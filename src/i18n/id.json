@@ -1,0 +1,124 @@
+{
+  "app": {
+    "name": "RIMA",
+    "tagline": "Ruang aman untuk kesehatan mentalmu",
+    "welcome": "Selamat datang di RIMA"
+  },
+  "nav": {
+    "home": "Beranda",
+    "mood": "Mood",
+    "journal": "Jurnal",
+    "forum": "Forum",
+    "profile": "Profil"
+  },
+  "home": {
+    "greeting_morning": "Selamat Pagi",
+    "greeting_afternoon": "Selamat Siang",
+    "greeting_evening": "Selamat Sore",
+    "greeting_night": "Selamat Malam",
+    "howAreYou": "Bagaimana perasaanmu hari ini?",
+    "quickActions": "Aksi Cepat",
+    "recentMoods": "Mood Terakhir",
+    "streak": "Hari Berturut-turut",
+    "todayAffirmation": "Afirmasi Hari Ini"
+  },
+  "mood": {
+    "title": "Mood Tracker",
+    "howDoYouFeel": "Bagaimana perasaanmu saat ini?",
+    "factors": "Apa yang memengaruhi moodmu?",
+    "addNote": "Tambahkan catatan...",
+    "save": "Simpan Mood",
+    "history": "Riwayat Mood",
+    "weekly": "Mingguan",
+    "monthly": "Bulanan",
+    "trend": "Tren",
+    "improving": "Membaik",
+    "declining": "Menurun",
+    "stable": "Stabil",
+    "noData": "Belum ada data mood"
+  },
+  "journal": {
+    "title": "Jurnal",
+    "newEntry": "Jurnal Baru",
+    "templates": {
+      "free": "Tulis Bebas",
+      "cbt": "CBT Terstruktur",
+      "gratitude": "Syukur",
+      "reflection": "Refleksi"
+    },
+    "placeholder": "Tulis perasaanmu di sini...",
+    "save": "Simpan",
+    "history": "Riwayat Jurnal",
+    "empty": "Belum ada jurnal",
+    "private": "Privat"
+  },
+  "forum": {
+    "title": "Forum Komunitas",
+    "newPost": "Buat Postingan",
+    "anonymous": "Anonim",
+    "categories": {
+      "anxiety": "Kecemasan",
+      "depression": "Depresi",
+      "relationships": "Hubungan",
+      "work": "Pekerjaan",
+      "family": "Keluarga",
+      "selfCare": "Self-Care",
+      "other": "Lainnya"
+    },
+    "reply": "Balas",
+    "support": "Dukung",
+    "report": "Laporkan",
+    "communityGuidelines": "Pedoman Komunitas",
+    "guidelineText": "Ini adalah ruang aman. Hargai privasi dan perasaan setiap orang. Tidak ada penghakiman di sini."
+  },
+  "profile": {
+    "title": "Profil",
+    "settings": "Pengaturan",
+    "theme": "Tema",
+    "language": "Bahasa",
+    "darkMode": "Mode Gelap",
+    "lightMode": "Mode Terang",
+    "safetyPlan": "Rencana Keselamatan",
+    "privacy": "Privasi",
+    "about": "Tentang RIMA",
+    "stats": "Statistikmu",
+    "totalMoods": "Total Mood",
+    "totalJournals": "Total Jurnal",
+    "memberSince": "Bergabung Sejak"
+  },
+  "safety": {
+    "sos": "Butuh Bantuan?",
+    "sosSubtitle": "Kamu tidak sendirian",
+    "callNow": "Hubungi Sekarang",
+    "crisisTitle": "Layanan Krisis",
+    "safetyPlan": "Rencana Keselamatan",
+    "warningSigns": "Tanda-tanda Peringatan",
+    "copingStrategies": "Strategi Koping",
+    "peopleToContact": "Orang yang Bisa Dihubungi",
+    "professionals": "Tenaga Profesional",
+    "safeEnvironment": "Membuat Lingkungan Aman",
+    "reasonsToLive": "Alasan untuk Tetap Ada",
+    "edit": "Edit",
+    "save": "Simpan",
+    "disclaimer": "RIMA bukan pengganti layanan kesehatan profesional. Jika kamu dalam bahaya, segera hubungi layanan darurat."
+  },
+  "common": {
+    "save": "Simpan",
+    "cancel": "Batal",
+    "delete": "Hapus",
+    "edit": "Edit",
+    "close": "Tutup",
+    "back": "Kembali",
+    "loading": "Memuat...",
+    "error": "Terjadi kesalahan",
+    "retry": "Coba Lagi",
+    "search": "Cari...",
+    "noResults": "Tidak ada hasil",
+    "confirm": "Konfirmasi",
+    "today": "Hari Ini",
+    "yesterday": "Kemarin",
+    "daysAgo": "{{count}} hari lalu",
+    "minutesAgo": "{{count}} menit lalu",
+    "hoursAgo": "{{count}} jam lalu"
+  }
+}

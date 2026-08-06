@@ -1,0 +1,124 @@
+{
+  "app": {
+    "name": "RIMA",
+    "tagline": "A safe space for your mental health",
+    "welcome": "Welcome to RIMA"
+  },
+  "nav": {
+    "home": "Home",
+    "mood": "Mood",
+    "journal": "Journal",
+    "forum": "Forum",
+    "profile": "Profile"
+  },
+  "home": {
+    "greeting_morning": "Good Morning",
+    "greeting_afternoon": "Good Afternoon",
+    "greeting_evening": "Good Evening",
+    "greeting_night": "Good Night",
+    "howAreYou": "How are you feeling today?",
+    "quickActions": "Quick Actions",
+    "recentMoods": "Recent Moods",
+    "streak": "Day Streak",
+    "todayAffirmation": "Today's Affirmation"
+  },
+  "mood": {
+    "title": "Mood Tracker",
+    "howDoYouFeel": "How do you feel right now?",
+    "factors": "What influenced your mood?",
+    "addNote": "Add a note...",
+    "save": "Save Mood",
+    "history": "Mood History",
+    "weekly": "Weekly",
+    "monthly": "Monthly",
+    "trend": "Trend",
+    "improving": "Improving",
+    "declining": "Declining",
+    "stable": "Stable",
+    "noData": "No mood data yet"
+  },
+  "journal": {
+    "title": "Journal",
+    "newEntry": "New Entry",
+    "templates": {
+      "free": "Free Writing",
+      "cbt": "Structured CBT",
+      "gratitude": "Gratitude",
+      "reflection": "Reflection"
+    },
+    "placeholder": "Write your feelings here...",
+    "save": "Save",
+    "history": "Journal History",
+    "empty": "No journals yet",
+    "private": "Private"
+  },
+  "forum": {
+    "title": "Community Forum",
+    "newPost": "Create Post",
+    "anonymous": "Anonymous",
+    "categories": {
+      "anxiety": "Anxiety",
+      "depression": "Depression",
+      "relationships": "Relationships",
+      "work": "Work",
+      "family": "Family",
+      "selfCare": "Self-Care",
+      "other": "Other"
+    },
+    "reply": "Reply",
+    "support": "Support",
+    "report": "Report",
+    "communityGuidelines": "Community Guidelines",
+    "guidelineText": "This is a safe space. Respect everyone's privacy and feelings. No judgment here."
+  },
+  "profile": {
+    "title": "Profile",
+    "settings": "Settings",
+    "theme": "Theme",
+    "language": "Language",
+    "darkMode": "Dark Mode",
+    "lightMode": "Light Mode",
+    "safetyPlan": "Safety Plan",
+    "privacy": "Privacy",
+    "about": "About RIMA",
+    "stats": "Your Stats",
+    "totalMoods": "Total Moods",
+    "totalJournals": "Total Journals",
+    "memberSince": "Member Since"
+  },
+  "safety": {
+    "sos": "Need Help?",
+    "sosSubtitle": "You are not alone",
+    "callNow": "Call Now",
+    "crisisTitle": "Crisis Services",
+    "safetyPlan": "Safety Plan",
+    "warningSigns": "Warning Signs",
+    "copingStrategies": "Coping Strategies",
+    "peopleToContact": "People to Contact",
+    "professionals": "Professionals",
+    "safeEnvironment": "Making a Safe Environment",
+    "reasonsToLive": "Reasons to Live",
+    "edit": "Edit",
+    "save": "Save",
+    "disclaimer": "RIMA is not a replacement for professional healthcare. If you are in danger, please contact emergency services immediately."
+  },
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "close": "Close",
+    "back": "Back",
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "retry": "Retry",
+    "search": "Search...",
+    "noResults": "No results",
+    "confirm": "Confirm",
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "daysAgo": "{{count}} days ago",
+    "minutesAgo": "{{count}} minutes ago",
+    "hoursAgo": "{{count}} hours ago"
+  }
+}
