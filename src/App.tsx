@@ -9,7 +9,7 @@ import { MoodTracker } from './pages/MoodTracker';
 import { Journal } from './pages/Journal';
 import { Forum } from './pages/Forum';
 import { Profile } from './pages/Profile';
-import { SafetyPlan } from './components/ui/SafetyPlan'; // Assuming this exists or will be created
+import { SafetyPlan } from './components/safety/SafetyPlan';
 import { useTheme } from './hooks/useTheme';
 
 const App: React.FC = () => {

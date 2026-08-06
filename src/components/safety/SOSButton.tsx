@@ -8,7 +8,7 @@ import { CRISIS_HOTLINES } from '../../utils/constants';
 
 export const SOSButton: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   return (
     <>
@@ -32,7 +32,7 @@ export const SOSButton: React.FC = () => {
                 <div className="flex justify-between items-start">
                   <div>
                     <h3 className="font-semibold text-foreground">{hotline.name}</h3>
-                    <p className="text-xs text-muted-foreground">{hotline.description}</p>
+                    <p className="text-xs text-muted-foreground">{i18n.language === 'en' ? hotline.descriptionEn : hotline.descriptionId}</p>
                   </div>
                 </div>
                 <a

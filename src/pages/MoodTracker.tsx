@@ -23,7 +23,7 @@ export const MoodTracker: React.FC = () => {
     if (selectedScore) {
       addMood({ 
         score: selectedScore as 1|2|3|4|5, 
-        emoji: ['😢', '😟', '😐', '🙂', '😊'][selectedScore - 1],
+        emoji: ['😢', '😟', '😐', '🙂', '😊'][selectedScore - 1] as any,
         factors: selectedFactors, 
         note 
       });
@@ -145,7 +145,7 @@ export const MoodTracker: React.FC = () => {
               </div>
               {entry.factors.length > 0 && (
                 <div className="history-factors">
-                  {entry.factors.map(f => <span key={f} className="small-chip">{f}</span>)}
+                  {entry.factors.map((f: string) => <span key={f} className="small-chip">{f}</span>)}
                 </div>
               )}
               {entry.note && <p className="history-note">{entry.note}</p>}

@@ -15,7 +15,7 @@ export const Forum: React.FC = () => {
   
   const [newTitle, setNewTitle] = useState('');
   const [newContent, setNewContent] = useState('');
-  const [newCategory, setNewCategory] = useState(FORUM_CATEGORIES[1].id);
+  const [newCategory, setNewCategory] = useState<string>(FORUM_CATEGORIES[1].id);
 
   const handlePost = () => {
     if (!newTitle || !newContent) return;
@@ -83,7 +83,7 @@ export const Forum: React.FC = () => {
             onChange={e => setNewCategory(e.target.value)}
             className="input-select"
           >
-            {FORUM_CATEGORIES.filter(c => c.id !== 'all').map(c => (
+            {FORUM_CATEGORIES.map(c => (
               <option key={c.id} value={c.id}>{i18n.language === 'en' ? c.labelEn : c.labelId}</option>
             ))}
           </select>
