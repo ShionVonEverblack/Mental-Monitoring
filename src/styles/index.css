@@ -409,3 +409,36 @@ a:hover {
 .about-logo { font-size: 1.25rem; font-weight: 700; color: var(--color-primary); margin-bottom: 4px; }
 .about-version { font-size: 0.75rem; }
 .about-disclaimer { margin-top: 16px; padding: 16px; background: hsla(35, 75%, 60%, 0.08); border-radius: var(--radius-lg); color: var(--color-warm); font-size: 0.813rem; line-height: 1.5; }
+
+/* Safety Plan Page */
+.safety-plan-page { animation: fadeInUp 0.5s ease-out; }
+.safety-plan-header { text-align: center; margin-bottom: 32px; }
+.safety-plan-title { font-size: 1.75rem; font-weight: 700; color: var(--text-primary); margin-bottom: 8px; }
+.safety-plan-subtitle { font-size: 0.938rem; color: var(--text-secondary); max-width: 600px; margin: 0 auto 20px; line-height: 1.6; }
+.safety-actions { display: flex; justify-content: center; gap: 12px; margin-bottom: 28px; }
+.safety-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
+@media (min-width: 768px) { .safety-grid { grid-template-columns: repeat(2, 1fr); } }
+.safety-card-header { display: flex; align-items: center; gap: 12px; }
+.safety-card-icon { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; }
+.safety-card-title { font-size: 1rem; font-weight: 600; color: var(--text-primary); }
+.safety-item-list { display: flex; flex-direction: column; gap: 8px; list-style: none; padding: 0; margin: 0; }
+.safety-item { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px; background: var(--bg-secondary); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); font-size: 0.875rem; color: var(--text-primary); transition: border-color 0.2s; }
+.safety-item:hover { border-color: var(--border-strong); }
+.safety-item-remove { border: none; background: transparent; color: var(--text-tertiary); cursor: pointer; padding: 4px; border-radius: var(--radius-sm); transition: color 0.2s; display: flex; align-items: center; }
+.safety-item-remove:hover { color: var(--color-danger); }
+.safety-empty-hint { text-align: center; padding: 16px; color: var(--text-tertiary); font-size: 0.813rem; font-style: italic; }
+.safety-input-group { display: flex; gap: 8px; margin-top: 12px; }
+.safety-suggestions { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border-subtle); }
+.safety-suggestion-chip { font-size: 0.75rem; padding: 4px 10px; border-radius: var(--radius-full); background: var(--bg-secondary); color: var(--text-secondary); border: 1px solid var(--border-subtle); cursor: pointer; transition: all 0.2s; }
+.safety-suggestion-chip:hover { background: var(--bg-elevated); color: var(--color-primary); border-color: var(--color-primary); }
+
+@media print {
+  .app-shell { background: white !important; color: black !important; }
+  .sidebar, .bottom-nav, .sos-float, .safety-actions, .safety-input-group, .safety-item-remove, .safety-suggestions { display: none !important; }
+  .safety-grid { display: block !important; }
+  .card { background: none !important; border: 1px solid #ccc !important; box-shadow: none !important; margin-bottom: 16px !important; break-inside: avoid; }
+  .safety-item { background: #f9f9f9 !important; color: black !important; border: 1px solid #ddd !important; }
+  .safety-card-title { color: black !important; }
+  .safety-plan-title { color: black !important; }
+  .safety-plan-subtitle { color: #555 !important; }
+}
