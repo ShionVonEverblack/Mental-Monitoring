@@ -10,26 +10,72 @@ export interface MoodSelectorProps {
 }
 
 export const MoodSelector: React.FC<MoodSelectorProps> = ({ value, onChange }) => {
-  const { t } = useTranslation();
+  const { i18n } = useTranslation();
 
   return (
-    <div className="flex justify-between items-center w-full max-w-md mx-auto gap-2">
-      {(Object.entries(MOOD_EMOJIS) as [string, { emoji: MoodEmoji; labelId: string; labelEn: string; color: string }][]).map(([scoreStr, mood]) => {
-        const score = parseInt(scoreStr) as MoodScore;
-        const isSelected = value === score;
-        return (
-          <button
-            key={score}
-            onClick={() => onChange(score, mood.emoji)}
-            className={`flex flex-col items-center gap-2 p-2 rounded-xl transition-all duration-300 ${isSelected ? 'scale-110 bg-primary/10' : 'hover:scale-105 hover:bg-muted/50'}`}
-          >
-            <span className="text-4xl filter drop-shadow-sm">{mood.emoji}</span>
-            <span className={`text-xs font-medium ${isSelected ? 'text-primary' : 'text-muted-foreground'}`}>
-              {t(`mood.${mood.labelId}`)}
-            </span>
-          </button>
-        );
-      })}
-    </div>
+    <>
+      <style>{`
+        .mood-selector {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          width: 100%;
+          max-width: 28rem;
+          margin: 0 auto;
+          gap: var(--spacing-sm);
+        }
+        .mood-option {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: var(--spacing-sm);
+          padding: var(--spacing-sm);
+          border-radius: var(--radius-xl);
+          transition: all var(--transition-normal);
+          background: transparent;
+          border: none;
+          cursor: pointer;
+        }
+        .mood-option:hover {
+          transform: scale(1.05);
+          background-color: var(--bg-secondary);
+        }
+        .mood-option.selected {
+          transform: scale(1.1);
+          background-color: var(--color-primary-transparent);
+        }
+        .mood-emoji {
+          font-size: 2.25rem;
+          filter: drop-shadow(0 1px 2px rgba(0,0,0,0.1));
+        }
+        .mood-label {
+          font-size: var(--font-size-xs);
+          font-weight: var(--font-weight-medium);
+          color: var(--text-secondary);
+        }
+        .mood-option.selected .mood-label {
+          color: var(--color-primary);
+        }
+      `}</style>
+      <div className="mood-selector">
+        {(Object.entries(MOOD_EMOJIS) as [string, { emoji: MoodEmoji; labelId: string; labelEn: string; color: string }][]).map(([scoreStr, mood]) => {
+          const score = parseInt(scoreStr) as MoodScore;
+          const isSelected = value === score;
+          return (
+            <button
+              key={score}
+              onClick={() => onChange(score, mood.emoji)}
+              className={`mood-option ${isSelected ? 'selected' : ''}`}
+              data-mood={score}
+            >
+              <span className="mood-emoji">{mood.emoji}</span>
+              <span className="mood-label">
+                {i18n.language === 'en' ? mood.labelEn : mood.labelId}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+    </>
   );
 };

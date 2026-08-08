@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { MessageSquare, Heart, Shield, Plus, Info } from 'lucide-react';
-import { Card } from '../components/ui/Card';
-import { Button } from '../components/ui/Button';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { FORUM_CATEGORIES } from '../utils/constants';
+import type { ForumCategory } from '../types';
 
 export const Forum: React.FC = () => {
   const { t, i18n } = useTranslation();
@@ -15,13 +13,15 @@ export const Forum: React.FC = () => {
   
   const [newTitle, setNewTitle] = useState('');
   const [newContent, setNewContent] = useState('');
-  const [newCategory, setNewCategory] = useState<string>(FORUM_CATEGORIES[1].id);
+  const [newCategory, setNewCategory] = useState<ForumCategory>(FORUM_CATEGORIES[1].id);
+
+  const lang = i18n.language as 'id' | 'en';
 
   const handlePost = () => {
     if (!newTitle || !newContent) return;
     const post = {
       id: Date.now().toString(),
-      author: `User${Math.floor(Math.random() * 1000)}`, // Anonymous placeholder
+      author: `User${Math.floor(Math.random() * 1000)}`,
       title: newTitle,
       content: newContent,
       categoryId: newCategory,
@@ -40,105 +40,103 @@ export const Forum: React.FC = () => {
     : posts.filter(p => p.categoryId === activeCategory);
 
   return (
-    <div className="forum-page animate-fade-in-up">
-      <header className="flex-between">
-        <h1>{t('forum.title', { defaultValue: 'Forum Dukungan' })}</h1>
-        <Button variant="primary" size="sm" onClick={() => setIsComposing(true)}>
-          <Plus size={16} /> {t('forum.newPost', { defaultValue: 'Tulis' })}
-        </Button>
+    <div className="forum-page">
+      <header className="forum-header">
+        <h1 className="page-title">{t('forum.title', { defaultValue: 'Forum Dukungan' })}</h1>
+        <p className="forum-subtitle">{t('forum.subtitle', { defaultValue: 'Ruang aman untuk berbagi.' })}</p>
+        <button className="btn-primary" onClick={() => setIsComposing(true)}>
+          {t('forum.newPost', { defaultValue: 'Tulis' })}
+        </button>
       </header>
 
       {!showGuidelines && (
-        <Card className="guidelines-banner bg-accent-soft">
-          <div className="flex items-start gap-3">
-            <Info className="text-primary mt-1" size={24} />
-            <div>
-              <h3>{t('forum.guidelines.title', { defaultValue: 'Ruang Aman Bersama' })}</h3>
-              <p>{t('forum.guidelines.desc', { defaultValue: 'Forum ini bersifat anonim. Harap jaga empati, saling menghargai, dan hindari konten pemicu (triggering) tanpa peringatan.' })}</p>
-              <Button variant="ghost" size="sm" className="mt-2" onClick={() => setShowGuidelines(true)}>
-                {t('common.understand', { defaultValue: 'Saya Mengerti' })}
-              </Button>
-            </div>
-          </div>
-        </Card>
+        <div className="guidelines-banner">
+          <h3>{t('forum.guidelines.title', { defaultValue: 'Ruang Aman Bersama' })}</h3>
+          <p>{t('forum.guidelines.desc', { defaultValue: 'Forum ini bersifat anonim. Harap jaga empati.' })}</p>
+          <button className="btn-ghost" onClick={() => setShowGuidelines(true)}>
+            {t('common.understand', { defaultValue: 'Saya Mengerti' })}
+          </button>
+        </div>
       )}
 
-      <div className="category-scroll hide-scrollbar">
+      <div className="category-chips">
+        <button
+          className={`category-chip ${activeCategory === 'all' ? 'active' : ''}`}
+          onClick={() => setActiveCategory('all')}
+        >
+          {t('forum.allCategories', { defaultValue: 'Semua' })}
+        </button>
         {FORUM_CATEGORIES.map(cat => (
           <button
             key={cat.id}
-            className={`chip ${activeCategory === cat.id ? 'active' : ''}`}
+            className={`category-chip ${activeCategory === cat.id ? 'active' : ''}`}
             onClick={() => setActiveCategory(cat.id)}
           >
-            {t(`forum.categories.${cat.id}`, { defaultValue: i18n.language === 'en' ? cat.labelEn : cat.labelId })}
+            {lang === 'en' ? cat.labelEn : cat.labelId}
           </button>
         ))}
       </div>
 
       {isComposing && (
-        <Card className="compose-card animate-fade-in">
+        <div className="forum-post-card">
           <h3>{t('forum.composeTitle', { defaultValue: 'Buat Postingan Baru' })}</h3>
           <select 
             value={newCategory} 
-            onChange={e => setNewCategory(e.target.value)}
-            className="input-select"
+            onChange={e => setNewCategory(e.target.value as ForumCategory)}
+            style={{ width: '100%', padding: 'var(--spacing-sm)', marginBottom: 'var(--spacing-sm)' }}
           >
             {FORUM_CATEGORIES.map(c => (
-              <option key={c.id} value={c.id}>{i18n.language === 'en' ? c.labelEn : c.labelId}</option>
+              <option key={c.id} value={c.id}>{lang === 'en' ? c.labelEn : c.labelId}</option>
             ))}
           </select>
           <input 
             type="text" 
             placeholder={t('forum.postTitlePlaceholder', { defaultValue: 'Judul...' })}
-            className="input-text"
+            style={{ width: '100%', padding: 'var(--spacing-sm)', marginBottom: 'var(--spacing-sm)' }}
             value={newTitle}
             onChange={e => setNewTitle(e.target.value)}
           />
           <textarea 
             placeholder={t('forum.postContentPlaceholder', { defaultValue: 'Bagikan ceritamu...' })}
-            className="input-textarea"
+            style={{ width: '100%', padding: 'var(--spacing-sm)', marginBottom: 'var(--spacing-sm)' }}
             rows={4}
             value={newContent}
             onChange={e => setNewContent(e.target.value)}
           />
-          <div className="flex gap-2 justify-end mt-3">
-            <Button variant="ghost" onClick={() => setIsComposing(false)}>
+          <div style={{ display: 'flex', gap: 'var(--spacing-sm)', justifyContent: 'flex-end' }}>
+            <button className="btn-ghost" onClick={() => setIsComposing(false)}>
               {t('common.cancel', { defaultValue: 'Batal' })}
-            </Button>
-            <Button variant="primary" onClick={handlePost}>
+            </button>
+            <button className="btn-primary" onClick={handlePost}>
               {t('forum.post', { defaultValue: 'Kirim' })}
-            </Button>
+            </button>
           </div>
-        </Card>
+        </div>
       )}
 
-      <div className="posts-list">
+      <div className="forum-posts">
         {filteredPosts.length === 0 ? (
-          <p className="empty-state">{t('forum.empty', { defaultValue: 'Belum ada postingan di kategori ini.' })}</p>
+          <div className="forum-empty">
+            <div className="forum-empty-icon">💬</div>
+            <p>{t('forum.empty', { defaultValue: 'Belum ada postingan di kategori ini.' })}</p>
+          </div>
         ) : (
           filteredPosts.map(post => (
-            <Card key={post.id} className="post-card">
-              <div className="post-header">
-                <div className="post-author">
-                  <div className="avatar-circle small">{post.author.charAt(0)}</div>
-                  <span className="author-name">{post.author}</span>
-                  <span className="post-category badge">
-                    {FORUM_CATEGORIES.find(c => c.id === post.categoryId) ? 
-                      (i18n.language === 'en' ? FORUM_CATEGORIES.find(c => c.id === post.categoryId)!.labelEn : FORUM_CATEGORIES.find(c => c.id === post.categoryId)!.labelId) 
-                      : ''}
-                  </span>
-                </div>
-                <span className="post-time">{new Date(post.timestamp).toLocaleDateString()}</span>
+            <div key={post.id} className="forum-post-card">
+              <div className="forum-post-header">
+                <div className="forum-post-avatar">{post.author.charAt(0)}</div>
+                <span className="forum-post-author">{post.author}</span>
+                <span className="forum-post-time">{new Date(post.timestamp).toLocaleDateString()}</span>
               </div>
-              <h4 className="post-title">{post.title}</h4>
-              <p className="post-content-preview">{post.content}</p>
+              <h4 className="forum-post-title">{post.title}</h4>
+              <p className="forum-post-content">{post.content}</p>
               
-              <div className="post-actions">
-                <button className="reaction-btn"><Heart size={16}/> {post.reactions.heart}</button>
-                <button className="reaction-btn"><Shield size={16}/> {post.reactions.strength}</button>
-                <button className="comment-btn"><MessageSquare size={16}/> {post.comments.length}</button>
+              <div className="forum-post-footer">
+                <button className="forum-reaction">❤️ {post.reactions.heart}</button>
+                <button className="forum-reaction">🛡️ {post.reactions.strength}</button>
+                <button className="forum-reaction">💬 {post.comments.length}</button>
               </div>
-            </Card>
+            </div>
           ))
         )}
       </div>

@@ -9,26 +9,29 @@ export interface CardProps {
 }
 
 export const Card = ({ children, className = '', variant = 'default', padding = 'md', onClick }: CardProps) => {
-  const baseClasses = 'card rounded-xl overflow-hidden';
-  const variantClasses = variant === 'glass' ? 'bg-white/10 backdrop-blur-md border border-white/20' : 'bg-card text-card-foreground shadow-sm';
-  const paddingClasses = padding === 'none' ? 'p-0' : padding === 'sm' ? 'p-4' : padding === 'md' ? 'p-6' : 'p-8';
-  const clickableClasses = onClick ? 'cursor-pointer transition-transform active:scale-[0.98]' : '';
+  const cardClass = variant === 'glass' ? 'card card-glass' : 'card';
+  const paddingStyle = padding === 'none' ? { padding: 0 } : padding === 'sm' ? { padding: 'var(--spacing-sm)' } : padding === 'lg' ? { padding: 'var(--spacing-xl)' } : {};
+  const clickableStyle = onClick ? { cursor: 'pointer' } : {};
 
   return (
-    <div className={`${baseClasses} ${variantClasses} ${paddingClasses} ${clickableClasses} ${className}`} onClick={onClick}>
+    <div 
+      className={`${cardClass} ${className}`} 
+      style={{ ...paddingStyle, ...clickableStyle }} 
+      onClick={onClick}
+    >
       {children}
     </div>
   );
 };
 
 Card.Header = ({ children, className = '' }: { children: React.ReactNode; className?: string }) => (
-  <div className={`mb-4 ${className}`}>{children}</div>
+  <div className={`card-header ${className}`}>{children}</div>
 );
 
 Card.Body = ({ children, className = '' }: { children: React.ReactNode; className?: string }) => (
-  <div className={`flex-1 ${className}`}>{children}</div>
+  <div className={`card-body ${className}`}>{children}</div>
 );
 
 Card.Footer = ({ children, className = '' }: { children: React.ReactNode; className?: string }) => (
-  <div className={`mt-4 pt-4 border-t border-border ${className}`}>{children}</div>
+  <div className={`card-footer ${className}`}>{children}</div>
 );

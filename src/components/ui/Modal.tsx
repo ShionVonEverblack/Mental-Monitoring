@@ -35,23 +35,24 @@ export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children, 
 
   if (!isOpen) return null;
 
-  const sizeClasses = size === 'sm' ? 'max-w-md' : size === 'md' ? 'max-w-lg' : 'max-w-2xl';
-
   return createPortal(
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-      <div className="fixed inset-0 bg-black/50 backdrop-blur-sm transition-opacity" onClick={onClose} />
+    <div className="modal-overlay" onClick={onClose}>
       <div
         ref={modalRef}
         tabIndex={-1}
-        className={`bg-card text-card-foreground w-full ${sizeClasses} rounded-xl shadow-xl relative z-[101] flex flex-col max-h-[90vh] overflow-hidden animate-in fade-in zoom-in-95`}
+        className="modal-content"
         role="dialog"
         aria-modal="true"
+        onClick={(e) => e.stopPropagation()}
+        style={{
+          maxWidth: size === 'sm' ? '400px' : size === 'md' ? '500px' : '700px'
+        }}
       >
-        <div className="flex items-center justify-between p-4 border-b border-border">
-          {title && <h2 className="text-lg font-semibold">{title}</h2>}
+        <div className="modal-header">
+          {title && <h2 style={{ fontSize: '1.125rem', fontWeight: 600, margin: 0 }}>{title}</h2>}
           <Button variant="ghost" size="sm" onClick={onClose} icon={<X size={20} />} aria-label="Close modal" />
         </div>
-        <div className="p-4 overflow-y-auto">{children}</div>
+        <div className="modal-body">{children}</div>
       </div>
     </div>,
     document.body

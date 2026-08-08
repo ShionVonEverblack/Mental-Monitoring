@@ -17,8 +17,8 @@ export const BottomNav: React.FC = () => {
   ];
 
   return (
-    <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-background/80 backdrop-blur-lg border-t border-border pb-safe z-40">
-      <div className="flex justify-around items-center h-16">
+    <nav className="bottom-nav">
+      <div className="bottom-nav-inner">
         {tabs.map((tab) => {
           const isActive = location.pathname === tab.path;
           const Icon = tab.icon;
@@ -26,10 +26,10 @@ export const BottomNav: React.FC = () => {
             <button
               key={tab.path}
               onClick={() => navigate(tab.path)}
-              className={`flex flex-col items-center justify-center w-full h-full space-y-1 transition-colors ${isActive ? 'text-primary' : 'text-muted-foreground hover:text-foreground'}`}
+              className={`bottom-nav-item ${isActive ? 'active' : ''}`}
             >
-              <Icon size={24} className={isActive ? 'animate-bounce-short' : ''} />
-              <span className="text-[10px] font-medium">{t(tab.label)}</span>
+              <Icon size={24} className="bottom-nav-icon" />
+              <span className="bottom-nav-label">{t(tab.label)}</span>
             </button>
           );
         })}

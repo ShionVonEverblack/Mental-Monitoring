@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import './i18n/config'; // side effect import for i18n
+import './i18n/config';
 import './styles/index.css';
 
 import { AppShell } from './components/layout/AppShell';

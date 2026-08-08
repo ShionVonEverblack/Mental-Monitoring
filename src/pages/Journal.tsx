@@ -1,27 +1,19 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { PenTool, Brain, Heart, Search, ChevronDown, ChevronUp } from 'lucide-react';
-import { Card } from '../components/ui/Card';
-import { Button } from '../components/ui/Button';
 import { useLocalStorage } from '../hooks/useLocalStorage';
-
-type TemplateType = 'freewrite' | 'cbt' | 'gratitude' | 'reflection';
-
-const TEMPLATES = [
-  { id: 'freewrite', icon: PenTool, name: 'Bebas Menulis', desc: 'Tuliskan apa saja yang ada di pikiranmu.' },
-  { id: 'cbt', icon: Brain, name: 'Analisis Pikiran (CBT)', desc: 'Identifikasi dan ubah pola pikir negatif.' },
-  { id: 'gratitude', icon: Heart, name: 'Jurnal Syukur', desc: 'Fokus pada hal-hal positif hari ini.' },
-  { id: 'reflection', icon: Search, name: 'Refleksi Diri', desc: 'Pahami dirimu lebih dalam.' },
-];
+import { JOURNAL_TEMPLATES } from '../utils/constants';
+import type { JournalTemplate } from '../types';
 
 export const Journal: React.FC = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [journals, setJournals] = useLocalStorage<any[]>('rima-journals', []);
-  const [selectedTemplate, setSelectedTemplate] = useState<TemplateType | null>(null);
+  const [selectedTemplate, setSelectedTemplate] = useState<JournalTemplate | null>(null);
   
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [expandedId, setExpandedId] = useState<string | null>(null);
+
+  const lang = i18n.language as 'id' | 'en';
 
   const handleSave = () => {
     if (!title || !content) return;
@@ -41,91 +33,92 @@ export const Journal: React.FC = () => {
   };
 
   return (
-    <div className="journal-page animate-fade-in-up">
+    <div className="journal-page">
       <header>
-        <h1>{t('journal.title', { defaultValue: 'Jurnal' })}</h1>
+        <h1 className="page-title">{t('journal.title', { defaultValue: 'Jurnal' })}</h1>
       </header>
 
       <section className="templates-section">
         {!selectedTemplate ? (
-          <div className="templates-grid">
-            {TEMPLATES.map(tmpl => {
-              const Icon = tmpl.icon;
-              return (
-                <Card 
-                  key={tmpl.id} 
-                  className="template-card interactive"
-                  onClick={() => setSelectedTemplate(tmpl.id as TemplateType)}
-                >
-                  <Icon className="template-icon text-primary" size={28} />
-                  <h3>{t(`journal.templates.${tmpl.id}.name`, { defaultValue: tmpl.name })}</h3>
-                  <p>{t(`journal.templates.${tmpl.id}.desc`, { defaultValue: tmpl.desc })}</p>
-                </Card>
-              )
-            })}
+          <div className="template-grid">
+            {JOURNAL_TEMPLATES.map(tmpl => (
+              <div 
+                key={tmpl.id} 
+                className={`template-card ${selectedTemplate === tmpl.id ? 'selected' : ''}`}
+                onClick={() => setSelectedTemplate(tmpl.id)}
+              >
+                <div className="template-icon"></div>
+                <h3 className="template-name">{lang === 'en' ? tmpl.labelEn : tmpl.labelId}</h3>
+                <p className="template-desc">{tmpl.description}</p>
+              </div>
+            ))}
           </div>
         ) : (
-          <Card className="editor-card animate-fade-in">
+          <div className="journal-editor">
             <div className="editor-header">
-              <h3>{t(`journal.templates.${selectedTemplate}.name`, { defaultValue: TEMPLATES.find(t => t.id === selectedTemplate)?.name })}</h3>
-              <button className="text-sm text-secondary" onClick={() => setSelectedTemplate(null)}>
+              <h3>
+                {(() => {
+                  const tmpl = JOURNAL_TEMPLATES.find(t => t.id === selectedTemplate);
+                  return tmpl ? (lang === 'en' ? tmpl.labelEn : tmpl.labelId) : '';
+                })()}
+              </h3>
+              <button onClick={() => setSelectedTemplate(null)}>
                 {t('common.cancel', { defaultValue: 'Batal' })}
               </button>
             </div>
             
             <input 
               type="text" 
-              className="input-title"
+              className="journal-title-input"
               placeholder={t('journal.titlePlaceholder', { defaultValue: 'Judul jurnal...' })}
               value={title}
               onChange={(e) => setTitle(e.target.value)}
             />
             
+            {JOURNAL_TEMPLATES.find(t => t.id === selectedTemplate)?.prompts.map((prompt, idx) => (
+               <div key={idx} className="journal-prompt">
+                 <label className="journal-prompt-label">{lang === 'en' ? prompt.en : prompt.id}</label>
+               </div>
+            ))}
+            
             <textarea
-              className="input-content auto-grow"
+              className="journal-content-input"
               placeholder={t('journal.contentPlaceholder', { defaultValue: 'Mulai menulis...' })}
               value={content}
               onChange={(e) => setContent(e.target.value)}
               rows={8}
             />
             
-            <Button onClick={handleSave} className="w-full mt-4">
+            <button onClick={handleSave} className="btn-primary w-full mt-4">
               {t('common.save', { defaultValue: 'Simpan Jurnal' })}
-            </Button>
-          </Card>
+            </button>
+          </div>
         )}
       </section>
 
       <section className="journal-history">
         <h3>{t('journal.history', { defaultValue: 'Catatan Sebelumnya' })}</h3>
-        <div className="history-list">
-          {journals.map(journal => (
-            <Card key={journal.id} className="history-item">
-              <div 
-                className="history-header interactive"
-                onClick={() => setExpandedId(expandedId === journal.id ? null : journal.id)}
-              >
-                <div>
-                  <h4>{journal.title}</h4>
-                  <div className="meta">
-                    <span className="badge">{journal.template}</span>
-                    <span className="date">{new Date(journal.date).toLocaleDateString()}</span>
-                  </div>
-                </div>
-                {expandedId === journal.id ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+        {journals.map(journal => (
+          <div key={journal.id} className="journal-entry-card">
+            <div 
+              onClick={() => setExpandedId(expandedId === journal.id ? null : journal.id)}
+            >
+              <h4 className="journal-entry-title">{journal.title}</h4>
+              <div className="journal-entry-meta">
+                <span className="journal-entry-date">{new Date(journal.date).toLocaleDateString()}</span>
               </div>
-              
-              {expandedId === journal.id && (
-                <div className="history-content animate-fade-in">
-                  <p>{journal.content}</p>
-                </div>
-              )}
-            </Card>
-          ))}
-          {journals.length === 0 && (
-            <p className="empty-state">{t('journal.empty', { defaultValue: 'Belum ada catatan. Mulai menulis hari ini!' })}</p>
-          )}
-        </div>
+            </div>
+            
+            {expandedId === journal.id ? (
+              <div className="journal-entry-preview">
+                <p>{journal.content}</p>
+              </div>
+            ) : null}
+          </div>
+        ))}
+        {journals.length === 0 && (
+          <p>{t('journal.empty', { defaultValue: 'Belum ada catatan. Mulai menulis hari ini!' })}</p>
+        )}
       </section>
     </div>
   );

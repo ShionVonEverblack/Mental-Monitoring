@@ -1,12 +1,9 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { User, Moon, Sun, Globe, Heart, ShieldAlert } from 'lucide-react';
-import { Card } from '../components/ui/Card';
-import { Button } from '../components/ui/Button';
+import { useNavigate } from 'react-router-dom';
 import { useTheme } from '../hooks/useTheme';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { useMood } from '../hooks/useMood';
-import { useNavigate } from 'react-router-dom';
 
 export const Profile: React.FC = () => {
   const { t, i18n } = useTranslation();
@@ -24,96 +21,85 @@ export const Profile: React.FC = () => {
   };
 
   return (
-    <div className="profile-page animate-fade-in-up">
-      <header>
-        <h1>{t('profile.title', 'Profil')}</h1>
+    <div className="profile-page">
+      <header className="profile-header">
+        <div className="profile-avatar">
+          {displayName.substring(0, 2).toUpperCase()}
+        </div>
+        
+        {isEditingName ? (
+          <div style={{ display: 'flex', gap: 'var(--spacing-sm)', justifyContent: 'center', marginTop: 'var(--spacing-sm)' }}>
+            <input 
+              type="text" 
+              value={displayName}
+              onChange={e => setDisplayName(e.target.value)}
+            />
+            <button className="btn-primary" onClick={() => setIsEditingName(false)}>OK</button>
+          </div>
+        ) : (
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 'var(--spacing-sm)', marginTop: 'var(--spacing-sm)' }}>
+            <h2 className="profile-name">{displayName}</h2>
+            <button onClick={() => setIsEditingName(true)}>✏️</button>
+          </div>
+        )}
       </header>
 
-      <section className="profile-header-card">
-        <Card className="text-center">
-          <div className="avatar-large mx-auto bg-primary text-white">
-            {displayName.substring(0, 2).toUpperCase()}
-          </div>
-          
-          {isEditingName ? (
-            <div className="mt-4 flex gap-2 justify-center">
-              <input 
-                type="text" 
-                value={displayName}
-                onChange={e => setDisplayName(e.target.value)}
-                className="input-text text-center w-48"
-              />
-              <Button size="sm" onClick={() => setIsEditingName(false)}>OK</Button>
-            </div>
-          ) : (
-            <div className="mt-4 flex items-center justify-center gap-2">
-              <h2 className="m-0">{displayName}</h2>
-              <button className="text-secondary" onClick={() => setIsEditingName(true)}>
-                <User size={16} />
-              </button>
-            </div>
-          )}
-        </Card>
-      </section>
-
-      <section className="stats-grid mt-6">
-        <Card className="stat-card">
-          <div className="stat-value text-primary">{stats.totalEntries}</div>
+      <section className="profile-stats">
+        <div className="stat-card">
+          <div className="stat-value">{stats.totalEntries}</div>
           <div className="stat-label">{t('profile.totalMoods', { defaultValue: 'Mood Dicatat' })}</div>
-        </Card>
-        <Card className="stat-card">
-          <div className="stat-value text-secondary">{journals.length}</div>
+        </div>
+        <div className="stat-card">
+          <div className="stat-value">{journals.length}</div>
           <div className="stat-label">{t('profile.totalJournals', { defaultValue: 'Jurnal Ditulis' })}</div>
-        </Card>
-        <Card className="stat-card col-span-2">
-          <div className="stat-value text-warm">{stats.streak} 🔥</div>
+        </div>
+        <div className="stat-card" style={{ gridColumn: 'span 2' }}>
+          <div className="stat-value">{stats.streak} 🔥</div>
           <div className="stat-label">{t('profile.currentStreak', { defaultValue: 'Streak Saat Ini' })}</div>
-        </Card>
+        </div>
       </section>
 
-      <section className="settings-section mt-8">
-        <h3>{t('profile.settings', { defaultValue: 'Pengaturan' })}</h3>
+      <section className="settings-section">
+        <h3 className="settings-title">{t('profile.settings', { defaultValue: 'Pengaturan' })}</h3>
         
-        <Card className="settings-list p-0 overflow-hidden">
-          <div className="setting-item flex-between p-4 border-b border-border">
-            <div className="flex items-center gap-3">
-              {theme === 'dark' ? <Moon size={20} /> : <Sun size={20} />}
+        <div className="settings-list">
+          <div className="settings-item">
+            <div className="settings-item-left">
               <span>{t('profile.theme', { defaultValue: 'Tema Gelap' })}</span>
             </div>
-            <button 
-              className={`toggle-switch ${theme === 'dark' ? 'on' : 'off'}`}
-              onClick={toggleTheme}
-            >
-              <div className="toggle-knob"></div>
-            </button>
+            <div className="settings-item-right">
+              <button 
+                className={`toggle-switch ${theme === 'dark' ? 'active' : ''}`}
+                onClick={toggleTheme}
+              >
+                <div className="toggle-knob"></div>
+              </button>
+            </div>
           </div>
           
-          <div className="setting-item flex-between p-4 border-b border-border">
-            <div className="flex items-center gap-3">
-              <Globe size={20} />
+          <div className="settings-item">
+            <div className="settings-item-left">
               <span>{t('profile.language', { defaultValue: 'Bahasa' })}</span>
             </div>
-            <button className="chip" onClick={toggleLanguage}>
-              {i18n.language === 'id' ? 'ID' : 'EN'}
-            </button>
+            <div className="settings-item-right">
+              <button className="btn-secondary" onClick={toggleLanguage}>
+                {i18n.language === 'id' ? 'ID' : 'EN'}
+              </button>
+            </div>
           </div>
 
-          <div 
-            className="setting-item flex-between p-4 interactive text-danger"
-            onClick={() => navigate('/safety-plan')}
-          >
-            <div className="flex items-center gap-3">
-              <ShieldAlert size={20} />
+          <div className="settings-item" onClick={() => navigate('/safety-plan')} style={{ cursor: 'pointer' }}>
+            <div className="settings-item-left text-danger">
               <span>{t('profile.safetyPlan', { defaultValue: 'Rencana Keselamatan' })}</span>
             </div>
           </div>
-        </Card>
+        </div>
       </section>
 
-      <section className="about-section mt-8 text-center text-secondary text-sm">
-        <Heart size={24} className="mx-auto mb-2 text-primary opacity-50" />
-        <p>RIMA (Ruang Interaksi Mental Aman) v1.0.0</p>
-        <p className="mt-2 text-danger-soft">
+      <section className="about-section">
+        <div className="about-logo">❤️</div>
+        <p className="about-version">RIMA (Ruang Interaksi Mental Aman) v1.0.0</p>
+        <p className="about-disclaimer">
           {t('profile.disclaimer', { defaultValue: 'RIMA bukan pengganti layanan kesehatan profesional. Hubungi profesional jika Anda dalam krisis.' })}
         </p>
       </section>
