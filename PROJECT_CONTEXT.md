@@ -13,7 +13,7 @@ Tujuan      : Platform kesehatan mental digital berbasis bukti ilmiah,
               anonim, dan bilingual (ID/EN) untuk masyarakat Indonesia.
 Target User : Masyarakat umum (bukan hanya mahasiswa), terutama yang
               menghadapi stigma atau akses terbatas ke layanan profesional.
-Status      : Fase 1 selesai (MVP lokal). Belum ada backend.
+Status      : Fase 1 & Fase 2 Selesai (MVP + Sync + Forum Realtime + Reminders + Export).
 
 ## ═══════════════════════════════════════════════════════════════
 ## 2. TECH STACK

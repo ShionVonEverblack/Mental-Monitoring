@@ -1,60 +1,182 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useLocalStorage } from '../hooks/useLocalStorage';
 import { FORUM_CATEGORIES } from '../utils/constants';
-import type { ForumCategory } from '../types';
+import type { ForumCategory, ForumPost, ForumComment } from '../types';
+import {
+  fetchForumPosts,
+  createForumPost,
+  addReactionToPost,
+  fetchPostComments,
+  addCommentToPost,
+  checkCrisisKeywords
+} from '../services/forumService';
+import { generateAnonymousName } from '../utils/helpers';
+import { ShieldAlert, MessageCircle, AlertTriangle, Send, Phone, CheckCircle, Flag } from 'lucide-react';
 
 export const Forum: React.FC = () => {
   const { t, i18n } = useTranslation();
-  const [posts, setPosts] = useLocalStorage<any[]>('rima-forum-posts', []);
+  const [posts, setPosts] = useState<ForumPost[]>([]);
   const [activeCategory, setActiveCategory] = useState<string>('all');
-  const [showGuidelines, setShowGuidelines] = useLocalStorage('rima-forum-guidelines-seen', false);
+  const [showGuidelines, setShowGuidelines] = useState<boolean>(
+    !localStorage.getItem('rima-forum-guidelines-seen')
+  );
   const [isComposing, setIsComposing] = useState(false);
-  
+
+  // Form states
   const [newTitle, setNewTitle] = useState('');
   const [newContent, setNewContent] = useState('');
-  const [newCategory, setNewCategory] = useState<ForumCategory>(FORUM_CATEGORIES[1].id);
+  const [newCategory, setNewCategory] = useState<ForumCategory>('anxiety');
+  const [anonymousAuthor, setAnonymousAuthor] = useState(() => generateAnonymousName());
+
+  // Crisis detection state
+  const [isCrisisDetected, setIsCrisisDetected] = useState(false);
+
+  // Expanded post for comments
+  const [expandedPostId, setExpandedPostId] = useState<string | null>(null);
+  const [commentsMap, setCommentsMap] = useState<Record<string, ForumComment[]>>({});
+  const [newCommentText, setNewCommentText] = useState('');
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   const lang = i18n.language as 'id' | 'en';
 
-  const handlePost = () => {
-    if (!newTitle || !newContent) return;
-    const post = {
-      id: Date.now().toString(),
-      author: `User${Math.floor(Math.random() * 1000)}`,
-      title: newTitle,
-      content: newContent,
-      categoryId: newCategory,
-      timestamp: new Date().toISOString(),
-      reactions: { heart: 0, strength: 0, hug: 0 },
-      comments: []
-    };
-    setPosts([post, ...posts]);
+  useEffect(() => {
+    loadPosts();
+  }, []);
+
+  const loadPosts = async () => {
+    const data = await fetchForumPosts();
+    setPosts(data);
+  };
+
+  const handleTitleChange = (val: string) => {
+    setNewTitle(val);
+    checkCrisis(val, newContent);
+  };
+
+  const handleContentChange = (val: string) => {
+    setNewContent(val);
+    checkCrisis(newTitle, val);
+  };
+
+  const checkCrisis = (title: string, content: string) => {
+    const crisis = checkCrisisKeywords(title) || checkCrisisKeywords(content);
+    setIsCrisisDetected(crisis);
+  };
+
+  const handlePost = async () => {
+    if (!newTitle.trim() || !newContent.trim()) return;
+
+    const { isCrisis } = await createForumPost(
+      newTitle.trim(),
+      newContent.trim(),
+      newCategory,
+      anonymousAuthor
+    );
+
+    if (isCrisis) {
+      triggerToast('Postingan terdeteksi berisi kata sensitif. Bantuan krisis selalu tersedia untukmu.');
+    } else {
+      triggerToast('Postingan anonim berhasil dipublikasikan!');
+    }
+
     setIsComposing(false);
     setNewTitle('');
     setNewContent('');
+    setAnonymousAuthor(generateAnonymousName());
+    setIsCrisisDetected(false);
+    loadPosts();
   };
 
-  const filteredPosts = activeCategory === 'all' 
-    ? posts 
-    : posts.filter(p => p.categoryId === activeCategory);
+  const handleReaction = async (postId: string, type: 'heart' | 'strength' | 'hug') => {
+    const updated = await addReactionToPost(postId, type);
+    setPosts(updated);
+  };
+
+  const toggleComments = async (postId: string) => {
+    if (expandedPostId === postId) {
+      setExpandedPostId(null);
+    } else {
+      setExpandedPostId(postId);
+      const comments = await fetchPostComments(postId);
+      setCommentsMap(prev => ({ ...prev, [postId]: comments }));
+    }
+  };
+
+  const handleAddComment = async (postId: string) => {
+    if (!newCommentText.trim()) return;
+    const comment = await addCommentToPost(postId, newCommentText.trim());
+    setCommentsMap(prev => ({
+      ...prev,
+      [postId]: [...(prev[postId] || []), comment]
+    }));
+    setNewCommentText('');
+    triggerToast('Dukunganmu telah terkirim!');
+    loadPosts();
+  };
+
+  const handleReportPost = () => {
+    triggerToast('Laporan telah diterima. Tim moderasi akan meninjau postingan ini.');
+  };
+
+  const triggerToast = (msg: string) => {
+    setToastMessage(msg);
+    setTimeout(() => setToastMessage(null), 3000);
+  };
+
+  const dismissGuidelines = () => {
+    localStorage.setItem('rima-forum-guidelines-seen', 'true');
+    setShowGuidelines(false);
+  };
+
+  const filteredPosts = activeCategory === 'all'
+    ? posts
+    : posts.filter(p => p.category === activeCategory);
 
   return (
     <div className="forum-page">
+      {toastMessage && (
+        <div style={{
+          position: 'fixed',
+          top: '20px',
+          right: '20px',
+          backgroundColor: 'var(--bg-elevated)',
+          color: 'var(--text-primary)',
+          padding: '12px 20px',
+          borderRadius: '12px',
+          boxShadow: 'var(--shadow-elevated)',
+          border: '1px solid var(--border-strong)',
+          zIndex: 100,
+          display: 'flex',
+          alignItems: 'center',
+          gap: '8px',
+          fontSize: '0.875rem',
+          fontWeight: 600,
+          animation: 'slideInRight 0.3s ease-out'
+        }}>
+          <CheckCircle size={18} style={{ color: 'var(--color-secondary)' }} />
+          <span>{toastMessage}</span>
+        </div>
+      )}
+
       <header className="forum-header">
-        <h1 className="page-title">{t('forum.title', { defaultValue: 'Forum Dukungan' })}</h1>
-        <p className="forum-subtitle">{t('forum.subtitle', { defaultValue: 'Ruang aman untuk berbagi.' })}</p>
-        <button className="btn-primary" onClick={() => setIsComposing(true)}>
-          {t('forum.newPost', { defaultValue: 'Tulis' })}
+        <div>
+          <h1 className="page-title">{t('forum.title', { defaultValue: 'Forum Komunitas Anonim' })}</h1>
+          <p className="forum-subtitle">{t('forum.subtitle', { defaultValue: 'Ruang aman tanpa penghakiman. Saling mendengar dan mendukung.' })}</p>
+        </div>
+        <button className="btn btn-primary" onClick={() => setIsComposing(prev => !prev)}>
+          {isComposing ? t('common.cancel', 'Batal') : t('forum.newPost', 'Tulis Cerita')}
         </button>
       </header>
 
-      {!showGuidelines && (
+      {showGuidelines && (
         <div className="guidelines-banner">
-          <h3>{t('forum.guidelines.title', { defaultValue: 'Ruang Aman Bersama' })}</h3>
-          <p>{t('forum.guidelines.desc', { defaultValue: 'Forum ini bersifat anonim. Harap jaga empati.' })}</p>
-          <button className="btn-ghost" onClick={() => setShowGuidelines(true)}>
-            {t('common.understand', { defaultValue: 'Saya Mengerti' })}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
+            <ShieldAlert size={18} style={{ color: 'var(--color-primary)' }} />
+            <strong>{t('forum.guidelinesTitle', 'Pedoman Komunitas Aman')}</strong>
+          </div>
+          <p>{t('forum.guidelinesText', 'Identitasmu terlindungi (anonim). Berbicaralah dengan penuh empati, saling menguatkan, dan hindari kata-kata kebencian.')}</p>
+          <button className="btn btn-ghost btn-sm" style={{ marginTop: '8px' }} onClick={dismissGuidelines}>
+            {t('common.understand', 'Saya Mengerti')}
           </button>
         </div>
       )}
@@ -64,52 +186,92 @@ export const Forum: React.FC = () => {
           className={`category-chip ${activeCategory === 'all' ? 'active' : ''}`}
           onClick={() => setActiveCategory('all')}
         >
-          {t('forum.allCategories', { defaultValue: 'Semua' })}
+          {t('forum.all', 'Semua')} ({posts.length})
         </button>
-        {FORUM_CATEGORIES.map(cat => (
-          <button
-            key={cat.id}
-            className={`category-chip ${activeCategory === cat.id ? 'active' : ''}`}
-            onClick={() => setActiveCategory(cat.id)}
-          >
-            {lang === 'en' ? cat.labelEn : cat.labelId}
-          </button>
-        ))}
+        {FORUM_CATEGORIES.map(cat => {
+          const count = posts.filter(p => p.category === cat.id).length;
+          return (
+            <button
+              key={cat.id}
+              className={`category-chip ${activeCategory === cat.id ? 'active' : ''}`}
+              onClick={() => setActiveCategory(cat.id)}
+            >
+              {lang === 'en' ? cat.labelEn : cat.labelId} ({count})
+            </button>
+          );
+        })}
       </div>
 
       {isComposing && (
-        <div className="forum-post-card">
-          <h3>{t('forum.composeTitle', { defaultValue: 'Buat Postingan Baru' })}</h3>
-          <select 
-            value={newCategory} 
-            onChange={e => setNewCategory(e.target.value as ForumCategory)}
-            style={{ width: '100%', padding: 'var(--spacing-sm)', marginBottom: 'var(--spacing-sm)' }}
-          >
-            {FORUM_CATEGORIES.map(c => (
-              <option key={c.id} value={c.id}>{lang === 'en' ? c.labelEn : c.labelId}</option>
-            ))}
-          </select>
-          <input 
-            type="text" 
-            placeholder={t('forum.postTitlePlaceholder', { defaultValue: 'Judul...' })}
-            style={{ width: '100%', padding: 'var(--spacing-sm)', marginBottom: 'var(--spacing-sm)' }}
-            value={newTitle}
-            onChange={e => setNewTitle(e.target.value)}
-          />
-          <textarea 
-            placeholder={t('forum.postContentPlaceholder', { defaultValue: 'Bagikan ceritamu...' })}
-            style={{ width: '100%', padding: 'var(--spacing-sm)', marginBottom: 'var(--spacing-sm)' }}
-            rows={4}
-            value={newContent}
-            onChange={e => setNewContent(e.target.value)}
-          />
-          <div style={{ display: 'flex', gap: 'var(--spacing-sm)', justifyContent: 'flex-end' }}>
-            <button className="btn-ghost" onClick={() => setIsComposing(false)}>
-              {t('common.cancel', { defaultValue: 'Batal' })}
-            </button>
-            <button className="btn-primary" onClick={handlePost}>
-              {t('forum.post', { defaultValue: 'Kirim' })}
-            </button>
+        <div className="card" style={{ padding: '24px', marginBottom: '24px', animation: 'scaleIn 0.3s' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+            <h3 style={{ fontSize: '1.125rem', fontWeight: 600, color: 'var(--text-primary)' }}>
+              {t('forum.newPostTitle', 'Tulis Cerita Anonim')}
+            </h3>
+            <span style={{ fontSize: '0.813rem', color: 'var(--color-primary)', fontWeight: 600 }}>
+              Sebagai: {anonymousAuthor}
+            </span>
+          </div>
+
+          {isCrisisDetected && (
+            <div style={{
+              backgroundColor: 'hsla(0, 65%, 55%, 0.12)',
+              border: '1px solid var(--color-danger)',
+              borderRadius: '12px',
+              padding: '16px',
+              marginBottom: '16px',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '8px'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--color-danger)', fontWeight: 700 }}>
+                <AlertTriangle size={20} />
+                <span>Kami peduli padamu. Kamu tidak sendirian.</span>
+              </div>
+              <p style={{ fontSize: '0.813rem', color: 'var(--text-secondary)', margin: 0 }}>
+                Jika kamu merasa sangat berat atau memikirkan hal-hal berbahaya, silakan hubungi Layanan Krisis Into The Light sekarang:
+              </p>
+              <a href="tel:119,8" className="btn btn-danger btn-sm" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', width: 'fit-content', marginTop: '4px' }}>
+                <Phone size={14} /> Telepon 119 ext 8
+              </a>
+            </div>
+          )}
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            <select
+              className="select"
+              value={newCategory}
+              onChange={e => setNewCategory(e.target.value as ForumCategory)}
+            >
+              {FORUM_CATEGORIES.map(c => (
+                <option key={c.id} value={c.id}>{lang === 'en' ? c.labelEn : c.labelId}</option>
+              ))}
+            </select>
+
+            <input
+              type="text"
+              className="input"
+              placeholder={t('forum.titlePlaceholder', 'Judul cerita atau pertanyaanmu...')}
+              value={newTitle}
+              onChange={e => handleTitleChange(e.target.value)}
+            />
+
+            <textarea
+              className="textarea"
+              placeholder={t('forum.contentPlaceholder', 'Ceritakan apa yang sedang kamu rasakan. Ini ruang amanmu...')}
+              rows={4}
+              value={newContent}
+              onChange={e => handleContentChange(e.target.value)}
+            />
+
+            <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>
+              <button className="btn btn-ghost" onClick={() => setIsComposing(false)}>
+                {t('common.cancel', 'Batal')}
+              </button>
+              <button className="btn btn-primary" onClick={handlePost}>
+                {t('forum.submit', 'Kirim Cerita')}
+              </button>
+            </div>
           </div>
         </div>
       )}
@@ -118,26 +280,102 @@ export const Forum: React.FC = () => {
         {filteredPosts.length === 0 ? (
           <div className="forum-empty">
             <div className="forum-empty-icon">💬</div>
-            <p>{t('forum.empty', { defaultValue: 'Belum ada postingan di kategori ini.' })}</p>
+            <p>{t('forum.empty', 'Belum ada cerita di kategori ini. Jadilah yang pertama berbagi.')}</p>
           </div>
         ) : (
-          filteredPosts.map(post => (
-            <div key={post.id} className="forum-post-card">
-              <div className="forum-post-header">
-                <div className="forum-post-avatar">{post.author.charAt(0)}</div>
-                <span className="forum-post-author">{post.author}</span>
-                <span className="forum-post-time">{new Date(post.timestamp).toLocaleDateString()}</span>
+          filteredPosts.map(post => {
+            const isExpanded = expandedPostId === post.id;
+            const comments = commentsMap[post.id] || [];
+
+            return (
+              <div key={post.id} className="forum-post-card">
+                <div className="forum-post-header">
+                  <div className="forum-post-avatar" style={{ backgroundColor: 'hsla(215, 65%, 55%, 0.15)', color: 'var(--color-primary)' }}>
+                    {post.authorName.charAt(0)}
+                  </div>
+                  <div>
+                    <span className="forum-post-author">{post.authorName}</span>
+                    <span className="badge badge-primary" style={{ marginLeft: '8px' }}>
+                      {FORUM_CATEGORIES.find(c => c.id === post.category)?.[lang === 'en' ? 'labelEn' : 'labelId'] || post.category}
+                    </span>
+                  </div>
+                  <span className="forum-post-time">
+                    {new Date(post.createdAt).toLocaleDateString(lang === 'id' ? 'id-ID' : 'en-US')}
+                  </span>
+                </div>
+
+                <h2 className="forum-post-title">{post.title}</h2>
+                <p className="forum-post-content" style={{ WebkitLineClamp: isExpanded ? 'unset' : 3 }}>
+                  {post.content}
+                </p>
+
+                <div className="forum-post-footer">
+                  <button className="forum-reaction" onClick={() => handleReaction(post.id, 'heart')}>
+                    ❤️ {post.reactions?.heart || 0}
+                  </button>
+                  <button className="forum-reaction" onClick={() => handleReaction(post.id, 'strength')}>
+                    💪 {post.reactions?.strength || 0}
+                  </button>
+                  <button className="forum-reaction" onClick={() => handleReaction(post.id, 'hug')}>
+                    🤗 {post.reactions?.hug || 0}
+                  </button>
+
+                  <button className="forum-reaction" onClick={() => toggleComments(post.id)} style={{ marginLeft: 'auto' }}>
+                    <MessageCircle size={14} /> {post.commentCount || 0} {t('forum.comments', 'Komentar')}
+                  </button>
+
+                  <button className="btn btn-ghost btn-sm" onClick={handleReportPost} title="Laporkan Postingan">
+                    <Flag size={14} style={{ color: 'var(--text-tertiary)' }} />
+                  </button>
+                </div>
+
+                {isExpanded && (
+                  <div style={{ marginTop: '16px', paddingTop: '16px', borderTop: '1px solid var(--border-subtle)', animation: 'fadeIn 0.3s' }}>
+                    <h4 style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--text-secondary)', marginBottom: '12px' }}>
+                      Dukungan Sesama ({comments.length})
+                    </h4>
+
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '16px' }}>
+                      {comments.map(comment => (
+                        <div key={comment.id} style={{ padding: '10px 14px', backgroundColor: 'var(--bg-secondary)', borderRadius: '12px', fontSize: '0.875rem' }}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
+                            <span style={{ fontWeight: 600, color: 'var(--color-primary)', fontSize: '0.813rem' }}>
+                              {comment.authorName}
+                            </span>
+                            <span style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)' }}>
+                              {new Date(comment.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                            </span>
+                          </div>
+                          <p style={{ color: 'var(--text-primary)', margin: 0, lineHeight: 1.5 }}>
+                            {comment.content}
+                          </p>
+                        </div>
+                      ))}
+                      {comments.length === 0 && (
+                        <p style={{ fontSize: '0.813rem', color: 'var(--text-tertiary)', fontStyle: 'italic' }}>
+                          Belum ada pesan dukungan. Jadilah yang pertama memberikan semangat!
+                        </p>
+                      )}
+                    </div>
+
+                    <div style={{ display: 'flex', gap: '8px' }}>
+                      <input
+                        type="text"
+                        className="input"
+                        placeholder={t('forum.replyPlaceholder', 'Tulis pesan dukungan hangat...')}
+                        value={newCommentText}
+                        onChange={e => setNewCommentText(e.target.value)}
+                        onKeyDown={e => { if (e.key === 'Enter') handleAddComment(post.id); }}
+                      />
+                      <button className="btn btn-primary btn-sm" onClick={() => handleAddComment(post.id)}>
+                        <Send size={16} />
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
-              <h4 className="forum-post-title">{post.title}</h4>
-              <p className="forum-post-content">{post.content}</p>
-              
-              <div className="forum-post-footer">
-                <button className="forum-reaction">❤️ {post.reactions.heart}</button>
-                <button className="forum-reaction">🛡️ {post.reactions.strength}</button>
-                <button className="forum-reaction">💬 {post.comments.length}</button>
-              </div>
-            </div>
-          ))
+            );
+          })
         )}
       </div>
     </div>
