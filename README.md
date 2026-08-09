@@ -81,7 +81,7 @@ Install langsung dari browser tanpa app store. Berfungsi offline — mood dan ju
 | **i18n** | i18next + react-i18next |
 | **Storage** | localStorage (offline-first) |
 | **PWA** | vite-plugin-pwa + Workbox |
-| **Backend** | Supabase *(planned)* |
+| **Backend** | Supabase (active / offline-first fallback) |
 
 ---
 
@@ -211,12 +211,12 @@ RIMA menggunakan design system yang dirancang khusus untuk konteks kesehatan men
 - [x] Bilingual (ID/EN)
 - [x] Responsive layout (mobile + desktop)
 
-### 🔲 Fase 2 — Backend & Komunitas
-- [ ] Integrasi Supabase (database, auth, realtime)
-- [ ] Sinkronisasi data antar perangkat
-- [ ] Forum realtime dengan moderasi
-- [ ] Notifikasi & reminder check-in
-- [ ] Export data mood/jurnal (PDF/CSV)
+### ✅ Fase 2 — Backend & Komunitas (Selesai)
+- [x] Integrasi Supabase (database, auth, realtime)
+- [x] Sinkronisasi data antar perangkat (offline-first fallback)
+- [x] Forum realtime dengan moderasi & deteksi krisis otomatis
+- [x] Notifikasi & reminder check-in harian
+- [x] Export data mood/jurnal/ safety plan (JSON, CSV, PDF print)
 
 ### 🔲 Fase 3 — AI & Edukasi
 - [ ] NLP crisis detection pada jurnal
