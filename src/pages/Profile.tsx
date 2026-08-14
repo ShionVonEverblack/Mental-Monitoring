@@ -47,18 +47,18 @@ export const Profile: React.FC = () => {
     if (tempName.trim()) {
       updateDisplayName(tempName.trim());
       setIsEditingName(false);
-      showToast('Nama tampilan diperbarui!');
+      showToast(t('profile.nameUpdated', 'Nama tampilan diperbarui!'));
     }
   };
 
   const handleRegenerate = () => {
     regenerateAnonymousName();
-    showToast('Nama anonim baru dibuat!');
+    showToast(t('profile.nameRegenerated', 'Nama anonim baru dibuat!'));
   };
 
   const handleLanguageChange = (newLang: 'id' | 'en') => {
     i18n.changeLanguage(newLang);
-    showToast(newLang === 'id' ? 'Bahasa diubah ke Bahasa Indonesia' : 'Language changed to English');
+    showToast(t('profile.langChanged', newLang === 'id' ? 'Bahasa diubah ke Bahasa Indonesia' : 'Language changed to English'));
   };
 
   const handleImportFile = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -120,7 +120,7 @@ export const Profile: React.FC = () => {
               className="profile-name-input"
             />
             <Button variant="primary" size="sm" onClick={handleSaveName}>
-              Simpan
+              {t('common.save', 'Simpan')}
             </Button>
           </div>
         ) : (
@@ -129,14 +129,14 @@ export const Profile: React.FC = () => {
             <button
               className="btn btn-ghost btn-icon"
               onClick={() => { setTempName(user.displayName); setIsEditingName(true); }}
-              title="Edit nama"
+              title={t('profile.editName', 'Edit nama')}
             >
               ✏️
             </button>
             <button
               className="btn btn-ghost btn-icon"
               onClick={handleRegenerate}
-              title="Generate Nama Anonim Baru"
+              title={t('profile.regenerateName', 'Generate Nama Anonim Baru')}
             >
               <RefreshCw size={16} />
             </button>
@@ -145,7 +145,7 @@ export const Profile: React.FC = () => {
 
         <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '0.75rem', color: 'var(--text-tertiary)', marginTop: '6px' }}>
           <Shield size={14} style={{ color: 'var(--color-secondary)' }} />
-          <span>Profil Anonim Aman • Terjaga di Perangkat</span>
+          <span>{t('profile.anonBadge', 'Profil Anonim Aman • Terjaga di Perangkat')}</span>
         </div>
       </div>
 
@@ -164,7 +164,7 @@ export const Profile: React.FC = () => {
         </Card>
         <Card className="stat-card">
           <div className="stat-value" style={{ color: 'var(--color-accent)' }}>
-            {stats.trend === 'improving' ? '📈 Membaik' : stats.trend === 'declining' ? '📉 Menurun' : '➖ Stabil'}
+            {stats.trend === 'improving' ? '📈 ' + t('mood.improving', 'Membaik') : stats.trend === 'declining' ? '📉 ' + t('mood.declining', 'Menurun') : '➖ ' + t('mood.stable', 'Stabil')}
           </div>
           <div className="stat-label">{t('profile.trend', 'Tren 30 Hari')}</div>
         </Card>
@@ -180,7 +180,7 @@ export const Profile: React.FC = () => {
             </div>
             <div className="settings-item-right">
               <span style={{ fontWeight: 600, marginRight: '12px' }}>
-                {theme === 'dark' ? 'Mode Gelap' : 'Mode Terang'}
+                {theme === 'dark' ? t('profile.darkMode', 'Mode Gelap') : t('profile.lightMode', 'Mode Terang')}
               </span>
               <div className={`toggle-switch ${theme === 'dark' ? 'active' : ''}`} />
             </div>
@@ -225,7 +225,7 @@ export const Profile: React.FC = () => {
           {notifEnabled && (
             <div className="settings-item" style={{ backgroundColor: 'var(--bg-secondary)' }}>
               <div className="settings-item-left">
-                <span style={{ fontSize: '0.875rem' }}>Waktu Pengingat:</span>
+                <span style={{ fontSize: '0.875rem' }}>{t('profile.reminderTime', 'Waktu Pengingat:')}</span>
               </div>
               <div className="settings-item-right" style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
                 <input
@@ -236,7 +236,7 @@ export const Profile: React.FC = () => {
                   onChange={(e) => setReminderTime(e.target.value)}
                 />
                 <Button variant="ghost" size="sm" onClick={sendTestNotification}>
-                  Uji Notifikasi
+                  {t('profile.testNotif', 'Uji Notifikasi')}
                 </Button>
               </div>
             </div>
@@ -250,11 +250,11 @@ export const Profile: React.FC = () => {
           <div className="settings-item" onClick={exportAllDataAsJSON}>
             <div className="settings-item-left">
               <Download size={18} />
-              <span>Ekspor Cadangan Lengkap (JSON)</span>
+              <span>{t('profile.exportJSON', 'Ekspor Cadangan Lengkap (JSON)')}</span>
             </div>
             <div className="settings-item-right">
               <Button variant="ghost" size="sm" icon={<Download size={14} />}>
-                Unduh
+                {t('common.download', 'Unduh')}
               </Button>
             </div>
           </div>
@@ -262,7 +262,7 @@ export const Profile: React.FC = () => {
           <div className="settings-item" onClick={exportMoodsAsCSV}>
             <div className="settings-item-left">
               <FileSpreadsheet size={18} />
-              <span>Ekspor Laporan Mood ke Terapis (CSV)</span>
+              <span>{t('profile.exportCSV', 'Ekspor Laporan Mood ke Terapis (CSV)')}</span>
             </div>
             <div className="settings-item-right">
               <Button variant="ghost" size="sm" icon={<FileSpreadsheet size={14} />}>
@@ -274,7 +274,7 @@ export const Profile: React.FC = () => {
           <div className="settings-item" onClick={() => fileInputRef.current?.click()}>
             <div className="settings-item-left">
               <Upload size={18} />
-              <span>Pulihkan Data dari File JSON</span>
+              <span>{t('profile.importJSON', 'Pulihkan Data dari File JSON')}</span>
             </div>
             <div className="settings-item-right">
               <input
@@ -285,7 +285,7 @@ export const Profile: React.FC = () => {
                 onChange={handleImportFile}
               />
               <Button variant="ghost" size="sm" icon={<Upload size={14} />}>
-                Pilih File
+                {t('profile.selectFile', 'Pilih File')}
               </Button>
             </div>
           </div>
@@ -298,11 +298,11 @@ export const Profile: React.FC = () => {
           <div className="settings-item">
             <div className="settings-item-left">
               <Database size={18} />
-              <span>Penyimpanan Supabase</span>
+              <span>{t('profile.supabaseStorage', 'Penyimpanan Supabase')}</span>
             </div>
             <div className="settings-item-right">
               <span className={`badge ${isSupabaseConfigured ? 'badge-primary' : 'badge-secondary'}`}>
-                {isSupabaseConfigured ? '⚡ Connected' : '🔒 Mode Lokal (Offline-first)'}
+                {isSupabaseConfigured ? t('profile.connected', '⚡ Connected') : t('profile.localMode', '🔒 Mode Lokal (Offline-first)')}
               </span>
             </div>
           </div>
@@ -311,16 +311,16 @@ export const Profile: React.FC = () => {
 
       <div className="about-section">
         <div className="about-logo">RIMA</div>
-        <div className="about-version">Ruang Interaksi Mental Aman v1.0.0 (Fase 2)</div>
+        <div className="about-version">{t('profile.version', 'Ruang Interaksi Mental Aman v1.0.0 (Fase 2)')}</div>
         <p style={{ marginTop: '8px', fontSize: '0.813rem' }}>
-          Dibuat berdasarkan riset kesehatan mental berbasis bukti ilmiah untuk masyarakat Indonesia.
+          {t('profile.aboutDesc', 'Dibuat berdasarkan riset kesehatan mental berbasis bukti ilmiah untuk masyarakat Indonesia.')}
         </p>
 
         <div className="about-disclaimer">
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', fontWeight: 600, marginBottom: '4px' }}>
-            <Info size={16} /> Disclaimer Penting
+            <Info size={16} /> {t('profile.disclaimer', 'Disclaimer Penting')}
           </div>
-          RIMA bukan pengganti layanan medis atau psikologis profesional. Jika Anda mengalami kondisi krisis, segera tekan tombol <strong>SOS</strong> merah di kanan bawah.
+          {t('safety.disclaimer')}
         </div>
       </div>
     </div>

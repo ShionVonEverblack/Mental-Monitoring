@@ -103,4 +103,10 @@
   --shadow-subtle: 0 2px 8px rgba(0, 0, 0, 0.05);
   --shadow-card: 0 4px 16px rgba(0, 0, 0, 0.08);
   --shadow-elevated: 0 8px 32px rgba(0, 0, 0, 0.12);
+
+  /* Light Mode Color Overrides for WCAG 2.2 AA contrast (4.5:1 on white text) */
+  --color-primary: hsl(215, 70%, 42%);
+  --color-primary-hover: hsl(215, 70%, 35%);
+  --color-danger: hsl(0, 70%, 42%);
+  --color-danger-hover: hsl(0, 70%, 35%);
 }

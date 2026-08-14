@@ -51,8 +51,8 @@ export const Sidebar: React.FC = () => {
           <div className="sidebar-mood-emoji">😊</div>
           {!isCollapsed && (
             <div>
-              <div style={{ fontSize: '0.875rem', fontWeight: 500 }}>Mood Hari Ini</div>
-              <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Cukup Baik</div>
+              <div style={{ fontSize: '0.875rem', fontWeight: 500 }}>{t('home.todayMood', 'Mood Hari Ini')}</div>
+              <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{t('home.feelingGood', 'Cukup Baik')}</div>
             </div>
           )}
         </div>

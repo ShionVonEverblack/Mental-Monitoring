@@ -27,7 +27,7 @@ const App: React.FC = () => {
     <ErrorBoundary>
       <BrowserRouter>
         <AppShell>
-          <Suspense fallback={<LoadingSpinner message="Memuat Ruang Aman..." />}>
+          <Suspense fallback={<LoadingSpinner message={localStorage.getItem('i18nextLng') === 'en' ? 'Loading Safe Space...' : 'Memuat Ruang Aman...'} />}>
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/mood" element={<MoodTracker />} />

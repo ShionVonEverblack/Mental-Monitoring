@@ -20,7 +20,9 @@
     "quickActions": "Quick Actions",
     "recentMoods": "Recent Moods",
     "streak": "Day Streak",
-    "todayAffirmation": "Today's Affirmation"
+    "todayAffirmation": "Today's Affirmation",
+    "todayMood": "Today's Mood",
+    "feelingGood": "Feeling Good"
   },
   "mood": {
     "title": "Mood Tracker",
@@ -69,7 +71,30 @@
     "support": "Support",
     "report": "Report",
     "communityGuidelines": "Community Guidelines",
-    "guidelineText": "This is a safe space. Respect everyone's privacy and feelings. No judgment here."
+    "guidelineText": "This is a safe space. Respect everyone's privacy and feelings. No judgment here.",
+    "crisisPostAlert": "Post detected sensitive content. Crisis support is always available for you.",
+    "postSuccess": "Anonymous post published successfully!",
+    "commentSent": "Your support has been sent!",
+    "reportSent": "Report received. The moderation team will review this post.",
+    "postingAs": "Posting as:",
+    "crisisTitle": "We care about you. You are not alone.",
+    "crisisBody": "If you're feeling overwhelmed or thinking about harmful things, please contact the Crisis Service Into The Light now:",
+    "crisisCall": "Call 119 ext 8",
+    "reportPost": "Report Post",
+    "peerSupport": "Peer Support",
+    "noComments": "No support messages yet. Be the first to encourage!",
+    "subtitle": "A safe space without judgment. Listen and support each other.",
+    "guidelinesTitle": "Safe Community Guidelines",
+    "guidelinesText2": "Your identity is protected (anonymous). Speak with empathy, support each other, and avoid hateful words.",
+    "understand": "I Understand",
+    "all": "All",
+    "newPostTitle": "Write Anonymous Story",
+    "titlePlaceholder": "Title of your story or question...",
+    "contentPlaceholder": "Share what you're feeling. This is your safe space...",
+    "submit": "Share Story",
+    "empty": "No stories in this category yet. Be the first to share.",
+    "comments": "Comments",
+    "replyPlaceholder": "Write a warm support message..."
   },
   "profile": {
     "title": "Profile",
@@ -84,7 +109,33 @@
     "stats": "Your Stats",
     "totalMoods": "Total Moods",
     "totalJournals": "Total Journals",
-    "memberSince": "Member Since"
+    "memberSince": "Member Since",
+    "nameUpdated": "Display name updated!",
+    "nameRegenerated": "New anonymous name generated!",
+    "langChanged": "Language changed successfully",
+    "editName": "Edit name",
+    "regenerateName": "Generate New Anonymous Name",
+    "anonBadge": "Safe Anonymous Profile • Stored on Device",
+    "streakDays": "Day Streak",
+    "avgMood": "Average Mood",
+    "trend": "30-Day Trend",
+    "appSettings": "APPEARANCE & LANGUAGE",
+    "notificationsTitle": "DAILY REMINDERS & NOTIFICATIONS",
+    "dailyReminder": "Daily Mood Reminder",
+    "reminderTime": "Reminder Time:",
+    "testNotif": "Test Notification",
+    "backupExport": "EXPORT, IMPORT & DATA BACKUP",
+    "exportJSON": "Export Full Backup (JSON)",
+    "exportCSV": "Export Mood Report for Therapist (CSV)",
+    "importJSON": "Restore Data from JSON File",
+    "selectFile": "Select File",
+    "backendStatus": "BACKEND & SYNC STATUS",
+    "supabaseStorage": "Supabase Storage",
+    "connected": "⚡ Connected",
+    "localMode": "🔒 Local Mode (Offline-first)",
+    "version": "Safe Mental Interaction Space v1.0.0 (Phase 2)",
+    "aboutDesc": "Built on evidence-based mental health research for the people of Indonesia.",
+    "disclaimer": "Important Disclaimer"
   },
   "safety": {
     "sos": "Need Help?",
@@ -100,7 +151,12 @@
     "reasonsToLive": "Reasons to Live",
     "edit": "Edit",
     "save": "Save",
-    "disclaimer": "RIMA is not a replacement for professional healthcare. If you are in danger, please contact emergency services immediately."
+    "disclaimer": "RIMA is not a replacement for professional healthcare. If you are in danger, please contact emergency services immediately.",
+    "safetyPlanTitle": "Personal Safety Plan",
+    "safetyPlanSubtitle": "A personal guide you create when your mind is calm, to guide and protect you when emotional crisis arrives.",
+    "emptySection": "No items yet. Add from suggestions below or write your own.",
+    "addPlaceholder": "Add personal item...",
+    "autoSaved": "Auto-saved"
   },
   "common": {
     "save": "Save",
@@ -119,6 +175,9 @@
     "yesterday": "Yesterday",
     "daysAgo": "{{count}} days ago",
     "minutesAgo": "{{count}} minutes ago",
-    "hoursAgo": "{{count}} hours ago"
+    "hoursAgo": "{{count}} hours ago",
+    "download": "Download",
+    "understand": "I Understand",
+    "print": "Print / Save PDF"
   }
 }

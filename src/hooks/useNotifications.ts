@@ -1,6 +1,14 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useLocalStorage } from './useLocalStorage';
 
+const getLang = (): string => {
+  try {
+    return localStorage.getItem('i18nextLng') || 'id';
+  } catch {
+    return 'id';
+  }
+};
+
 interface NotificationSettings {
   enabled: boolean;
   reminderTime: string; // HH:mm format, e.g. "20:00"
@@ -25,7 +33,7 @@ export function useNotifications() {
 
   const requestPermission = useCallback(async (): Promise<boolean> => {
     if (typeof Notification === 'undefined') {
-      alert('Perangkat Anda tidak mendukung notifikasi web.');
+      alert(getLang() === 'en' ? 'Your device does not support web notifications.' : 'Perangkat Anda tidak mendukung notifikasi web.');
       return false;
     }
 
@@ -63,12 +71,12 @@ export function useNotifications() {
 
   const sendTestNotification = useCallback(() => {
     if (typeof Notification !== 'undefined' && Notification.permission === 'granted') {
-      new Notification('RIMA — Pengingat Kesehatan Mental', {
-        body: 'Halo! Bagaimana perasaanmu hari ini? Luangkan 1 menit untuk mencatat mood-mu.',
+      new Notification(getLang() === 'en' ? 'RIMA — Mental Health Reminder' : 'RIMA — Pengingat Kesehatan Mental', {
+        body: getLang() === 'en' ? 'Hello! How are you feeling today? Take 1 minute to log your mood.' : 'Halo! Bagaimana perasaanmu hari ini? Luangkan 1 menit untuk mencatat mood-mu.',
         icon: '/favicon.svg',
       });
     } else {
-      alert('Notifikasi belum diizinkan. Izinkan notifikasi terlebih dahulu.');
+      alert(getLang() === 'en' ? 'Notifications not allowed. Please enable notifications first.' : 'Notifikasi belum diizinkan. Izinkan notifikasi terlebih dahulu.');
     }
   }, []);
 

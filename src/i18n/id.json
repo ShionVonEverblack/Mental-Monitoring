@@ -20,7 +20,9 @@
     "quickActions": "Aksi Cepat",
     "recentMoods": "Mood Terakhir",
     "streak": "Hari Berturut-turut",
-    "todayAffirmation": "Afirmasi Hari Ini"
+    "todayAffirmation": "Afirmasi Hari Ini",
+    "todayMood": "Mood Hari Ini",
+    "feelingGood": "Cukup Baik"
   },
   "mood": {
     "title": "Mood Tracker",
@@ -69,7 +71,30 @@
     "support": "Dukung",
     "report": "Laporkan",
     "communityGuidelines": "Pedoman Komunitas",
-    "guidelineText": "Ini adalah ruang aman. Hargai privasi dan perasaan setiap orang. Tidak ada penghakiman di sini."
+    "guidelineText": "Ini adalah ruang aman. Hargai privasi dan perasaan setiap orang. Tidak ada penghakiman di sini.",
+    "crisisPostAlert": "Postingan terdeteksi berisi kata sensitif. Bantuan krisis selalu tersedia untukmu.",
+    "postSuccess": "Postingan anonim berhasil dipublikasikan!",
+    "commentSent": "Dukunganmu telah terkirim!",
+    "reportSent": "Laporan telah diterima. Tim moderasi akan meninjau postingan ini.",
+    "postingAs": "Sebagai:",
+    "crisisTitle": "Kami peduli padamu. Kamu tidak sendirian.",
+    "crisisBody": "Jika kamu merasa sangat berat atau memikirkan hal-hal berbahaya, silakan hubungi Layanan Krisis Into The Light sekarang:",
+    "crisisCall": "Telepon 119 ext 8",
+    "reportPost": "Laporkan Postingan",
+    "peerSupport": "Dukungan Sesama",
+    "noComments": "Belum ada pesan dukungan. Jadilah yang pertama memberikan semangat!",
+    "subtitle": "Ruang aman tanpa penghakiman. Saling mendengar dan mendukung.",
+    "guidelinesTitle": "Pedoman Komunitas Aman",
+    "guidelinesText2": "Identitasmu terlindungi (anonim). Berbicaralah dengan penuh empati, saling menguatkan, dan hindari kata-kata kebencian.",
+    "understand": "Saya Mengerti",
+    "all": "Semua",
+    "newPostTitle": "Tulis Cerita Anonim",
+    "titlePlaceholder": "Judul cerita atau pertanyaanmu...",
+    "contentPlaceholder": "Ceritakan apa yang sedang kamu rasakan. Ini ruang amanmu...",
+    "submit": "Kirim Cerita",
+    "empty": "Belum ada cerita di kategori ini. Jadilah yang pertama berbagi.",
+    "comments": "Komentar",
+    "replyPlaceholder": "Tulis pesan dukungan hangat..."
   },
   "profile": {
     "title": "Profil",
@@ -84,7 +109,33 @@
     "stats": "Statistikmu",
     "totalMoods": "Total Mood",
     "totalJournals": "Total Jurnal",
-    "memberSince": "Bergabung Sejak"
+    "memberSince": "Bergabung Sejak",
+    "nameUpdated": "Nama tampilan diperbarui!",
+    "nameRegenerated": "Nama anonim baru dibuat!",
+    "langChanged": "Bahasa berhasil diubah",
+    "editName": "Edit nama",
+    "regenerateName": "Generate Nama Anonim Baru",
+    "anonBadge": "Profil Anonim Aman • Terjaga di Perangkat",
+    "streakDays": "Hari Berturut",
+    "avgMood": "Rata-rata Mood",
+    "trend": "Tren 30 Hari",
+    "appSettings": "TAMPILAN & BAHASA",
+    "notificationsTitle": "PENGINGAT HARIAN & NOTIFIKASI",
+    "dailyReminder": "Pengingat Mood Harian",
+    "reminderTime": "Waktu Pengingat:",
+    "testNotif": "Uji Notifikasi",
+    "backupExport": "EKSPOR, IMPOR & CADANGAN DATA",
+    "exportJSON": "Ekspor Cadangan Lengkap (JSON)",
+    "exportCSV": "Ekspor Laporan Mood ke Terapis (CSV)",
+    "importJSON": "Pulihkan Data dari File JSON",
+    "selectFile": "Pilih File",
+    "backendStatus": "STATUS BACKEND & SINKRONISASI",
+    "supabaseStorage": "Penyimpanan Supabase",
+    "connected": "⚡ Connected",
+    "localMode": "🔒 Mode Lokal (Offline-first)",
+    "version": "Ruang Interaksi Mental Aman v1.0.0 (Fase 2)",
+    "aboutDesc": "Dibuat berdasarkan riset kesehatan mental berbasis bukti ilmiah untuk masyarakat Indonesia.",
+    "disclaimer": "Disclaimer Penting"
   },
   "safety": {
     "sos": "Butuh Bantuan?",
@@ -100,7 +151,12 @@
     "reasonsToLive": "Alasan untuk Tetap Ada",
     "edit": "Edit",
     "save": "Simpan",
-    "disclaimer": "RIMA bukan pengganti layanan kesehatan profesional. Jika kamu dalam bahaya, segera hubungi layanan darurat."
+    "disclaimer": "RIMA bukan pengganti layanan kesehatan profesional. Jika kamu dalam bahaya, segera hubungi layanan darurat.",
+    "safetyPlanTitle": "Rencana Keselamatan Personal",
+    "safetyPlanSubtitle": "Panduan pribadi yang Anda susun saat pikiran tenang, untuk menuntun dan melindungi Anda ketika krisis emosional datang.",
+    "emptySection": "Belum ada item. Tambahkan dari ide di bawah atau tulis milikmu.",
+    "addPlaceholder": "Tambah item pribadi...",
+    "autoSaved": "Tersimpan otomatis"
   },
   "common": {
     "save": "Simpan",
@@ -119,6 +175,9 @@
     "yesterday": "Kemarin",
     "daysAgo": "{{count}} hari lalu",
     "minutesAgo": "{{count}} menit lalu",
-    "hoursAgo": "{{count}} jam lalu"
+    "hoursAgo": "{{count}} jam lalu",
+    "download": "Unduh",
+    "understand": "Saya Mengerti",
+    "print": "Cetak / Simpan PDF"
   }
 }

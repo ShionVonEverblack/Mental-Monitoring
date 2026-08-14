@@ -74,9 +74,9 @@ export const Forum: React.FC = () => {
     );
 
     if (isCrisis) {
-      triggerToast('Postingan terdeteksi berisi kata sensitif. Bantuan krisis selalu tersedia untukmu.');
+      triggerToast(t('forum.crisisPostAlert', 'Postingan terdeteksi berisi kata sensitif. Bantuan krisis selalu tersedia untukmu.'));
     } else {
-      triggerToast('Postingan anonim berhasil dipublikasikan!');
+      triggerToast(t('forum.postSuccess', 'Postingan anonim berhasil dipublikasikan!'));
     }
 
     setIsComposing(false);
@@ -110,12 +110,12 @@ export const Forum: React.FC = () => {
       [postId]: [...(prev[postId] || []), comment]
     }));
     setNewCommentText('');
-    triggerToast('Dukunganmu telah terkirim!');
+    triggerToast(t('forum.commentSent', 'Dukunganmu telah terkirim!'));
     loadPosts();
   };
 
   const handleReportPost = () => {
-    triggerToast('Laporan telah diterima. Tim moderasi akan meninjau postingan ini.');
+    triggerToast(t('forum.reportSent', 'Laporan telah diterima. Tim moderasi akan meninjau postingan ini.'));
   };
 
   const triggerToast = (msg: string) => {
@@ -209,7 +209,7 @@ export const Forum: React.FC = () => {
               {t('forum.newPostTitle', 'Tulis Cerita Anonim')}
             </h3>
             <span style={{ fontSize: '0.813rem', color: 'var(--color-primary)', fontWeight: 600 }}>
-              Sebagai: {anonymousAuthor}
+              {t('forum.postingAs', 'Sebagai:')} {anonymousAuthor}
             </span>
           </div>
 
@@ -226,13 +226,13 @@ export const Forum: React.FC = () => {
             }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--color-danger)', fontWeight: 700 }}>
                 <AlertTriangle size={20} />
-                <span>Kami peduli padamu. Kamu tidak sendirian.</span>
+                <span>{t('forum.crisisTitle', 'Kami peduli padamu. Kamu tidak sendirian.')}</span>
               </div>
               <p style={{ fontSize: '0.813rem', color: 'var(--text-secondary)', margin: 0 }}>
-                Jika kamu merasa sangat berat atau memikirkan hal-hal berbahaya, silakan hubungi Layanan Krisis Into The Light sekarang:
+                {t('forum.crisisBody', 'Jika kamu merasa sangat berat atau memikirkan hal-hal berbahaya, silakan hubungi Layanan Krisis Into The Light sekarang:')}
               </p>
               <a href="tel:119,8" className="btn btn-danger btn-sm" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', width: 'fit-content', marginTop: '4px' }}>
-                <Phone size={14} /> Telepon 119 ext 8
+                <Phone size={14} /> {t('forum.crisisCall', 'Telepon 119 ext 8')}
               </a>
             </div>
           )}
@@ -324,7 +324,7 @@ export const Forum: React.FC = () => {
                     <MessageCircle size={14} /> {post.commentCount || 0} {t('forum.comments', 'Komentar')}
                   </button>
 
-                  <button className="btn btn-ghost btn-sm" onClick={handleReportPost} title="Laporkan Postingan">
+                  <button className="btn btn-ghost btn-sm" onClick={handleReportPost} title={t('forum.reportPost', 'Laporkan Postingan')}>
                     <Flag size={14} style={{ color: 'var(--text-tertiary)' }} />
                   </button>
                 </div>
@@ -332,7 +332,7 @@ export const Forum: React.FC = () => {
                 {isExpanded && (
                   <div style={{ marginTop: '16px', paddingTop: '16px', borderTop: '1px solid var(--border-subtle)', animation: 'fadeIn 0.3s' }}>
                     <h4 style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--text-secondary)', marginBottom: '12px' }}>
-                      Dukungan Sesama ({comments.length})
+                      {t('forum.peerSupport', 'Dukungan Sesama')} ({comments.length})
                     </h4>
 
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '16px' }}>
@@ -353,7 +353,7 @@ export const Forum: React.FC = () => {
                       ))}
                       {comments.length === 0 && (
                         <p style={{ fontSize: '0.813rem', color: 'var(--text-tertiary)', fontStyle: 'italic' }}>
-                          Belum ada pesan dukungan. Jadilah yang pertama memberikan semangat!
+                          {t('forum.noComments', 'Belum ada pesan dukungan. Jadilah yang pertama memberikan semangat!')}
                         </p>
                       )}
                     </div>

@@ -1,6 +1,10 @@
 import { Component, type ReactNode, type ErrorInfo } from 'react';
 import { AlertTriangle, RefreshCw, Home } from 'lucide-react';
 
+const getLang = (): string => {
+  try { return localStorage.getItem('i18nextLng') || 'id'; } catch { return 'id'; }
+};
+
 interface Props {
   children: ReactNode;
   fallback?: ReactNode;
@@ -80,11 +84,11 @@ export class ErrorBoundary extends Component<Props, State> {
             </div>
 
             <h1 style={{ fontSize: '1.5rem', fontWeight: 700, margin: 0 }}>
-              Ada Kendala Teknis
+              {getLang() === 'en' ? 'Technical Issue' : 'Ada Kendala Teknis'}
             </h1>
 
             <p style={{ fontSize: '0.938rem', color: 'var(--text-secondary, #a0aec0)', lineHeight: 1.6, margin: 0 }}>
-              Jangan khawatir, data mood dan jurnal kamu tetap aman di perangkat. Cobalah memuat ulang aplikasi.
+              {getLang() === 'en' ? "Don't worry, your mood and journal data is safe on your device. Try reloading the app." : 'Jangan khawatir, data mood dan jurnal kamu tetap aman di perangkat. Cobalah memuat ulang aplikasi.'}
             </p>
 
             {this.state.error && (
@@ -110,7 +114,7 @@ export class ErrorBoundary extends Component<Props, State> {
                 style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
               >
                 <RefreshCw size={18} />
-                <span>Muat Ulang</span>
+                <span>{getLang() === 'en' ? 'Reload' : 'Muat Ulang'}</span>
               </button>
               <button
                 onClick={this.handleGoHome}
@@ -118,7 +122,7 @@ export class ErrorBoundary extends Component<Props, State> {
                 style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
               >
                 <Home size={18} />
-                <span>Beranda</span>
+                <span>{getLang() === 'en' ? 'Home' : 'Beranda'}</span>
               </button>
             </div>
           </div>
