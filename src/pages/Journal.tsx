@@ -42,15 +42,16 @@ export const Journal: React.FC = () => {
         {!selectedTemplate ? (
           <div className="template-grid">
             {JOURNAL_TEMPLATES.map(tmpl => (
-              <div 
+              <button 
                 key={tmpl.id} 
                 className={`template-card ${selectedTemplate === tmpl.id ? 'selected' : ''}`}
                 onClick={() => setSelectedTemplate(tmpl.id)}
+                type="button"
               >
                 <div className="template-icon"></div>
                 <h3 className="template-name">{lang === 'en' ? tmpl.labelEn : tmpl.labelId}</h3>
                 <p className="template-desc">{tmpl.description}</p>
-              </div>
+              </button>
             ))}
           </div>
         ) : (
@@ -100,14 +101,17 @@ export const Journal: React.FC = () => {
         <h3>{t('journal.history', { defaultValue: 'Catatan Sebelumnya' })}</h3>
         {journals.map(journal => (
           <div key={journal.id} className="journal-entry-card">
-            <div 
+            <button 
+              type="button"
+              className="journal-entry-toggle"
               onClick={() => setExpandedId(expandedId === journal.id ? null : journal.id)}
+              aria-expanded={expandedId === journal.id}
             >
               <h4 className="journal-entry-title">{journal.title}</h4>
               <div className="journal-entry-meta">
                 <span className="journal-entry-date">{new Date(journal.date).toLocaleDateString()}</span>
               </div>
-            </div>
+            </button>
             
             {expandedId === journal.id ? (
               <div className="journal-entry-preview">

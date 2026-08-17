@@ -1,11 +1,9 @@
 import React from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { Home, SmilePlus, BookOpen, Users, User } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 export const BottomNav: React.FC = () => {
-  const location = useLocation();
-  const navigate = useNavigate();
   const { t } = useTranslation();
 
   const tabs = [
@@ -20,17 +18,17 @@ export const BottomNav: React.FC = () => {
     <nav className="bottom-nav">
       <div className="bottom-nav-inner">
         {tabs.map((tab) => {
-          const isActive = location.pathname === tab.path;
           const Icon = tab.icon;
           return (
-            <button
+            <NavLink
               key={tab.path}
-              onClick={() => navigate(tab.path)}
-              className={`bottom-nav-item ${isActive ? 'active' : ''}`}
+              to={tab.path}
+              end={tab.path === '/'}
+              className={({ isActive }) => `bottom-nav-item ${isActive ? 'active' : ''}`}
             >
               <Icon size={24} className="bottom-nav-icon" />
               <span className="bottom-nav-label">{t(tab.label)}</span>
-            </button>
+            </NavLink>
           );
         })}
       </div>

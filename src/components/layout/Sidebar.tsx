@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { Home, SmilePlus, BookOpen, Users, User, Menu, ChevronLeft } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 export const Sidebar: React.FC = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const location = useLocation();
-  const navigate = useNavigate();
   const { t } = useTranslation();
 
   const tabs = [
@@ -31,17 +29,17 @@ export const Sidebar: React.FC = () => {
 
       <nav className="sidebar-nav">
         {tabs.map((tab) => {
-          const isActive = location.pathname === tab.path;
           const Icon = tab.icon;
           return (
-            <button
+            <NavLink
               key={tab.path}
-              onClick={() => navigate(tab.path)}
-              className={`sidebar-link ${isActive ? 'active' : ''}`}
+              to={tab.path}
+              end={tab.path === '/'}
+              className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`}
             >
               <Icon size={20} />
               {!isCollapsed && <span>{t(tab.label)}</span>}
-            </button>
+            </NavLink>
           );
         })}
       </nav>

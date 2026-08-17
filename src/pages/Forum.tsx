@@ -36,6 +36,7 @@ export const Forum: React.FC = () => {
   const [commentsMap, setCommentsMap] = useState<Record<string, ForumComment[]>>({});
   const [newCommentText, setNewCommentText] = useState('');
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const lang = i18n.language as 'id' | 'en';
 
@@ -44,8 +45,12 @@ export const Forum: React.FC = () => {
   }, []);
 
   const loadPosts = async () => {
-    const data = await fetchForumPosts();
-    setPosts(data);
+    try {
+      const data = await fetchForumPosts();
+      setPosts(data);
+    } catch (error) {
+      console.error('Failed to load posts:', error);
+    }
   };
 
   const handleTitleChange = (val: string) => {
@@ -64,32 +69,41 @@ export const Forum: React.FC = () => {
   };
 
   const handlePost = async () => {
-    if (!newTitle.trim() || !newContent.trim()) return;
-
-    const { isCrisis } = await createForumPost(
-      newTitle.trim(),
-      newContent.trim(),
-      newCategory,
-      anonymousAuthor
-    );
-
-    if (isCrisis) {
-      triggerToast(t('forum.crisisPostAlert', 'Postingan terdeteksi berisi kata sensitif. Bantuan krisis selalu tersedia untukmu.'));
-    } else {
-      triggerToast(t('forum.postSuccess', 'Postingan anonim berhasil dipublikasikan!'));
+    if (!newTitle.trim() || !newContent.trim() || isSubmitting) return;
+    setIsSubmitting(true);
+    try {
+      const { isCrisis } = await createForumPost(
+        newTitle.trim(),
+        newContent.trim(),
+        newCategory,
+        anonymousAuthor
+      );
+      if (isCrisis) {
+        triggerToast(t('forum.crisisPostAlert', 'Postingan terdeteksi berisi kata sensitif. Bantuan krisis selalu tersedia untukmu.'));
+      } else {
+        triggerToast(t('forum.postSuccess', 'Postingan anonim berhasil dipublikasikan!'));
+      }
+      setIsComposing(false);
+      setNewTitle('');
+      setNewContent('');
+      setAnonymousAuthor(generateAnonymousName());
+      setIsCrisisDetected(false);
+      loadPosts();
+    } catch (error) {
+      console.error('Failed to create post:', error);
+      triggerToast(t('common.error', 'Terjadi kesalahan'));
+    } finally {
+      setIsSubmitting(false);
     }
-
-    setIsComposing(false);
-    setNewTitle('');
-    setNewContent('');
-    setAnonymousAuthor(generateAnonymousName());
-    setIsCrisisDetected(false);
-    loadPosts();
   };
 
   const handleReaction = async (postId: string, type: 'heart' | 'strength' | 'hug') => {
-    const updated = await addReactionToPost(postId, type);
-    setPosts(updated);
+    try {
+      const updated = await addReactionToPost(postId, type);
+      setPosts(updated);
+    } catch (error) {
+      console.error('Failed to add reaction:', error);
+    }
   };
 
   const toggleComments = async (postId: string) => {
@@ -97,21 +111,30 @@ export const Forum: React.FC = () => {
       setExpandedPostId(null);
     } else {
       setExpandedPostId(postId);
-      const comments = await fetchPostComments(postId);
-      setCommentsMap(prev => ({ ...prev, [postId]: comments }));
+      try {
+        const comments = await fetchPostComments(postId);
+        setCommentsMap(prev => ({ ...prev, [postId]: comments }));
+      } catch (error) {
+        console.error('Failed to load comments:', error);
+      }
     }
   };
 
   const handleAddComment = async (postId: string) => {
     if (!newCommentText.trim()) return;
-    const comment = await addCommentToPost(postId, newCommentText.trim());
-    setCommentsMap(prev => ({
-      ...prev,
-      [postId]: [...(prev[postId] || []), comment]
-    }));
-    setNewCommentText('');
-    triggerToast(t('forum.commentSent', 'Dukunganmu telah terkirim!'));
-    loadPosts();
+    try {
+      const comment = await addCommentToPost(postId, newCommentText.trim());
+      setCommentsMap(prev => ({
+        ...prev,
+        [postId]: [...(prev[postId] || []), comment]
+      }));
+      setNewCommentText('');
+      triggerToast(t('forum.commentSent', 'Dukunganmu telah terkirim!'));
+      loadPosts();
+    } catch (error) {
+      console.error('Failed to add comment:', error);
+      triggerToast(t('common.error', 'Terjadi kesalahan'));
+    }
   };
 
   const handleReportPost = () => {
@@ -268,7 +291,7 @@ export const Forum: React.FC = () => {
               <button className="btn btn-ghost" onClick={() => setIsComposing(false)}>
                 {t('common.cancel', 'Batal')}
               </button>
-              <button className="btn btn-primary" onClick={handlePost}>
+              <button className="btn btn-primary" onClick={handlePost} disabled={isSubmitting}>
                 {t('forum.submit', 'Kirim Cerita')}
               </button>
             </div>

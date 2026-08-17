@@ -173,7 +173,7 @@ export const Profile: React.FC = () => {
       <div className="settings-section">
         <h2 className="settings-title">{t('profile.appSettings', 'TAMPILAN & BAHASA')}</h2>
         <div className="settings-list">
-          <div className="settings-item" onClick={toggleTheme}>
+          <button className="settings-item" type="button" onClick={toggleTheme}>
             <div className="settings-item-left">
               {theme === 'dark' ? <Moon size={18} /> : <Sun size={18} />}
               <span>{t('profile.theme', 'Tema Aplikasi')}</span>
@@ -184,7 +184,7 @@ export const Profile: React.FC = () => {
               </span>
               <div className={`toggle-switch ${theme === 'dark' ? 'active' : ''}`} />
             </div>
-          </div>
+          </button>
 
           <div className="settings-item">
             <div className="settings-item-left">
@@ -212,7 +212,7 @@ export const Profile: React.FC = () => {
       <div className="settings-section">
         <h2 className="settings-title">{t('profile.notificationsTitle', 'PENGINGAT HARIAN & NOTIFIKASI')}</h2>
         <div className="settings-list">
-          <div className="settings-item" onClick={toggleNotifications}>
+          <button className="settings-item" type="button" onClick={toggleNotifications}>
             <div className="settings-item-left">
               <Bell size={18} />
               <span>{t('profile.dailyReminder', 'Pengingat Mood Harian')}</span>
@@ -220,7 +220,7 @@ export const Profile: React.FC = () => {
             <div className="settings-item-right">
               <div className={`toggle-switch ${notifEnabled ? 'active' : ''}`} />
             </div>
-          </div>
+          </button>
 
           {notifEnabled && (
             <div className="settings-item" style={{ backgroundColor: 'var(--bg-secondary)' }}>
@@ -247,7 +247,7 @@ export const Profile: React.FC = () => {
       <div className="settings-section">
         <h2 className="settings-title">{t('profile.backupExport', 'EKSPOR, IMPOR & CADANGAN DATA')}</h2>
         <div className="settings-list">
-          <div className="settings-item" onClick={exportAllDataAsJSON}>
+          <button className="settings-item" type="button" onClick={exportAllDataAsJSON}>
             <div className="settings-item-left">
               <Download size={18} />
               <span>{t('profile.exportJSON', 'Ekspor Cadangan Lengkap (JSON)')}</span>
@@ -257,9 +257,9 @@ export const Profile: React.FC = () => {
                 {t('common.download', 'Unduh')}
               </Button>
             </div>
-          </div>
+          </button>
 
-          <div className="settings-item" onClick={exportMoodsAsCSV}>
+          <button className="settings-item" type="button" onClick={exportMoodsAsCSV}>
             <div className="settings-item-left">
               <FileSpreadsheet size={18} />
               <span>{t('profile.exportCSV', 'Ekspor Laporan Mood ke Terapis (CSV)')}</span>
@@ -269,9 +269,9 @@ export const Profile: React.FC = () => {
                 CSV
               </Button>
             </div>
-          </div>
+          </button>
 
-          <div className="settings-item" onClick={() => fileInputRef.current?.click()}>
+          <button className="settings-item" type="button" onClick={() => fileInputRef.current?.click()}>
             <div className="settings-item-left">
               <Upload size={18} />
               <span>{t('profile.importJSON', 'Pulihkan Data dari File JSON')}</span>
@@ -288,7 +288,7 @@ export const Profile: React.FC = () => {
                 {t('profile.selectFile', 'Pilih File')}
               </Button>
             </div>
-          </div>
+          </button>
         </div>
       </div>
 

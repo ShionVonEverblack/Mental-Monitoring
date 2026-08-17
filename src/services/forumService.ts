@@ -201,7 +201,12 @@ export async function fetchPostComments(postId: string): Promise<ForumComment[]>
   }
 
   const raw = localStorage.getItem(LOCAL_COMMENTS_KEY);
-  const allComments: ForumComment[] = raw ? JSON.parse(raw) : [];
+  let allComments: ForumComment[] = [];
+  try {
+    allComments = raw ? JSON.parse(raw) : [];
+  } catch {
+    console.warn('Failed to parse comments from localStorage');
+  }
   return allComments.filter(c => c.postId === postId);
 }
 
@@ -216,7 +221,12 @@ export async function addCommentToPost(postId: string, content: string, authorNa
   };
 
   const raw = localStorage.getItem(LOCAL_COMMENTS_KEY);
-  const allComments: ForumComment[] = raw ? JSON.parse(raw) : [];
+  let allComments: ForumComment[] = [];
+  try {
+    allComments = raw ? JSON.parse(raw) : [];
+  } catch {
+    console.warn('Failed to parse comments from localStorage');
+  }
   const updatedComments = [...allComments, newComment];
   localStorage.setItem(LOCAL_COMMENTS_KEY, JSON.stringify(updatedComments));
 
