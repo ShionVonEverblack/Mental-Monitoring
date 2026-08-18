@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import React, { forwardRef, useId } from 'react';
 
 export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement | HTMLTextAreaElement> {
   label?: string;
@@ -9,10 +9,13 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement |
 }
 
 export const Input = forwardRef<HTMLInputElement | HTMLTextAreaElement, InputProps>(
-  ({ label, error, icon, className = '', multiline, rows = 3, ...props }, ref) => {
+  ({ label, error, icon, className = '', multiline, rows = 3, id: externalId, ...props }, ref) => {
+    const generatedId = useId();
+    const inputId = externalId || generatedId;
+
     return (
       <div className={className} style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-xs)' }}>
-        {label && <label style={{ fontSize: 'var(--font-size-sm)', fontWeight: 'var(--font-weight-medium)', color: 'var(--text-primary)' }}>{label}</label>}
+        {label && <label htmlFor={inputId} style={{ fontSize: 'var(--font-size-sm)', fontWeight: 'var(--font-weight-medium)', color: 'var(--text-primary)' }}>{label}</label>}
         <div style={{ position: 'relative' }}>
           {icon && (
             <div style={{ position: 'absolute', left: '0.75rem', top: '0.75rem', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -22,6 +25,7 @@ export const Input = forwardRef<HTMLInputElement | HTMLTextAreaElement, InputPro
           {multiline ? (
             <textarea
               ref={ref as React.Ref<HTMLTextAreaElement>}
+              id={inputId}
               className="textarea"
               rows={rows}
               style={icon ? { paddingLeft: '2.5rem' } : undefined}
@@ -30,6 +34,7 @@ export const Input = forwardRef<HTMLInputElement | HTMLTextAreaElement, InputPro
           ) : (
             <input
               ref={ref as React.Ref<HTMLInputElement>}
+              id={inputId}
               className="input"
               style={icon ? { paddingLeft: '2.5rem' } : undefined}
               {...(props as React.InputHTMLAttributes<HTMLInputElement>)}

@@ -169,7 +169,7 @@ export async function addReactionToPost(postId: string, reactionType: 'heart' | 
         .from('forum_posts')
         .update({ reactions: target.reactions })
         .eq('id', postId)
-        .then();
+        .then(() => {}, err => console.warn('Supabase sync failed:', err));
     }
   }
 
@@ -248,12 +248,12 @@ export async function addCommentToPost(postId: string, content: string, authorNa
       author_name: newComment.authorName,
       content: newComment.content,
       is_supportive: newComment.isSupportive
-    }]).then();
+    }]).then(() => {}, err => console.warn('Supabase comment insert failed:', err));
 
     supabase.from('forum_posts')
       .update({ comment_count: updatedPosts.find(p => p.id === postId)?.commentCount || 1 })
       .eq('id', postId)
-      .then();
+      .then(() => {}, err => console.warn('Supabase comment count update failed:', err));
   }
 
   return newComment;

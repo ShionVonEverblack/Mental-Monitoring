@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { JOURNAL_TEMPLATES } from '../utils/constants';
-import type { JournalTemplate } from '../types';
+import type { JournalTemplate, JournalEntry } from '../types';
 
 export const Journal: React.FC = () => {
   const { t, i18n } = useTranslation();
-  const [journals, setJournals] = useLocalStorage<any[]>('rima-journals', []);
+  const [journals, setJournals] = useLocalStorage<JournalEntry[]>('rima-journals', []);
   const [selectedTemplate, setSelectedTemplate] = useState<JournalTemplate | null>(null);
   
   const [title, setTitle] = useState('');
@@ -18,12 +18,15 @@ export const Journal: React.FC = () => {
   const handleSave = () => {
     if (!title || !content) return;
     
-    const newJournal = {
+    const now = new Date().toISOString();
+    const newJournal: JournalEntry = {
       id: Date.now().toString(),
       title,
       content,
-      template: selectedTemplate,
-      date: new Date().toISOString(),
+      template: selectedTemplate || 'free',
+      isPrivate: false,
+      createdAt: now,
+      updatedAt: now,
     };
     
     setJournals([newJournal, ...journals]);
@@ -90,7 +93,7 @@ export const Journal: React.FC = () => {
               rows={8}
             />
             
-            <button onClick={handleSave} className="btn-primary w-full mt-4">
+            <button onClick={handleSave} className="btn btn-primary" style={{ width: '100%', marginTop: 'var(--spacing-md)' }}>
               {t('common.save', { defaultValue: 'Simpan Jurnal' })}
             </button>
           </div>
@@ -109,7 +112,7 @@ export const Journal: React.FC = () => {
             >
               <h4 className="journal-entry-title">{journal.title}</h4>
               <div className="journal-entry-meta">
-                <span className="journal-entry-date">{new Date(journal.date).toLocaleDateString()}</span>
+                <span className="journal-entry-date">{new Date(journal.createdAt).toLocaleDateString()}</span>
               </div>
             </button>
             

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 
 export interface CardProps {
   children: React.ReactNode;
@@ -13,11 +13,19 @@ export const Card = ({ children, className = '', variant = 'default', padding = 
   const paddingStyle = padding === 'none' ? { padding: 0 } : padding === 'sm' ? { padding: 'var(--spacing-sm)' } : padding === 'lg' ? { padding: 'var(--spacing-xl)' } : {};
   const clickableStyle = onClick ? { cursor: 'pointer' } : {};
 
+  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
+    if (onClick && (e.key === 'Enter' || e.key === ' ')) {
+      e.preventDefault();
+      onClick();
+    }
+  }, [onClick]);
+
   return (
     <div 
       className={`${cardClass} ${className}`} 
       style={{ ...paddingStyle, ...clickableStyle }} 
       onClick={onClick}
+      {...(onClick ? { role: 'button', tabIndex: 0, onKeyDown: handleKeyDown } : {})}
     >
       {children}
     </div>

@@ -67,11 +67,19 @@ export const Profile: React.FC = () => {
 
     const reader = new FileReader();
     reader.onload = (event) => {
-      const content = event.target?.result as string;
-      if (content) {
-        const result = importDataFromJSON(content);
-        showToast(result.message);
+      try {
+        const content = event.target?.result as string;
+        if (content) {
+          const result = importDataFromJSON(content);
+          showToast(result.message);
+        }
+      } catch (err) {
+        showToast(t('common.error', 'Terjadi kesalahan saat membaca file'));
+        console.error('Import file error:', err);
       }
+    };
+    reader.onerror = () => {
+      showToast(t('common.error', 'Gagal membaca file'));
     };
     reader.readAsText(file);
   };

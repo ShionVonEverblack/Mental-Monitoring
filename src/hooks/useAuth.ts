@@ -29,6 +29,8 @@ export function useAuth() {
           displayName: session.user.user_metadata?.displayName || prev.displayName,
         }));
       }
+    }).catch(err => {
+      console.warn('Failed to get Supabase session:', err);
     });
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {

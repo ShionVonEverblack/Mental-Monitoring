@@ -87,6 +87,18 @@ export function exportMoodsAsCSV() {
   URL.revokeObjectURL(url);
 }
 
+function isValidMoodEntry(item: unknown): boolean {
+  if (typeof item !== 'object' || item === null) return false;
+  const obj = item as Record<string, unknown>;
+  return typeof obj.id === 'string' && typeof obj.score === 'number' && typeof obj.createdAt === 'string';
+}
+
+function isValidJournalEntry(item: unknown): boolean {
+  if (typeof item !== 'object' || item === null) return false;
+  const obj = item as Record<string, unknown>;
+  return typeof obj.id === 'string' && typeof obj.title === 'string' && typeof obj.content === 'string';
+}
+
 export function importDataFromJSON(jsonString: string): { success: boolean; message: string } {
   try {
     const parsed = JSON.parse(jsonString) as RimaBackupData;
@@ -94,20 +106,29 @@ export function importDataFromJSON(jsonString: string): { success: boolean; mess
       return { success: false, message: 'Format file JSON tidak valid.' };
     }
 
+    let importedCount = 0;
+
     if (Array.isArray(parsed.moods)) {
-      localStorage.setItem('rima-moods', JSON.stringify(parsed.moods));
+      const validMoods = parsed.moods.filter(isValidMoodEntry);
+      localStorage.setItem('rima-moods', JSON.stringify(validMoods));
+      importedCount += validMoods.length;
     }
     if (Array.isArray(parsed.journals)) {
-      localStorage.setItem('rima-journals', JSON.stringify(parsed.journals));
+      const validJournals = parsed.journals.filter(isValidJournalEntry);
+      localStorage.setItem('rima-journals', JSON.stringify(validJournals));
+      importedCount += validJournals.length;
     }
-    if (parsed.safetyPlan) {
+    if (parsed.safetyPlan && typeof parsed.safetyPlan === 'object') {
       localStorage.setItem('rima-safety-plan', JSON.stringify(parsed.safetyPlan));
     }
-    if (parsed.user) {
+    if (parsed.user && typeof parsed.user === 'object') {
       localStorage.setItem('rima-user-profile', JSON.stringify(parsed.user));
     }
 
-    window.dispatchEvent(new Event('local-storage'));
+    window.dispatchEvent(new CustomEvent('local-storage', { detail: { key: 'rima-moods' } }));
+    window.dispatchEvent(new CustomEvent('local-storage', { detail: { key: 'rima-journals' } }));
+    window.dispatchEvent(new CustomEvent('local-storage', { detail: { key: 'rima-safety-plan' } }));
+    window.dispatchEvent(new CustomEvent('local-storage', { detail: { key: 'rima-user-profile' } }));
     return { success: true, message: 'Data RIMA berhasil dipulihkan!' };
   } catch (err) {
     return { success: false, message: `Gagal membaca file: ${(err as Error).message}` };
