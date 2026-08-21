@@ -21,7 +21,7 @@ export const Button: React.FC<ButtonProps> = ({
   const classes = `btn btn-${variant} ${size !== 'md' ? `btn-${size}` : ''} ${className}`;
   
   return (
-    <button className={classes.trim()} disabled={disabled || loading} {...props}>
+    <button className={classes.trim()} disabled={disabled || loading} aria-busy={loading} {...props}>
       {loading && <Loader2 className="animate-spin" style={{ marginRight: '0.5rem' }} size={size === 'sm' ? 16 : size === 'md' ? 20 : 24} />}
       {!loading && icon && <span style={{ marginRight: children ? '0.5rem' : '0', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{icon}</span>}
       {children}

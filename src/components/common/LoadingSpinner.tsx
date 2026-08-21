@@ -6,7 +6,7 @@ interface LoadingSpinnerProps {
 
 export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({ message }) => {
   return (
-    <div style={{
+    <div role="status" aria-live="polite" style={{
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',

@@ -80,7 +80,7 @@ export default defineConfig({
     setupFiles: ['./src/test/setup.ts']
   },
   build: {
-    target: 'es2020',
+    target: 'es2023',
     sourcemap: true,
     chunkSizeWarningLimit: 1000,
     rollupOptions: {

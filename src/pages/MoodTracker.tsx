@@ -67,15 +67,19 @@ export const MoodTracker: React.FC = () => {
           <div className="factors-section">
             <h4 className="factors-title">{t('moodTracker.factors', { defaultValue: 'Apa yang memengaruhi moodmu?' })}</h4>
             <div className="factors-grid">
-              {MOOD_FACTORS.map(factor => (
-                <button
-                  key={factor.id}
-                  className={`factor-chip ${selectedFactors.includes(factor.id) ? 'active' : ''}`}
-                  onClick={() => toggleFactor(factor.id)}
-                >
-                  {lang === 'en' ? factor.labelEn : factor.labelId}
-                </button>
-              ))}
+              {MOOD_FACTORS.map(factor => {
+                const isSelected = selectedFactors.includes(factor.id);
+                return (
+                  <button
+                    key={factor.id}
+                    className={`factor-chip ${isSelected ? 'active' : ''}`}
+                    onClick={() => toggleFactor(factor.id)}
+                    aria-pressed={isSelected}
+                  >
+                    {lang === 'en' ? factor.labelEn : factor.labelId}
+                  </button>
+                );
+              })}
             </div>
 
             <h4 className="factors-title">{t('moodTracker.note', { defaultValue: 'Catatan tambahan (opsional)' })}</h4>

@@ -174,10 +174,10 @@ a:hover {
 /* App Shell Layout */
 .app-shell { display: flex; min-height: 100vh; background: var(--bg-primary); }
 .app-main { flex: 1; position: relative; padding-bottom: 80px; overflow-x: hidden; }
-.app-content { width: 100%; max-width: 800px; margin: 0 auto; padding: 24px 16px; }
+.app-content { width: 100%; max-width: 800px; margin: 0 auto; padding: var(--spacing-lg) var(--spacing-md); }
 @media (min-width: 768px) {
   .app-main { padding-bottom: 0; }
-  .app-content { padding: 32px 24px; }
+  .app-content { padding: var(--spacing-xl) var(--spacing-lg); }
 }
 
 /* Sidebar Styles */
