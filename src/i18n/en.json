@@ -22,7 +22,8 @@
     "streak": "Day Streak",
     "todayAffirmation": "Today's Affirmation",
     "todayMood": "Today's Mood",
-    "feelingGood": "Feeling Good"
+    "feelingGood": "Feeling Good",
+    "education": "Education"
   },
   "mood": {
     "title": "Mood Tracker",
@@ -179,5 +180,58 @@
     "download": "Download",
     "understand": "I Understand",
     "print": "Print / Save PDF"
+  },
+  "insights": {
+    "weeklyTitle": "Weekly Insights",
+    "exerciseHelps": "Exercise Boosts Your Mood",
+    "exerciseHelpsDesc": "When you exercise, your mood tends to be higher. Keep up this great habit!",
+    "sleepAffects": "Sleep Affects Your Mood",
+    "sleepAffectsDesc": "Poor sleep patterns correlate with lower moods. Try adjusting your sleep schedule.",
+    "weekdayPattern": "Weekday Pattern",
+    "weekdayPatternDesc": "Your mood tends to be lower on weekdays. Try making time for self-care.",
+    "improving": "Mood Improving",
+    "improvingDesc": "Your mood trend is showing improvement. Keep it up!",
+    "declining": "Watch Your Mood",
+    "decliningDesc": "Your mood has been declining recently. Don't hesitate to talk to someone.",
+    "stable": "Stable Mood",
+    "stableDesc": "Your mood has been quite stable this week. That's a good thing!"
+  },
+  "breathe": {
+    "title": "Breathing Exercises",
+    "subtitle": "Calm your mind with breathing techniques",
+    "technique478": "4-7-8",
+    "technique478Desc": "Inhale 4s, hold 7s, exhale 8s",
+    "techniqueBox": "Box Breathing",
+    "techniqueBoxDesc": "4 seconds each phase",
+    "techniqueCalm": "Simple Calm",
+    "techniqueCalmDesc": "4s in, 4s out",
+    "start": "Start",
+    "stop": "Stop",
+    "inhale": "Inhale",
+    "hold": "Hold",
+    "exhale": "Exhale",
+    "cycles": "Cycles",
+    "duration": "Duration"
+  },
+  "education": {
+    "title": "Mental Health Education",
+    "subtitle": "Learn about your mental health"
+  },
+  "escalation": {
+    "level1": "It seems like you've been having a tough time lately. It's okay to feel this way. Try taking some time for yourself.",
+    "level2": "We've noticed your mood has been declining. You're not alone. Try sharing in the forum or reviewing your safety plan.",
+    "level3": "You seem to be going through a very difficult time. Professional help is available for you 24/7.",
+    "tryBreathing": "Breathing Exercise",
+    "writeJournal": "Write Journal",
+    "visitForum": "Visit Forum",
+    "reviewSafety": "Review Safety Plan",
+    "contactHelp": "Contact Help"
+  },
+  "crisis": {
+    "weNoticed": "We Noticed...",
+    "gentleMessage": "Your writing suggests you may be going through a difficult time. You are not alone, and help is available.",
+    "contactHelp": "🆘 Contact Crisis Help",
+    "safetyPlan": "📋 View Safety Plan",
+    "imOk": "I'm okay, thank you"
   }
 }

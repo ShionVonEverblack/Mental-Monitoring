@@ -15,6 +15,8 @@ const Journal = lazy(() => import('./pages/Journal').then(module => ({ default: 
 const Forum = lazy(() => import('./pages/Forum').then(module => ({ default: module.Forum })));
 const Profile = lazy(() => import('./pages/Profile').then(module => ({ default: module.Profile })));
 const SafetyPlan = lazy(() => import('./components/safety/SafetyPlan').then(module => ({ default: module.SafetyPlan })));
+const Breathe = lazy(() => import('./pages/Breathe').then(module => ({ default: module.Breathe })));
+const Education = lazy(() => import('./pages/Education').then(module => ({ default: module.Education })));
 
 const App: React.FC = () => {
   const { theme } = useTheme();
@@ -35,6 +37,8 @@ const App: React.FC = () => {
               <Route path="/forum" element={<Forum />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/safety-plan" element={<SafetyPlan />} />
+              <Route path="/breathe" element={<Breathe />} />
+              <Route path="/education" element={<Education />} />
             </Routes>
           </Suspense>
         </AppShell>

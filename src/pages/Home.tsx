@@ -1,20 +1,23 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { Book, MessageCircle, Heart, Flame, Wind } from 'lucide-react';
+import { Book, MessageCircle, Heart, Flame, Wind, BookOpen } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { MoodSelector } from '../components/ui/MoodSelector';
 import { useMood } from '../hooks/useMood';
 import { getGreeting } from '../utils/helpers';
 import { DAILY_AFFIRMATIONS } from '../utils/constants';
+import { EscalationBanner } from '../components/common/EscalationBanner';
+import { generateInsights } from '../services/moodAnalysisService';
 
 export const Home: React.FC = () => {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
-  const { getTodayMood, getWeeklyMoods, addMood, getMoodStats } = useMood();
+  const { moods, getTodayMood, getWeeklyMoods, addMood, getMoodStats } = useMood();
   
   const todayMood = getTodayMood();
-  const recentMoods = getWeeklyMoods().map((m) => ({ 
+  const weeklyMoods = getWeeklyMoods();
+  const recentMoods = weeklyMoods.map((m) => ({ 
     date: new Date(m.createdAt).toLocaleDateString(), 
     score: m.score 
   }));
@@ -23,6 +26,11 @@ export const Home: React.FC = () => {
   const affirmationIndex = new Date().getDay() % DAILY_AFFIRMATIONS.length;
   const affirmation = DAILY_AFFIRMATIONS[affirmationIndex];
   const lang = i18n.language as 'id' | 'en';
+  
+  const insights = generateInsights(weeklyMoods);
+
+  // In a real app, you'd fetch the latest journal content here. For now, pass undefined.
+  const latestJournalContent = undefined;
 
   return (
     <div className="home-page">
@@ -48,9 +56,28 @@ export const Home: React.FC = () => {
         )}
       </section>
 
+      <EscalationBanner moods={moods} latestJournalContent={latestJournalContent} />
+
       <div className="affirmation-card" style={{ backgroundColor: 'var(--color-primary-soft)' }}>
         <p className="affirmation-text">"{lang === 'en' ? affirmation.en : affirmation.id}"</p>
       </div>
+
+      {weeklyMoods.length >= 3 && (
+        <section className="insight-section">
+          <h3>{t('insights.weeklyTitle', 'Insight Mingguan')}</h3>
+          <div className="insight-cards">
+            {insights.map((insight: { severity: string; icon: string; titleKey: string; titleFallback: string; descriptionKey: string; descriptionFallback: string }, i: number) => (
+              <div key={i} className={`insight-card insight-${insight.severity}`}>
+                <span className="insight-icon">{insight.icon}</span>
+                <div>
+                  <strong>{String(t(insight.titleKey, insight.titleFallback))}</strong>
+                  <p>{String(t(insight.descriptionKey, insight.descriptionFallback))}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
 
       <section className="quick-actions">
         <button className="quick-action-btn journal" onClick={() => navigate('/journal')}>
@@ -65,9 +92,13 @@ export const Home: React.FC = () => {
           <Heart className="action-icon" />
           <span>{t('home.safetyPlan', { defaultValue: 'Rencana Keselamatan' })}</span>
         </button>
-        <button className="quick-action-btn meditate" onClick={() => navigate('/meditate')}>
+        <button className="quick-action-btn meditate" onClick={() => navigate('/breathe')}>
           <Wind className="action-icon" />
           <span>{t('home.meditate', { defaultValue: 'Meditasi' })}</span>
+        </button>
+        <button className="quick-action-btn education" onClick={() => navigate('/education')}>
+          <BookOpen className="action-icon" />
+          <span>{t('home.education', 'Edukasi')}</span>
         </button>
       </section>
 

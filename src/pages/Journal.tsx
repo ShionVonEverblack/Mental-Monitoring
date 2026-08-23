@@ -1,17 +1,23 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { JOURNAL_TEMPLATES } from '../utils/constants';
 import type { JournalTemplate, JournalEntry } from '../types';
+import { detectCrisis } from '../services/crisisDetectionService';
+import { Modal } from '../components/ui/Modal';
+import type { CrisisDetectionResult } from '../services/crisisDetectionService';
 
 export const Journal: React.FC = () => {
   const { t, i18n } = useTranslation();
+  const navigate = useNavigate();
   const [journals, setJournals] = useLocalStorage<JournalEntry[]>('rima-journals', []);
   const [selectedTemplate, setSelectedTemplate] = useState<JournalTemplate | null>(null);
   
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [crisisResult, setCrisisResult] = useState<CrisisDetectionResult | null>(null);
 
   const lang = i18n.language as 'id' | 'en';
 
@@ -32,6 +38,12 @@ export const Journal: React.FC = () => {
     setJournals([newJournal, ...journals]);
     setSelectedTemplate(null);
     setTitle('');
+    
+    const result = detectCrisis(content);
+    if (result.isDetected) {
+      setCrisisResult(result);
+    }
+    
     setContent('');
   };
 
@@ -127,6 +139,29 @@ export const Journal: React.FC = () => {
           <p>{t('journal.empty', { defaultValue: 'Belum ada catatan. Mulai menulis hari ini!' })}</p>
         )}
       </section>
+
+      {crisisResult && (
+        <Modal 
+          isOpen={!!crisisResult}
+          onClose={() => setCrisisResult(null)}
+          title={t('crisis.weNoticed', 'Kami Memperhatikan...')}
+        >
+          <p style={{ color: 'var(--text-secondary)', lineHeight: '1.6', marginBottom: 'var(--spacing-md)' }}>
+            {t('crisis.gentleMessage', 'Tulisanmu menunjukkan bahwa kamu mungkin sedang mengalami masa sulit. Kamu tidak sendirian, dan ada bantuan yang tersedia.')}
+          </p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-sm)' }}>
+            <button className="btn btn-danger" onClick={() => { document.querySelector<HTMLButtonElement>('.sos-float')?.click(); }}>
+              {t('crisis.contactHelp', '🆘 Hubungi Bantuan Krisis')}
+            </button>
+            <button className="btn btn-secondary" onClick={() => navigate('/safety-plan')}>
+              {t('crisis.safetyPlan', '📋 Lihat Rencana Keselamatan')}
+            </button>
+            <button className="btn btn-ghost" onClick={() => setCrisisResult(null)}>
+              {t('crisis.imOk', 'Saya baik-baik saja, terima kasih')}
+            </button>
+          </div>
+        </Modal>
+      )}
     </div>
   );
 };

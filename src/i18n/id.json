@@ -22,7 +22,8 @@
     "streak": "Hari Berturut-turut",
     "todayAffirmation": "Afirmasi Hari Ini",
     "todayMood": "Mood Hari Ini",
-    "feelingGood": "Cukup Baik"
+    "feelingGood": "Cukup Baik",
+    "education": "Edukasi"
   },
   "mood": {
     "title": "Mood Tracker",
@@ -179,5 +180,58 @@
     "download": "Unduh",
     "understand": "Saya Mengerti",
     "print": "Cetak / Simpan PDF"
+  },
+  "insights": {
+    "weeklyTitle": "Insight Mingguan",
+    "exerciseHelps": "Olahraga Meningkatkan Mood",
+    "exerciseHelpsDesc": "Saat kamu berolahraga, moodmu cenderung lebih tinggi. Pertahankan kebiasaan baik ini!",
+    "sleepAffects": "Tidur Memengaruhi Mood",
+    "sleepAffectsDesc": "Pola tidur yang buruk berkorelasi dengan mood rendah. Coba atur jadwal tidurmu.",
+    "weekdayPattern": "Pola Hari Kerja",
+    "weekdayPatternDesc": "Moodmu cenderung lebih rendah di hari kerja. Coba luangkan waktu untuk self-care.",
+    "improving": "Mood Membaik",
+    "improvingDesc": "Tren moodmu menunjukkan perbaikan. Terus pertahankan!",
+    "declining": "Perhatikan Moodmu",
+    "decliningDesc": "Tren moodmu menurun belakangan ini. Jangan ragu untuk berbicara dengan seseorang.",
+    "stable": "Mood Stabil",
+    "stableDesc": "Moodmu cukup stabil minggu ini. Itu hal yang baik!"
+  },
+  "breathe": {
+    "title": "Latihan Pernapasan",
+    "subtitle": "Tenangkan pikiran dengan teknik pernapasan",
+    "technique478": "4-7-8",
+    "technique478Desc": "Tarik 4 detik, tahan 7, buang 8",
+    "techniqueBox": "Box Breathing",
+    "techniqueBoxDesc": "4 detik setiap fase",
+    "techniqueCalm": "Simple Calm",
+    "techniqueCalmDesc": "4 detik masuk, 4 detik keluar",
+    "start": "Mulai",
+    "stop": "Berhenti",
+    "inhale": "Tarik Napas",
+    "hold": "Tahan",
+    "exhale": "Buang Napas",
+    "cycles": "Siklus",
+    "duration": "Durasi"
+  },
+  "education": {
+    "title": "Edukasi Kesehatan Mental",
+    "subtitle": "Pelajari tentang kesehatan mentalmu"
+  },
+  "escalation": {
+    "level1": "Sepertinya kamu sedang kurang baik belakangan ini. Tidak apa-apa untuk merasa begitu. Coba luangkan waktu untuk dirimu sendiri.",
+    "level2": "Kami perhatikan moodmu sedang turun. Kamu tidak sendirian. Coba berbagi di forum atau review rencana keselamatanmu.",
+    "level3": "Kamu terlihat sedang mengalami masa yang sangat berat. Bantuan profesional tersedia untukmu 24/7.",
+    "tryBreathing": "Latihan Pernapasan",
+    "writeJournal": "Tulis Jurnal",
+    "visitForum": "Kunjungi Forum",
+    "reviewSafety": "Review Rencana Keselamatan",
+    "contactHelp": "Hubungi Bantuan"
+  },
+  "crisis": {
+    "weNoticed": "Kami Memperhatikan...",
+    "gentleMessage": "Tulisanmu menunjukkan bahwa kamu mungkin sedang mengalami masa sulit. Kamu tidak sendirian, dan ada bantuan yang tersedia.",
+    "contactHelp": "🆘 Hubungi Bantuan Krisis",
+    "safetyPlan": "📋 Lihat Rencana Keselamatan",
+    "imOk": "Saya baik-baik saja, terima kasih"
   }
 }
