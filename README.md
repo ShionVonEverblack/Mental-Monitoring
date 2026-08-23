@@ -66,6 +66,30 @@ Tersedia dalam Bahasa Indonesia (default) dan English, dapat diubah kapan saja.
 ### 📱 PWA (Progressive Web App)
 Install langsung dari browser tanpa app store. Berfungsi offline — mood dan jurnal tersimpan di perangkat.
 
+### 🔍 Mood Insights & Pattern Analysis
+Analisis pola mood otomatis langsung di perangkat:
+- **Insight Mingguan** — rata-rata mood, hari terbaik/terburuk, faktor dominan
+- **Korelasi Faktor** — identifikasi aktivitas yang memengaruhi mood
+- **Rekomendasi** — saran empatis berbasis data (misal: "Olahraga meningkatkan moodmu")
+
+### 🆘 Crisis Detection
+Deteksi otomatis kata/frasa krisis pada jurnal (Bahasa Indonesia & English). Jika terdeteksi, muncul dialog yang menawarkan akses ke hotline krisis dan safety plan — **100% client-side, privasi terjaga**.
+
+### 📊 Escalation Ladder
+Sistem eskalasi 4 level berdasarkan pola mood dan deteksi krisis:
+- **Level 1** — Saran ringan: latihan pernapasan, journaling
+- **Level 2** — Saran moderat: peer support forum, review safety plan
+- **Level 3** — Akses langsung ke bantuan profesional 24/7
+
+### 🌬️ Latihan Pernapasan (`/breathe`)
+Tiga teknik pernapasan interaktif dengan animasi lingkaran:
+- **4-7-8 Breathing** — Tarik 4 detik, tahan 7, buang 8
+- **Box Breathing** — 4 detik setiap fase
+- **Simple Calm** — 4 detik masuk, 4 detik keluar
+
+### 📚 Edukasi Kesehatan Mental (`/education`)
+Library 10 artikel bilingual berbasis bukti dari WHO, Kemenkes RI, APA, dan NIMH. Topik meliputi kecemasan, depresi, manajemen stres, self-care, dan kapan harus ke profesional.
+
 ---
 
 ## 🏗️ Tech Stack
@@ -94,6 +118,10 @@ mental monitoring/
 │   └── icons/                   # PWA icons
 ├── src/
 │   ├── components/
+│   │   ├── common/
+│   │   │   ├── ErrorBoundary.tsx    # Graceful error handling
+│   │   │   ├── EscalationBanner.tsx # Adaptive mood escalation banner
+│   │   │   └── LoadingSpinner.tsx   # Accessible loading indicator
 │   │   ├── layout/
 │   │   │   ├── AppShell.tsx     # Responsive layout wrapper
 │   │   │   ├── BottomNav.tsx    # Mobile navigation (5 tabs)
@@ -107,7 +135,10 @@ mental monitoring/
 │   │       ├── Input.tsx        # Input with icon & error states
 │   │       ├── Modal.tsx        # Portal modal with focus trap
 │   │       └── MoodSelector.tsx # Emoji mood picker
+│   ├── data/
+│   │   └── educationContent.ts  # 10 bilingual education articles
 │   ├── hooks/
+│   │   ├── useAuth.ts           # Anonymous + Supabase auth
 │   │   ├── useLocalStorage.ts   # Generic persistent storage
 │   │   ├── useMood.ts           # Mood CRUD & statistics
 │   │   └── useTheme.ts          # Dark/light mode toggle
@@ -116,11 +147,19 @@ mental monitoring/
 │   │   ├── id.json              # Bahasa Indonesia translations
 │   │   └── en.json              # English translations
 │   ├── pages/
-│   │   ├── Home.tsx             # Dashboard
+│   │   ├── Home.tsx             # Dashboard + insights + escalation
 │   │   ├── MoodTracker.tsx      # Mood input + charts + history
-│   │   ├── Journal.tsx          # Template-based journaling
+│   │   ├── Journal.tsx          # Template journaling + crisis detection
 │   │   ├── Forum.tsx            # Anonymous peer support
-│   │   └── Profile.tsx          # Settings & stats
+│   │   ├── Profile.tsx          # Settings & stats
+│   │   ├── Breathe.tsx          # Breathing exercises (3 techniques)
+│   │   └── Education.tsx        # Mental health education library
+│   ├── services/
+│   │   ├── crisisDetectionService.ts  # Client-side crisis keyword detection
+│   │   ├── escalationService.ts       # 4-level escalation system
+│   │   ├── forumService.ts            # Forum CRUD + Supabase sync
+│   │   ├── moodAnalysisService.ts     # Mood pattern analysis & insights
+│   │   └── supabase.ts                # Supabase client (offline fallback)
 │   ├── styles/
 │   │   ├── design-tokens.css    # CSS custom properties (colors, spacing, etc.)
 │   │   ├── components.css       # Pre-built component classes
@@ -129,12 +168,15 @@ mental monitoring/
 │   │   └── index.ts             # 16+ TypeScript interfaces
 │   ├── utils/
 │   │   ├── constants.ts         # Crisis hotlines, mood data, categories
+│   │   ├── exportImport.ts      # Data export/import (JSON, CSV)
 │   │   └── helpers.ts           # Date formatting, mood analysis, utilities
 │   ├── App.tsx                  # Routing configuration
 │   └── main.tsx                 # Entry point
 ├── index.html                   # HTML entry with SEO meta tags
 ├── vite.config.ts               # Vite + PWA configuration
 ├── tsconfig.app.json            # TypeScript strict config
+├── supabase_schema.sql          # Database schema (Supabase)
+├── LICENSE                      # MIT License
 └── package.json
 ```
 
@@ -170,6 +212,7 @@ Buka **http://localhost:5173/** di browser.
 | `npm run dev` | Jalankan dev server dengan hot reload |
 | `npm run build` | Build untuk production |
 | `npm run preview` | Preview production build |
+| `npm test` | Jalankan unit tests (Vitest) |
 | `npm run lint` | Linting dengan oxlint |
 
 ---
@@ -218,12 +261,13 @@ RIMA menggunakan design system yang dirancang khusus untuk konteks kesehatan men
 - [x] Notifikasi & reminder check-in harian
 - [x] Export data mood/jurnal/ safety plan (JSON, CSV, PDF print)
 
-### 🔲 Fase 3 — AI & Edukasi
-- [ ] NLP crisis detection pada jurnal
-- [ ] AI mood pattern analysis
-- [ ] Konten edukasi kesehatan mental
-- [ ] Breathing exercises & guided meditation
-- [ ] Escalation ladder (mood → peer → profesional)
+### ✅ Fase 3 — Intelligence & Edukasi (Selesai)
+- [x] Client-side crisis detection pada jurnal (keyword matching ID/EN)
+- [x] Mood pattern analysis & weekly insights
+- [x] Konten edukasi kesehatan mental (10 artikel bilingual)
+- [x] Breathing exercises (4-7-8, Box, Simple Calm)
+- [x] Escalation ladder (mood rendah → peer support → profesional)
+- [x] Escalation banner adaptif di Home dashboard
 
 ### 🔲 Fase 4 — Skalabilitas
 - [ ] Adaptasi kultural (bahasa daerah, konteks spiritual)

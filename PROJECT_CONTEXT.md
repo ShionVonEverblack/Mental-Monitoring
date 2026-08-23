@@ -13,7 +13,7 @@ Tujuan      : Platform kesehatan mental digital berbasis bukti ilmiah,
               anonim, dan bilingual (ID/EN) untuk masyarakat Indonesia.
 Target User : Masyarakat umum (bukan hanya mahasiswa), terutama yang
               menghadapi stigma atau akses terbatas ke layanan profesional.
-Status      : Fase 1 & Fase 2 Selesai (MVP + Sync + Forum Realtime + Reminders + Export).
+Status      : Fase 1, 2, & 3 Selesai (MVP + Komunitas + Intelligence + Edukasi).
 
 ## ═══════════════════════════════════════════════════════════════
 ## 2. TECH STACK
@@ -407,12 +407,13 @@ npx tsc -p tsconfig.app.json --noEmit   # TypeScript type check
 - Notifikasi & reminder mood check-in
 - Export data (PDF/CSV)
 
-### Fase 3 — AI & Edukasi
-- NLP crisis detection pada jurnal
-- AI mood pattern analysis
-- Breathing exercises & guided meditation
-- Konten edukasi kesehatan mental
-- Escalation: mood buruk → suggest peer support → suggest profesional
+### Fase 3 — Intelligence & Edukasi ✅ SELESAI
+- Client-side crisis detection (keyword matching ID/EN) pada jurnal
+- Mood pattern analysis & weekly insights di Home
+- Escalation ladder 4-level dengan adaptive banner
+- Breathing exercises (4-7-8, Box, Simple Calm) di /breathe
+- 10 artikel edukasi bilingual berbasis bukti di /education
+- i18n semua fitur baru (40+ keys)
 
 ### Fase 4 — Skalabilitas
 - Bahasa daerah & konteks spiritual/kultural
