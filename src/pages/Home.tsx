@@ -5,8 +5,10 @@ import { Book, MessageCircle, Heart, Flame, Wind, BookOpen } from 'lucide-react'
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { MoodSelector } from '../components/ui/MoodSelector';
 import { useMood } from '../hooks/useMood';
+import { useLocalStorage } from '../hooks/useLocalStorage';
 import { getGreeting } from '../utils/helpers';
 import { DAILY_AFFIRMATIONS } from '../utils/constants';
+import { SPIRITUAL_CONTENT } from '../data/spiritualContent';
 import { EscalationBanner } from '../components/common/EscalationBanner';
 import { generateInsights } from '../services/moodAnalysisService';
 
@@ -28,6 +30,17 @@ export const Home: React.FC = () => {
   const lang = i18n.language as 'id' | 'en';
   
   const insights = generateInsights(weeklyMoods);
+
+  const [spiritualEnabled] = useLocalStorage('rima-spiritual-enabled', false);
+  const [spiritualSource] = useLocalStorage<string>('rima-spiritual-source', 'universal');
+
+  // Rotate between regular affirmations and spiritual content
+  const spiritualItems = spiritualEnabled 
+    ? SPIRITUAL_CONTENT.filter(s => spiritualSource === 'universal' ? true : s.source === spiritualSource || s.source === 'universal')
+    : [];
+
+  const showSpiritual = spiritualEnabled && spiritualItems.length > 0 && new Date().getMinutes() % 2 === 0;
+  const spiritualItem = spiritualItems[new Date().getDay() % (spiritualItems.length || 1)];
 
   // In a real app, you'd fetch the latest journal content here. For now, pass undefined.
   const latestJournalContent = undefined;
@@ -59,7 +72,16 @@ export const Home: React.FC = () => {
       <EscalationBanner moods={moods} latestJournalContent={latestJournalContent} />
 
       <div className="affirmation-card" style={{ backgroundColor: 'var(--color-primary-soft)' }}>
-        <p className="affirmation-text">"{lang === 'en' ? affirmation.en : affirmation.id}"</p>
+        {showSpiritual && spiritualItem ? (
+          <>
+            <p className="affirmation-text">"{lang === 'en' ? spiritualItem.contentEn : spiritualItem.contentId}"</p>
+            <p style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)', marginTop: 'var(--spacing-xs)' }}>
+              {spiritualItem.icon} {lang === 'en' ? spiritualItem.titleEn : spiritualItem.titleId}
+            </p>
+          </>
+        ) : (
+          <p className="affirmation-text">"{lang === 'en' ? affirmation.en : affirmation.id}"</p>
+        )}
       </div>
 
       {weeklyMoods.length >= 3 && (

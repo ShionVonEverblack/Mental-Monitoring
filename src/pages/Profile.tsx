@@ -24,8 +24,13 @@ import {
   Shield,
   CheckCircle,
   Database,
-  Info
+  Info,
+  BarChart2,
+  Stethoscope
 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { useLocalStorage } from '../hooks/useLocalStorage';
+import { SPIRITUAL_SOURCES } from '../data/spiritualContent';
 
 export const Profile: React.FC = () => {
   const { t, i18n } = useTranslation();
@@ -33,15 +38,19 @@ export const Profile: React.FC = () => {
   const { getMoodStats } = useMood();
   const { user, updateDisplayName, regenerateAnonymousName, isSupabaseConfigured } = useAuth();
   const { enabled: notifEnabled, reminderTime, toggleNotifications, setReminderTime, sendTestNotification } = useNotifications();
+  const navigate = useNavigate();
 
   const [isEditingName, setIsEditingName] = useState(false);
   const [tempName, setTempName] = useState(user.displayName);
   const [toastMsg, setToastMsg] = useState<string | null>(null);
+  
+  const [spiritualEnabled, setSpiritualEnabled] = useLocalStorage('rima-spiritual-enabled', false);
+  const [spiritualSource, setSpiritualSource] = useLocalStorage<string>('rima-spiritual-source', 'universal');
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const stats = getMoodStats();
-  const lang = i18n.language as 'id' | 'en';
+  const lang = i18n.language as 'id' | 'en' | 'jv';
 
   const handleSaveName = () => {
     if (tempName.trim()) {
@@ -54,11 +63,6 @@ export const Profile: React.FC = () => {
   const handleRegenerate = () => {
     regenerateAnonymousName();
     showToast(t('profile.nameRegenerated', 'Nama anonim baru dibuat!'));
-  };
-
-  const handleLanguageChange = (newLang: 'id' | 'en') => {
-    i18n.changeLanguage(newLang);
-    showToast(t('profile.langChanged', newLang === 'id' ? 'Bahasa diubah ke Bahasa Indonesia' : 'Language changed to English'));
   };
 
   const handleImportFile = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -200,19 +204,61 @@ export const Profile: React.FC = () => {
               <span>{t('profile.language', 'Bahasa (Language)')}</span>
             </div>
             <div className="settings-item-right" style={{ display: 'flex', gap: '4px' }}>
-              <button
-                className={`btn btn-sm ${lang === 'id' ? 'btn-primary' : 'btn-ghost'}`}
-                onClick={() => handleLanguageChange('id')}
-              >
-                ID 🇮🇩
-              </button>
-              <button
-                className={`btn btn-sm ${lang === 'en' ? 'btn-primary' : 'btn-ghost'}`}
-                onClick={() => handleLanguageChange('en')}
-              >
-                EN 🇬🇧
+              {(['id', 'en', 'jv'] as const).map((langCode) => (
+                <button
+                  key={langCode}
+                  className={`btn btn-sm ${lang === langCode ? 'btn-primary' : 'btn-ghost'}`}
+                  onClick={() => i18n.changeLanguage(langCode)}
+                >
+                  {langCode === 'id' ? 'Indonesia' : langCode === 'en' ? 'English' : 'Basa Jawa'}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Spiritual Content */}
+          <Card>
+            <div className="profile-setting-item" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <div className="profile-setting-info" style={{ display: 'flex', flexDirection: 'column' }}>
+                <span className="profile-setting-label" style={{ fontWeight: 600 }}>{t('profile.spiritualContent', 'Konten Spiritual')}</span>
+                <span className="profile-setting-desc" style={{ fontSize: '0.813rem', color: 'var(--text-secondary)' }}>{t('profile.spiritualDesc', 'Tampilkan doa dan refleksi spiritual')}</span>
+              </div>
+              <button className={`btn btn-sm ${spiritualEnabled ? 'btn-primary' : 'btn-ghost'}`} onClick={() => setSpiritualEnabled(!spiritualEnabled)}>
+                {spiritualEnabled ? 'ON' : 'OFF'}
               </button>
             </div>
+            {spiritualEnabled && (
+              <div className="profile-spiritual-sources" style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginTop: '12px' }}>
+                {SPIRITUAL_SOURCES.map(source => (
+                  <button
+                    key={source.id}
+                    className={`chip ${spiritualSource === source.id ? 'chip-active' : ''}`}
+                    style={{ padding: '6px 12px', borderRadius: '16px', border: '1px solid var(--border-color)', background: spiritualSource === source.id ? 'var(--color-primary)' : 'transparent', color: spiritualSource === source.id ? 'white' : 'var(--text-primary)' }}
+                    onClick={() => setSpiritualSource(source.id)}
+                  >
+                    {source.icon} {lang === 'en' ? source.labelEn : source.labelId}
+                  </button>
+                ))}
+              </div>
+            )}
+          </Card>
+          
+          <div style={{ marginTop: '12px' }}>
+            <Card onClick={() => navigate('/analytics')} className="clickable">
+              <div className="profile-setting-item" style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+                <BarChart2 size={20} />
+                <span className="profile-setting-label">{t('profile.analytics', 'Dashboard Analytics')}</span>
+              </div>
+            </Card>
+          </div>
+          
+          <div style={{ marginTop: '12px' }}>
+            <Card onClick={() => navigate('/professional-help')} className="clickable">
+              <div className="profile-setting-item" style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+                <Stethoscope size={20} />
+                <span className="profile-setting-label">{t('profile.professionalHelp', 'Bantuan Profesional')}</span>
+              </div>
+            </Card>
           </div>
         </div>
       </div>

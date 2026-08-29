@@ -4,6 +4,7 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 
 import idTranslations from './id.json';
 import enTranslations from './en.json';
+import jvTranslations from './jv.json';
 
 i18n
   .use(LanguageDetector)
@@ -15,6 +16,9 @@ i18n
       },
       en: {
         translation: enTranslations,
+      },
+      jv: {
+        translation: jvTranslations,
       },
     },
     fallbackLng: 'id',

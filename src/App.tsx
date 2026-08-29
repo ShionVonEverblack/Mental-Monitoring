@@ -17,6 +17,8 @@ const Profile = lazy(() => import('./pages/Profile').then(module => ({ default: 
 const SafetyPlan = lazy(() => import('./components/safety/SafetyPlan').then(module => ({ default: module.SafetyPlan })));
 const Breathe = lazy(() => import('./pages/Breathe').then(module => ({ default: module.Breathe })));
 const Education = lazy(() => import('./pages/Education').then(module => ({ default: module.Education })));
+const ProfessionalHelp = lazy(() => import('./pages/ProfessionalHelp').then(module => ({ default: module.ProfessionalHelp })));
+const Analytics = lazy(() => import('./pages/Analytics').then(module => ({ default: module.Analytics })));
 
 const App: React.FC = () => {
   const { theme } = useTheme();
@@ -39,6 +41,8 @@ const App: React.FC = () => {
               <Route path="/safety-plan" element={<SafetyPlan />} />
               <Route path="/breathe" element={<Breathe />} />
               <Route path="/education" element={<Education />} />
+              <Route path="/professional-help" element={<ProfessionalHelp />} />
+              <Route path="/analytics" element={<Analytics />} />
             </Routes>
           </Suspense>
         </AppShell>

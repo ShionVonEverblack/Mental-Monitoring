@@ -136,7 +136,11 @@
     "localMode": "🔒 Local Mode (Offline-first)",
     "version": "Safe Mental Interaction Space v1.0.0 (Phase 2)",
     "aboutDesc": "Built on evidence-based mental health research for the people of Indonesia.",
-    "disclaimer": "Important Disclaimer"
+    "disclaimer": "Important Disclaimer",
+    "spiritualContent": "Spiritual Content",
+    "spiritualDesc": "Show prayers and spiritual reflections",
+    "analytics": "Analytics Dashboard",
+    "professionalHelp": "Professional Help"
   },
   "safety": {
     "sos": "Need Help?",
@@ -233,5 +237,29 @@
     "contactHelp": "🆘 Contact Crisis Help",
     "safetyPlan": "📋 View Safety Plan",
     "imOk": "I'm okay, thank you"
+  },
+  "professional": {
+    "title": "Professional Help",
+    "subtitle": "Find professional mental health services in Indonesia",
+    "search": "Search services...",
+    "onlineOnly": "Online only",
+    "bpjsOnly": "Accepts BPJS",
+    "call": "Call",
+    "disclaimer": "RIMA is not affiliated with the services listed above. Information is provided as a general reference.",
+    "noResults": "No services match your filters."
+  },
+  "analytics": {
+    "title": "Analytics Dashboard",
+    "subtitle": "Your mental health statistics",
+    "privacy": "All data is processed locally on your device",
+    "totalEntries": "Total Entries",
+    "averageMood": "Average Mood",
+    "streak": "Streak (Days)",
+    "journals": "Total Journals",
+    "moodDistribution": "Mood Distribution",
+    "moodByDay": "Mood by Day",
+    "factorImpact": "Factor Impact",
+    "monthlyTrend": "Monthly Trend",
+    "noData": "No data to display yet."
   }
 }
