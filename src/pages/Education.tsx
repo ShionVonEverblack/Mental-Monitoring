@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { FC } from 'react';
 import { EDUCATION_ARTICLES, EDUCATION_CATEGORIES } from '../data/educationContent';
@@ -11,15 +11,17 @@ export const Education: FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
-  const filteredArticles = EDUCATION_ARTICLES.filter(article => {
-    const matchesCategory = selectedCategory === 'all' || article.category === selectedCategory;
-    const searchLower = searchQuery.toLowerCase();
-    const title = lang === 'en' ? article.titleEn : article.titleId;
-    const summary = lang === 'en' ? article.summaryEn : article.summaryId;
-    const matchesSearch = title.toLowerCase().includes(searchLower) || summary.toLowerCase().includes(searchLower);
-    
-    return matchesCategory && matchesSearch;
-  });
+  const filteredArticles = useMemo(() => {
+    return EDUCATION_ARTICLES.filter(article => {
+      const matchesCategory = selectedCategory === 'all' || article.category === selectedCategory;
+      const searchLower = searchQuery.toLowerCase();
+      const title = lang === 'en' ? article.titleEn : article.titleId;
+      const summary = lang === 'en' ? article.summaryEn : article.summaryId;
+      const matchesSearch = title.toLowerCase().includes(searchLower) || summary.toLowerCase().includes(searchLower);
+      
+      return matchesCategory && matchesSearch;
+    });
+  }, [searchQuery, selectedCategory, lang]);
 
   const toggleExpand = (id: string) => {
     setExpandedId(prev => prev === id ? null : id);
@@ -55,16 +57,6 @@ export const Education: FC = () => {
             key={cat.id}
             className={`chip ${selectedCategory === cat.id ? 'chip-active' : ''}`}
             onClick={() => setSelectedCategory(cat.id)}
-            style={{
-              padding: '6px 16px',
-              borderRadius: '9999px',
-              border: '1px solid var(--border-subtle)',
-              background: selectedCategory === cat.id ? 'var(--color-primary)' : 'var(--bg-card)',
-              color: selectedCategory === cat.id ? '#fff' : 'var(--text-secondary)',
-              cursor: 'pointer',
-              fontSize: '0.875rem',
-              transition: 'all 0.2s'
-            }}
           >
             {lang === 'en' ? cat.labelEn : cat.labelId}
           </button>

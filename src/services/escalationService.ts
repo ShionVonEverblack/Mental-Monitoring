@@ -61,13 +61,10 @@ export function calculateEscalation(moods: MoodEntry[], latestJournalContent?: s
     }
   }
 
-  let decliningTrendFor5Days = false;
-  if (sortedMoods.length >= 5) {
-    const last5 = sortedMoods.slice(0, 5); 
-    if (last5[0].score < last5[last5.length - 1].score && avgMood < 2) {
-       decliningTrendFor5Days = true;
-    }
-  }
+  const last5 = sortedMoods.slice(0, 5);
+  const decliningTrendFor5Days = last5.length >= 5 && 
+    (last5.slice(0, 2).reduce((s, m) => s + m.score, 0) / 2) < 
+    (last5.slice(2, 5).reduce((s, m) => s + m.score, 0) / 3);
 
   if (avgMood < 2 || decliningTrendFor5Days) {
     level = 2;

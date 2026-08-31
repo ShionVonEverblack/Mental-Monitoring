@@ -218,22 +218,21 @@ export const Profile: React.FC = () => {
 
           {/* Spiritual Content */}
           <Card>
-            <div className="profile-setting-item" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <div className="profile-setting-info" style={{ display: 'flex', flexDirection: 'column' }}>
-                <span className="profile-setting-label" style={{ fontWeight: 600 }}>{t('profile.spiritualContent', 'Konten Spiritual')}</span>
-                <span className="profile-setting-desc" style={{ fontSize: '0.813rem', color: 'var(--text-secondary)' }}>{t('profile.spiritualDesc', 'Tampilkan doa dan refleksi spiritual')}</span>
+            <div className="profile-setting-item">
+              <div className="profile-setting-info">
+                <span className="profile-setting-label">{t('profile.spiritualContent', 'Konten Spiritual')}</span>
+                <span className="profile-setting-desc">{t('profile.spiritualDesc', 'Tampilkan doa dan refleksi spiritual')}</span>
               </div>
               <button className={`btn btn-sm ${spiritualEnabled ? 'btn-primary' : 'btn-ghost'}`} onClick={() => setSpiritualEnabled(!spiritualEnabled)}>
-                {spiritualEnabled ? 'ON' : 'OFF'}
+                {spiritualEnabled ? t('common.on', 'ON') : t('common.off', 'OFF')}
               </button>
             </div>
             {spiritualEnabled && (
-              <div className="profile-spiritual-sources" style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginTop: '12px' }}>
+              <div className="profile-spiritual-sources">
                 {SPIRITUAL_SOURCES.map(source => (
                   <button
                     key={source.id}
                     className={`chip ${spiritualSource === source.id ? 'chip-active' : ''}`}
-                    style={{ padding: '6px 12px', borderRadius: '16px', border: '1px solid var(--border-color)', background: spiritualSource === source.id ? 'var(--color-primary)' : 'transparent', color: spiritualSource === source.id ? 'white' : 'var(--text-primary)' }}
                     onClick={() => setSpiritualSource(source.id)}
                   >
                     {source.icon} {lang === 'en' ? source.labelEn : source.labelId}
@@ -245,7 +244,7 @@ export const Profile: React.FC = () => {
           
           <div style={{ marginTop: '12px' }}>
             <Card onClick={() => navigate('/analytics')} className="clickable">
-              <div className="profile-setting-item" style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+              <div className="profile-setting-item">
                 <BarChart2 size={20} />
                 <span className="profile-setting-label">{t('profile.analytics', 'Dashboard Analytics')}</span>
               </div>
@@ -254,7 +253,7 @@ export const Profile: React.FC = () => {
           
           <div style={{ marginTop: '12px' }}>
             <Card onClick={() => navigate('/professional-help')} className="clickable">
-              <div className="profile-setting-item" style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+              <div className="profile-setting-item">
                 <Stethoscope size={20} />
                 <span className="profile-setting-label">{t('profile.professionalHelp', 'Bantuan Profesional')}</span>
               </div>

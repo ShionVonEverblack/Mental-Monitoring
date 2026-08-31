@@ -87,6 +87,7 @@ export const Journal: React.FC = () => {
               type="text" 
               className="journal-title-input"
               placeholder={t('journal.titlePlaceholder', { defaultValue: 'Judul jurnal...' })}
+              aria-label={t('journal.titlePlaceholder', { defaultValue: 'Judul jurnal...' })}
               value={title}
               onChange={(e) => setTitle(e.target.value)}
             />
@@ -100,6 +101,7 @@ export const Journal: React.FC = () => {
             <textarea
               className="journal-content-input"
               placeholder={t('journal.contentPlaceholder', { defaultValue: 'Mulai menulis...' })}
+              aria-label={t('journal.contentPlaceholder', { defaultValue: 'Mulai menulis...' })}
               value={content}
               onChange={(e) => setContent(e.target.value)}
               rows={8}
@@ -150,7 +152,7 @@ export const Journal: React.FC = () => {
             {t('crisis.gentleMessage', 'Tulisanmu menunjukkan bahwa kamu mungkin sedang mengalami masa sulit. Kamu tidak sendirian, dan ada bantuan yang tersedia.')}
           </p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-sm)' }}>
-            <button className="btn btn-danger" onClick={() => { document.querySelector<HTMLButtonElement>('.sos-float')?.click(); }}>
+            <button className="btn btn-danger" onClick={() => { navigate('/safety-plan'); setCrisisResult(null); }}>
               {t('crisis.contactHelp', '🆘 Hubungi Bantuan Krisis')}
             </button>
             <button className="btn btn-secondary" onClick={() => navigate('/safety-plan')}>

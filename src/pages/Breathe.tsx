@@ -159,7 +159,7 @@ export const Breathe: FC = () => {
             disabled={isActive}
             aria-pressed={selectedTechnique === tech.id}
           >
-            <span className="breathe-tech-icon">{tech.icon}</span>
+            <span className="breathe-tech-icon" aria-hidden="true">{tech.icon}</span>
             <span className="breathe-tech-name">{t(tech.nameKey, tech.nameFallback)}</span>
             <span className="breathe-tech-desc">{t(tech.descKey, tech.descFallback)}</span>
           </button>

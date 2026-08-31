@@ -525,6 +525,7 @@ button.journal-entry-toggle { background: none; border: none; font: inherit; col
 .professional-card-location { font-size: 0.813rem; color: var(--text-tertiary); margin-bottom: var(--spacing-sm); }
 .professional-card-desc { font-size: 0.875rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: var(--spacing-md); }
 .professional-card-badges { display: flex; gap: var(--spacing-sm); margin-bottom: var(--spacing-md); }
+.badge-bpjs { background: hsla(165, 45%, 50%, 0.15); color: var(--color-secondary); }
 .professional-card-actions { display: flex; gap: var(--spacing-sm); }
 .professional-card-actions a { text-decoration: none; }
 .professional-disclaimer { text-align: center; font-size: 0.75rem; color: var(--text-tertiary); margin-top: var(--spacing-xl); padding-top: var(--spacing-md); border-top: 1px solid var(--border-subtle); }
@@ -543,3 +544,12 @@ button.journal-entry-toggle { background: none; border: none; font: inherit; col
 .analytics-chart-section { margin-bottom: var(--spacing-xl); }
 .analytics-chart-section h3 { font-size: 1rem; font-weight: 600; color: var(--text-primary); margin-bottom: var(--spacing-md); }
 .analytics-chart-card { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: var(--spacing-md); }
+
+/* Profile Spiritual & Navigation */
+.profile-setting-item { display: flex; align-items: center; gap: var(--spacing-md); }
+.profile-setting-info { flex: 1; }
+.profile-setting-label { font-size: 0.875rem; font-weight: 500; color: var(--text-primary); }
+.profile-setting-desc { font-size: 0.75rem; color: var(--text-secondary); }
+.profile-spiritual-sources { display: flex; flex-wrap: wrap; gap: var(--spacing-sm); padding: var(--spacing-sm) var(--spacing-md); }
+.clickable { cursor: pointer; }
+.chip-active { background: var(--color-primary) !important; color: #fff !important; border-color: var(--color-primary) !important; }

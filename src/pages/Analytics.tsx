@@ -42,7 +42,8 @@ export const Analytics: React.FC = () => {
   const moodByDay = useMemo(() => {
     const daysEn = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     const daysId = ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'];
-    const daysLabels = lang === 'en' ? daysEn : daysId;
+    const daysJv = ['Ahd', 'Sen', 'Sel', 'Reb', 'Kem', 'Jum', 'Sab'];
+    const daysLabels = lang === 'en' ? daysEn : lang === 'jv' ? daysJv : daysId;
     
     const dayData = Array.from({ length: 7 }, (_, i) => ({
       day: daysLabels[i],
@@ -128,7 +129,7 @@ export const Analytics: React.FC = () => {
         <>
           <section className="analytics-chart-section">
             <h3>{t('analytics.moodDistribution', 'Distribusi Mood')}</h3>
-            <div className="analytics-chart-card">
+            <div className="analytics-chart-card" role="img" aria-label={t('analytics.moodDistribution', 'Distribusi Mood')}>
               <ResponsiveContainer width="100%" height={250}>
                 <PieChart>
                   <Pie data={moodDistribution} dataKey="count" nameKey="label" cx="50%" cy="50%" outerRadius={80}>
@@ -145,7 +146,7 @@ export const Analytics: React.FC = () => {
           
           <section className="analytics-chart-section">
             <h3>{t('analytics.moodByDay', 'Mood per Hari')}</h3>
-            <div className="analytics-chart-card">
+            <div className="analytics-chart-card" role="img" aria-label={t('analytics.moodByDay', 'Mood per Hari')}>
               <ResponsiveContainer width="100%" height={250}>
                 <BarChart data={moodByDay}>
                   <XAxis dataKey="day" />
@@ -160,7 +161,7 @@ export const Analytics: React.FC = () => {
           {factorData && factorData.length > 0 && (
             <section className="analytics-chart-section">
               <h3>{t('analytics.factorImpact', 'Dampak Faktor')}</h3>
-              <div className="analytics-chart-card">
+              <div className="analytics-chart-card" role="img" aria-label={t('analytics.factorImpact', 'Dampak Faktor')}>
                 <ResponsiveContainer width="100%" height={300}>
                   <BarChart data={factorData} layout="vertical">
                     <XAxis type="number" domain={[0, 5]} />
@@ -175,7 +176,7 @@ export const Analytics: React.FC = () => {
           
           <section className="analytics-chart-section">
             <h3>{t('analytics.monthlyTrend', 'Tren Bulanan')}</h3>
-            <div className="analytics-chart-card">
+            <div className="analytics-chart-card" role="img" aria-label={t('analytics.monthlyTrend', 'Tren Bulanan')}>
               <ResponsiveContainer width="100%" height={250}>
                 <LineChart data={monthlyTrend}>
                   <XAxis dataKey="month" />

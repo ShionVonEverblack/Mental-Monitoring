@@ -21,14 +21,14 @@ export const SERVICE_TYPES = [
 ] as const;
 
 export const PROVINCES = [
-  { id: 'all', label: 'Semua Provinsi' },
-  { id: 'dki-jakarta', label: 'DKI Jakarta' },
-  { id: 'jawa-barat', label: 'Jawa Barat' },
-  { id: 'jawa-tengah', label: 'Jawa Tengah' },
-  { id: 'jawa-timur', label: 'Jawa Timur' },
-  { id: 'bali', label: 'Bali' },
-  { id: 'yogyakarta', label: 'DI Yogyakarta' },
-  { id: 'online', label: 'Online' },
+  { id: 'all', labelId: 'Semua Provinsi', labelEn: 'All Provinces' },
+  { id: 'dki-jakarta', labelId: 'DKI Jakarta', labelEn: 'DKI Jakarta' },
+  { id: 'jawa-barat', labelId: 'Jawa Barat', labelEn: 'West Java' },
+  { id: 'jawa-tengah', labelId: 'Jawa Tengah', labelEn: 'Central Java' },
+  { id: 'jawa-timur', labelId: 'Jawa Timur', labelEn: 'East Java' },
+  { id: 'bali', labelId: 'Bali', labelEn: 'Bali' },
+  { id: 'yogyakarta', labelId: 'DI Yogyakarta', labelEn: 'DI Yogyakarta' },
+  { id: 'online', labelId: 'Online', labelEn: 'Online' },
 ] as const;
 
 export const PROFESSIONAL_SERVICES: ProfessionalService[] = [

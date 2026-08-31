@@ -136,7 +136,11 @@
     "localMode": "🔒 Mode Lokal (Offline-first)",
     "version": "Ruang Interaksi Mental Aman v1.0.0 (Fase 2)",
     "aboutDesc": "Didamel adhedhasar riset kesehatan mental basis bukti ilmiah kagem masyarakat Indonesia.",
-    "disclaimer": "Disclaimer Penting"
+    "disclaimer": "Disclaimer Penting",
+    "spiritualContent": "Konten Spiritual",
+    "spiritualDesc": "Tampilaken donga lan refleksi spiritual",
+    "analytics": "Dashboard Analitik",
+    "professionalHelp": "Pitulungan Profesional"
   },
   "safety": {
     "sos": "Betah Bantuan?",
@@ -233,5 +237,29 @@
     "contactHelp": "🆘 Hubungi Bantuan Krisis",
     "safetyPlan": "📋 Tingali Rencana Keselamatan",
     "imOk": "Kula sae-sae kemawon, matur nuwun"
+  },
+  "professional": {
+    "title": "Pitulungan Profesional",
+    "subtitle": "Temokake layanan kesehatan mental profesional ing Indonesia",
+    "search": "Pados layanan...",
+    "onlineOnly": "Online kemawon",
+    "bpjsOnly": "Nampi BPJS",
+    "call": "Telpon",
+    "disclaimer": "RIMA boten afiliasi kaliyan layanan ing nginggil. Informasi dipunsediakaken minangka referensi umum.",
+    "noResults": "Boten wonten layanan ingkang cocok kaliyan filter."
+  },
+  "analytics": {
+    "title": "Dashboard Analitik",
+    "subtitle": "Statistik kesehatan mentalipun",
+    "privacy": "Sedaya data dipunproses sacara lokal ing piranti panjenengan",
+    "totalEntries": "Total Entri",
+    "averageMood": "Rata-rata Mood",
+    "streak": "Streak (Dinten)",
+    "journals": "Total Jurnal",
+    "moodDistribution": "Distribusi Mood",
+    "moodByDay": "Mood saben Dinten",
+    "factorImpact": "Dampak Faktor",
+    "monthlyTrend": "Tren Saben Wulan",
+    "noData": "Dereng wonten data kangge dipuntampilaken."
   }
 }

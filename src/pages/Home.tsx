@@ -39,7 +39,7 @@ export const Home: React.FC = () => {
     ? SPIRITUAL_CONTENT.filter(s => spiritualSource === 'universal' ? true : s.source === spiritualSource || s.source === 'universal')
     : [];
 
-  const showSpiritual = spiritualEnabled && spiritualItems.length > 0 && new Date().getMinutes() % 2 === 0;
+  const showSpiritual = spiritualEnabled && spiritualItems.length > 0 && new Date().getDate() % 2 === 0;
   const spiritualItem = spiritualItems[new Date().getDay() % (spiritualItems.length || 1)];
 
   // In a real app, you'd fetch the latest journal content here. For now, pass undefined.

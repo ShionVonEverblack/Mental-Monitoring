@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-// @ts-ignore
 import { PROFESSIONAL_SERVICES, SERVICE_TYPES, PROVINCES } from '../data/professionalServices';
+import type { ProfessionalService } from '../data/professionalServices';
 
 export const ProfessionalHelp: React.FC = () => {
   const { t, i18n } = useTranslation();
@@ -11,8 +11,7 @@ export const ProfessionalHelp: React.FC = () => {
   const [onlineOnly, setOnlineOnly] = useState(false);
   const [bpjsOnly, setBpjsOnly] = useState(false);
 
-  // @ts-ignore
-  const filtered = PROFESSIONAL_SERVICES.filter(service => {
+  const filtered = PROFESSIONAL_SERVICES.filter((service: ProfessionalService) => {
     if (search && !service.name.toLowerCase().includes(search.toLowerCase())) return false;
     if (province && service.province !== province) return false;
     if (serviceType && service.type !== serviceType) return false;
@@ -36,6 +35,7 @@ export const ProfessionalHelp: React.FC = () => {
           <input 
             type="text"
             placeholder={t('professional.search', 'Cari layanan...')} 
+            aria-label={t('professional.search', 'Cari layanan...')}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
@@ -45,19 +45,27 @@ export const ProfessionalHelp: React.FC = () => {
             className="select" 
             value={province} 
             onChange={(e) => setProvince(e.target.value)}
+            aria-label={t('professional.allProvinces', 'Semua Provinsi')}
           >
             <option value="">{t('professional.allProvinces', 'Semua Provinsi')}</option>
-            {/* @ts-ignore */}
-            {PROVINCES.map(p => <option key={p} value={p}>{p}</option>)}
+            {PROVINCES.map(p => (
+              <option key={p.id} value={p.id}>
+                {lang === 'en' ? p.labelEn : p.labelId}
+              </option>
+            ))}
           </select>
           <select 
             className="select" 
             value={serviceType} 
             onChange={(e) => setServiceType(e.target.value)}
+            aria-label={t('professional.allTypes', 'Semua Jenis Layanan')}
           >
             <option value="">{t('professional.allTypes', 'Semua Jenis Layanan')}</option>
-            {/* @ts-ignore */}
-            {SERVICE_TYPES.map(st => <option key={st} value={st}>{st}</option>)}
+            {SERVICE_TYPES.map(st => (
+              <option key={st.id} value={st.id}>
+                {lang === 'en' ? st.labelEn : st.labelId}
+              </option>
+            ))}
           </select>
         </div>
         <div className="professional-toggles">
@@ -81,8 +89,7 @@ export const ProfessionalHelp: React.FC = () => {
       {/* Results */}
       <div className="professional-results">
         <p className="professional-count">{filtered.length} layanan</p>
-        {/* @ts-ignore */}
-        {filtered.map(service => (
+        {filtered.map((service: ProfessionalService) => (
           <div className="professional-card" key={service.id}>
             <div className="professional-card-header">
               <h3>{service.name}</h3>
@@ -95,7 +102,7 @@ export const ProfessionalHelp: React.FC = () => {
             <div className="professional-card-badges">
               {service.online && <span className="badge badge-secondary">Online</span>}
               {service.bpjs && (
-                <span className="badge" style={{ background: 'hsla(165,45%,50%,0.15)', color: 'var(--color-secondary)' }}>
+                <span className="badge badge-bpjs">
                   BPJS
                 </span>
               )}

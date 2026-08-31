@@ -12,8 +12,8 @@ export interface MoodInsight {
 
 export interface WeeklySummary {
   averageScore: number;
-  bestDay: string | null;   
-  worstDay: string | null;
+  bestDay: number | null;   // day of week index (0=Sun, 6=Sat)
+  worstDay: number | null;
   topFactors: { factor: string, avgScore: number, count: number }[];
   bottomFactors: { factor: string, avgScore: number, count: number }[];
   trend: 'improving' | 'declining' | 'stable';
@@ -78,10 +78,8 @@ export function analyzeWeeklyMoods(moods: MoodEntry[]): WeeklySummary {
     avg: data.totalScore / data.count
   })).sort((a, b) => b.avg - a.avg);
 
-  const daysOfWeek = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
-  
-  const bestDay = dayAverages.length > 0 ? daysOfWeek[dayAverages[0].day] : null;
-  const worstDay = dayAverages.length > 0 ? daysOfWeek[dayAverages[dayAverages.length - 1].day] : null;
+  const bestDay = dayAverages.length > 0 ? dayAverages[0].day : null;
+  const worstDay = dayAverages.length > 0 ? dayAverages[dayAverages.length - 1].day : null;
 
   // Factors
   const correlations = getFactorCorrelation(moods);
@@ -171,13 +169,14 @@ export function generateInsights(moods: MoodEntry[]): MoodInsight[] {
     });
   }
 
-  if (weeklySummary.bestDay) {
+  if (weeklySummary.bestDay !== null) {
+    const daysOfWeek = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
     insights.push({
       type: 'pattern',
       titleKey: 'insights.bestDayTitle',
       titleFallback: 'Hari Terbaik Anda',
       descriptionKey: 'insights.bestDayDesc',
-      descriptionFallback: `Hari ${weeklySummary.bestDay} biasanya menjadi hari terbaik Anda minggu ini.`,
+      descriptionFallback: `Hari ${daysOfWeek[weeklySummary.bestDay]} biasanya menjadi hari terbaik Anda minggu ini.`,
       icon: '📅',
       severity: 'neutral'
     });
