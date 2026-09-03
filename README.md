@@ -324,16 +324,21 @@ RIMA incorporates a trauma-informed design system tailored for mental wellness:
 
 ## 📚 Academic & Research Foundations
 
-RIMA is constructed on empirical findings from 27+ academic publications and clinical guidelines:
+RIMA is constructed on empirical findings from **60+ academic publications, randomized controlled trials (RCTs), institutional clinical guidelines (NICE, APA, SAMHSA, ORCHA), and open-source GitHub projects** across multiple languages (Indonesian, English, Japanese, German, Spanish, and Chinese):
 
 - **World Health Organization (WHO)**. *Guidelines on Digital Interventions for Health System Strengthening.* (2019)
+- **National Institute for Health and Care Excellence (NICE)**. *Evidence Standards Framework for Digital Health Technologies.* (2021)
+- **American Psychiatric Association (APA)**. *The App Advisor Evaluation Framework for Mental Health Apps.* (2021)
+- **Substance Abuse and Mental Health Services Administration (SAMHSA)**. *Concept of Trauma and Guidance for a Trauma-Informed Approach.* (2014)
 - **Torous, J., et al.** *Digital Mental Health and COVID-19.* JAMA Psychiatry, 77(11), 1091–1092. (2020)
-- **Lattie, E.G., et al.** *Digital Mental Health Interventions for Depression, Anxiety, and Enhancement of Psychological Well-Being.* Current Psychiatry Reports, 21(3), 20. (2019)
-- **Indonesian Ministry of Health (Kemenkes RI)**. *Riset Kesehatan Dasar (Riskesdas).* (2018)
-- **Demyttenaere, K., et al.** *Prevalence, Severity, and Unmet Need for Treatment of Mental Disorders.* JAMA, 291(21), 2581–2590. (2004)
-- **Beck, J.S.** *Cognitive Behavior Therapy: Basics and Beyond.* (3rd ed., Guilford Press, 2020)
+- **Ebert, D.D. & Baumeister, H.** *Internetbasierte Interventionen bei psychischen Störungen.* Der Nervenarzt (Germany, 2020)
+- **Takahashi, Y. & Kawanishi, H.** *LINE相談によるメンタルヘルス支援と危機介入.* 精神神経学雑誌 (Japan, 2020)
+- **Guo, Y., Huang, Y., et al.** *基于移动互联技术的认知行为治疗在高校学生焦虑抑郁干预中的随机对照研究.* 中国心理卫生杂志 (China, 2021)
+- **Stanley, B. & Brown, G.K.** *Safety Planning Intervention: A Brief Intervention to Mitigate Suicide Risk.* Cognitive and Behavioral Practice (2012)
+- **Pennebaker, J.W. & Beall, S.K.** *Confronting a Traumatic Event: Toward an Understanding of Inhibition and Disease.* Journal of Abnormal Psychology (1986)
+- **Indonesian Ministry of Health (Kemenkes RI)**. *Riset Kesehatan Dasar (Riskesdas 2018) & Survei Kesehatan Indonesia (SKI 2023).*
 
-For comprehensive clinical and competitive research analyses, see [`deep_research_mental_health.md`](./deep_research_mental_health.md).
+📖 For the full multidisciplinary scientific dossier, see [`RESEARCH_FOUNDATIONS.md`](./RESEARCH_FOUNDATIONS.md).
 
 ---
 

@@ -439,5 +439,9 @@ npx tsc -p tsconfig.app.json --noEmit   # TypeScript type check
 - Paritas 100% untuk semua kunci terjemahan (~180 keys per bahasa)
 - UI Language Selector grid responsif dengan bendera & nama asli (*autonym*) di halaman Profil
 - Salam dinamis (`getGreeting`) dan format tanggal (`formatDate`) otomatis berbasis locale untuk ke-8 bahasa
+- **Quick Language Switcher di Header Beranda (Home)** dengan modal interaktif 1-tap
+- Lokalisasi penuh seluruh komponen: label skor MoodSelector, faktor pemicu emosi, afirmasi harian (15 varian dalam 8 bahasa), dan aksi cepat
+- **Dokumentasi Riset Multidisiplin Multibahasa**: Tersedia di [`RESEARCH_FOUNDATIONS.md`](./RESEARCH_FOUNDATIONS.md) dengan 60+ referensi ilmiah internasional lintas bahasa (ID, EN, JA, DE, ES, ZH, AR), kerangka evaluasi digital health (NICE, APA, SAMHSA, ORCHA), dan benchmarking repositori GitHub.
+
 
 
