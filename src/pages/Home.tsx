@@ -1,21 +1,24 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { Book, MessageCircle, Heart, Flame, Wind, BookOpen } from 'lucide-react';
+import { Book, MessageCircle, Heart, Flame, Wind, BookOpen, Globe } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { MoodSelector } from '../components/ui/MoodSelector';
+import { Modal } from '../components/ui/Modal';
 import { useMood } from '../hooks/useMood';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { getGreeting } from '../utils/helpers';
-import { DAILY_AFFIRMATIONS } from '../utils/constants';
+import { DAILY_AFFIRMATIONS, AVAILABLE_LANGUAGES } from '../utils/constants';
 import { SPIRITUAL_CONTENT } from '../data/spiritualContent';
 import { EscalationBanner } from '../components/common/EscalationBanner';
 import { generateInsights } from '../services/moodAnalysisService';
+import type { Language } from '../types';
 
 export const Home: React.FC = () => {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const { moods, getTodayMood, getWeeklyMoods, addMood, getMoodStats } = useMood();
+  const [showLangModal, setShowLangModal] = useState(false);
   
   const todayMood = getTodayMood();
   const weeklyMoods = getWeeklyMoods();
@@ -29,7 +32,9 @@ export const Home: React.FC = () => {
   
   const affirmationIndex = new Date().getDay() % DAILY_AFFIRMATIONS.length;
   const affirmation = DAILY_AFFIRMATIONS[affirmationIndex];
-  const lang = i18n.language as 'id' | 'en';
+  const currentLang = (i18n.language?.split('-')[0] || 'id') as Language;
+  const currentLangObj = AVAILABLE_LANGUAGES.find(l => l.code === currentLang) || AVAILABLE_LANGUAGES[0];
+  const affirmationText = affirmation[currentLang] || affirmation.en || affirmation.id;
   const insights = generateInsights(weeklyMoods);
 
   const [spiritualEnabled] = useLocalStorage('rima-spiritual-enabled', false);
@@ -47,18 +52,78 @@ export const Home: React.FC = () => {
 
   return (
     <div className="home-page">
-      <header className="home-header">
-        <h1 className="home-greeting">{getGreeting(lang)}</h1>
-        <div className="streak-badge" style={isGrace ? { borderColor: 'var(--color-secondary)', background: 'hsla(165, 45%, 50%, 0.15)' } : undefined}>
-          <Flame size={20} style={{ color: isGrace ? 'var(--color-secondary)' : undefined }} />
-          <span>{currentStreak} {t('home.daysStreak', { defaultValue: 'Hari' })}</span>
-          {isGrace && (
-            <span style={{ fontSize: '0.688rem', color: 'var(--color-secondary)', marginLeft: '4px', fontWeight: 600 }}>
-              🌱 {t('streak.recovery', 'Pemulihan')}
-            </span>
-          )}
+      <header className="home-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px' }}>
+        <h1 className="home-greeting">{getGreeting(currentLang)}</h1>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <button
+            type="button"
+            className="home-lang-btn"
+            onClick={() => setShowLangModal(true)}
+            aria-label={t('profile.language', 'Bahasa (Language)')}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px',
+              padding: '6px 12px',
+              background: 'var(--bg-secondary)',
+              border: '1px solid var(--border-subtle)',
+              borderRadius: 'var(--radius-full)',
+              fontSize: '0.813rem',
+              fontWeight: 500,
+              cursor: 'pointer',
+              color: 'var(--text-primary)',
+              transition: 'all 0.2s ease'
+            }}
+          >
+            <Globe size={15} style={{ color: 'var(--color-primary)' }} />
+            <span>{currentLangObj.flag} {currentLangObj.nativeName}</span>
+          </button>
+
+          <div className="streak-badge" style={isGrace ? { borderColor: 'var(--color-secondary)', background: 'hsla(165, 45%, 50%, 0.15)' } : undefined}>
+            <Flame size={20} style={{ color: isGrace ? 'var(--color-secondary)' : undefined }} />
+            <span>{currentStreak} {t('home.daysStreak', 'Hari')}</span>
+            {isGrace && (
+              <span style={{ fontSize: '0.688rem', color: 'var(--color-secondary)', marginLeft: '4px', fontWeight: 600 }}>
+                🌱 {t('streak.recovery', 'Pemulihan')}
+              </span>
+            )}
+          </div>
         </div>
       </header>
+
+      {showLangModal && (
+        <Modal
+          isOpen={showLangModal}
+          onClose={() => setShowLangModal(false)}
+          title={t('profile.language', 'Bahasa (Language)')}
+        >
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(130px, 1fr))', gap: '10px', marginTop: '8px' }}>
+            {AVAILABLE_LANGUAGES.map((item) => (
+              <button
+                key={item.code}
+                type="button"
+                className={`btn btn-sm ${currentLang === item.code ? 'btn-primary' : 'btn-ghost'}`}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '6px',
+                  padding: '10px 8px',
+                  fontSize: '0.85rem',
+                  border: currentLang === item.code ? 'none' : '1px solid var(--border-subtle)'
+                }}
+                onClick={() => {
+                  i18n.changeLanguage(item.code);
+                  setShowLangModal(false);
+                }}
+              >
+                <span aria-hidden="true">{item.flag}</span>
+                <span>{item.nativeName}</span>
+              </button>
+            ))}
+          </div>
+        </Modal>
+      )}
 
       <section className="mood-section">
         {!todayMood ? (
@@ -79,13 +144,13 @@ export const Home: React.FC = () => {
       <div className="affirmation-card" style={{ backgroundColor: 'var(--color-primary-soft)' }}>
         {showSpiritual && spiritualItem ? (
           <>
-            <p className="affirmation-text">"{lang === 'en' ? spiritualItem.contentEn : spiritualItem.contentId}"</p>
+            <p className="affirmation-text">"{currentLang === 'id' ? spiritualItem.contentId : spiritualItem.contentEn}"</p>
             <p style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)', marginTop: 'var(--spacing-xs)' }}>
-              {spiritualItem.icon} {lang === 'en' ? spiritualItem.titleEn : spiritualItem.titleId}
+              {spiritualItem.icon} {currentLang === 'id' ? spiritualItem.titleId : spiritualItem.titleEn}
             </p>
           </>
         ) : (
-          <p className="affirmation-text">"{lang === 'en' ? affirmation.en : affirmation.id}"</p>
+          <p className="affirmation-text">"{affirmationText}"</p>
         )}
       </div>
 
@@ -112,19 +177,19 @@ export const Home: React.FC = () => {
       <section className="quick-actions">
         <button className="quick-action-btn journal" onClick={() => navigate('/journal')}>
           <Book className="action-icon" />
-          <span>{t('home.writeJournal', { defaultValue: 'Tulis Jurnal' })}</span>
+          <span>{t('home.writeJournal', 'Tulis Jurnal')}</span>
         </button>
         <button className="quick-action-btn forum" onClick={() => navigate('/forum')}>
           <MessageCircle className="action-icon" />
-          <span>{t('home.viewForum', { defaultValue: 'Lihat Forum' })}</span>
+          <span>{t('home.viewForum', 'Lihat Forum')}</span>
         </button>
         <button className="quick-action-btn safety" onClick={() => navigate('/safety-plan')}>
           <Heart className="action-icon" />
-          <span>{t('home.safetyPlan', { defaultValue: 'Rencana Keselamatan' })}</span>
+          <span>{t('home.safetyPlan', 'Rencana Keselamatan')}</span>
         </button>
         <button className="quick-action-btn meditate" onClick={() => navigate('/breathe')}>
           <Wind className="action-icon" />
-          <span>{t('home.meditate', { defaultValue: 'Meditasi' })}</span>
+          <span>{t('home.meditate', 'Latihan Napas')}</span>
         </button>
         <button className="quick-action-btn education" onClick={() => navigate('/education')}>
           <BookOpen className="action-icon" />

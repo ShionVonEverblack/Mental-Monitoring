@@ -36,18 +36,8 @@ import { useLocalStorage } from '../hooks/useLocalStorage';
 import { SPIRITUAL_SOURCES } from '../data/spiritualContent';
 import { Modal } from '../components/ui/Modal';
 import { wipeAllData } from '../utils/dataWipe';
+import { AVAILABLE_LANGUAGES } from '../utils/constants';
 import type { Language } from '../types';
-
-const AVAILABLE_LANGUAGES: { code: Language; name: string; nativeName: string; flag: string }[] = [
-  { code: 'id', name: 'Indonesian', nativeName: 'Bahasa Indonesia', flag: '🇮🇩' },
-  { code: 'en', name: 'English', nativeName: 'English', flag: '🇬🇧' },
-  { code: 'jv', name: 'Javanese', nativeName: 'Basa Jawa', flag: '🇮🇩' },
-  { code: 'su', name: 'Sundanese', nativeName: 'Basa Sunda', flag: '🇮🇩' },
-  { code: 'ja', name: 'Japanese', nativeName: '日本語', flag: '🇯🇵' },
-  { code: 'zh', name: 'Chinese', nativeName: '简体中文', flag: '🇨🇳' },
-  { code: 'es', name: 'Spanish', nativeName: 'Español', flag: '🇪🇸' },
-  { code: 'ar', name: 'Arabic', nativeName: 'العربية', flag: '🇸🇦' },
-];
 
 export const Profile: React.FC = () => {
   const { t, i18n } = useTranslation();

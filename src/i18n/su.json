@@ -23,7 +23,13 @@
     "todayAffirmation": "Afirmasi Dinten Ieu",
     "todayMood": "Raraosan Dinten Ieu",
     "feelingGood": "Cukup Saé",
-    "education": "Édukasi"
+    "education": "Édukasi",
+    "daysStreak": "Dinten",
+    "moodLogged": "Raraosan dinten ieu parantos kacatet",
+    "writeJournal": "Serat Jurnal",
+    "viewForum": "Tingali Forum",
+    "safetyPlan": "Rancangan Kasalametan",
+    "meditate": "Latihan Ambegan"
   },
   "mood": {
     "title": "Catetan Raraosan",
@@ -38,7 +44,26 @@
     "improving": "Mendingan",
     "declining": "Nyirorot",
     "stable": "Ajeg",
-    "noData": "Teu acan aya data raraosan"
+    "noData": "Teu acan aya data raraosan",
+    "scores": {
+      "1": "Awon Pisan",
+      "2": "Kirang Saé",
+      "3": "Biasa",
+      "4": "Saé",
+      "5": "Saé Pisan"
+    },
+    "factorList": {
+      "sleep": "Kulem",
+      "exercise": "Olahraga",
+      "work": "Padamelan",
+      "social": "Sosial",
+      "food": "Tuangeun",
+      "weather": "Hawa",
+      "health": "Kasehatan",
+      "family": "Kulawarga",
+      "hobby": "Hobi",
+      "meditation": "Ambegan"
+    }
   },
   "journal": {
     "title": "Jurnal",

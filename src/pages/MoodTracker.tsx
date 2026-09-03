@@ -76,7 +76,7 @@ export const MoodTracker: React.FC = () => {
                     onClick={() => toggleFactor(factor.id)}
                     aria-pressed={isSelected}
                   >
-                    {lang === 'en' ? factor.labelEn : factor.labelId}
+                    {t(`mood.factorList.${factor.id}`, i18n.language === 'en' ? factor.labelEn : factor.labelId)}
                   </button>
                 );
               })}

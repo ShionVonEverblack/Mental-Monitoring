@@ -23,7 +23,13 @@
     "todayAffirmation": "Afirmación de hoy",
     "todayMood": "Estado de hoy",
     "feelingGood": "Bastante bien",
-    "education": "Educación"
+    "education": "Educación",
+    "daysStreak": "Días",
+    "moodLogged": "El estado de hoy está registrado",
+    "writeJournal": "Escribir Diario",
+    "viewForum": "Ver Comunidad",
+    "safetyPlan": "Plan de Seguridad",
+    "meditate": "Respiración y Calma"
   },
   "mood": {
     "title": "Registro de Ánimo",
@@ -38,7 +44,26 @@
     "improving": "Mejorando",
     "declining": "Disminuyendo",
     "stable": "Estable",
-    "noData": "Aún no hay datos de ánimo"
+    "noData": "Aún no hay datos de ánimo",
+    "scores": {
+      "1": "Muy Malo",
+      "2": "Malo",
+      "3": "Regular",
+      "4": "Bueno",
+      "5": "Excelente"
+    },
+    "factorList": {
+      "sleep": "Sueño",
+      "exercise": "Ejercicio",
+      "work": "Trabajo",
+      "social": "Social",
+      "food": "Comida",
+      "weather": "Clima",
+      "health": "Salud",
+      "family": "Familia",
+      "hobby": "Pasatiempo",
+      "meditation": "Meditación"
+    }
   },
   "journal": {
     "title": "Diario Emocional",

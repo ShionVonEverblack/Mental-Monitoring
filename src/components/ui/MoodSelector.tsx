@@ -10,7 +10,7 @@ export interface MoodSelectorProps {
 }
 
 export const MoodSelector: React.FC<MoodSelectorProps> = ({ value, onChange }) => {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   return (
     <>
@@ -70,7 +70,7 @@ export const MoodSelector: React.FC<MoodSelectorProps> = ({ value, onChange }) =
             >
               <span className="mood-emoji">{mood.emoji}</span>
               <span className="mood-label">
-                {i18n.language === 'en' ? mood.labelEn : mood.labelId}
+                {t(`mood.scores.${score}`, i18n.language === 'en' ? mood.labelEn : mood.labelId)}
               </span>
             </button>
           );

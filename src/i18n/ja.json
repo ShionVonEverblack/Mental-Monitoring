@@ -23,7 +23,13 @@
     "todayAffirmation": "今日のアファメーション",
     "todayMood": "今日の気分",
     "feelingGood": "良好",
-    "education": "メンタルヘルス学習"
+    "education": "メンタルヘルス学習",
+    "daysStreak": "日",
+    "moodLogged": "今日の気分が記録されました",
+    "writeJournal": "日記を書く",
+    "viewForum": "フォーラムを見る",
+    "safetyPlan": "セーフティプラン",
+    "meditate": "呼吸・瞑想"
   },
   "mood": {
     "title": "気分トラッカー",
@@ -38,7 +44,26 @@
     "improving": "向上中",
     "declining": "低下気味",
     "stable": "安定",
-    "noData": "気分のデータがまだありません"
+    "noData": "気分のデータがまだありません",
+    "scores": {
+      "1": "とても悪い",
+      "2": "悪い",
+      "3": "普通",
+      "4": "良い",
+      "5": "とても良い"
+    },
+    "factorList": {
+      "sleep": "睡眠",
+      "exercise": "運動",
+      "work": "仕事",
+      "social": "人間関係",
+      "food": "食事",
+      "weather": "天気",
+      "health": "健康",
+      "family": "家族",
+      "hobby": "趣味",
+      "meditation": "瞑想"
+    }
   },
   "journal": {
     "title": "メンタル日記",

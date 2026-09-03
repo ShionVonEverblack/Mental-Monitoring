@@ -23,7 +23,13 @@
     "todayAffirmation": "Today's Affirmation",
     "todayMood": "Today's Mood",
     "feelingGood": "Feeling Good",
-    "education": "Education"
+    "education": "Education",
+    "daysStreak": "Days",
+    "moodLogged": "Today's mood is logged",
+    "writeJournal": "Write Journal",
+    "viewForum": "View Forum",
+    "safetyPlan": "Safety Plan",
+    "meditate": "Breathing Exercise"
   },
   "mood": {
     "title": "Mood Tracker",
@@ -38,7 +44,26 @@
     "improving": "Improving",
     "declining": "Declining",
     "stable": "Stable",
-    "noData": "No mood data yet"
+    "noData": "No mood data yet",
+    "scores": {
+      "1": "Very Bad",
+      "2": "Bad",
+      "3": "Okay",
+      "4": "Good",
+      "5": "Great"
+    },
+    "factorList": {
+      "sleep": "Sleep",
+      "exercise": "Exercise",
+      "work": "Work",
+      "social": "Social",
+      "food": "Food",
+      "weather": "Weather",
+      "health": "Health",
+      "family": "Family",
+      "hobby": "Hobby",
+      "meditation": "Meditation"
+    }
   },
   "journal": {
     "title": "Journal",

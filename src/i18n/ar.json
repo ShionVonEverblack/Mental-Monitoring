@@ -23,7 +23,13 @@
     "todayAffirmation": "توكيد اليوم الإيجابي",
     "todayMood": "مزاج اليوم",
     "feelingGood": "جيد جداً",
-    "education": "التثقيف النفسي"
+    "education": "التثقيف النفسي",
+    "daysStreak": "أيام",
+    "moodLogged": "تم تسجيل مزاج اليوم",
+    "writeJournal": "كتابة اليوميات",
+    "viewForum": "زيارة المجتمع",
+    "safetyPlan": "خطة الأمان",
+    "meditate": "تمارين التنفس"
   },
   "mood": {
     "title": "متتبع المزاج",
@@ -38,7 +44,26 @@
     "improving": "في تحسن",
     "declining": "في تراجع",
     "stable": "مستقر",
-    "noData": "لا توجد بيانات مزاج بعد"
+    "noData": "لا توجد بيانات مزاج بعد",
+    "scores": {
+      "1": "سيء جداً",
+      "2": "سيء",
+      "3": "عادي",
+      "4": "جيد",
+      "5": "ممتاز"
+    },
+    "factorList": {
+      "sleep": "النوم",
+      "exercise": "الرياضة",
+      "work": "العمل",
+      "social": "العلاقات",
+      "food": "الطعام",
+      "weather": "الطقس",
+      "health": "الصحة",
+      "family": "العائلة",
+      "hobby": "الهوايات",
+      "meditation": "التأمل"
+    }
   },
   "journal": {
     "title": "يوميات المشاعر",

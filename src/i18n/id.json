@@ -23,7 +23,13 @@
     "todayAffirmation": "Afirmasi Hari Ini",
     "todayMood": "Mood Hari Ini",
     "feelingGood": "Cukup Baik",
-    "education": "Edukasi"
+    "education": "Edukasi",
+    "daysStreak": "Hari",
+    "moodLogged": "Mood hari ini tercatat",
+    "writeJournal": "Tulis Jurnal",
+    "viewForum": "Lihat Forum",
+    "safetyPlan": "Rencana Keselamatan",
+    "meditate": "Latihan Napas"
   },
   "mood": {
     "title": "Mood Tracker",
@@ -38,7 +44,26 @@
     "improving": "Membaik",
     "declining": "Menurun",
     "stable": "Stabil",
-    "noData": "Belum ada data mood"
+    "noData": "Belum ada data mood",
+    "scores": {
+      "1": "Sangat Buruk",
+      "2": "Buruk",
+      "3": "Biasa",
+      "4": "Baik",
+      "5": "Sangat Baik"
+    },
+    "factorList": {
+      "sleep": "Tidur",
+      "exercise": "Olahraga",
+      "work": "Pekerjaan",
+      "social": "Sosial",
+      "food": "Makanan",
+      "weather": "Cuaca",
+      "health": "Kesehatan",
+      "family": "Keluarga",
+      "hobby": "Hobi",
+      "meditation": "Meditasi"
+    }
   },
   "journal": {
     "title": "Jurnal",

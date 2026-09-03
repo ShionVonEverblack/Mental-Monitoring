@@ -23,7 +23,13 @@
     "todayAffirmation": "Afirmasi Dinten Puniki",
     "todayMood": "Mood Dinten Puniki",
     "feelingGood": "Cukup Sae",
-    "education": "Edukasi"
+    "education": "Edukasi",
+    "daysStreak": "Dinten",
+    "moodLogged": "Mood dinten puniki sampun kacathet",
+    "writeJournal": "Serat Jurnal",
+    "viewForum": "Mriksani Forum",
+    "safetyPlan": "Rancangan Kaslametan",
+    "meditate": "Latihan Ambegan"
   },
   "mood": {
     "title": "Mood Tracker",
@@ -38,7 +44,26 @@
     "improving": "Soyo Sae",
     "declining": "Merosot",
     "stable": "Stabil",
-    "noData": "Dereng wonten data mood"
+    "noData": "Dereng wonten data mood",
+    "scores": {
+      "1": "Awon Sanget",
+      "2": "Kirang Sae",
+      "3": "Biasa",
+      "4": "Sae",
+      "5": "Sae Sanget"
+    },
+    "factorList": {
+      "sleep": "Sare",
+      "exercise": "Olahraga",
+      "work": "Pakaryan",
+      "social": "Sosial",
+      "food": "Dhaharan",
+      "weather": "Hawa",
+      "health": "Kasarasan",
+      "family": "Kulawarga",
+      "hobby": "Kesenengan",
+      "meditation": "Semadi"
+    }
   },
   "journal": {
     "title": "Jurnal",

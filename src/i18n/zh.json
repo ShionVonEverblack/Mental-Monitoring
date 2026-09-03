@@ -23,7 +23,13 @@
     "todayAffirmation": "今日肯定语",
     "todayMood": "今日心情",
     "feelingGood": "还不错",
-    "education": "心理知识"
+    "education": "心理知识",
+    "daysStreak": "天",
+    "moodLogged": "今日心情已记录",
+    "writeJournal": "写心情日记",
+    "viewForum": "浏览互助社区",
+    "safetyPlan": "个人安全计划",
+    "meditate": "呼吸与正念"
   },
   "mood": {
     "title": "心情追踪",
@@ -38,7 +44,26 @@
     "improving": "好转",
     "declining": "低落",
     "stable": "稳定",
-    "noData": "暂无心情数据"
+    "noData": "暂无心情数据",
+    "scores": {
+      "1": "非常糟糕",
+      "2": "不佳",
+      "3": "一般",
+      "4": "较好",
+      "5": "非常好"
+    },
+    "factorList": {
+      "sleep": "睡眠",
+      "exercise": "运动",
+      "work": "工作",
+      "social": "社交",
+      "food": "饮食",
+      "weather": "天气",
+      "health": "健康",
+      "family": "家庭",
+      "hobby": "爱好",
+      "meditation": "正念"
+    }
   },
   "journal": {
     "title": "心情日记",
