@@ -95,7 +95,8 @@
     "submit": "Kirim Cariyos",
     "empty": "Dereng wonten cariyos ing kategori puniki. Dados ingkang sepisanan berbagi.",
     "comments": "Komentar",
-    "replyPlaceholder": "Tulis pesen dukungan anget..."
+    "replyPlaceholder": "Tulis pesen dukungan anget...",
+    "loadMore": "Muat Langkung Kathah"
   },
   "profile": {
     "title": "Profil",
@@ -140,7 +141,11 @@
     "spiritualContent": "Konten Spiritual",
     "spiritualDesc": "Tampilaken donga lan refleksi spiritual",
     "analytics": "Dashboard Analitik",
-    "professionalHelp": "Pitulungan Profesional"
+    "professionalHelp": "Pitulungan Profesional",
+    "privacyTitle": "HAK DATA & KEBIJAKAN PRIVASI (UU PDP)",
+    "privacyPolicyLink": "Kebijakan Privasi & Hak Pengguna",
+    "wipeDataBtn": "Busak Sedaya Data Permanen",
+    "irreversible": "Permanen"
   },
   "safety": {
     "sos": "Betah Bantuan?",
@@ -261,5 +266,73 @@
     "factorImpact": "Dampak Faktor",
     "monthlyTrend": "Tren Saben Wulan",
     "noData": "Dereng wonten data kangge dipuntampilaken."
+  },
+  "common": {
+    "loading": "Ngundhuh...",
+    "error": "Wonten kaluputan",
+    "save": "Simpen",
+    "cancel": "Batal",
+    "download": "Undhuh",
+    "back": "Wangsul",
+    "view": "Tingali",
+    "on": "ON",
+    "off": "OFF"
+  },
+  "privacy": {
+    "title": "Kabijakan Privasi & Pangayoman Data",
+    "subtitle": "Komitmen RIMA anggenipun ngreksa data kesehatan mental panjenengan miturut UU No. 27 Taun 2022 (UU PDP).",
+    "offlineFirstTitle": "1. Prinsip Offline-First & Panyimpenan Lokal",
+    "offlineFirstDesc": "Data pribadi kados ta cathetan mood, jurnal, lan rencana kawilujengan kasimpen kanthi otomatis wonten ing piranti panjenengan piyambak. Boten wonten data jurnal pribadi ingkang dipunkintun dhateng server pihak sanes tanpa pasarujukan panjenengan.",
+    "dataCollectedTitle": "2. Data ingkang Dipunolah",
+    "moodData": "Data Emosi/Mood:",
+    "moodDataDesc": "Skor mood (1-5), faktor panyebab, cathetan, kasimpen sacara lokal.",
+    "journalData": "Cathetan Jurnal:",
+    "journalDataDesc": "Refleksi pribadi dipunolah 100% lokal ing peramban panjenengan.",
+    "communityData": "Forum Komunitas:",
+    "communityDataDesc": "Cariyos anonim kanthi sesinglon acak kangge njagi jati dhiri panjenengan.",
+    "userRightsTitle": "3. Hak Panjenengan Miturut UU PDP",
+    "userRightsDesc": "Miturut UU Pangayoman Data Pribadi (UU No. 27/2022), panjenengan kagungan hak jangkep kangge:",
+    "rightAccess": "Hak Akses & Portabilitas:",
+    "rightAccessDesc": "Ngundhuh sedaya data pribadi panjenengan wonten format JSON utawi CSV.",
+    "rightErasure": "Hak Pambusakan (Right to Erasure):",
+    "rightErasureDesc": "Mbusak permanen sedaya data panjenengan saking piranti lan server sacara cepet.",
+    "rightAnonymity": "Hak Anonimitas:",
+    "rightAnonymityDesc": "Ngginakaken RIMA tanpa kedah nyukani asma asli utawi nomer telpon pribadi.",
+    "crisisSafetyTitle": "4. Privasi Paningalan Krisis",
+    "crisisSafetyDesc": "Algoritma paningalan tembung krisis lumampah sedaya wonten ing peramban panjenengan (client-side NLP matching). Boten wonten seratan darurat ingkang dipunkintun dhateng server.",
+    "wipeTitle": "5. Mbusak Sedaya Data Panjenengan",
+    "wipeDesc": "Panjenengan saged mbusak sedaya riwayat mood, jurnal, pangaturan, lan identitas anonim lumantar kaca Profil kanthi tombol \"Busak Sedaya Data Permanen\".",
+    "goToProfile": "Kunjungi Kaca Profil",
+    "lastUpdated": "Pungkasan Dipunanyari: September 2026",
+    "contactDPO": "Pitakenan babagan privasi data: privasi@rima.app"
+  },
+  "consent": {
+    "title": "Komitmen Privasi & Kawilujengan RIMA",
+    "welcomeDesc": "RIMA dipundamel minangka ruang aman digital kangge nyengkuyung kesehatan mental panjenengan. Privasi lan kawilujengan data dados prioritas utami.",
+    "offlineFirst": "100% Offline-First",
+    "offlineFirstDesc": "Cathetan mood lan jurnal kajagi wonten ing memori piranti panjenengan piyambak.",
+    "anonymous": "Identitas Anonim",
+    "anonymousDesc": "Boten mbetahaken asma asli utawi nomer HP kangge ngginakaken platform puniki.",
+    "control": "Kendali Jangkep ing Asta Panjenengan",
+    "controlDesc": "Panjenengan gadhah hak ngundhuh utawi mbusak sedaya data miturut UU PDP.",
+    "agreeCheckbox": "Kula mangertos prinsip privasi puniki lan sarujuk ngginakaken RIMA.",
+    "readPolicy": "Waos Kabijakan Jangkep",
+    "continue": "Wiwiti Ngginakaken RIMA"
+  },
+  "dataWipe": {
+    "confirmTitle": "Konfirmasi Pambusakan Data",
+    "warningDesc": "Tindakan puniki badhe mbusak sedaya cathetan mood, entri jurnal, rencana kawilujengan, lan pangaturan saking piranti lan server. Tindakan puniki BOTEN saged dipunbatalaken.",
+    "recommendExport": "Dipunanjuraken ngundhuh cadangan data JSON rumiyin menawi kepengin nyimpen cathetan.",
+    "confirmDelete": "Inggih, Busak Sedaya",
+    "success": "Sedaya data lokal lan cloud kasil dipunbusak."
+  },
+  "disclaimer": {
+    "insights": "Insight puniki dipunolah saking data pribadi kangge refleksi dhiri, sanes diagnosis medis klinis.",
+    "analytics": "Visualisasi data puniki kagem refleksi pribadi, sanes alat diagnosis medis.",
+    "escalation": "Pitedah otomatis puniki katujokaken kangge pandampingan mandiri, sanes panggantos pananganan medis."
+  },
+  "streak": {
+    "recovery": "Pamulihan",
+    "recoveryDay": "Dinten Pamulihan"
   }
 }

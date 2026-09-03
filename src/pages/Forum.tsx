@@ -38,18 +38,37 @@ export const Forum: React.FC = () => {
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const lang = i18n.language as 'id' | 'en';
+  const [page, setPage] = useState(0);
+  const [hasMore, setHasMore] = useState(false);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+
+  const lang = i18n.language as 'id' | 'en' | 'jv';
 
   useEffect(() => {
-    loadPosts();
+    loadPosts(0, false);
   }, []);
 
-  const loadPosts = async () => {
+  const loadPosts = async (pageNum = 0, append = false) => {
     try {
-      const data = await fetchForumPosts();
-      setPosts(data);
+      if (append) setIsLoadingMore(true);
+      const data = await fetchForumPosts(pageNum, 10);
+      if (append) {
+        setPosts(prev => [...prev, ...data.posts]);
+      } else {
+        setPosts(data.posts);
+      }
+      setHasMore(data.hasMore);
+      setPage(pageNum);
     } catch (error) {
       console.error('Failed to load posts:', error);
+    } finally {
+      setIsLoadingMore(false);
+    }
+  };
+
+  const handleLoadMore = () => {
+    if (!isLoadingMore && hasMore) {
+      loadPosts(page + 1, true);
     }
   };
 
@@ -399,6 +418,18 @@ export const Forum: React.FC = () => {
               </div>
             );
           })
+        )}
+
+        {hasMore && (
+          <div style={{ display: 'flex', justifyContent: 'center', marginTop: '24px' }}>
+            <button 
+              className="btn btn-secondary" 
+              onClick={handleLoadMore}
+              disabled={isLoadingMore}
+            >
+              {isLoadingMore ? t('common.loading', 'Memuat...') : t('forum.loadMore', 'Muat Lebih Banyak')}
+            </button>
+          </div>
         )}
       </div>
     </div>

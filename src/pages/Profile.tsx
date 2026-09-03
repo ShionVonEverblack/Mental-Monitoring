@@ -26,11 +26,16 @@ import {
   Database,
   Info,
   BarChart2,
-  Stethoscope
+  Stethoscope,
+  ShieldCheck,
+  Trash2,
+  AlertTriangle
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { SPIRITUAL_SOURCES } from '../data/spiritualContent';
+import { Modal } from '../components/ui/Modal';
+import { wipeAllData } from '../utils/dataWipe';
 
 export const Profile: React.FC = () => {
   const { t, i18n } = useTranslation();
@@ -46,11 +51,30 @@ export const Profile: React.FC = () => {
   
   const [spiritualEnabled, setSpiritualEnabled] = useLocalStorage('rima-spiritual-enabled', false);
   const [spiritualSource, setSpiritualSource] = useLocalStorage<string>('rima-spiritual-source', 'universal');
+  const [showWipeModal, setShowWipeModal] = useState(false);
+  const [isWiping, setIsWiping] = useState(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const stats = getMoodStats();
   const lang = i18n.language as 'id' | 'en' | 'jv';
+
+  const handleConfirmWipe = async () => {
+    setIsWiping(true);
+    try {
+      await wipeAllData();
+      setShowWipeModal(false);
+      showToast(t('dataWipe.success', 'Seluruh data lokal & cloud berhasil dihapus.'));
+      setTimeout(() => {
+        window.location.href = '/';
+      }, 1000);
+    } catch (e) {
+      console.error(e);
+      showToast(t('common.error', 'Terjadi kesalahan'));
+    } finally {
+      setIsWiping(false);
+    }
+  };
 
   const handleSaveName = () => {
     if (tempName.trim()) {
@@ -361,6 +385,70 @@ export const Profile: React.FC = () => {
           </div>
         </div>
       </div>
+
+      <div className="settings-section">
+        <h2 className="settings-title">{t('profile.privacyTitle', 'HAK DATA & KEBIJAKAN PRIVASI (UU PDP)')}</h2>
+        <div className="settings-list">
+          <button className="settings-item" type="button" onClick={() => navigate('/privacy')}>
+            <div className="settings-item-left">
+              <ShieldCheck size={18} style={{ color: 'var(--color-primary)' }} />
+              <span>{t('profile.privacyPolicyLink', 'Kebijakan Privasi & Hak Pengguna')}</span>
+            </div>
+            <div className="settings-item-right">
+              <Button variant="ghost" size="sm">
+                {t('common.view', 'Lihat')}
+              </Button>
+            </div>
+          </button>
+
+          <button className="settings-item" type="button" onClick={() => setShowWipeModal(true)}>
+            <div className="settings-item-left">
+              <Trash2 size={18} style={{ color: 'var(--color-danger)' }} />
+              <span style={{ color: 'var(--color-danger)' }}>{t('profile.wipeDataBtn', 'Hapus Seluruh Data Permanen')}</span>
+            </div>
+            <div className="settings-item-right">
+              <span className="badge" style={{ background: 'hsla(0, 65%, 55%, 0.15)', color: 'var(--color-danger)' }}>
+                {t('profile.irreversible', 'Permanen')}
+              </span>
+            </div>
+          </button>
+        </div>
+      </div>
+
+      {/* Wipe Confirmation Modal */}
+      {showWipeModal && (
+        <Modal
+          isOpen={showWipeModal}
+          onClose={() => setShowWipeModal(false)}
+          title={t('dataWipe.confirmTitle', 'Konfirmasi Penghapusan Data')}
+        >
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+            <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start', background: 'hsla(0, 65%, 55%, 0.1)', padding: '12px', borderRadius: '10px' }}>
+              <AlertTriangle size={24} style={{ color: 'var(--color-danger)', flexShrink: 0 }} />
+              <p style={{ fontSize: '0.875rem', color: 'var(--text-primary)', margin: 0, lineHeight: 1.5 }}>
+                {t('dataWipe.warningDesc', 'Tindakan ini akan menghapus seluruh catatan mood, entri jurnal, rencana keselamatan, dan pengaturan Anda dari perangkat ini dan server. Tindakan ini TIDAK dapat dibatalkan.')}
+              </p>
+            </div>
+            <p style={{ fontSize: '0.813rem', color: 'var(--text-secondary)', margin: 0 }}>
+              {t('dataWipe.recommendExport', 'Disarankan untuk mengekspor cadangan data JSON terlebih dahulu jika Anda ingin menyimpannya.')}
+            </p>
+            <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end', marginTop: '8px' }}>
+              <Button variant="ghost" onClick={() => setShowWipeModal(false)} disabled={isWiping}>
+                {t('common.cancel', 'Batal')}
+              </Button>
+              <Button
+                variant="primary"
+                onClick={handleConfirmWipe}
+                disabled={isWiping}
+                style={{ backgroundColor: 'var(--color-danger)', borderColor: 'var(--color-danger)' }}
+                icon={<Trash2 size={16} />}
+              >
+                {isWiping ? t('common.loading', 'Memuat...') : t('dataWipe.confirmDelete', 'Ya, Hapus Semua')}
+              </Button>
+            </div>
+          </div>
+        </Modal>
+      )}
 
       <div className="about-section">
         <div className="about-logo">RIMA</div>

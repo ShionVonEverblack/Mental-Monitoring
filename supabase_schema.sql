@@ -60,6 +60,11 @@ CREATE TABLE IF NOT EXISTS public.safety_plans (
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
+-- Forum Public View (Hides is_flagged from public queries for user safety & privacy)
+CREATE OR REPLACE VIEW public.forum_posts_public AS
+  SELECT id, author_name, category, title, content, reactions, comment_count, created_at
+  FROM public.forum_posts;
+
 -- Row Level Security (RLS) Policies
 ALTER TABLE public.mood_entries ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.journal_entries ENABLE ROW LEVEL SECURITY;
@@ -67,13 +72,19 @@ ALTER TABLE public.forum_posts ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.forum_comments ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.safety_plans ENABLE ROW LEVEL SECURITY;
 
--- Forum Policies (Public Read/Write for anonymous support)
+-- Forum Policies
+-- Public can read posts and comments
 CREATE POLICY "Allow public read forum_posts" ON public.forum_posts FOR SELECT USING (true);
-CREATE POLICY "Allow public insert forum_posts" ON public.forum_posts FOR INSERT WITH CHECK (true);
-CREATE POLICY "Allow public read forum_comments" ON public.forum_comments FOR SELECT USING (true);
-CREATE POLICY "Allow public insert forum_comments" ON public.forum_comments FOR INSERT WITH CHECK (true);
+-- Authenticated users or verified sessions can insert (prevents unauthenticated bot spam / DoS)
+CREATE POLICY "Allow authenticated insert forum_posts" ON public.forum_posts 
+  FOR INSERT WITH CHECK (auth.role() = 'authenticated' OR auth.uid() IS NOT NULL);
 
--- User-owned Data Policies
+CREATE POLICY "Allow public read forum_comments" ON public.forum_comments FOR SELECT USING (true);
+CREATE POLICY "Allow authenticated insert forum_comments" ON public.forum_comments 
+  FOR INSERT WITH CHECK (auth.role() = 'authenticated' OR auth.uid() IS NOT NULL);
+
+-- User-owned Data Policies (strict ownership)
 CREATE POLICY "Users manage own mood_entries" ON public.mood_entries FOR ALL USING (auth.uid() = user_id);
 CREATE POLICY "Users manage own journal_entries" ON public.journal_entries FOR ALL USING (auth.uid() = user_id);
 CREATE POLICY "Users manage own safety_plans" ON public.safety_plans FOR ALL USING (auth.uid() = user_id);
+

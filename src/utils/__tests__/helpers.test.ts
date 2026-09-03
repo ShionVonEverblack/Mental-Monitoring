@@ -6,6 +6,7 @@ import {
   getMoodColor,
   getMoodTrend,
   calculateStreak,
+  calculateGraceStreak,
   clamp,
   generateId
 } from '../helpers';
@@ -63,6 +64,20 @@ describe('Helper Utilities', () => {
       { id: '2', score: 3, emoji: '😐', factors: [], createdAt: yesterdayStr }
     ];
     expect(calculateStreak(moods)).toBe(2);
+  });
+
+  it('calculateGraceStreak supports recovery gap day without breaking streak', () => {
+    const todayStr = new Date().toISOString();
+    // 2 days ago (yesterday skipped)
+    const twoDaysAgoStr = new Date(Date.now() - 86400000 * 2).toISOString();
+
+    const moodsWithGap: MoodEntry[] = [
+      { id: '1', score: 4, emoji: '🙂', factors: [], createdAt: todayStr },
+      { id: '2', score: 5, emoji: '😊', factors: [], createdAt: twoDaysAgoStr }
+    ];
+
+    const result = calculateGraceStreak(moodsWithGap);
+    expect(result.streak).toBe(2);
   });
 
   it('clamp restricts value within range', () => {

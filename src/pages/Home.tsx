@@ -23,18 +23,18 @@ export const Home: React.FC = () => {
     date: new Date(m.createdAt).toLocaleDateString(), 
     score: m.score 
   }));
-  const currentStreak = getMoodStats().streak;
+  const stats = getMoodStats();
+  const currentStreak = stats.streak;
+  const isGrace = stats.isGrace;
   
   const affirmationIndex = new Date().getDay() % DAILY_AFFIRMATIONS.length;
   const affirmation = DAILY_AFFIRMATIONS[affirmationIndex];
   const lang = i18n.language as 'id' | 'en';
-  
   const insights = generateInsights(weeklyMoods);
 
   const [spiritualEnabled] = useLocalStorage('rima-spiritual-enabled', false);
   const [spiritualSource] = useLocalStorage<string>('rima-spiritual-source', 'universal');
 
-  // Rotate between regular affirmations and spiritual content
   const spiritualItems = spiritualEnabled 
     ? SPIRITUAL_CONTENT.filter(s => spiritualSource === 'universal' ? true : s.source === spiritualSource || s.source === 'universal')
     : [];
@@ -49,9 +49,14 @@ export const Home: React.FC = () => {
     <div className="home-page">
       <header className="home-header">
         <h1 className="home-greeting">{getGreeting(lang)}</h1>
-        <div className="streak-badge">
-          <Flame size={20} />
+        <div className="streak-badge" style={isGrace ? { borderColor: 'var(--color-secondary)', background: 'hsla(165, 45%, 50%, 0.15)' } : undefined}>
+          <Flame size={20} style={{ color: isGrace ? 'var(--color-secondary)' : undefined }} />
           <span>{currentStreak} {t('home.daysStreak', { defaultValue: 'Hari' })}</span>
+          {isGrace && (
+            <span style={{ fontSize: '0.688rem', color: 'var(--color-secondary)', marginLeft: '4px', fontWeight: 600 }}>
+              🌱 {t('streak.recovery', 'Pemulihan')}
+            </span>
+          )}
         </div>
       </header>
 
@@ -98,6 +103,9 @@ export const Home: React.FC = () => {
               </div>
             ))}
           </div>
+          <p style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)', marginTop: '10px', textAlign: 'center', fontStyle: 'italic' }}>
+            ⚕️ {t('disclaimer.insights', 'Insight ini diolah dari data pribadi untuk refleksi diri, bukan diagnosis klinis profesional.')}
+          </p>
         </section>
       )}
 

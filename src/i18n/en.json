@@ -95,7 +95,8 @@
     "submit": "Share Story",
     "empty": "No stories in this category yet. Be the first to share.",
     "comments": "Comments",
-    "replyPlaceholder": "Write a warm support message..."
+    "replyPlaceholder": "Write a warm support message...",
+    "loadMore": "Load More"
   },
   "profile": {
     "title": "Profile",
@@ -140,7 +141,11 @@
     "spiritualContent": "Spiritual Content",
     "spiritualDesc": "Show prayers and spiritual reflections",
     "analytics": "Analytics Dashboard",
-    "professionalHelp": "Professional Help"
+    "professionalHelp": "Professional Help",
+    "privacyTitle": "DATA RIGHTS & PRIVACY POLICY (UU PDP)",
+    "privacyPolicyLink": "Privacy Policy & User Rights",
+    "wipeDataBtn": "Delete All Data Permanently",
+    "irreversible": "Permanent"
   },
   "safety": {
     "sos": "Need Help?",
@@ -261,5 +266,73 @@
     "factorImpact": "Factor Impact",
     "monthlyTrend": "Monthly Trend",
     "noData": "No data to display yet."
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "save": "Save",
+    "cancel": "Cancel",
+    "download": "Download",
+    "back": "Back",
+    "view": "View",
+    "on": "ON",
+    "off": "OFF"
+  },
+  "privacy": {
+    "title": "Privacy Policy & Data Protection",
+    "subtitle": "RIMA's commitment to protecting your mental health data under Law No. 27 of 2022 (UU PDP).",
+    "offlineFirstTitle": "1. Offline-First Principle & Local Storage",
+    "offlineFirstDesc": "Personal data such as mood logs, journals, and safety plans are stored by default directly on your device (local device storage). No personal journal text is transmitted to third-party servers without your explicit consent.",
+    "dataCollectedTitle": "2. Data Processed",
+    "moodData": "Emotional/Mood Data:",
+    "moodDataDesc": "Mood scores (1-5), contributing factors, and notes, stored locally.",
+    "journalData": "Journal Reflections:",
+    "journalDataDesc": "Personal writing processed 100% locally within your browser.",
+    "communityData": "Community Forum:",
+    "communityDataDesc": "Anonymous posts using random aliases to protect your identity.",
+    "userRightsTitle": "3. Your Rights Under UU PDP",
+    "userRightsDesc": "Under the Indonesian Personal Data Protection Act, you have the full right to:",
+    "rightAccess": "Right to Access & Portability:",
+    "rightAccessDesc": "Export all your personal data at any time in JSON or CSV format.",
+    "rightErasure": "Right to Erasure:",
+    "rightErasureDesc": "Instantly and permanently wipe all your data from your device and the server.",
+    "rightAnonymity": "Right to Anonymity:",
+    "rightAnonymityDesc": "Use RIMA without ever providing your real name or personal phone number.",
+    "crisisSafetyTitle": "4. Crisis Detection Privacy",
+    "crisisSafetyDesc": "Crisis keyword detection runs completely on your browser (client-side NLP matching). No emergency journal text is saved or sent to external servers for artificial intelligence training.",
+    "wipeTitle": "5. Deleting All Your Data",
+    "wipeDesc": "You can permanently delete all your mood history, journal entries, settings, and anonymous identity via the Profile page using the \"Delete All Data Permanently\" button.",
+    "goToProfile": "Go to Profile Page",
+    "lastUpdated": "Last Updated: September 2026",
+    "contactDPO": "Data privacy inquiries: privacy@rima.app"
+  },
+  "consent": {
+    "title": "RIMA Privacy & Safety Commitment",
+    "welcomeDesc": "RIMA is designed as a safe digital space to support your mental well-being. Your privacy and data security are our absolute priority.",
+    "offlineFirst": "100% Offline-First",
+    "offlineFirstDesc": "Mood logs and journals remain safely in your device memory, not on cloud servers.",
+    "anonymous": "Anonymous Identity",
+    "anonymousDesc": "No real name or phone number is required to use this platform.",
+    "control": "Full Control in Your Hands",
+    "controlDesc": "You have the right to export or delete all your data at any time under UU PDP.",
+    "agreeCheckbox": "I understand these privacy principles and consent to using RIMA.",
+    "readPolicy": "Read Full Policy",
+    "continue": "Start Using RIMA"
+  },
+  "dataWipe": {
+    "confirmTitle": "Confirm Data Deletion",
+    "warningDesc": "This action will permanently delete all your mood logs, journal entries, safety plans, and preferences from this device and the server. This action CANNOT be undone.",
+    "recommendExport": "We recommend exporting a JSON data backup first if you wish to keep your records.",
+    "confirmDelete": "Yes, Delete Everything",
+    "success": "All local and cloud data has been permanently deleted."
+  },
+  "disclaimer": {
+    "insights": "These insights are generated from personal entries for self-reflection, not a professional clinical diagnosis.",
+    "analytics": "This data visualization is designed for personal self-reflection, not a medical diagnostic tool.",
+    "escalation": "Automated suggestions are meant for self-guidance, not a substitute for professional healthcare."
+  },
+  "streak": {
+    "recovery": "Recovery",
+    "recoveryDay": "Recovery Day"
   }
 }

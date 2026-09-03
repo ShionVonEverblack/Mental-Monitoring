@@ -95,7 +95,8 @@
     "submit": "Kirim Cerita",
     "empty": "Belum ada cerita di kategori ini. Jadilah yang pertama berbagi.",
     "comments": "Komentar",
-    "replyPlaceholder": "Tulis pesan dukungan hangat..."
+    "replyPlaceholder": "Tulis pesan dukungan hangat...",
+    "loadMore": "Muat Lebih Banyak"
   },
   "profile": {
     "title": "Profil",
@@ -140,7 +141,11 @@
     "spiritualContent": "Konten Spiritual",
     "spiritualDesc": "Tampilkan doa dan refleksi spiritual",
     "analytics": "Dashboard Analytics",
-    "professionalHelp": "Bantuan Profesional"
+    "professionalHelp": "Bantuan Profesional",
+    "privacyTitle": "HAK DATA & KEBIJAKAN PRIVASI (UU PDP)",
+    "privacyPolicyLink": "Kebijakan Privasi & Hak Pengguna",
+    "wipeDataBtn": "Hapus Seluruh Data Permanen",
+    "irreversible": "Permanen"
   },
   "safety": {
     "sos": "Butuh Bantuan?",
@@ -261,5 +266,73 @@
     "factorImpact": "Dampak Faktor",
     "monthlyTrend": "Tren Bulanan",
     "noData": "Belum ada data untuk ditampilkan."
+  },
+  "common": {
+    "loading": "Memuat...",
+    "error": "Terjadi kesalahan",
+    "save": "Simpan",
+    "cancel": "Batal",
+    "download": "Unduh",
+    "back": "Kembali",
+    "view": "Lihat",
+    "on": "ON",
+    "off": "OFF"
+  },
+  "privacy": {
+    "title": "Kebijakan Privasi & Perlindungan Data",
+    "subtitle": "Komitmen RIMA dalam melindungi data kesehatan mental Anda sesuai UU No. 27 Tahun 2022 (UU PDP).",
+    "offlineFirstTitle": "1. Prinsip Offline-First & Penyimpanan Lokal",
+    "offlineFirstDesc": "Data pribadi seperti catatan mood, jurnal, dan rencana keselamatan disimpan secara default di perangkat Anda sendiri (local device storage). Tidak ada data jurnal pribadi yang dikirim ke server pihak ketiga tanpa persetujuan eksplisit Anda.",
+    "dataCollectedTitle": "2. Data yang Diproses",
+    "moodData": "Data Emosi/Mood:",
+    "moodDataDesc": "Skor mood (1-5), faktor penyebab, catatan, disimpan secara lokal.",
+    "journalData": "Catatan Jurnal:",
+    "journalDataDesc": "Refleksi pribadi diproses 100% lokal di browser pengguna.",
+    "communityData": "Forum Komunitas:",
+    "communityDataDesc": "Posting anonim dengan nama samaran acak untuk melindungi identitas Anda.",
+    "userRightsTitle": "3. Hak Anda Berdasarkan UU PDP",
+    "userRightsDesc": "Sesuai UU Pelindungan Data Pribadi (UU No. 27/2022), Anda memiliki hak penuh untuk:",
+    "rightAccess": "Hak Akses & Portabilitas:",
+    "rightAccessDesc": "Mengekspor seluruh data pribadi Anda kapan saja dalam format JSON atau CSV.",
+    "rightErasure": "Hak Penghapusan (Right to Erasure):",
+    "rightErasureDesc": "Menghapus permanen seluruh data Anda dari perangkat dan server secara instan.",
+    "rightAnonymity": "Hak Anonimitas:",
+    "rightAnonymityDesc": "Menggunakan RIMA tanpa perlu memberikan identitas asli atau nomor telepon pribadi.",
+    "crisisSafetyTitle": "4. Privasi Deteksi Krisis",
+    "crisisSafetyDesc": "Algoritma pendeteksi kata kunci krisis berjalan sepenuhnya pada browser Anda (client-side NLP matching). Tidak ada teks jurnal darurat yang dikirim atau disimpan di server untuk analisis kecerdasan buatan.",
+    "wipeTitle": "5. Menghapus Seluruh Data Anda",
+    "wipeDesc": "Anda dapat menghapus seluruh riwayat mood, jurnal, pengaturan, dan identitas anonim Anda melalui halaman Profil dengan tombol \"Hapus Semua Data\".",
+    "goToProfile": "Kunjungi Halaman Profil",
+    "lastUpdated": "Terakhir Diperbarui: September 2026",
+    "contactDPO": "Pertanyaan mengenai privasi data: privasi@rima.app"
+  },
+  "consent": {
+    "title": "Komitmen Privasi & Keamanan RIMA",
+    "welcomeDesc": "RIMA dirancang sebagai ruang aman digital untuk mendukung kesehatan mental Anda. Privasi dan keamanan data Anda adalah prioritas mutlak kami.",
+    "offlineFirst": "100% Offline-First",
+    "offlineFirstDesc": "Catatan mood dan jurnal tersimpan di memori perangkat Anda, bukan di cloud server.",
+    "anonymous": "Identitas Anonim",
+    "anonymousDesc": "Tidak memerlukan nama asli atau nomor HP untuk menggunakan platform ini.",
+    "control": "Kendali Penuh di Tangan Anda",
+    "controlDesc": "Anda berhak mengekspor atau menghapus seluruh data kapan saja sesuai UU PDP.",
+    "agreeCheckbox": "Saya memahami prinsip privasi ini dan menyetujui penggunaan RIMA.",
+    "readPolicy": "Baca Kebijakan Lengkap",
+    "continue": "Mulai Gunakan RIMA"
+  },
+  "dataWipe": {
+    "confirmTitle": "Konfirmasi Penghapusan Data",
+    "warningDesc": "Tindakan ini akan menghapus seluruh catatan mood, entri jurnal, rencana keselamatan, dan pengaturan Anda dari perangkat ini dan server. Tindakan ini TIDAK dapat dibatalkan.",
+    "recommendExport": "Disarankan untuk mengekspor cadangan data JSON terlebih dahulu jika Anda ingin menyimpannya.",
+    "confirmDelete": "Ya, Hapus Semua",
+    "success": "Seluruh data lokal & cloud berhasil dihapus."
+  },
+  "disclaimer": {
+    "insights": "Insight ini diolah dari data pribadi untuk refleksi diri, bukan diagnosis klinis profesional.",
+    "analytics": "Visualisasi data ini dirancang untuk refleksi pribadi, bukan alat diagnosis medis.",
+    "escalation": "Saran otomatis ini bertujuan untuk pendampingan mandiri, bukan pengganti penanganan medis."
+  },
+  "streak": {
+    "recovery": "Pemulihan",
+    "recoveryDay": "Hari Pemulihan"
   }
 }

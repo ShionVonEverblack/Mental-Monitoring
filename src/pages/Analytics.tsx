@@ -102,6 +102,9 @@ export const Analytics: React.FC = () => {
         <h1>{t('analytics.title', 'Dashboard Analytics')}</h1>
         <p>{t('analytics.subtitle', 'Statistik kesehatan mentalmu')}</p>
         <p className="analytics-privacy">🔒 {t('analytics.privacy', 'Semua data diproses secara lokal di perangkatmu')}</p>
+        <p style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)', marginTop: '6px', fontStyle: 'italic' }}>
+          ⚕️ {t('disclaimer.analytics', 'Visualisasi data ini dirancang untuk refleksi pribadi, bukan alat diagnosis medis.')}
+        </p>
       </header>
       
       {/* Stats Overview Cards */}

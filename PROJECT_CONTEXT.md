@@ -13,7 +13,7 @@ Tujuan      : Platform kesehatan mental digital berbasis bukti ilmiah,
               anonim, dan bilingual (ID/EN) untuk masyarakat Indonesia.
 Target User : Masyarakat umum (bukan hanya mahasiswa), terutama yang
               menghadapi stigma atau akses terbatas ke layanan profesional.
-Status      : Fase 1–4 Selesai (MVP + Komunitas + Intelligence + Skalabilitas).
+Status      : Fase 1–5 Selesai (MVP + Komunitas + Intelligence + Skalabilitas + Keamanan/UU PDP).
 
 ## ═══════════════════════════════════════════════════════════════
 ## 2. TECH STACK
@@ -422,3 +422,15 @@ npx tsc -p tsconfig.app.json --noEmit   # TypeScript type check
 - Analytics dashboard lokal (PieChart, BarChart, LineChart)
 - Capacitor config siap untuk build Android/iOS
 - Platform detection utility (web/android/ios)
+
+### Fase 5 — Keamanan, Kepatuhan UU PDP & Hardening Arsitektur ✅ SELESAI
+- Hardening Supabase RLS (pembatasan insert forum ke authenticated user & public view tanpa `is_flagged`)
+- Halaman Kebijakan Privasi (`/privacy`) sesuai UU No. 27 Tahun 2022 (UU PDP)
+- ConsentModal pada first onboarding
+- Fitur "Hapus Semua Data Permanen" (`wipeAllData`) di Profil
+- Disclaimer medis klinis pada Home insight, Analytics, dan Escalation Banner
+- Migrasi state management ke Zustand (`useMoodStore`) dengan persistensi otomatis
+- Paginasi cursor-based 10 per page di Forum Komunitas + tombol Load More
+- Grace-based streaks ("Recovery Day") agar streak tidak putus karena 1 hari terlambat
+- Unit test suite diperluas dari 13 menjadi 30 tes (100% passing)
+

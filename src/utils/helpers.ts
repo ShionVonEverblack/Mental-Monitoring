@@ -67,40 +67,56 @@ export const getMoodTrend = (moods: MoodEntry[]): 'improving' | 'declining' | 's
   return 'stable';
 };
 
-export const calculateStreak = (moods: MoodEntry[]): number => {
-  if (moods.length === 0) return 0;
+export interface GraceStreakResult {
+  streak: number;
+  isGrace: boolean;
+}
+
+export const calculateGraceStreak = (moods: MoodEntry[]): GraceStreakResult => {
+  if (moods.length === 0) return { streak: 0, isGrace: false };
   
   const sorted = [...moods].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-  let streak = 0;
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   
-  let currentDate = new Date(sorted[0].createdAt);
-  currentDate.setHours(0, 0, 0, 0);
+  const mostRecentDate = new Date(sorted[0].createdAt);
+  mostRecentDate.setHours(0, 0, 0, 0);
   
-  const diffDays = Math.floor((today.getTime() - currentDate.getTime()) / (1000 * 3600 * 24));
-  if (diffDays > 1) return 0;
+  const diffFromToday = Math.floor((today.getTime() - mostRecentDate.getTime()) / (1000 * 3600 * 24));
   
-  streak = 1;
-  let prevDate = currentDate;
+  // If last logged > 2 days ago, streak is broken even with 1 grace day
+  if (diffFromToday > 2) return { streak: 0, isGrace: false };
+  
+  const isGrace = diffFromToday === 2; // Missed yesterday, but today can recover!
+  let streak = 1;
+  let prevDate = mostRecentDate;
+  let usedGraceInHistory = false;
   
   for (let i = 1; i < sorted.length; i++) {
     const d = new Date(sorted[i].createdAt);
     d.setHours(0, 0, 0, 0);
     const diff = Math.floor((prevDate.getTime() - d.getTime()) / (1000 * 3600 * 24));
     
-    if (diff === 1) {
+    if (diff === 0) {
+      continue; // Same day entry
+    } else if (diff === 1) {
       streak++;
       prevDate = d;
-    } else if (diff === 0) {
-      // Same day, continue
-      continue;
+    } else if (diff === 2 && !usedGraceInHistory) {
+      // 1 recovery gap day forgiven
+      streak++;
+      usedGraceInHistory = true;
+      prevDate = d;
     } else {
       break;
     }
   }
   
-  return streak;
+  return { streak, isGrace };
+};
+
+export const calculateStreak = (moods: MoodEntry[]): number => {
+  return calculateGraceStreak(moods).streak;
 };
 
 export const generateId = (): string => {

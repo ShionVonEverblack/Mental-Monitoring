@@ -59,16 +59,40 @@ export const DEFAULT_POSTS: ForumPost[] = [
   }
 ];
 
-export async function fetchForumPosts(): Promise<ForumPost[]> {
+import { detectCrisis } from './crisisDetectionService';
+
+export interface PaginatedPosts {
+  posts: ForumPost[];
+  hasMore: boolean;
+  total?: number;
+}
+
+export async function fetchForumPosts(page = 0, limit = 20): Promise<PaginatedPosts> {
   if (isSupabaseConfigured && supabase) {
     try {
-      const { data, error } = await supabase
-        .from('forum_posts')
-        .select('*')
-        .order('created_at', { ascending: false });
+      // First attempt query on the hardened public view (hiding is_flagged)
+      const from = page * limit;
+      const to = from + limit - 1;
+      
+      let { data, error } = await supabase
+        .from('forum_posts_public')
+        .select('*', { count: 'exact' })
+        .order('created_at', { ascending: false })
+        .range(from, to);
+
+      // Fallback if view hasn't been migrated yet
+      if (error) {
+        const fallback = await supabase
+          .from('forum_posts')
+          .select('*', { count: 'exact' })
+          .order('created_at', { ascending: false })
+          .range(from, to);
+        data = fallback.data;
+        error = fallback.error;
+      }
 
       if (!error && data) {
-        return data.map(item => ({
+        const posts: ForumPost[] = data.map(item => ({
           id: item.id,
           authorName: item.author_name,
           category: item.category as ForumCategory,
@@ -76,9 +100,13 @@ export async function fetchForumPosts(): Promise<ForumPost[]> {
           content: item.content,
           reactions: item.reactions || { heart: 0, strength: 0, hug: 0 },
           commentCount: item.comment_count || 0,
-          isFlagged: item.is_flagged || false,
+          isFlagged: false, // Hidden for user privacy
           createdAt: item.created_at
         }));
+        return {
+          posts,
+          hasMore: data.length === limit,
+        };
       }
     } catch (e) {
       console.warn('Supabase fetch failed, falling back to local storage:', e);
@@ -87,24 +115,35 @@ export async function fetchForumPosts(): Promise<ForumPost[]> {
 
   // Local storage fallback
   const raw = localStorage.getItem(LOCAL_STORAGE_KEY);
+  let allPosts: ForumPost[] = DEFAULT_POSTS;
   if (!raw) {
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(DEFAULT_POSTS));
-    return DEFAULT_POSTS;
+  } else {
+    try {
+      allPosts = JSON.parse(raw);
+    } catch {
+      allPosts = DEFAULT_POSTS;
+    }
   }
-  try {
-    return JSON.parse(raw);
-  } catch {
-    return DEFAULT_POSTS;
-  }
+
+  const from = page * limit;
+  const paginated = allPosts.slice(from, from + limit);
+  return {
+    posts: paginated,
+    hasMore: from + limit < allPosts.length,
+    total: allPosts.length
+  };
 }
+
 
 export async function createForumPost(
   title: string,
   content: string,
   category: ForumCategory,
   authorName?: string
-): Promise<{ post: ForumPost; isCrisis: boolean }> {
-  const isCrisis = checkCrisisKeywords(title) || checkCrisisKeywords(content);
+): Promise<{ post: ForumPost; isCrisis: boolean; severity: string }> {
+  const crisisResult = detectCrisis(`${title} ${content}`);
+  const isCrisis = crisisResult.isDetected;
   const newPost: ForumPost = {
     id: generateId(),
     authorName: authorName || generateAnonymousName(),
@@ -135,16 +174,28 @@ export async function createForumPost(
   }
 
   // Update local storage
-  const existing = await fetchForumPosts();
+  const raw = localStorage.getItem(LOCAL_STORAGE_KEY);
+  let existing: ForumPost[] = [];
+  try {
+    existing = raw ? JSON.parse(raw) : DEFAULT_POSTS;
+  } catch {
+    existing = DEFAULT_POSTS;
+  }
   const updated = [newPost, ...existing];
   localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updated));
   window.dispatchEvent(new Event('local-storage'));
 
-  return { post: newPost, isCrisis };
+  return { post: newPost, isCrisis, severity: crisisResult.severity };
 }
 
 export async function addReactionToPost(postId: string, reactionType: 'heart' | 'strength' | 'hug'): Promise<ForumPost[]> {
-  const posts = await fetchForumPosts();
+  const raw = localStorage.getItem(LOCAL_STORAGE_KEY);
+  let posts: ForumPost[] = [];
+  try {
+    posts = raw ? JSON.parse(raw) : DEFAULT_POSTS;
+  } catch {
+    posts = DEFAULT_POSTS;
+  }
   const updated = posts.map(p => {
     if (p.id === postId) {
       const currentCount = p.reactions[reactionType] || 0;
@@ -231,7 +282,13 @@ export async function addCommentToPost(postId: string, content: string, authorNa
   localStorage.setItem(LOCAL_COMMENTS_KEY, JSON.stringify(updatedComments));
 
   // Update comment count on post
-  const posts = await fetchForumPosts();
+  const rawPosts = localStorage.getItem(LOCAL_STORAGE_KEY);
+  let posts: ForumPost[] = [];
+  try {
+    posts = rawPosts ? JSON.parse(rawPosts) : DEFAULT_POSTS;
+  } catch {
+    posts = DEFAULT_POSTS;
+  }
   const updatedPosts = posts.map(p => {
     if (p.id === postId) {
       return { ...p, commentCount: p.commentCount + 1 };

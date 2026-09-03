@@ -32,6 +32,9 @@ export const EscalationBanner: React.FC<EscalationBannerProps> = ({ moods, lates
           </button>
         ))}
       </div>
+      <p style={{ fontSize: '0.688rem', color: 'var(--text-tertiary)', marginTop: '8px', marginBottom: 0, fontStyle: 'italic' }}>
+        ⚕️ {t('disclaimer.escalation', 'Saran otomatis ini bertujuan untuk pendampingan mandiri, bukan pengganti penanganan medis.')}
+      </p>
     </div>
   );
 };

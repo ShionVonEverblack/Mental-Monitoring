@@ -276,6 +276,15 @@ RIMA menggunakan design system yang dirancang khusus untuk konteks kesehatan men
 - [x] Analytics dashboard lokal (distribusi mood, tren bulanan, dampak faktor)
 - [x] Capacitor-ready untuk multi-platform (Android/iOS)
 
+### ✅ Fase 5 — Keamanan, UU PDP & Hardening Arsitektur (Selesai)
+- [x] **Keamanan Supabase RLS**: Pembatasan insert forum ke pengguna terverifikasi & isolasi `is_flagged` via public view
+- [x] **Kepatuhan UU PDP (UU No. 27/2022)**: Halaman Kebijakan Privasi (`/privacy`), Consent Onboarding Modal, dan tombol Hapus Seluruh Data Permanen (`wipeAllData`)
+- [x] **Disclaimer Medis Klinis**: Penegasan bahwa insight dan analytics adalah refleksi diri, bukan diagnosis medis
+- [x] **Modernisasi State Management**: Migrasi ke **Zustand** (`useMoodStore`) dengan persistensi otomatis
+- [x] **Paginasi & Auto-Moderasi Forum**: Paginasi cursor-based 10 post per muat dan integrasi deteksi krisis
+- [x] **Grace-Based Streaks**: Mekanisme Hari Pemulihan (Recovery Day) agar pengguna tidak merasa bersalah saat melewatkan 1 hari
+- [x] **Unit Testing Komprehensif**: Penambahan 17 tes baru (total 30 tes lolos) untuk deteksi krisis, analisis mood, dan mood store
+
 ---
 
 ## 📚 Referensi Riset
