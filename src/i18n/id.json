@@ -175,6 +175,7 @@
     "edit": "Edit",
     "close": "Tutup",
     "back": "Kembali",
+    "view": "Lihat",
     "loading": "Memuat...",
     "error": "Terjadi kesalahan",
     "retry": "Coba Lagi",
@@ -188,7 +189,9 @@
     "hoursAgo": "{{count}} jam lalu",
     "download": "Unduh",
     "understand": "Saya Mengerti",
-    "print": "Cetak / Simpan PDF"
+    "print": "Cetak / Simpan PDF",
+    "on": "ON",
+    "off": "OFF"
   },
   "insights": {
     "weeklyTitle": "Insight Mingguan",
@@ -266,17 +269,6 @@
     "factorImpact": "Dampak Faktor",
     "monthlyTrend": "Tren Bulanan",
     "noData": "Belum ada data untuk ditampilkan."
-  },
-  "common": {
-    "loading": "Memuat...",
-    "error": "Terjadi kesalahan",
-    "save": "Simpan",
-    "cancel": "Batal",
-    "download": "Unduh",
-    "back": "Kembali",
-    "view": "Lihat",
-    "on": "ON",
-    "off": "OFF"
   },
   "privacy": {
     "title": "Kebijakan Privasi & Perlindungan Data",

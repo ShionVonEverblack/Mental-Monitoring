@@ -40,10 +40,18 @@ export const Analytics: React.FC = () => {
 
   // Mood by Day
   const moodByDay = useMemo(() => {
-    const daysEn = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-    const daysId = ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'];
-    const daysJv = ['Ahd', 'Sen', 'Sel', 'Reb', 'Kem', 'Jum', 'Sab'];
-    const daysLabels = lang === 'en' ? daysEn : lang === 'jv' ? daysJv : daysId;
+    const dayMap: Record<string, string[]> = {
+      en: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+      jv: ['Ahd', 'Sen', 'Sel', 'Reb', 'Kem', 'Jum', 'Sab'],
+      su: ['Ahad', 'Sén', 'Sal', 'Reb', 'Kem', 'Jum', 'Sap'],
+      ja: ['日', '月', '火', '水', '木', '金', '土'],
+      zh: ['周日', '周一', '周二', '周三', '周四', '周五', '周六'],
+      es: ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'],
+      ar: ['أحد', 'إثنين', 'ثلاثاء', 'أربعاء', 'خميس', 'جمعة', 'سبت'],
+      id: ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'],
+    };
+    const currentLang = lang?.split('-')[0] || 'id';
+    const daysLabels = dayMap[currentLang] || dayMap.id;
     
     const dayData = Array.from({ length: 7 }, (_, i) => ({
       day: daysLabels[i],

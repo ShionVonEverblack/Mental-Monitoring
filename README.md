@@ -285,6 +285,20 @@ RIMA menggunakan design system yang dirancang khusus untuk konteks kesehatan men
 - [x] **Grace-Based Streaks**: Mekanisme Hari Pemulihan (Recovery Day) agar pengguna tidak merasa bersalah saat melewatkan 1 hari
 - [x] **Unit Testing Komprehensif**: Penambahan 17 tes baru (total 30 tes lolos) untuk deteksi krisis, analisis mood, dan mood store
 
+### ✅ Fase 6 — Ekspansi Multi-Bahasa Populer (Selesai)
+- [x] **Dukungan 8 Bahasa Lengkap**:
+  - 🇮🇩 **Bahasa Indonesia (`id`)**
+  - 🇬🇧 **English (`en`)**
+  - 🇮🇩 **Basa Jawa (`jv`)** — Krama Madya
+  - 🇮🇩 **Basa Sunda (`su`)** — Basa Sunda Lemes
+  - 🇯🇵 **日本語 (`ja`)** — Japanese Teineigo
+  - 🇨🇳 **简体中文 (`zh`)** — Simplified Chinese
+  - 🇪🇸 **Español (`es`)** — Spanish
+  - 🇸🇦 **العربية (`ar`)** — Modern Standard Arabic
+- [x] **Paritas Terjemahan 100%**: Seluruh ~180 kunci terjemahan tersedia lengkap di setiap bahasa
+- [x] **UI Language Selector Responsif**: Grid pemilihan bahasa dengan bendera & nama asli (*autonym*) di halaman Profil
+- [x] **Salam & Tanggal Terlokalisasi**: Fungsi `getGreeting` dan `formatDate` otomatis menyesuaikan zona waktu dan konvensi lokal
+
 ---
 
 ## 📚 Referensi Riset

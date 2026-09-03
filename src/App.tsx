@@ -35,9 +35,19 @@ const App: React.FC = () => {
         <ConsentModal />
         <AppShell>
           <Suspense fallback={<LoadingSpinner message={
-            localStorage.getItem('i18nextLng') === 'en' ? 'Loading Safe Space...' 
-            : localStorage.getItem('i18nextLng') === 'jv' ? 'Ngundhuh Ruang Aman...' 
-            : 'Memuat Ruang Aman...'
+            (() => {
+              const l = localStorage.getItem('i18nextLng')?.split('-')[0];
+              switch (l) {
+                case 'en': return 'Loading Safe Space...';
+                case 'jv': return 'Ngundhuh Ruang Aman...';
+                case 'su': return 'Ngunggahkeun Rohangan Aman...';
+                case 'ja': return '安全な空間を読み込み中...';
+                case 'zh': return '正在进入安全空间...';
+                case 'es': return 'Cargando Espacio Seguro...';
+                case 'ar': return 'جاري تحميل المساحة الآمنة...';
+                default: return 'Memuat Ruang Aman...';
+              }
+            })()
           } />}>
             <Routes>
               <Route path="/" element={<Home />} />

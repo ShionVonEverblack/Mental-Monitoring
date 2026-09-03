@@ -75,7 +75,8 @@ export interface CrisisResource {
 
 export type Theme = 'dark' | 'light';
 
-export type Language = 'id' | 'en' | 'jv';
+export type Language = 'id' | 'en' | 'jv' | 'su' | 'ja' | 'zh' | 'es' | 'ar';
+
 
 export interface UserProfile {
   id: string;

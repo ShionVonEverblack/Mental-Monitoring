@@ -36,6 +36,18 @@ import { useLocalStorage } from '../hooks/useLocalStorage';
 import { SPIRITUAL_SOURCES } from '../data/spiritualContent';
 import { Modal } from '../components/ui/Modal';
 import { wipeAllData } from '../utils/dataWipe';
+import type { Language } from '../types';
+
+const AVAILABLE_LANGUAGES: { code: Language; name: string; nativeName: string; flag: string }[] = [
+  { code: 'id', name: 'Indonesian', nativeName: 'Bahasa Indonesia', flag: '🇮🇩' },
+  { code: 'en', name: 'English', nativeName: 'English', flag: '🇬🇧' },
+  { code: 'jv', name: 'Javanese', nativeName: 'Basa Jawa', flag: '🇮🇩' },
+  { code: 'su', name: 'Sundanese', nativeName: 'Basa Sunda', flag: '🇮🇩' },
+  { code: 'ja', name: 'Japanese', nativeName: '日本語', flag: '🇯🇵' },
+  { code: 'zh', name: 'Chinese', nativeName: '简体中文', flag: '🇨🇳' },
+  { code: 'es', name: 'Spanish', nativeName: 'Español', flag: '🇪🇸' },
+  { code: 'ar', name: 'Arabic', nativeName: 'العربية', flag: '🇸🇦' },
+];
 
 export const Profile: React.FC = () => {
   const { t, i18n } = useTranslation();
@@ -57,7 +69,7 @@ export const Profile: React.FC = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const stats = getMoodStats();
-  const lang = i18n.language as 'id' | 'en' | 'jv';
+  const lang = (i18n.language?.split('-')[0] || 'id') as Language;
 
   const handleConfirmWipe = async () => {
     setIsWiping(true);
@@ -222,19 +234,35 @@ export const Profile: React.FC = () => {
             </div>
           </button>
 
-          <div className="settings-item">
-            <div className="settings-item-left">
-              <Globe size={18} />
-              <span>{t('profile.language', 'Bahasa (Language)')}</span>
+          <div className="settings-item" style={{ flexDirection: 'column', alignItems: 'stretch', gap: '12px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+              <div className="settings-item-left">
+                <Globe size={18} />
+                <span>{t('profile.language', 'Bahasa (Language)')}</span>
+              </div>
+              <span className="badge badge-primary">
+                {AVAILABLE_LANGUAGES.find(l => l.code === lang)?.flag} {AVAILABLE_LANGUAGES.find(l => l.code === lang)?.nativeName || lang}
+              </span>
             </div>
-            <div className="settings-item-right" style={{ display: 'flex', gap: '4px' }}>
-              {(['id', 'en', 'jv'] as const).map((langCode) => (
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(130px, 1fr))', gap: '8px', width: '100%' }}>
+              {AVAILABLE_LANGUAGES.map((item) => (
                 <button
-                  key={langCode}
-                  className={`btn btn-sm ${lang === langCode ? 'btn-primary' : 'btn-ghost'}`}
-                  onClick={() => i18n.changeLanguage(langCode)}
+                  key={item.code}
+                  type="button"
+                  className={`btn btn-sm ${lang === item.code ? 'btn-primary' : 'btn-ghost'}`}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '6px',
+                    padding: '8px 6px',
+                    fontSize: '0.813rem',
+                    border: lang === item.code ? 'none' : '1px solid var(--border-subtle)'
+                  }}
+                  onClick={() => i18n.changeLanguage(item.code)}
                 >
-                  {langCode === 'id' ? 'Indonesia' : langCode === 'en' ? 'English' : 'Basa Jawa'}
+                  <span aria-hidden="true">{item.flag}</span>
+                  <span>{item.nativeName}</span>
                 </button>
               ))}
             </div>

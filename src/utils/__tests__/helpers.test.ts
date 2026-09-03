@@ -13,13 +13,13 @@ import {
 import type { MoodEntry } from '../../types';
 
 describe('Helper Utilities', () => {
-  it('getGreeting returns localized time-appropriate greetings', () => {
-    const greetingId = getGreeting('id');
-    const greetingEn = getGreeting('en');
-    expect(typeof greetingId).toBe('string');
-    expect(typeof greetingEn).toBe('string');
-    expect(greetingId.length).toBeGreaterThan(0);
-    expect(greetingEn.length).toBeGreaterThan(0);
+  it('getGreeting returns localized time-appropriate greetings for multiple languages', () => {
+    const langs = ['id', 'en', 'jv', 'su', 'ja', 'zh', 'es', 'ar'] as const;
+    langs.forEach(l => {
+      const greeting = getGreeting(l);
+      expect(typeof greeting).toBe('string');
+      expect(greeting.length).toBeGreaterThan(0);
+    });
   });
 
   it('generateAnonymousName generates 2-word name', () => {
@@ -27,12 +27,14 @@ describe('Helper Utilities', () => {
     expect(name.split(' ').length).toBe(2);
   });
 
-  it('formatDate formats date correctly for ID and EN', () => {
+  it('formatDate formats date correctly for multiple languages', () => {
     const dateStr = '2026-08-08T12:00:00.000Z';
     const formattedId = formatDate(dateStr, 'id');
-    const formattedEn = formatDate(dateStr, 'en');
+    const formattedJa = formatDate(dateStr, 'ja');
+    const formattedEs = formatDate(dateStr, 'es');
     expect(formattedId).toContain('2026');
-    expect(formattedEn).toContain('2026');
+    expect(formattedJa).toContain('2026');
+    expect(formattedEs).toContain('2026');
   });
 
   it('getMoodColor returns appropriate CSS color variables', () => {

@@ -1,17 +1,59 @@
-import type { MoodEntry } from '../types';
+import type { MoodEntry, Language } from '../types';
 import { ANONYMOUS_ADJECTIVES, ANONYMOUS_NOUNS } from './constants';
 
-export const getGreeting = (language: 'id' | 'en'): string => {
+export const getLocaleTag = (lang: Language | string): string => {
+  switch (lang) {
+    case 'jv': return 'jv-ID';
+    case 'su': return 'su-ID';
+    case 'ja': return 'ja-JP';
+    case 'zh': return 'zh-CN';
+    case 'es': return 'es-ES';
+    case 'ar': return 'ar-SA';
+    case 'en': return 'en-US';
+    case 'id':
+    default:
+      return 'id-ID';
+  }
+};
+
+export const getGreeting = (language: Language | string): string => {
   const hour = new Date().getHours();
-  if (language === 'id') {
-    if (hour < 12) return 'Selamat Pagi';
-    if (hour < 15) return 'Selamat Siang';
-    if (hour < 18) return 'Selamat Sore';
-    return 'Selamat Malam';
-  } else {
-    if (hour < 12) return 'Good Morning';
-    if (hour < 18) return 'Good Afternoon';
-    return 'Good Evening';
+  switch (language) {
+    case 'jv':
+      if (hour < 12) return 'Sugeng Enjang';
+      if (hour < 15) return 'Sugeng Siang';
+      if (hour < 18) return 'Sugeng Sonten';
+      return 'Sugeng Dalu';
+    case 'su':
+      if (hour < 12) return 'Wilujeng Énjing';
+      if (hour < 15) return 'Wilujeng Siang';
+      if (hour < 18) return 'Wilujeng Sonten';
+      return 'Wilujeng Wengi';
+    case 'ja':
+      if (hour < 12) return 'おはようございます';
+      if (hour < 18) return 'こんにちは';
+      return 'こんばんは';
+    case 'zh':
+      if (hour < 12) return '早上好';
+      if (hour < 18) return '下午好';
+      return '晚上好';
+    case 'es':
+      if (hour < 12) return 'Buenos días';
+      if (hour < 18) return 'Buenas tardes';
+      return 'Buenas noches';
+    case 'ar':
+      if (hour < 12) return 'صباح الخير';
+      return 'مساء الخير';
+    case 'en':
+      if (hour < 12) return 'Good Morning';
+      if (hour < 18) return 'Good Afternoon';
+      return 'Good Evening';
+    case 'id':
+    default:
+      if (hour < 12) return 'Selamat Pagi';
+      if (hour < 15) return 'Selamat Siang';
+      if (hour < 18) return 'Selamat Sore';
+      return 'Selamat Malam';
   }
 };
 
@@ -21,9 +63,9 @@ export const generateAnonymousName = (): string => {
   return `${adj} ${noun}`;
 };
 
-export const formatDate = (date: Date | string, language: 'id' | 'en'): string => {
+export const formatDate = (date: Date | string, language: string = 'id'): string => {
   const d = new Date(date);
-  return d.toLocaleDateString(language === 'id' ? 'id-ID' : 'en-US', {
+  return d.toLocaleDateString(getLocaleTag(language), {
     weekday: 'long',
     year: 'numeric',
     month: 'long',
@@ -31,15 +73,19 @@ export const formatDate = (date: Date | string, language: 'id' | 'en'): string =
   });
 };
 
-export const formatRelativeTime = (date: Date | string, language: 'id' | 'en'): string => {
-  const rtf = new Intl.RelativeTimeFormat(language === 'id' ? 'id-ID' : 'en-US', { numeric: 'auto' });
-  const d = new Date(date);
-  const diffInSeconds = (d.getTime() - Date.now()) / 1000;
-  
-  if (Math.abs(diffInSeconds) < 60) return rtf.format(Math.round(diffInSeconds), 'second');
-  if (Math.abs(diffInSeconds) < 3600) return rtf.format(Math.round(diffInSeconds / 60), 'minute');
-  if (Math.abs(diffInSeconds) < 86400) return rtf.format(Math.round(diffInSeconds / 3600), 'hour');
-  return rtf.format(Math.round(diffInSeconds / 86400), 'day');
+export const formatRelativeTime = (date: Date | string, language: string = 'id'): string => {
+  try {
+    const rtf = new Intl.RelativeTimeFormat(getLocaleTag(language), { numeric: 'auto' });
+    const d = new Date(date);
+    const diffInSeconds = (d.getTime() - Date.now()) / 1000;
+    
+    if (Math.abs(diffInSeconds) < 60) return rtf.format(Math.round(diffInSeconds), 'second');
+    if (Math.abs(diffInSeconds) < 3600) return rtf.format(Math.round(diffInSeconds / 60), 'minute');
+    if (Math.abs(diffInSeconds) < 86400) return rtf.format(Math.round(diffInSeconds / 3600), 'hour');
+    return rtf.format(Math.round(diffInSeconds / 86400), 'day');
+  } catch {
+    return formatDate(date, language);
+  }
 };
 
 export const getMoodColor = (score: number): string => {

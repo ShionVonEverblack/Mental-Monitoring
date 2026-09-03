@@ -13,7 +13,7 @@ Tujuan      : Platform kesehatan mental digital berbasis bukti ilmiah,
               anonim, dan bilingual (ID/EN) untuk masyarakat Indonesia.
 Target User : Masyarakat umum (bukan hanya mahasiswa), terutama yang
               menghadapi stigma atau akses terbatas ke layanan profesional.
-Status      : Fase 1–5 Selesai (MVP + Komunitas + Intelligence + Skalabilitas + Keamanan/UU PDP).
+Status      : Fase 1–6 Selesai (MVP + Komunitas + Intelligence + Skalabilitas + Keamanan/UU PDP + 8 Bahasa Populer).
 
 ## ═══════════════════════════════════════════════════════════════
 ## 2. TECH STACK
@@ -433,4 +433,11 @@ npx tsc -p tsconfig.app.json --noEmit   # TypeScript type check
 - Paginasi cursor-based 10 per page di Forum Komunitas + tombol Load More
 - Grace-based streaks ("Recovery Day") agar streak tidak putus karena 1 hari terlambat
 - Unit test suite diperluas dari 13 menjadi 30 tes (100% passing)
+
+### Fase 6 — Ekspansi Multi-Bahasa Populer ✅ SELESAI
+- Dukungan 8 bahasa lengkap: Indonesia (`id`), English (`en`), Basa Jawa (`jv`), Basa Sunda (`su`), 日本語 (`ja`), 简体中文 (`zh`), Español (`es`), العربية (`ar`)
+- Paritas 100% untuk semua kunci terjemahan (~180 keys per bahasa)
+- UI Language Selector grid responsif dengan bendera & nama asli (*autonym*) di halaman Profil
+- Salam dinamis (`getGreeting`) dan format tanggal (`formatDate`) otomatis berbasis locale untuk ke-8 bahasa
+
 

@@ -175,6 +175,7 @@
     "edit": "Edit",
     "close": "Tutup",
     "back": "Wangsul",
+    "view": "Tingali",
     "loading": "Ngundhuh...",
     "error": "Wonten kelepatan",
     "retry": "Cobi Malih",
@@ -188,7 +189,9 @@
     "hoursAgo": "{{count}} jam kepengker",
     "download": "Undhuh",
     "understand": "Kula Ngertos",
-    "print": "Cetak / Simpen PDF"
+    "print": "Cetak / Simpen PDF",
+    "on": "ON",
+    "off": "OFF"
   },
   "insights": {
     "weeklyTitle": "Insight Minggon",
@@ -266,17 +269,6 @@
     "factorImpact": "Dampak Faktor",
     "monthlyTrend": "Tren Saben Wulan",
     "noData": "Dereng wonten data kangge dipuntampilaken."
-  },
-  "common": {
-    "loading": "Ngundhuh...",
-    "error": "Wonten kaluputan",
-    "save": "Simpen",
-    "cancel": "Batal",
-    "download": "Undhuh",
-    "back": "Wangsul",
-    "view": "Tingali",
-    "on": "ON",
-    "off": "OFF"
   },
   "privacy": {
     "title": "Kabijakan Privasi & Pangayoman Data",
