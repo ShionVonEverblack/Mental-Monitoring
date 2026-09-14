@@ -85,7 +85,7 @@ export const SOSButton: React.FC = () => {
                   <p className="sos-hotline-desc">{i18n.language === 'en' ? hotline.descriptionEn : hotline.descriptionId}</p>
                 </div>
                 <a
-                  href={`tel:${hotline.phone.replace(/[^0-9+]/g, '')}`}
+                  href={`tel:${hotline.phone.includes('ext') ? hotline.phone.replace(/\s*ext\s*/i, ',').replace(/[^0-9+,]/g, '') : hotline.phone.replace(/[^0-9+]/g, '')}`}
                   className="sos-hotline-call"
                 >
                   <Button variant="danger" style={{ width: '100%' }} icon={<Phone size={16} />}>

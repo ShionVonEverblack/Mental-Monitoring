@@ -10,6 +10,22 @@ export interface EscalationState {
   suggestedActions: { labelKey: string, labelFallback: string, route: string, icon: string }[];
 }
 
+/**
+ * Log escalation events for clinical governance (NICE ESF compliance).
+ * Keeps last 50 entries in localStorage for user to review with their clinician.
+ */
+function logEscalationEvent(level: EscalationLevel, messageKey: string): void {
+  if (level < 2) return; // Only log significant escalations
+  try {
+    const logEntry = { timestamp: new Date().toISOString(), level, messageKey };
+    const logs = JSON.parse(localStorage.getItem('rima-escalation-log') || '[]');
+    logs.push(logEntry);
+    localStorage.setItem('rima-escalation-log', JSON.stringify(logs.slice(-50)));
+  } catch {
+    // Silently fail — logging should never break the app
+  }
+}
+
 export function calculateEscalation(moods: MoodEntry[], latestJournalContent?: string): EscalationState {
   let level: EscalationLevel = 0;
   
@@ -17,6 +33,7 @@ export function calculateEscalation(moods: MoodEntry[], latestJournalContent?: s
     const crisisResult = detectCrisis(latestJournalContent);
     if (crisisResult.severity === 'severe' || crisisResult.severity === 'moderate') {
       level = 3;
+      logEscalationEvent(level, 'escalation.level3Msg');
       return {
         level,
         messageKey: 'escalation.level3Msg',
@@ -25,14 +42,14 @@ export function calculateEscalation(moods: MoodEntry[], latestJournalContent?: s
           {
             labelKey: 'escalation.actionSOS',
             labelFallback: 'Layanan Darurat',
-            route: '/sos',
+            route: '/professional-help',
             icon: '🚨'
           },
           {
-            labelKey: 'escalation.actionSupport',
-            labelFallback: 'Kontak Darurat',
-            route: '/contacts',
-            icon: '📞'
+            labelKey: 'escalation.actionSafetyPlan',
+            labelFallback: 'Rencana Keselamatan',
+            route: '/safety-plan',
+            icon: '🛡️'
           }
         ]
       };
@@ -68,6 +85,7 @@ export function calculateEscalation(moods: MoodEntry[], latestJournalContent?: s
 
   if (avgMood < 2 || decliningTrendFor5Days) {
     level = 2;
+    logEscalationEvent(level, 'escalation.level2Msg');
     return {
       level,
       messageKey: 'escalation.level2Msg',

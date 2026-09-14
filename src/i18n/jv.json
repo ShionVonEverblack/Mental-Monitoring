@@ -351,5 +351,31 @@
   "streak": {
     "recovery": "Pamulihan",
     "recoveryDay": "Dinten Pamulihan"
-  }
+  },
+  "session.timeReminder": "Sampeyan sampun dangu wonten mriki 🍃 Emut kangge wangsul tumuju donya nyata.",
+  "disclaimer.clinical": "RIMA minangka piranti pendampingan mandiri berbasis bukti ilmiah, sanes pengganti konsultasi kaliyan psikolog utawi psikiater profesional.",
+  "crisis.interceptorTitle": "Sampeyan mboten piyambakan",
+  "crisis.interceptorMessage": "Kula mangertos sampeyan nembe ngalami wekdal ingkang awrat. Pitulungan cumawis sapuniki.",
+  "crisis.interceptorDismiss": "Kula sae-sae kemawon, matur nuwun",
+  "crisis.interceptorGuide": "Utawi bikak Rencana Keselamatan ingkang sampun sampeyan damel.",
+  "disclaimer.crisis": "Deteksi puniki otomatis lan sanes diagnosis klinis.",
+  "accessibility.skipToContent": "Langkahi menyang konten utama",
+  "accessibility.quickExit": "Medal cepet",
+  "sidebar.offlineReady": "Siap Offline",
+  "sidebar.logMoodToday": "Cathet Mood Dinten Puniki",
+  "common.dismiss": "Tutup",
+  "breathe.tech.coherent": "Coherent Breathing",
+  "breathe.desc.coherent": "6d Narik, 6d Ngeculake — HRV Optimal",
+  "breathe.hapticOn": "Getar: Aktif",
+  "breathe.hapticOff": "Getar: Mati",
+  "breathe.reflectionTitle": "Refleksi Sasampunipun Sesi",
+  "breathe.reflectionQuestion": "Kados pundi raos sampeyan sapuniki?",
+  "breathe.feelCalmer": "Langkung tenang",
+  "breathe.feelSame": "Sami kemawon",
+  "breathe.feelAnxious": "Taksih gelisah",
+  "breathe.reflectionNote": "Punapa kemawon ingkang sampeyan raosaken, punika sah. Sampeyan sampun tumindak sae.",
+  "breathe.recentSessions": "Sesi Pungkasan",
+  "breathe.seconds": "detik",
+  "timeWellSpent.message": "Sampeyan sampun nyisihaken wekdal kangge nyadhari dhiri 🌱",
+  "timeWellSpent.dismiss": "Tutup & Wangsul Beraktivitas"
 }

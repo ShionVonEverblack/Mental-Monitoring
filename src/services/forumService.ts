@@ -2,22 +2,12 @@ import type { ForumPost, ForumComment, ForumCategory } from '../types';
 import { generateId, generateAnonymousName } from '../utils/helpers';
 import { supabase, isSupabaseConfigured } from './supabase';
 
-const CRISIS_KEYWORDS = [
-  'bunuh diri',
-  'suicide',
-  'mengakhiri hidup',
-  'ending it all',
-  'menyakiti diri',
-  'self harm',
-  'ingin mati',
-  'want to die',
-  'putus asa total',
-  'gantung diri'
-];
+import { detectCrisis } from './crisisDetectionService';
 
+// Unified crisis check — delegates to centralized crisisDetectionService
+// (Previously had a separate CRISIS_KEYWORDS array here causing desync)
 export function checkCrisisKeywords(text: string): boolean {
-  const lower = text.toLowerCase();
-  return CRISIS_KEYWORDS.some(kw => lower.includes(kw));
+  return detectCrisis(text).isDetected;
 }
 
 const LOCAL_STORAGE_KEY = 'rima-forum-posts';
@@ -59,7 +49,7 @@ export const DEFAULT_POSTS: ForumPost[] = [
   }
 ];
 
-import { detectCrisis } from './crisisDetectionService';
+
 
 export interface PaginatedPosts {
   posts: ForumPost[];

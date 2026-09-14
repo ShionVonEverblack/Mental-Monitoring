@@ -351,5 +351,31 @@
   "streak": {
     "recovery": "リカバリー",
     "recoveryDay": "リカバリーデー"
-  }
+  },
+  "session.timeReminder": "ここにいる時間が長くなりました 🍃 現実の世界にも戻ることを忘れないでください。",
+  "disclaimer.clinical": "RIMAはエビデンスに基づくセルフケアツールであり、専門家への相談の代わりにはなりません。",
+  "crisis.interceptorTitle": "あなたは一人ではありません",
+  "crisis.interceptorMessage": "つらい時期を過ごしているかもしれません。今すぐ助けを得ることができます。",
+  "crisis.interceptorDismiss": "大丈夫です、ありがとうございます",
+  "crisis.interceptorGuide": "または、セーフティプランを開いて次のステップの指針にしてください。",
+  "disclaimer.crisis": "この検出は自動であり、臨床診断ではありません。",
+  "accessibility.skipToContent": "メインコンテンツへスキップ",
+  "accessibility.quickExit": "クイック終了",
+  "sidebar.offlineReady": "オフライン対応",
+  "sidebar.logMoodToday": "今日の気分を記録する",
+  "common.dismiss": "閉じる",
+  "breathe.tech.coherent": "コヒーレント呼吸法",
+  "breathe.desc.coherent": "6秒吸って、6秒吐く — HRV最適",
+  "breathe.hapticOn": "振動: オン",
+  "breathe.hapticOff": "振動: オフ",
+  "breathe.reflectionTitle": "セッション後の振り返り",
+  "breathe.reflectionQuestion": "今の気分はどうですか？",
+  "breathe.feelCalmer": "落ち着きました",
+  "breathe.feelSame": "変わりません",
+  "breathe.feelAnxious": "まだ不安です",
+  "breathe.reflectionNote": "どんな気持ちでも、それは大切です。自分のために良いことをしましたね。",
+  "breathe.recentSessions": "最近のセッション",
+  "breathe.seconds": "秒",
+  "timeWellSpent.message": "今日、自分自身に気づくための大切な時間を過ごしました 🌱",
+  "timeWellSpent.dismiss": "閉じて活動に戻る"
 }

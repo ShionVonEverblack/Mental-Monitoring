@@ -2,10 +2,13 @@ import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { Home, SmilePlus, BookOpen, Users, User, Menu, ChevronLeft } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { useMood } from '../../hooks/useMood';
 
 export const Sidebar: React.FC = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const { t } = useTranslation();
+  const { getTodayMood } = useMood();
+  const todayMood = getTodayMood();
 
   const tabs = [
     { path: '/', icon: Home, label: 'nav.home' },
@@ -22,6 +25,7 @@ export const Sidebar: React.FC = () => {
         <button
           onClick={() => setIsCollapsed(!isCollapsed)}
           className="sidebar-toggle"
+          style={{ minWidth: '44px', minHeight: '44px' }}
         >
           {isCollapsed ? <Menu size={20} /> : <ChevronLeft size={20} />}
         </button>
@@ -45,15 +49,48 @@ export const Sidebar: React.FC = () => {
       </nav>
 
       <div className="sidebar-footer">
+        {/* Dynamic mood display — replaces hardcoded static emoji */}
         <div className="sidebar-mood">
-          <div className="sidebar-mood-emoji">😊</div>
-          {!isCollapsed && (
-            <div>
-              <div style={{ fontSize: '0.875rem', fontWeight: 500 }}>{t('home.todayMood', 'Mood Hari Ini')}</div>
-              <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{t('home.feelingGood', 'Cukup Baik')}</div>
-            </div>
+          {todayMood ? (
+            <>
+              <div className="sidebar-mood-emoji">{todayMood.emoji}</div>
+              {!isCollapsed && (
+                <div>
+                  <div style={{ fontSize: '0.875rem', fontWeight: 500 }}>
+                    {t('home.todayMood', 'Mood Hari Ini')}
+                  </div>
+                  <div style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)' }}>
+                    {todayMood.score >= 4 ? '✨' : todayMood.score <= 2 ? '💙' : '🌿'} {t('home.moodLogged', 'Tercatat')}
+                  </div>
+                </div>
+              )}
+            </>
+          ) : (
+            <NavLink to="/mood" style={{ display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none', color: 'inherit' }}>
+              <div className="sidebar-mood-emoji">📝</div>
+              {!isCollapsed && (
+                <div>
+                  <div style={{ fontSize: '0.875rem', fontWeight: 500, color: 'var(--text-secondary)' }}>
+                    {t('sidebar.logMoodToday', 'Catat Mood Hari Ini')}
+                  </div>
+                </div>
+              )}
+            </NavLink>
           )}
         </div>
+
+        {/* Peripheral ambient status — Calm Technology */}
+        {!isCollapsed && (
+          <div style={{ 
+            fontSize: '0.688rem', 
+            color: 'var(--text-tertiary)', 
+            textAlign: 'center', 
+            marginTop: 'var(--spacing-sm)',
+            opacity: 0.7 
+          }}>
+            🟢 {t('sidebar.offlineReady', 'Offline-Ready')}
+          </div>
+        )}
       </div>
     </aside>
   );

@@ -351,5 +351,31 @@
   "streak": {
     "recovery": "Recuperación",
     "recoveryDay": "Día de Recuperación"
-  }
+  },
+  "session.timeReminder": "Llevas un rato aquí 🍃 Recuerda volver al mundo real también.",
+  "disclaimer.clinical": "RIMA es una herramienta de autocuidado basada en evidencia, no sustituye la consulta con un profesional de salud mental.",
+  "crisis.interceptorTitle": "No estás solo/a",
+  "crisis.interceptorMessage": "Notamos que podrías estar pasando por un momento difícil. La ayuda está disponible ahora.",
+  "crisis.interceptorDismiss": "Estoy bien, gracias",
+  "crisis.interceptorGuide": "O abre tu Plan de Seguridad para orientación sobre los próximos pasos.",
+  "disclaimer.crisis": "Esta detección es automática y no constituye un diagnóstico clínico.",
+  "accessibility.skipToContent": "Saltar al contenido principal",
+  "accessibility.quickExit": "Salida rápida",
+  "sidebar.offlineReady": "Disponible sin conexión",
+  "sidebar.logMoodToday": "Registra tu ánimo de hoy",
+  "common.dismiss": "Cerrar",
+  "breathe.tech.coherent": "Respiración Coherente",
+  "breathe.desc.coherent": "6s Inhalar, 6s Exhalar — HRV Óptimo",
+  "breathe.hapticOn": "Vibración: Activada",
+  "breathe.hapticOff": "Vibración: Desactivada",
+  "breathe.reflectionTitle": "Reflexión post-sesión",
+  "breathe.reflectionQuestion": "¿Cómo te sientes ahora?",
+  "breathe.feelCalmer": "Más tranquilo/a",
+  "breathe.feelSame": "Igual",
+  "breathe.feelAnxious": "Aún ansioso/a",
+  "breathe.reflectionNote": "Lo que sientas es válido. Hiciste algo bueno por ti.",
+  "breathe.recentSessions": "Sesiones recientes",
+  "breathe.seconds": "segundos",
+  "timeWellSpent.message": "Has dedicado tiempo valioso a conocerte hoy 🌱 Es momento de volver a tus actividades.",
+  "timeWellSpent.dismiss": "Cerrar y volver a las actividades"
 }

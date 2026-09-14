@@ -351,5 +351,31 @@
   "streak": {
     "recovery": "Pemulihan",
     "recoveryDay": "Hari Pemulihan"
-  }
+  },
+  "session.timeReminder": "Kamu sudah di sini cukup lama 🍃 Ingat untuk kembali ke dunia nyata juga ya.",
+  "disclaimer.clinical": "RIMA adalah alat pendampingan mandiri berbasis bukti ilmiah, bukan pengganti konsultasi dengan psikolog atau psikiater profesional.",
+  "crisis.interceptorTitle": "Kamu tidak sendirian",
+  "crisis.interceptorMessage": "Kami menyadari kamu mungkin sedang mengalami masa yang sulit. Bantuan tersedia sekarang, dan kamu berhak mendapatkannya.",
+  "crisis.interceptorDismiss": "Saya baik-baik saja, terima kasih",
+  "crisis.interceptorGuide": "Atau buka Rencana Keselamatan yang sudah kamu susun untuk panduan langkah selanjutnya.",
+  "disclaimer.crisis": "Deteksi ini bersifat otomatis dan bukan diagnosis klinis. Jika Anda merasa aman, silakan abaikan pesan ini.",
+  "accessibility.skipToContent": "Lewati ke konten utama",
+  "accessibility.quickExit": "Keluar cepat",
+  "sidebar.offlineReady": "Offline-Ready",
+  "sidebar.logMoodToday": "Catat Mood Hari Ini",
+  "common.dismiss": "Tutup",
+  "breathe.tech.coherent": "Coherent Breathing",
+  "breathe.desc.coherent": "6d Masuk, 6d Keluar — HRV Optimal",
+  "breathe.hapticOn": "Getar: Aktif",
+  "breathe.hapticOff": "Getar: Mati",
+  "breathe.reflectionTitle": "Refleksi Pasca-Sesi",
+  "breathe.reflectionQuestion": "Bagaimana perasaanmu sekarang?",
+  "breathe.feelCalmer": "Lebih tenang",
+  "breathe.feelSame": "Sama saja",
+  "breathe.feelAnxious": "Masih gelisah",
+  "breathe.reflectionNote": "Apapun yang kamu rasakan, itu valid. Kamu sudah melakukan sesuatu yang baik untuk dirimu.",
+  "breathe.recentSessions": "Sesi Terakhir",
+  "breathe.seconds": "detik",
+  "timeWellSpent.message": "Kamu telah meluangkan waktu berharga untuk menyadari dirimu hari ini 🌱 Saatnya kembali beraktivitas.",
+  "timeWellSpent.dismiss": "Tutup & Kembali Beraktivitas"
 }

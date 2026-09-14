@@ -351,5 +351,31 @@
   "streak": {
     "recovery": "休养日",
     "recoveryDay": "休养恢复日"
-  }
+  },
+  "session.timeReminder": "你已经在这里待了很久了 🍃 记得也要回到现实世界哦。",
+  "disclaimer.clinical": "RIMA是基于循证的自助工具，不能替代专业心理咨询师或精神科医生的诊疗。",
+  "crisis.interceptorTitle": "你并不孤单",
+  "crisis.interceptorMessage": "我们注意到你可能正在经历困难时期。帮助随时可得，你值得被关爱。",
+  "crisis.interceptorDismiss": "我没事，谢谢",
+  "crisis.interceptorGuide": "或打开你的安全计划，获取下一步指引。",
+  "disclaimer.crisis": "此检测为自动化功能，非临床诊断。",
+  "accessibility.skipToContent": "跳到主要内容",
+  "accessibility.quickExit": "快速退出",
+  "sidebar.offlineReady": "离线可用",
+  "sidebar.logMoodToday": "记录今日心情",
+  "common.dismiss": "关闭",
+  "breathe.tech.coherent": "谐振呼吸法",
+  "breathe.desc.coherent": "6秒吸气，6秒呼气 — 最佳HRV",
+  "breathe.hapticOn": "振动：开",
+  "breathe.hapticOff": "振动：关",
+  "breathe.reflectionTitle": "练习后反思",
+  "breathe.reflectionQuestion": "你现在感觉怎么样？",
+  "breathe.feelCalmer": "更平静了",
+  "breathe.feelSame": "差不多",
+  "breathe.feelAnxious": "仍然焦虑",
+  "breathe.reflectionNote": "无论你有什么感受，都是真实的。你为自己做了一件好事。",
+  "breathe.recentSessions": "最近的练习",
+  "breathe.seconds": "秒",
+  "timeWellSpent.message": "今天你花了宝贵的时间关注自己 🌱 是时候回到生活中了。",
+  "timeWellSpent.dismiss": "关闭并恢复活动"
 }

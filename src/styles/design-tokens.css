@@ -20,7 +20,7 @@
   /* Text Colors (Dark Mode) */
   --text-primary: hsl(0, 0%, 95%);
   --text-secondary: hsl(0, 0%, 75%);
-  --text-tertiary: hsl(0, 0%, 55%);
+  --text-tertiary: hsl(0, 0%, 68%);
   --text-inverse: hsl(220, 25%, 10%);
 
   /* Border Colors */
@@ -92,7 +92,7 @@
   /* Text Colors (Light Mode) */
   --text-primary: hsl(220, 30%, 15%);
   --text-secondary: hsl(220, 15%, 35%);
-  --text-tertiary: hsl(220, 10%, 55%);
+  --text-tertiary: hsl(220, 15%, 40%);
   --text-inverse: hsl(0, 0%, 100%);
 
   /* Border Colors */

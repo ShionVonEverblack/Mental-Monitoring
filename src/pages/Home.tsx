@@ -47,8 +47,9 @@ export const Home: React.FC = () => {
   const showSpiritual = spiritualEnabled && spiritualItems.length > 0 && new Date().getDate() % 2 === 0;
   const spiritualItem = spiritualItems[new Date().getDay() % (spiritualItems.length || 1)];
 
-  // In a real app, you'd fetch the latest journal content here. For now, pass undefined.
-  const latestJournalContent = undefined;
+  // Read the latest journal content for escalation detection
+  const [journals] = useLocalStorage<{ content?: string }[]>('rima-journals', []);
+  const latestJournalContent = journals.length > 0 ? journals[0]?.content : undefined;
 
   return (
     <div className="home-page">

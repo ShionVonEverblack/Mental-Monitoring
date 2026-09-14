@@ -301,3 +301,54 @@
   visibility: visible;
   transform: translateX(-50%) translateY(-4px);
 }
+
+/* WCAG 2.4.1 — Skip to Content bypass link */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 16px;
+  z-index: 200;
+  padding: 8px 16px;
+  background: var(--color-primary);
+  color: white;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  transition: top var(--transition-fast);
+}
+.skip-link:focus {
+  top: 16px;
+}
+
+/* SAMHSA Safety — Quick Exit for unsafe domestic environments */
+.quick-exit-btn {
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  z-index: 55;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-full);
+  color: var(--text-tertiary);
+  text-decoration: none;
+  font-size: 0.75rem;
+  opacity: 0.5;
+  transition: all var(--transition-fast);
+}
+.quick-exit-btn:hover {
+  opacity: 1;
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+}
+@media (max-width: 768px) {
+  .quick-exit-btn {
+    top: 8px;
+    right: 8px;
+  }
+}

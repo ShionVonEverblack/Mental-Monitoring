@@ -351,5 +351,31 @@
   "streak": {
     "recovery": "Pamulihan",
     "recoveryDay": "Dinten Pamulihan"
-  }
+  },
+  "session.timeReminder": "Anjeun parantos lami di dieu 🍃 Émut kanggo mulih ka dunya nyata.",
+  "disclaimer.clinical": "RIMA nyaéta alat pendampingan mandiri dumasar bukti ilmiah, sanés pangganti konsultasi sareng psikolog atanapi psikiater profesional.",
+  "crisis.interceptorTitle": "Anjeun henteu nyorangan",
+  "crisis.interceptorMessage": "Kami nyadar anjeun panginten nuju ngalaman waktos anu sesah. Bantosan sayogi ayeuna.",
+  "crisis.interceptorDismiss": "Abdi saé-saé waé, hatur nuhun",
+  "crisis.interceptorGuide": "Atanapi buka Rencana Kasalametan anu parantos anjeun susun.",
+  "disclaimer.crisis": "Deteksi ieu otomatis sareng sanés diagnosis klinis.",
+  "accessibility.skipToContent": "Langkung ka eusi utama",
+  "accessibility.quickExit": "Kaluar gancang",
+  "sidebar.offlineReady": "Siap Offline",
+  "sidebar.logMoodToday": "Catetkeun Mood Dinten Ieu",
+  "common.dismiss": "Tutup",
+  "breathe.tech.coherent": "Coherent Breathing",
+  "breathe.desc.coherent": "6d Asup, 6d Kaluar — HRV Optimal",
+  "breathe.hapticOn": "Getar: Aktif",
+  "breathe.hapticOff": "Getar: Pareum",
+  "breathe.reflectionTitle": "Réfléksi Saatos Sési",
+  "breathe.reflectionQuestion": "Kumaha rarasoan anjeun ayeuna?",
+  "breathe.feelCalmer": "Langkung tenang",
+  "breathe.feelSame": "Sami waé",
+  "breathe.feelAnxious": "Masih hariwang",
+  "breathe.reflectionNote": "Naon waé anu anjeun raoskeun, éta valid. Anjeun parantos ngalakukeun hal anu saé.",
+  "breathe.recentSessions": "Sési Pamungkas",
+  "breathe.seconds": "detik",
+  "timeWellSpent.message": "Anjeun parantos nyéépkeun waktos pikeun nyadar kana diri 🌱",
+  "timeWellSpent.dismiss": "Tutup & Mulih Beraktivitas"
 }

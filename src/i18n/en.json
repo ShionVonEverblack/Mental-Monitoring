@@ -351,5 +351,31 @@
   "streak": {
     "recovery": "Recovery",
     "recoveryDay": "Recovery Day"
-  }
+  },
+  "session.timeReminder": "You've been here for a while 🍃 Remember to return to the real world too.",
+  "disclaimer.clinical": "RIMA is an evidence-based self-care companion tool, not a substitute for consultation with a professional psychologist or psychiatrist.",
+  "crisis.interceptorTitle": "You are not alone",
+  "crisis.interceptorMessage": "We notice you may be going through a difficult time. Help is available now, and you deserve it.",
+  "crisis.interceptorDismiss": "I'm okay, thank you",
+  "crisis.interceptorGuide": "Or open your Safety Plan for guidance on next steps.",
+  "disclaimer.crisis": "This detection is automated and not a clinical diagnosis. If you feel safe, please disregard this message.",
+  "accessibility.skipToContent": "Skip to main content",
+  "accessibility.quickExit": "Quick exit",
+  "sidebar.offlineReady": "Offline-Ready",
+  "sidebar.logMoodToday": "Log Today's Mood",
+  "common.dismiss": "Dismiss",
+  "breathe.tech.coherent": "Coherent Breathing",
+  "breathe.desc.coherent": "6s In, 6s Out — HRV Optimal",
+  "breathe.hapticOn": "Haptic: On",
+  "breathe.hapticOff": "Haptic: Off",
+  "breathe.reflectionTitle": "Post-Session Reflection",
+  "breathe.reflectionQuestion": "How do you feel now?",
+  "breathe.feelCalmer": "Calmer",
+  "breathe.feelSame": "About the same",
+  "breathe.feelAnxious": "Still anxious",
+  "breathe.reflectionNote": "Whatever you feel, it's valid. You did something good for yourself.",
+  "breathe.recentSessions": "Recent Sessions",
+  "breathe.seconds": "seconds",
+  "timeWellSpent.message": "You've taken valuable time to be aware of yourself today 🌱 Time to get back to living.",
+  "timeWellSpent.dismiss": "Close & Resume Activities"
 }

@@ -10,6 +10,8 @@ import {
   addCommentToPost,
   checkCrisisKeywords
 } from '../services/forumService';
+import { detectCrisis } from '../services/crisisDetectionService';
+import { CrisisInterceptor } from '../components/safety/CrisisInterceptor';
 import { generateAnonymousName } from '../utils/helpers';
 import { ShieldAlert, MessageCircle, AlertTriangle, Send, Phone, CheckCircle, Flag } from 'lucide-react';
 
@@ -37,6 +39,7 @@ export const Forum: React.FC = () => {
   const [newCommentText, setNewCommentText] = useState('');
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showCrisisInterceptor, setShowCrisisInterceptor] = useState(false);
 
   const [page, setPage] = useState(0);
   const [hasMore, setHasMore] = useState(false);
@@ -89,6 +92,17 @@ export const Forum: React.FC = () => {
 
   const handlePost = async () => {
     if (!newTitle.trim() || !newContent.trim() || isSubmitting) return;
+
+    // Crisis Text Line research: intercept severe posts to prevent emotional contagion
+    const combinedText = `${newTitle.trim()} ${newContent.trim()}`;
+    const crisisCheck = detectCrisis(combinedText);
+    
+    if (crisisCheck.severity === 'severe') {
+      // Don't publish — show supportive crisis interceptor instead
+      setShowCrisisInterceptor(true);
+      return;
+    }
+
     setIsSubmitting(true);
     try {
       const { isCrisis } = await createForumPost(
@@ -432,6 +446,12 @@ export const Forum: React.FC = () => {
           </div>
         )}
       </div>
+
+      {/* Crisis Interceptor — shown when user tries to post severe crisis content */}
+      <CrisisInterceptor
+        isOpen={showCrisisInterceptor}
+        onClose={() => setShowCrisisInterceptor(false)}
+      />
     </div>
   );
 };

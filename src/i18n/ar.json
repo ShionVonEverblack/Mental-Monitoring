@@ -351,5 +351,31 @@
   "streak": {
     "recovery": "تعافي",
     "recoveryDay": "يوم تعافي"
-  }
+  },
+  "session.timeReminder": "لقد كنت هنا لفترة طويلة 🍃 تذكر أن تعود إلى العالم الحقيقي أيضاً.",
+  "disclaimer.clinical": "ريما أداة رعاية ذاتية مبنية على الأدلة العلمية، وليست بديلاً عن استشارة أخصائي نفسي محترف.",
+  "crisis.interceptorTitle": "أنت لست وحدك",
+  "crisis.interceptorMessage": "نلاحظ أنك قد تمر بوقت صعب. المساعدة متاحة الآن، وأنت تستحقها.",
+  "crisis.interceptorDismiss": "أنا بخير، شكراً",
+  "crisis.interceptorGuide": "أو افتح خطة السلامة الخاصة بك للحصول على إرشادات الخطوات التالية.",
+  "disclaimer.crisis": "هذا الكشف تلقائي وليس تشخيصاً سريرياً.",
+  "accessibility.skipToContent": "انتقل إلى المحتوى الرئيسي",
+  "accessibility.quickExit": "خروج سريع",
+  "sidebar.offlineReady": "جاهز للعمل بدون اتصال",
+  "sidebar.logMoodToday": "سجّل مزاجك اليوم",
+  "common.dismiss": "إغلاق",
+  "breathe.tech.coherent": "التنفس المتناسق",
+  "breathe.desc.coherent": "٦ث شهيق، ٦ث زفير — HRV مثالي",
+  "breathe.hapticOn": "اهتزاز: مفعّل",
+  "breathe.hapticOff": "اهتزاز: متوقف",
+  "breathe.reflectionTitle": "تأمل بعد الجلسة",
+  "breathe.reflectionQuestion": "كيف تشعر الآن؟",
+  "breathe.feelCalmer": "أكثر هدوءاً",
+  "breathe.feelSame": "كما كنت",
+  "breathe.feelAnxious": "لا زلت قلقاً",
+  "breathe.reflectionNote": "مهما شعرت، فمشاعرك مهمة. لقد فعلت شيئاً جيداً لنفسك.",
+  "breathe.recentSessions": "الجلسات الأخيرة",
+  "breathe.seconds": "ثانية",
+  "timeWellSpent.message": "لقد خصصت وقتاً ثميناً للوعي بنفسك اليوم 🌱 حان وقت العودة لأنشطتك.",
+  "timeWellSpent.dismiss": "إغلاق والعودة للأنشطة"
 }

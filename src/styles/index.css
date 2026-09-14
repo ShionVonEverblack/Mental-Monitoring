@@ -444,10 +444,11 @@ button.journal-entry-toggle { background: none; border: none; font: inherit; col
 .breathe-page header h1 { font-size: 1.75rem; font-weight: 700; color: var(--text-primary); margin-bottom: var(--spacing-xs); }
 .breathe-page header p { color: var(--text-secondary); font-size: 0.938rem; }
 
-.breathe-techniques { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-sm); margin-bottom: var(--spacing-xl); }
-@media (max-width: 500px) { .breathe-techniques { grid-template-columns: 1fr; } }
+.breathe-techniques { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--spacing-sm); margin-bottom: var(--spacing-xl); }
+@media (max-width: 640px) { .breathe-techniques { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 400px) { .breathe-techniques { grid-template-columns: 1fr; } }
 
-.breathe-technique-card { display: flex; flex-direction: column; align-items: center; gap: var(--spacing-xs); padding: var(--spacing-md); background: var(--bg-card); border: 2px solid var(--border-subtle); border-radius: var(--radius-lg); cursor: pointer; transition: all var(--transition-fast); font-family: var(--font-family-base); color: var(--text-secondary); }
+.breathe-technique-card { display: flex; flex-direction: column; align-items: center; gap: var(--spacing-xs); padding: var(--spacing-md); background: var(--bg-card); border: 2px solid var(--border-subtle); border-radius: var(--radius-lg); cursor: pointer; transition: all var(--transition-fast); font-family: var(--font-family-base); color: var(--text-secondary); min-height: 44px; }
 .breathe-technique-card:hover { border-color: var(--color-primary); background: var(--bg-elevated); }
 .breathe-technique-card.active { border-color: var(--color-primary); background: hsla(215, 65%, 55%, 0.1); color: var(--text-primary); }
 .breathe-tech-icon { font-size: 2rem; }
@@ -463,8 +464,32 @@ button.journal-entry-toggle { background: none; border: none; font: inherit; col
 .breathe-phase-text { font-size: 1.125rem; font-weight: 600; color: var(--text-primary); }
 .breathe-timer { font-size: 2.5rem; font-weight: 700; color: var(--text-primary); margin-top: var(--spacing-xs); }
 
-.breathe-controls { display: flex; justify-content: center; gap: var(--spacing-md); margin-bottom: var(--spacing-lg); }
+.breathe-controls { display: flex; justify-content: center; align-items: center; gap: var(--spacing-md); margin-bottom: var(--spacing-lg); }
 .breathe-stats { display: flex; justify-content: center; gap: var(--spacing-xl); color: var(--text-secondary); font-size: 0.875rem; }
+
+/* Post-Session Reflection */
+.breathe-reflection { margin-top: var(--spacing-xl); animation: fadeInUp 0.4s ease-out; }
+.breathe-reflection-card { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: var(--spacing-lg); text-align: center; }
+.breathe-reflection-question { font-size: 1.125rem; font-weight: 600; color: var(--text-primary); margin-bottom: var(--spacing-md); }
+.breathe-reflection-options { display: flex; gap: var(--spacing-sm); justify-content: center; flex-wrap: wrap; margin-bottom: var(--spacing-md); }
+.breathe-reflection-btn { padding: var(--spacing-sm) var(--spacing-md); border-radius: var(--radius-md); border: 2px solid var(--border-subtle); background: var(--bg-secondary); color: var(--text-primary); cursor: pointer; font-family: var(--font-family-base); font-size: 0.875rem; font-weight: 500; transition: all var(--transition-fast); min-height: 44px; min-width: 44px; }
+.breathe-reflection-btn:hover { border-color: var(--color-primary); background: var(--bg-elevated); }
+.breathe-reflection-btn.calmer:hover { border-color: var(--color-secondary); }
+.breathe-reflection-btn.anxious:hover { border-color: var(--color-warm); }
+.breathe-reflection-note { font-size: 0.813rem; color: var(--text-tertiary); font-style: italic; }
+
+/* Session History */
+.breathe-history { margin-top: var(--spacing-xl); animation: fadeIn 0.3s ease-out; }
+.breathe-history h3 { font-size: 1rem; font-weight: 600; color: var(--text-primary); margin-bottom: var(--spacing-sm); }
+.breathe-history-list { display: flex; flex-direction: column; gap: var(--spacing-xs); }
+.breathe-history-item { display: flex; justify-content: space-between; align-items: center; padding: var(--spacing-sm) var(--spacing-md); background: var(--bg-card); border-radius: var(--radius-md); border: 1px solid var(--border-subtle); }
+.breathe-history-tech { font-weight: 500; font-size: 0.875rem; color: var(--text-primary); }
+.breathe-history-meta { font-size: 0.75rem; color: var(--text-tertiary); }
+
+/* Time Well Spent Completion Card (Humane Technology) */
+.time-well-spent-card { margin-top: var(--spacing-md); padding: var(--spacing-lg); background: hsla(165, 45%, 50%, 0.1); border: 1px solid hsla(165, 45%, 50%, 0.2); border-radius: var(--radius-lg); text-align: center; animation: fadeInUp 0.5s ease-out; }
+.time-well-spent-card p { font-size: 0.938rem; color: var(--text-secondary); margin-bottom: var(--spacing-sm); line-height: 1.6; }
+.time-well-spent-card .btn { margin-top: var(--spacing-sm); }
 
 /* Education Page */
 .education-page { animation: fadeInUp 0.5s ease-out; }
