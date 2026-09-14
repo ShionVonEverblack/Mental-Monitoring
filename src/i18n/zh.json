@@ -69,16 +69,38 @@
     "title": "心情日记",
     "newEntry": "写新日记",
     "templates": {
-      "free": "自由写作",
-      "cbt": "结构化CBT认知",
-      "gratitude": "感恩日记",
-      "reflection": "自我反思"
+      "free": "自由书写",
+      "cbt": "结构化CBT",
+      "gratitude": "感恩",
+      "reflection": "反思"
     },
     "placeholder": "在此畅叙心中所感，这是你的安全空间...",
     "save": "保存",
     "history": "日记历史",
     "empty": "暂无日记记录",
-    "private": "私密"
+    "private": "私密",
+    "templateDesc": {
+      "free": "随心写下你脑海中的任何想法",
+      "cbt": "基于认知行为疗法（CBT）框架分析想法",
+      "gratitude": "专注于今天积极美好的事物",
+      "reflection": "自我评估与个人成长"
+    },
+    "prompts": {
+      "cbt": {
+        "0": "情境：发生了什么事？",
+        "1": "自动化思维：脑海中闪过了什么想法？",
+        "2": "情绪：你当时的感受是什么？",
+        "3": "替代回应：如何更客观地理性看待？"
+      },
+      "gratitude": {
+        "0": "今天我心怀感激的3件事...",
+        "1": "今天发生的最美好的事..."
+      },
+      "reflection": {
+        "0": "今天我对自己的认识有了什么收获？",
+        "1": "明天我希望在哪些方面做得更好？"
+      }
+    }
   },
   "forum": {
     "title": "互助社区",
@@ -86,12 +108,13 @@
     "anonymous": "匿名",
     "categories": {
       "anxiety": "焦虑",
-      "depression": "抑郁低落",
-      "relationships": "人际交往",
-      "work": "工作职场",
-      "family": "家庭情感",
+      "depression": "抑郁",
+      "relationships": "人际关系",
+      "work": "工作",
+      "family": "家庭",
       "selfCare": "自我关怀",
-      "other": "其他"
+      "other": "其他",
+      "self-care": "自我关怀"
     },
     "reply": "回复",
     "support": "鼓励",
@@ -216,7 +239,8 @@
     "understand": "我明白了",
     "print": "打印 / 存为PDF",
     "on": "开启",
-    "off": "关闭"
+    "off": "关闭",
+    "loadingSafeSpace": "正在加载安全空间..."
   },
   "insights": {
     "weeklyTitle": "每周洞察",
@@ -252,7 +276,16 @@
   },
   "education": {
     "title": "心理健康知识库",
-    "subtitle": "了解情绪机理与科学关怀方案"
+    "subtitle": "了解情绪机理与科学关怀方案",
+    "readingTime": "阅读时间 {{count}} 分钟",
+    "categoryList": {
+      "all": "全部",
+      "anxiety": "焦虑",
+      "depression": "抑郁",
+      "stress": "压力管理",
+      "self-care": "自我关怀",
+      "professional": "专业援助"
+    }
   },
   "escalation": {
     "level1": "最近好像有些疲惫低落，有这样的感受很正常，给自己的心灵留点喘息空间吧。",
@@ -279,7 +312,28 @@
     "bpjsOnly": "支持医保/BPJS",
     "call": "拨打电话",
     "disclaimer": "RIMA 与上述机构无隶属利益关系，所有资料仅作一般求助信息参考。",
-    "noResults": "未找到符合筛选条件的医疗机构。"
+    "noResults": "未找到符合筛选条件的医疗机构。",
+    "servicesCount": "{{count}} 项专业服务",
+    "onlineBadge": "线上",
+    "bpjsBadge": "BPJS医保",
+    "website": "官方网站",
+    "provinces": {
+      "all": "所有省份",
+      "dki-jakarta": "雅加达特区",
+      "jawa-barat": "西爪哇省",
+      "jawa-tengah": "中爪哇省",
+      "jawa-timur": "东爪哇省",
+      "bali": "巴厘岛",
+      "yogyakarta": "日惹特区",
+      "online": "线上服务"
+    },
+    "types": {
+      "all": "全部",
+      "psikolog": "心理咨询师",
+      "psikiater": "精神科医生",
+      "konselor": "辅导员",
+      "lembaga": "非政府组织/机构"
+    }
   },
   "analytics": {
     "title": "心理数据看板",
@@ -359,7 +413,7 @@
   "crisis.interceptorDismiss": "我没事，谢谢",
   "crisis.interceptorGuide": "或打开你的安全计划，获取下一步指引。",
   "disclaimer.crisis": "此检测为自动化功能，非临床诊断。",
-  "accessibility.skipToContent": "跳到主要内容",
+  "accessibility.skipToContent": "跳过并转到主要内容",
   "accessibility.quickExit": "快速退出",
   "sidebar.offlineReady": "离线可用",
   "sidebar.logMoodToday": "记录今日心情",
@@ -488,5 +542,70 @@
   "assessment.gad7.recMinimal": "Your anxiety levels are well within the standard range. Keep up your balanced habits.",
   "assessment.gad7.recMild": "Mild tension or worry detected. Schedule intentional pause times and gentle breathing relaxation.",
   "assessment.gad7.recModerate": "Anxiety is impacting your sense of calm. Practice the 5-4-3-2-1 grounding technique to soothe your nervous system.",
-  "assessment.gad7.recSevere": "High anxiety levels detected which may drain daily energy. Consultation with a mental health professional is recommended."
+  "assessment.gad7.recSevere": "High anxiety levels detected which may drain daily energy. Consultation with a mental health professional is recommended.",
+  "accessibility.quickExitAria": "快速退出到安全页面",
+  "sos.buttonAria": "SOS - 需要帮助",
+  "sidebar.expand": "展开侧边栏",
+  "sidebar.collapse": "收起侧边栏",
+  "common.loadingSafeSpace": "正在加载安全空间...",
+  "assessment.phq9Tab": "抑郁 (PHQ-9)",
+  "assessment.gad7Tab": "焦虑 (GAD-7)",
+  "assessment.scoreLabel": "分数",
+  "assessment.severityLabel": "严重程度",
+  "assessment.scoreOfMax": "{{type}} 分数：{{score}} / 最大 {{max}}",
+  "assessment.answeredCount": "已回答 {{answered}} / {{total}}",
+  "grounding.stepAria": "第 {{step}} 步：{{title}}",
+  "hotlines.itl": "自杀预防和心理健康援助服务。",
+  "hotlines.lsm-jbd": "针对高危个体的紧急援助服务。",
+  "hotlines.pulih": "创伤心理咨询服务。",
+  "hotlines.sejiwa": "印度尼西亚卫生部心理健康服务热线。",
+  "hotlines.emergency": "国家紧急求助号码。",
+  "journal.templates.free": "自由书写",
+  "journal.templates.cbt": "结构化CBT",
+  "journal.templates.gratitude": "感恩",
+  "journal.templates.reflection": "反思",
+  "journal.templateDesc.free": "随心写下你脑海中的任何想法",
+  "journal.templateDesc.cbt": "基于认知行为疗法（CBT）框架分析想法",
+  "journal.templateDesc.gratitude": "专注于今天积极美好的事物",
+  "journal.templateDesc.reflection": "自我评估与个人成长",
+  "journal.prompts.cbt.0": "情境：发生了什么事？",
+  "journal.prompts.cbt.1": "自动化思维：脑海中闪过了什么想法？",
+  "journal.prompts.cbt.2": "情绪：你当时的感受是什么？",
+  "journal.prompts.cbt.3": "替代回应：如何更客观地理性看待？",
+  "journal.prompts.gratitude.0": "今天我心怀感激的3件事...",
+  "journal.prompts.gratitude.1": "今天发生的最美好的事...",
+  "journal.prompts.reflection.0": "今天我对自己的认识有了什么收获？",
+  "journal.prompts.reflection.1": "明天我希望在哪些方面做得更好？",
+  "forum.categories.anxiety": "焦虑",
+  "forum.categories.depression": "抑郁",
+  "forum.categories.relationships": "人际关系",
+  "forum.categories.work": "工作",
+  "forum.categories.family": "家庭",
+  "forum.categories.self-care": "自我关怀",
+  "forum.categories.selfCare": "自我关怀",
+  "forum.categories.other": "其他",
+  "professional.servicesCount": "{{count}} 项专业服务",
+  "professional.onlineBadge": "线上",
+  "professional.bpjsBadge": "BPJS医保",
+  "professional.website": "官方网站",
+  "professional.provinces.all": "所有省份",
+  "professional.provinces.dki-jakarta": "雅加达特区",
+  "professional.provinces.jawa-barat": "西爪哇省",
+  "professional.provinces.jawa-tengah": "中爪哇省",
+  "professional.provinces.jawa-timur": "东爪哇省",
+  "professional.provinces.bali": "巴厘岛",
+  "professional.provinces.yogyakarta": "日惹特区",
+  "professional.provinces.online": "线上服务",
+  "professional.types.all": "全部",
+  "professional.types.psikolog": "心理咨询师",
+  "professional.types.psikiater": "精神科医生",
+  "professional.types.konselor": "辅导员",
+  "professional.types.lembaga": "非政府组织/机构",
+  "education.readingTime": "阅读时间 {{count}} 分钟",
+  "education.categoryList.all": "全部",
+  "education.categoryList.anxiety": "焦虑",
+  "education.categoryList.depression": "抑郁",
+  "education.categoryList.stress": "压力管理",
+  "education.categoryList.self-care": "自我关怀",
+  "education.categoryList.professional": "专业援助"
 }

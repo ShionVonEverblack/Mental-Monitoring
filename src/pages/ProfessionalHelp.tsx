@@ -20,7 +20,7 @@ export const ProfessionalHelp: React.FC = () => {
     return true;
   });
 
-  const lang = i18n.language;
+  const lang = i18n.language?.split('-')[0] || 'id';
 
   return (
     <div className="professional-page">
@@ -33,7 +33,7 @@ export const ProfessionalHelp: React.FC = () => {
       <div className="professional-filters">
         <div className="professional-search">
           <input 
-            type="text"
+            type="text" 
             placeholder={t('professional.search', 'Cari layanan...')} 
             aria-label={t('professional.search', 'Cari layanan...')}
             value={search}
@@ -50,7 +50,7 @@ export const ProfessionalHelp: React.FC = () => {
             <option value="">{t('professional.allProvinces', 'Semua Provinsi')}</option>
             {PROVINCES.map(p => (
               <option key={p.id} value={p.id}>
-                {lang === 'en' ? p.labelEn : p.labelId}
+                {t(`professional.provinces.${p.id}`, lang === 'en' ? p.labelEn : p.labelId)}
               </option>
             ))}
           </select>
@@ -63,7 +63,7 @@ export const ProfessionalHelp: React.FC = () => {
             <option value="">{t('professional.allTypes', 'Semua Jenis Layanan')}</option>
             {SERVICE_TYPES.map(st => (
               <option key={st.id} value={st.id}>
-                {lang === 'en' ? st.labelEn : st.labelId}
+                {t(`professional.types.${st.id}`, lang === 'en' ? st.labelEn : st.labelId)}
               </option>
             ))}
           </select>
@@ -88,22 +88,22 @@ export const ProfessionalHelp: React.FC = () => {
       
       {/* Results */}
       <div className="professional-results">
-        <p className="professional-count">{filtered.length} layanan</p>
+        <p className="professional-count">{t('professional.servicesCount', '{{count}} layanan', { count: filtered.length })}</p>
         {filtered.map((service: ProfessionalService) => (
           <div className="professional-card" key={service.id}>
             <div className="professional-card-header">
               <h3>{service.name}</h3>
-              <span className="badge badge-primary">{service.type}</span>
+              <span className="badge badge-primary">{t(`professional.types.${service.type}`, service.type)}</span>
             </div>
             <p className="professional-card-location">{service.city}, {service.province}</p>
             <p className="professional-card-desc">
-              {lang === 'en' ? service.descriptionEn : service.descriptionId}
+              {t(`professional.services.${service.id}.desc`, lang === 'en' ? service.descriptionEn : service.descriptionId)}
             </p>
             <div className="professional-card-badges">
-              {service.online && <span className="badge badge-secondary">Online</span>}
+              {service.online && <span className="badge badge-secondary">{t('professional.onlineBadge', 'Online')}</span>}
               {service.bpjs && (
                 <span className="badge badge-bpjs">
-                  BPJS
+                  {t('professional.bpjsBadge', 'BPJS')}
                 </span>
               )}
             </div>
@@ -115,7 +115,7 @@ export const ProfessionalHelp: React.FC = () => {
               )}
               {service.website && (
                 <a href={service.website} target="_blank" rel="noopener noreferrer" className="btn btn-sm btn-secondary">
-                  🌐 Website
+                  🌐 {t('professional.website', 'Website')}
                 </a>
               )}
             </div>

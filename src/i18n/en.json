@@ -78,7 +78,29 @@
     "save": "Save",
     "history": "Journal History",
     "empty": "No journals yet",
-    "private": "Private"
+    "private": "Private",
+    "templateDesc": {
+      "free": "Write whatever comes to your mind",
+      "cbt": "Analyze thoughts using the Cognitive Behavioral Therapy framework",
+      "gratitude": "Focus on the positives of today",
+      "reflection": "Self-evaluation and personal growth"
+    },
+    "prompts": {
+      "cbt": {
+        "0": "Situation: What happened?",
+        "1": "Automatic Thought: What crossed your mind?",
+        "2": "Emotion: What did you feel?",
+        "3": "Alternative Response: How can you look at this more objectively?"
+      },
+      "gratitude": {
+        "0": "3 things I am grateful for today are...",
+        "1": "The best thing that happened today..."
+      },
+      "reflection": {
+        "0": "What did I learn about myself today?",
+        "1": "What do I want to improve tomorrow?"
+      }
+    }
   },
   "forum": {
     "title": "Community Forum",
@@ -91,7 +113,8 @@
       "work": "Work",
       "family": "Family",
       "selfCare": "Self-Care",
-      "other": "Other"
+      "other": "Other",
+      "self-care": "Self-Care"
     },
     "reply": "Reply",
     "support": "Support",
@@ -216,7 +239,8 @@
     "understand": "I Understand",
     "print": "Print / Save PDF",
     "on": "ON",
-    "off": "OFF"
+    "off": "OFF",
+    "loadingSafeSpace": "Loading Safe Space..."
   },
   "insights": {
     "weeklyTitle": "Weekly Insights",
@@ -252,7 +276,16 @@
   },
   "education": {
     "title": "Mental Health Education",
-    "subtitle": "Learn about your mental health"
+    "subtitle": "Learn about your mental health",
+    "readingTime": "{{count}} min",
+    "categoryList": {
+      "all": "All",
+      "anxiety": "Anxiety",
+      "depression": "Depression",
+      "stress": "Stress Management",
+      "self-care": "Self-Care",
+      "professional": "Professional Help"
+    }
   },
   "escalation": {
     "level1": "It seems like you've been having a tough time lately. It's okay to feel this way. Try taking some time for yourself.",
@@ -279,7 +312,28 @@
     "bpjsOnly": "Accepts BPJS",
     "call": "Call",
     "disclaimer": "RIMA is not affiliated with the services listed above. Information is provided as a general reference.",
-    "noResults": "No services match your filters."
+    "noResults": "No services match your filters.",
+    "servicesCount": "{{count}} services",
+    "onlineBadge": "Online",
+    "bpjsBadge": "BPJS",
+    "website": "Website",
+    "provinces": {
+      "all": "All Provinces",
+      "dki-jakarta": "DKI Jakarta",
+      "jawa-barat": "West Java",
+      "jawa-tengah": "Central Java",
+      "jawa-timur": "East Java",
+      "bali": "Bali",
+      "yogyakarta": "DI Yogyakarta",
+      "online": "Online"
+    },
+    "types": {
+      "all": "All",
+      "psikolog": "Psychologist",
+      "psikiater": "Psychiatrist",
+      "konselor": "Counselor",
+      "lembaga": "Organization/NGO"
+    }
   },
   "analytics": {
     "title": "Analytics Dashboard",
@@ -360,7 +414,7 @@
   "crisis.interceptorGuide": "Or open your Safety Plan for guidance on next steps.",
   "disclaimer.crisis": "This detection is automated and not a clinical diagnosis. If you feel safe, please disregard this message.",
   "accessibility.skipToContent": "Skip to main content",
-  "accessibility.quickExit": "Quick exit",
+  "accessibility.quickExit": "Quick Exit",
   "sidebar.offlineReady": "Offline-Ready",
   "sidebar.logMoodToday": "Log Today's Mood",
   "common.dismiss": "Dismiss",
@@ -488,5 +542,70 @@
   "assessment.gad7.recMinimal": "Your anxiety levels are well within the standard range. Keep up your balanced habits.",
   "assessment.gad7.recMild": "Mild tension or worry detected. Schedule intentional pause times and gentle breathing relaxation.",
   "assessment.gad7.recModerate": "Anxiety is impacting your sense of calm. Practice the 5-4-3-2-1 grounding technique to soothe your nervous system.",
-  "assessment.gad7.recSevere": "High anxiety levels detected which may drain daily energy. Consultation with a mental health professional is recommended."
+  "assessment.gad7.recSevere": "High anxiety levels detected which may drain daily energy. Consultation with a mental health professional is recommended.",
+  "accessibility.quickExitAria": "Quick exit to a safe page",
+  "sos.buttonAria": "SOS - Need Help",
+  "sidebar.expand": "Expand sidebar",
+  "sidebar.collapse": "Collapse sidebar",
+  "common.loadingSafeSpace": "Loading Safe Space...",
+  "assessment.phq9Tab": "Depression (PHQ-9)",
+  "assessment.gad7Tab": "Anxiety (GAD-7)",
+  "assessment.scoreLabel": "Score",
+  "assessment.severityLabel": "Severity Level",
+  "assessment.scoreOfMax": "Score {{type}}: {{score}} out of maximum {{max}}",
+  "assessment.answeredCount": "{{answered}} of {{total}} answered",
+  "grounding.stepAria": "Step {{step}}: {{title}}",
+  "hotlines.itl": "Suicide prevention and mental health service.",
+  "hotlines.lsm-jbd": "Emergency support service for at-risk individuals.",
+  "hotlines.pulih": "Trauma psychological counseling service.",
+  "hotlines.sejiwa": "Mental health service by the Ministry of Health RI.",
+  "hotlines.emergency": "National emergency number.",
+  "journal.templates.free": "Free Writing",
+  "journal.templates.cbt": "Structured CBT",
+  "journal.templates.gratitude": "Gratitude",
+  "journal.templates.reflection": "Reflection",
+  "journal.templateDesc.free": "Write whatever comes to your mind",
+  "journal.templateDesc.cbt": "Analyze thoughts using the Cognitive Behavioral Therapy framework",
+  "journal.templateDesc.gratitude": "Focus on the positives of today",
+  "journal.templateDesc.reflection": "Self-evaluation and personal growth",
+  "journal.prompts.cbt.0": "Situation: What happened?",
+  "journal.prompts.cbt.1": "Automatic Thought: What crossed your mind?",
+  "journal.prompts.cbt.2": "Emotion: What did you feel?",
+  "journal.prompts.cbt.3": "Alternative Response: How can you look at this more objectively?",
+  "journal.prompts.gratitude.0": "3 things I am grateful for today are...",
+  "journal.prompts.gratitude.1": "The best thing that happened today...",
+  "journal.prompts.reflection.0": "What did I learn about myself today?",
+  "journal.prompts.reflection.1": "What do I want to improve tomorrow?",
+  "forum.categories.anxiety": "Anxiety",
+  "forum.categories.depression": "Depression",
+  "forum.categories.relationships": "Relationships",
+  "forum.categories.work": "Work",
+  "forum.categories.family": "Family",
+  "forum.categories.self-care": "Self-Care",
+  "forum.categories.selfCare": "Self-Care",
+  "forum.categories.other": "Other",
+  "professional.servicesCount": "{{count}} services",
+  "professional.onlineBadge": "Online",
+  "professional.bpjsBadge": "BPJS",
+  "professional.website": "Website",
+  "professional.provinces.all": "All Provinces",
+  "professional.provinces.dki-jakarta": "DKI Jakarta",
+  "professional.provinces.jawa-barat": "West Java",
+  "professional.provinces.jawa-tengah": "Central Java",
+  "professional.provinces.jawa-timur": "East Java",
+  "professional.provinces.bali": "Bali",
+  "professional.provinces.yogyakarta": "DI Yogyakarta",
+  "professional.provinces.online": "Online",
+  "professional.types.all": "All",
+  "professional.types.psikolog": "Psychologist",
+  "professional.types.psikiater": "Psychiatrist",
+  "professional.types.konselor": "Counselor",
+  "professional.types.lembaga": "Organization/NGO",
+  "education.readingTime": "{{count}} min",
+  "education.categoryList.all": "All",
+  "education.categoryList.anxiety": "Anxiety",
+  "education.categoryList.depression": "Depression",
+  "education.categoryList.stress": "Stress Management",
+  "education.categoryList.self-care": "Self-Care",
+  "education.categoryList.professional": "Professional Help"
 }

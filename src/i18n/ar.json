@@ -70,28 +70,51 @@
     "newEntry": "تدوينة جديدة",
     "templates": {
       "free": "كتابة حرة",
-      "cbt": "العلاج المعرفي السلوكي (CBT)",
-      "gratitude": "الامتنان والشكر",
-      "reflection": "التأمل الذاتي"
+      "cbt": "العلاج المعرفي السلوكي المنظم",
+      "gratitude": "الامتنان",
+      "reflection": "تأمل ذاتي"
     },
     "placeholder": "اكتب ما يجول في خاطرك، هذه مساحتك الآمنة تماماً...",
     "save": "حفظ",
     "history": "سجل اليوميات",
     "empty": "لا توجد تدوينات بعد",
-    "private": "خاص وسري"
+    "private": "خاص وسري",
+    "templateDesc": {
+      "free": "اكتب أي شيء يخطر في بالك",
+      "cbt": "حلل أفكارك بناءً على إطار العلاج السلوكي المعرفي",
+      "gratitude": "ركز على الإيجابيات اليوم",
+      "reflection": "تقييم الذات والنمو الشخصي"
+    },
+    "prompts": {
+      "cbt": {
+        "0": "الموقف: ماذا حدث؟",
+        "1": "الفكرة التلقائية: ما الذي خطر في بالك؟",
+        "2": "المشاعر: بماذا شعرت؟",
+        "3": "الاستجابة البديلة: كيف يمكنك النظر للأمر بموضوعية أكثر؟"
+      },
+      "gratitude": {
+        "0": "3 أشياء أشعر بالامتنان لها اليوم...",
+        "1": "أفضل ما حدث اليوم..."
+      },
+      "reflection": {
+        "0": "ماذا تعلمت عن نفسي اليوم؟",
+        "1": "ما الذي أريد تحسينه غداً؟"
+      }
+    }
   },
   "forum": {
     "title": "مجتمع الدعم والمشاركة",
     "newPost": "مشاركة جديدة",
     "anonymous": "مجهول الهوية",
     "categories": {
-      "anxiety": "القلق والتوتر",
-      "depression": "الحزن والاكتئاب",
+      "anxiety": "القلق",
+      "depression": "الاكتئاب",
       "relationships": "العلاقات",
-      "work": "العمل والوظيفة",
-      "family": "الأسرة",
-      "selfCare": "الاعتناء بالنفس",
-      "other": "أخرى"
+      "work": "العمل",
+      "family": "العائلة",
+      "selfCare": "العناية الذاتية",
+      "other": "أخرى",
+      "self-care": "العناية الذاتية"
     },
     "reply": "رد",
     "support": "دعم",
@@ -216,7 +239,8 @@
     "understand": "فهمت ذلك",
     "print": "طباعة / حفظ كملف PDF",
     "on": "تشغيل",
-    "off": "إيقاف"
+    "off": "إيقاف",
+    "loadingSafeSpace": "جاري تحميل المساحة الآمنة..."
   },
   "insights": {
     "weeklyTitle": "رؤى وتحليلات أسبوعية",
@@ -252,7 +276,16 @@
   },
   "education": {
     "title": "مكتبة التثقيف النفسي",
-    "subtitle": "تعرف على آليات المشاعر والعناية بصحتك النفسية"
+    "subtitle": "تعرف على آليات المشاعر والعناية بصحتك النفسية",
+    "readingTime": "{{count}} دقيقة قراءة",
+    "categoryList": {
+      "all": "الكل",
+      "anxiety": "القلق",
+      "depression": "الاكتئاب",
+      "stress": "إدارة التوتر",
+      "self-care": "العناية بالذات",
+      "professional": "المساعدة المهنية"
+    }
   },
   "escalation": {
     "level1": "يبدو أنك تشعر ببعض التعب النفسي مؤخراً. هذا شعور طبيعي تماماً، خذ قسطاً من الراحة لنفسك.",
@@ -279,7 +312,28 @@
     "bpjsOnly": "يقبل التأمين الصحي (BPJS)",
     "call": "اتصال هاتفياً",
     "disclaimer": "لا تتبع منصة RIMA الجهات المذكورة. المعلومات معروضة كدليل استرشادي عام.",
-    "noResults": "لم نجد خدمات تطابق خيارات البحث الحالية."
+    "noResults": "لم نجد خدمات تطابق خيارات البحث الحالية.",
+    "servicesCount": "{{count}} من الخدمات",
+    "onlineBadge": "عبر الإنترنت",
+    "bpjsBadge": "تأمين BPJS",
+    "website": "الموقع الإلكتروني",
+    "provinces": {
+      "all": "جميع المحافظات",
+      "dki-jakarta": "جاكرتا",
+      "jawa-barat": "جاوة الغربية",
+      "jawa-tengah": "جاوة الوسطى",
+      "jawa-timur": "جاوة الشرقية",
+      "bali": "بالي",
+      "yogyakarta": "يوجياكرتا",
+      "online": "عبر الإنترنت"
+    },
+    "types": {
+      "all": "الكل",
+      "psikolog": "أخصائي نفسي",
+      "psikiater": "طبيب نفسي",
+      "konselor": "مرشد نفسي",
+      "lembaga": "منظمة / جهة خيرية"
+    }
   },
   "analytics": {
     "title": "لوحة التحليلات النفسية",
@@ -488,5 +542,70 @@
   "assessment.gad7.recMinimal": "Your anxiety levels are well within the standard range. Keep up your balanced habits.",
   "assessment.gad7.recMild": "Mild tension or worry detected. Schedule intentional pause times and gentle breathing relaxation.",
   "assessment.gad7.recModerate": "Anxiety is impacting your sense of calm. Practice the 5-4-3-2-1 grounding technique to soothe your nervous system.",
-  "assessment.gad7.recSevere": "High anxiety levels detected which may drain daily energy. Consultation with a mental health professional is recommended."
+  "assessment.gad7.recSevere": "High anxiety levels detected which may drain daily energy. Consultation with a mental health professional is recommended.",
+  "accessibility.quickExitAria": "خروج سريع إلى صفحة آمنة",
+  "sos.buttonAria": "SOS - أحتاج إلى مساعدة",
+  "sidebar.expand": "توسيع الشريط الجانبي",
+  "sidebar.collapse": "طي الشريط الجانبي",
+  "common.loadingSafeSpace": "جاري تحميل المساحة الآمنة...",
+  "assessment.phq9Tab": "الاكتئاب (PHQ-9)",
+  "assessment.gad7Tab": "القلق (GAD-7)",
+  "assessment.scoreLabel": "الدرجة",
+  "assessment.severityLabel": "مستوى الشدة",
+  "assessment.scoreOfMax": "درجة {{type}}: {{score}} من الحد الأقصى {{max}}",
+  "assessment.answeredCount": "تمت الإجابة على {{answered}} من أصل {{total}}",
+  "grounding.stepAria": "الخطوة {{step}}: {{title}}",
+  "hotlines.itl": "خدمة الوقاية من الانتحار والدعم النفسي.",
+  "hotlines.lsm-jbd": "خدمة الدعم في حالات الطوارئ للأفراد المعرضين للخطر.",
+  "hotlines.pulih": "خدمة الاستشارة النفسية للصدمات.",
+  "hotlines.sejiwa": "خدمة الصحة النفسية التابعة لوزارة الصحة الإندونيسية.",
+  "hotlines.emergency": "رقم الطوارئ الوطني.",
+  "journal.templates.free": "كتابة حرة",
+  "journal.templates.cbt": "العلاج المعرفي السلوكي المنظم",
+  "journal.templates.gratitude": "الامتنان",
+  "journal.templates.reflection": "تأمل ذاتي",
+  "journal.templateDesc.free": "اكتب أي شيء يخطر في بالك",
+  "journal.templateDesc.cbt": "حلل أفكارك بناءً على إطار العلاج السلوكي المعرفي",
+  "journal.templateDesc.gratitude": "ركز على الإيجابيات اليوم",
+  "journal.templateDesc.reflection": "تقييم الذات والنمو الشخصي",
+  "journal.prompts.cbt.0": "الموقف: ماذا حدث؟",
+  "journal.prompts.cbt.1": "الفكرة التلقائية: ما الذي خطر في بالك؟",
+  "journal.prompts.cbt.2": "المشاعر: بماذا شعرت؟",
+  "journal.prompts.cbt.3": "الاستجابة البديلة: كيف يمكنك النظر للأمر بموضوعية أكثر؟",
+  "journal.prompts.gratitude.0": "3 أشياء أشعر بالامتنان لها اليوم...",
+  "journal.prompts.gratitude.1": "أفضل ما حدث اليوم...",
+  "journal.prompts.reflection.0": "ماذا تعلمت عن نفسي اليوم؟",
+  "journal.prompts.reflection.1": "ما الذي أريد تحسينه غداً؟",
+  "forum.categories.anxiety": "القلق",
+  "forum.categories.depression": "الاكتئاب",
+  "forum.categories.relationships": "العلاقات",
+  "forum.categories.work": "العمل",
+  "forum.categories.family": "العائلة",
+  "forum.categories.self-care": "العناية الذاتية",
+  "forum.categories.selfCare": "العناية الذاتية",
+  "forum.categories.other": "أخرى",
+  "professional.servicesCount": "{{count}} من الخدمات",
+  "professional.onlineBadge": "عبر الإنترنت",
+  "professional.bpjsBadge": "تأمين BPJS",
+  "professional.website": "الموقع الإلكتروني",
+  "professional.provinces.all": "جميع المحافظات",
+  "professional.provinces.dki-jakarta": "جاكرتا",
+  "professional.provinces.jawa-barat": "جاوة الغربية",
+  "professional.provinces.jawa-tengah": "جاوة الوسطى",
+  "professional.provinces.jawa-timur": "جاوة الشرقية",
+  "professional.provinces.bali": "بالي",
+  "professional.provinces.yogyakarta": "يوجياكرتا",
+  "professional.provinces.online": "عبر الإنترنت",
+  "professional.types.all": "الكل",
+  "professional.types.psikolog": "أخصائي نفسي",
+  "professional.types.psikiater": "طبيب نفسي",
+  "professional.types.konselor": "مرشد نفسي",
+  "professional.types.lembaga": "منظمة / جهة خيرية",
+  "education.readingTime": "{{count}} دقيقة قراءة",
+  "education.categoryList.all": "الكل",
+  "education.categoryList.anxiety": "القلق",
+  "education.categoryList.depression": "الاكتئاب",
+  "education.categoryList.stress": "إدارة التوتر",
+  "education.categoryList.self-care": "العناية بالذات",
+  "education.categoryList.professional": "المساعدة المهنية"
 }

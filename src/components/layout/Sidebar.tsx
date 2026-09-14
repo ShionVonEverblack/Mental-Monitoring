@@ -26,6 +26,7 @@ export const Sidebar: React.FC = () => {
           onClick={() => setIsCollapsed(!isCollapsed)}
           className="sidebar-toggle"
           style={{ minWidth: '44px', minHeight: '44px' }}
+          aria-label={isCollapsed ? t('sidebar.expand', 'Buka menu samping') : t('sidebar.collapse', 'Tutup menu samping')}
         >
           {isCollapsed ? <Menu size={20} /> : <ChevronLeft size={20} />}
         </button>

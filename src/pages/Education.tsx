@@ -5,7 +5,7 @@ import { EDUCATION_ARTICLES, EDUCATION_CATEGORIES } from '../data/educationConte
 
 export const Education: FC = () => {
   const { t, i18n } = useTranslation();
-  const lang = i18n.language === 'en' ? 'en' : 'id';
+  const lang = i18n.language?.split('-')[0] || 'id';
 
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState('');
@@ -15,13 +15,13 @@ export const Education: FC = () => {
     return EDUCATION_ARTICLES.filter(article => {
       const matchesCategory = selectedCategory === 'all' || article.category === selectedCategory;
       const searchLower = searchQuery.toLowerCase();
-      const title = lang === 'en' ? article.titleEn : article.titleId;
-      const summary = lang === 'en' ? article.summaryEn : article.summaryId;
+      const title = t(`education.articles.${article.id}.title`, lang === 'en' ? article.titleEn : article.titleId);
+      const summary = t(`education.articles.${article.id}.summary`, lang === 'en' ? article.summaryEn : article.summaryId);
       const matchesSearch = title.toLowerCase().includes(searchLower) || summary.toLowerCase().includes(searchLower);
       
       return matchesCategory && matchesSearch;
     });
-  }, [searchQuery, selectedCategory, lang]);
+  }, [searchQuery, selectedCategory, lang, t]);
 
   const toggleExpand = (id: string) => {
     setExpandedId(prev => prev === id ? null : id);
@@ -58,7 +58,7 @@ export const Education: FC = () => {
             className={`chip ${selectedCategory === cat.id ? 'chip-active' : ''}`}
             onClick={() => setSelectedCategory(cat.id)}
           >
-            {lang === 'en' ? cat.labelEn : cat.labelId}
+            {t(`education.categoryList.${cat.id}`, lang === 'en' ? cat.labelEn : cat.labelId)}
           </button>
         ))}
       </div>
@@ -74,15 +74,15 @@ export const Education: FC = () => {
               >
                 <span className="education-card-icon">{article.icon}</span>
                 <div className="education-card-info">
-                  <h3>{lang === 'en' ? article.titleEn : article.titleId}</h3>
-                  <p>{lang === 'en' ? article.summaryEn : article.summaryId}</p>
+                  <h3>{t(`education.articles.${article.id}.title`, lang === 'en' ? article.titleEn : article.titleId)}</h3>
+                  <p>{t(`education.articles.${article.id}.summary`, lang === 'en' ? article.summaryEn : article.summaryId)}</p>
                 </div>
-                <span className="education-card-meta">{article.readingTimeMinutes} min</span>
+                <span className="education-card-meta">{t('education.readingTime', '{{count}} min', { count: article.readingTimeMinutes })}</span>
               </button>
               
               {expandedId === article.id && (
                 <div className="education-card-content">
-                  {renderContent(lang === 'en' ? article.contentEn : article.contentId)}
+                  {renderContent(t(`education.articles.${article.id}.content`, lang === 'en' ? article.contentEn : article.contentId))}
                   <p className="education-source">
                     {t('education.source', 'Sumber')}: {article.source}
                   </p>

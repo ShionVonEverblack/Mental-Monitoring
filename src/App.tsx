@@ -24,8 +24,11 @@ const Grounding = lazy(() => import('./pages/Grounding').then(module => ({ defau
 const Assessment = lazy(() => import('./pages/Assessment').then(module => ({ default: module.Assessment })));
 import { ConsentModal } from './components/common/ConsentModal';
 
+import { useTranslation } from 'react-i18next';
+
 const App: React.FC = () => {
   const { theme } = useTheme();
+  const { t } = useTranslation();
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
@@ -36,21 +39,7 @@ const App: React.FC = () => {
       <BrowserRouter>
         <ConsentModal />
         <AppShell>
-          <Suspense fallback={<LoadingSpinner message={
-            (() => {
-              const l = localStorage.getItem('i18nextLng')?.split('-')[0];
-              switch (l) {
-                case 'en': return 'Loading Safe Space...';
-                case 'jv': return 'Ngundhuh Ruang Aman...';
-                case 'su': return 'Ngunggahkeun Rohangan Aman...';
-                case 'ja': return '安全な空間を読み込み中...';
-                case 'zh': return '正在进入安全空间...';
-                case 'es': return 'Cargando Espacio Seguro...';
-                case 'ar': return 'جاري تحميل المساحة الآمنة...';
-                default: return 'Memuat Ruang Aman...';
-              }
-            })()
-          } />}>
+          <Suspense fallback={<LoadingSpinner message={t('common.loadingSafeSpace', 'Memuat Ruang Aman...')} />}>
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/mood" element={<MoodTracker />} />

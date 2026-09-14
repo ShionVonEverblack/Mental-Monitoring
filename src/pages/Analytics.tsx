@@ -7,6 +7,7 @@ import { useMood } from '../hooks/useMood';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { getFactorCorrelation } from '../services/moodAnalysisService';
 import { MOOD_EMOJIS } from '../utils/constants';
+import { getLocaleTag } from '../utils/helpers';
 
 const MOOD_COLORS = ['#e74c3c', '#e67e22', '#95a5a6', '#3498db', '#9b59b6'];
 
@@ -40,18 +41,10 @@ export const Analytics: React.FC = () => {
 
   // Mood by Day
   const moodByDay = useMemo(() => {
-    const dayMap: Record<string, string[]> = {
-      en: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
-      jv: ['Ahd', 'Sen', 'Sel', 'Reb', 'Kem', 'Jum', 'Sab'],
-      su: ['Ahad', 'Sén', 'Sal', 'Reb', 'Kem', 'Jum', 'Sap'],
-      ja: ['日', '月', '火', '水', '木', '金', '土'],
-      zh: ['周日', '周一', '周二', '周三', '周四', '周五', '周六'],
-      es: ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'],
-      ar: ['أحد', 'إثنين', 'ثلاثاء', 'أربعاء', 'خميس', 'جمعة', 'سبت'],
-      id: ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'],
-    };
     const currentLang = lang?.split('-')[0] || 'id';
-    const daysLabels = dayMap[currentLang] || dayMap.id;
+    const dtf = new Intl.DateTimeFormat(getLocaleTag(currentLang), { weekday: 'short' });
+    // Jan 1, 2023 was a Sunday
+    const daysLabels = Array.from({ length: 7 }, (_, i) => dtf.format(new Date(2023, 0, 1 + i)));
     
     const dayData = Array.from({ length: 7 }, (_, i) => ({
       day: daysLabels[i],
@@ -76,11 +69,15 @@ export const Analytics: React.FC = () => {
   // Factor Impact
   const factorData = useMemo(() => {
     try {
-      return getFactorCorrelation(moods);
-    } catch (e) {
+      const raw = getFactorCorrelation(moods);
+      return raw.map(item => ({
+        ...item,
+        factorName: t(`mood.factorList.${item.factor}`, item.factor)
+      }));
+    } catch {
       return [];
     }
-  }, [moods]);
+  }, [moods, t]);
 
   // Monthly Trend
   const monthlyTrend = useMemo(() => {
@@ -176,7 +173,7 @@ export const Analytics: React.FC = () => {
                 <ResponsiveContainer width="100%" height={300}>
                   <BarChart data={factorData} layout="vertical">
                     <XAxis type="number" domain={[0, 5]} />
-                    <YAxis type="category" dataKey="factor" width={80} />
+                    <YAxis type="category" dataKey="factorName" width={80} />
                     <Tooltip />
                     <Bar dataKey="avgScore" fill="var(--color-secondary)" radius={[0,4,4,0]} />
                   </BarChart>

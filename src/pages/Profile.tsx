@@ -106,7 +106,7 @@ export const Profile: React.FC = () => {
   };
 
   const handleExportMoods = () => {
-    const ok = exportMoodsAsCSV();
+    const ok = exportMoodsAsCSV(i18n.language);
     if (ok) {
       showToast(t('profile.exportMoodsSuccess', 'Laporan mood CSV berhasil diunduh!'));
     } else {
@@ -115,7 +115,7 @@ export const Profile: React.FC = () => {
   };
 
   const handleExportJournals = () => {
-    const ok = exportJournalsAsCSV();
+    const ok = exportJournalsAsCSV(i18n.language);
     if (ok) {
       showToast(t('profile.exportJournalsSuccess', 'Laporan jurnal CSV berhasil diunduh!'));
     } else {
@@ -124,7 +124,7 @@ export const Profile: React.FC = () => {
   };
 
   const handleExportClinical = () => {
-    const ok = generateClinicalSummaryHTML();
+    const ok = generateClinicalSummaryHTML(i18n.language);
     if (ok) {
       showToast(t('profile.exportClinicalSuccess', 'Laporan klinis HTML berhasil dibuat!'));
     } else {

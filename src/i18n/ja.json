@@ -69,16 +69,38 @@
     "title": "メンタル日記",
     "newEntry": "新しい日記を書く",
     "templates": {
-      "free": "自由形式",
-      "cbt": "認知行動療法（CBT）",
-      "gratitude": "感謝日記",
-      "reflection": "自己内省"
+      "free": "自由記述",
+      "cbt": "構造化CBT",
+      "gratitude": "感謝",
+      "reflection": "自己省察"
     },
     "placeholder": "心の中の思いを自由に書いてください...",
     "save": "保存",
     "history": "過去の日記",
     "empty": "日記がまだありません",
-    "private": "非公開"
+    "private": "非公開",
+    "templateDesc": {
+      "free": "心に浮かぶことを自由に書いてみましょう",
+      "cbt": "認知行動療法の枠組みに基づいて思考を分析します",
+      "gratitude": "今日のポジティブな出来事に意識を向けましょう",
+      "reflection": "自己評価と個人の成長を振り返ります"
+    },
+    "prompts": {
+      "cbt": {
+        "0": "状況：何が起きましたか？",
+        "1": "自動思考：どのような考えが頭をよぎりましたか？",
+        "2": "感情：どのように感じましたか？",
+        "3": "別の見方：より客観的に捉えるにはどうすればよいですか？"
+      },
+      "gratitude": {
+        "0": "今日感謝している3つのこと...",
+        "1": "今日起きた最も良かったこと..."
+      },
+      "reflection": {
+        "0": "今日、自分自身について何を学びましたか？",
+        "1": "明日改善したいことは何ですか？"
+      }
+    }
   },
   "forum": {
     "title": "コミュニティ・フォーラム",
@@ -86,12 +108,13 @@
     "anonymous": "匿名",
     "categories": {
       "anxiety": "不安",
-      "depression": "うつ・落ち込み",
+      "depression": "うつ",
       "relationships": "人間関係",
-      "work": "仕事・職場",
+      "work": "仕事",
       "family": "家族",
       "selfCare": "セルフケア",
-      "other": "その他"
+      "other": "その他",
+      "self-care": "セルフケア"
     },
     "reply": "返信",
     "support": "応援",
@@ -216,7 +239,8 @@
     "understand": "了解しました",
     "print": "印刷 / PDF保存",
     "on": "ON",
-    "off": "OFF"
+    "off": "OFF",
+    "loadingSafeSpace": "安全なスペースを読み込み中..."
   },
   "insights": {
     "weeklyTitle": "週間インサイト",
@@ -252,7 +276,16 @@
   },
   "education": {
     "title": "メンタルヘルス学習",
-    "subtitle": "心の健康とセルフケアの科学を学ぶ"
+    "subtitle": "心の健康とセルフケアの科学を学ぶ",
+    "readingTime": "所要時間 {{count}} 分",
+    "categoryList": {
+      "all": "すべて",
+      "anxiety": "不安",
+      "depression": "うつ",
+      "stress": "ストレス管理",
+      "self-care": "セルフケア",
+      "professional": "専門的サポート"
+    }
   },
   "escalation": {
     "level1": "最近少しお疲れのようです。そのように感じるのは自然なことです。ご自身のための時間を作りましょう。",
@@ -279,7 +312,28 @@
     "bpjsOnly": "保険適用可能",
     "call": "電話をかける",
     "disclaimer": "RIMAは上記機関と直接の提携関係はありません。情報は一般的な参考資料として提供されています。",
-    "noResults": "条件に一致する支援機関が見つかりませんでした。"
+    "noResults": "条件に一致する支援機関が見つかりませんでした。",
+    "servicesCount": "{{count}} 件の相談機関",
+    "onlineBadge": "オンライン",
+    "bpjsBadge": "BPJS（公的保険）",
+    "website": "ウェブサイト",
+    "provinces": {
+      "all": "すべての州",
+      "dki-jakarta": "ジャカルタ首都特別州",
+      "jawa-barat": "西ジャワ州",
+      "jawa-tengah": "中部ジャワ州",
+      "jawa-timur": "東ジャワ州",
+      "bali": "バリ州",
+      "yogyakarta": "ジョグジャカルタ特別州",
+      "online": "オンライン"
+    },
+    "types": {
+      "all": "すべて",
+      "psikolog": "臨床心理士",
+      "psikiater": "精神科医",
+      "konselor": "カウンセラー",
+      "lembaga": "支援団体/NGO"
+    }
   },
   "analytics": {
     "title": "詳細アナリティクス",
@@ -488,5 +542,70 @@
   "assessment.gad7.recMinimal": "Your anxiety levels are well within the standard range. Keep up your balanced habits.",
   "assessment.gad7.recMild": "Mild tension or worry detected. Schedule intentional pause times and gentle breathing relaxation.",
   "assessment.gad7.recModerate": "Anxiety is impacting your sense of calm. Practice the 5-4-3-2-1 grounding technique to soothe your nervous system.",
-  "assessment.gad7.recSevere": "High anxiety levels detected which may drain daily energy. Consultation with a mental health professional is recommended."
+  "assessment.gad7.recSevere": "High anxiety levels detected which may drain daily energy. Consultation with a mental health professional is recommended.",
+  "accessibility.quickExitAria": "安全なページへ素早く移動",
+  "sos.buttonAria": "SOS - 助けが必要です",
+  "sidebar.expand": "サイドバーを展開",
+  "sidebar.collapse": "サイドバーを折りたたむ",
+  "common.loadingSafeSpace": "安全なスペースを読み込み中...",
+  "assessment.phq9Tab": "うつ病 (PHQ-9)",
+  "assessment.gad7Tab": "不安症 (GAD-7)",
+  "assessment.scoreLabel": "スコア",
+  "assessment.severityLabel": "重症度レベル",
+  "assessment.scoreOfMax": "スコア {{type}}: 最大 {{max}} 点中 {{score}} 点",
+  "assessment.answeredCount": "{{total}} 問中 {{answered}} 問回答済み",
+  "grounding.stepAria": "ステップ {{step}}: {{title}}",
+  "hotlines.itl": "自殺防止およびメンタルヘルス相談サービス。",
+  "hotlines.lsm-jbd": "ハイリスクな個人のための緊急支援サービス。",
+  "hotlines.pulih": "トラウマに関する心理カウンセリングサービス。",
+  "hotlines.sejiwa": "インドネシア保健省によるメンタルヘルスサービス。",
+  "hotlines.emergency": "全国共通緊急電話番号。",
+  "journal.templates.free": "自由記述",
+  "journal.templates.cbt": "構造化CBT",
+  "journal.templates.gratitude": "感謝",
+  "journal.templates.reflection": "自己省察",
+  "journal.templateDesc.free": "心に浮かぶことを自由に書いてみましょう",
+  "journal.templateDesc.cbt": "認知行動療法の枠組みに基づいて思考を分析します",
+  "journal.templateDesc.gratitude": "今日のポジティブな出来事に意識を向けましょう",
+  "journal.templateDesc.reflection": "自己評価と個人の成長を振り返ります",
+  "journal.prompts.cbt.0": "状況：何が起きましたか？",
+  "journal.prompts.cbt.1": "自動思考：どのような考えが頭をよぎりましたか？",
+  "journal.prompts.cbt.2": "感情：どのように感じましたか？",
+  "journal.prompts.cbt.3": "別の見方：より客観的に捉えるにはどうすればよいですか？",
+  "journal.prompts.gratitude.0": "今日感謝している3つのこと...",
+  "journal.prompts.gratitude.1": "今日起きた最も良かったこと...",
+  "journal.prompts.reflection.0": "今日、自分自身について何を学びましたか？",
+  "journal.prompts.reflection.1": "明日改善したいことは何ですか？",
+  "forum.categories.anxiety": "不安",
+  "forum.categories.depression": "うつ",
+  "forum.categories.relationships": "人間関係",
+  "forum.categories.work": "仕事",
+  "forum.categories.family": "家族",
+  "forum.categories.self-care": "セルフケア",
+  "forum.categories.selfCare": "セルフケア",
+  "forum.categories.other": "その他",
+  "professional.servicesCount": "{{count}} 件の相談機関",
+  "professional.onlineBadge": "オンライン",
+  "professional.bpjsBadge": "BPJS（公的保険）",
+  "professional.website": "ウェブサイト",
+  "professional.provinces.all": "すべての州",
+  "professional.provinces.dki-jakarta": "ジャカルタ首都特別州",
+  "professional.provinces.jawa-barat": "西ジャワ州",
+  "professional.provinces.jawa-tengah": "中部ジャワ州",
+  "professional.provinces.jawa-timur": "東ジャワ州",
+  "professional.provinces.bali": "バリ州",
+  "professional.provinces.yogyakarta": "ジョグジャカルタ特別州",
+  "professional.provinces.online": "オンライン",
+  "professional.types.all": "すべて",
+  "professional.types.psikolog": "臨床心理士",
+  "professional.types.psikiater": "精神科医",
+  "professional.types.konselor": "カウンセラー",
+  "professional.types.lembaga": "支援団体/NGO",
+  "education.readingTime": "所要時間 {{count}} 分",
+  "education.categoryList.all": "すべて",
+  "education.categoryList.anxiety": "不安",
+  "education.categoryList.depression": "うつ",
+  "education.categoryList.stress": "ストレス管理",
+  "education.categoryList.self-care": "セルフケア",
+  "education.categoryList.professional": "専門的サポート"
 }

@@ -7,6 +7,7 @@ import type { JournalTemplate, JournalEntry } from '../types';
 import { detectCrisis } from '../services/crisisDetectionService';
 import { Modal } from '../components/ui/Modal';
 import type { CrisisDetectionResult } from '../services/crisisDetectionService';
+import { formatDate } from '../utils/helpers';
 
 export const Journal: React.FC = () => {
   const { t, i18n } = useTranslation();
@@ -19,7 +20,7 @@ export const Journal: React.FC = () => {
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [crisisResult, setCrisisResult] = useState<CrisisDetectionResult | null>(null);
 
-  const lang = i18n.language as 'id' | 'en';
+  const lang = i18n.language?.split('-')[0] || 'id';
 
   const handleSave = () => {
     if (!title || !content) return;
@@ -64,8 +65,8 @@ export const Journal: React.FC = () => {
                 type="button"
               >
                 <div className="template-icon"></div>
-                <h3 className="template-name">{lang === 'en' ? tmpl.labelEn : tmpl.labelId}</h3>
-                <p className="template-desc">{tmpl.description}</p>
+                <h3 className="template-name">{t(`journal.templates.${tmpl.id}`, lang === 'en' ? tmpl.labelEn : tmpl.labelId)}</h3>
+                <p className="template-desc">{t(`journal.templateDesc.${tmpl.id}`, tmpl.description)}</p>
               </button>
             ))}
           </div>
@@ -75,7 +76,7 @@ export const Journal: React.FC = () => {
               <h3>
                 {(() => {
                   const tmpl = JOURNAL_TEMPLATES.find(t => t.id === selectedTemplate);
-                  return tmpl ? (lang === 'en' ? tmpl.labelEn : tmpl.labelId) : '';
+                  return tmpl ? t(`journal.templates.${tmpl.id}`, lang === 'en' ? tmpl.labelEn : tmpl.labelId) : '';
                 })()}
               </h3>
               <button onClick={() => setSelectedTemplate(null)}>
@@ -94,7 +95,7 @@ export const Journal: React.FC = () => {
             
             {JOURNAL_TEMPLATES.find(t => t.id === selectedTemplate)?.prompts.map((prompt, idx) => (
                <div key={idx} className="journal-prompt">
-                 <label className="journal-prompt-label">{lang === 'en' ? prompt.en : prompt.id}</label>
+                 <label className="journal-prompt-label">{t(`journal.prompts.${selectedTemplate}.${idx}`, lang === 'en' ? prompt.en : prompt.id)}</label>
                </div>
             ))}
             
@@ -126,7 +127,7 @@ export const Journal: React.FC = () => {
             >
               <h4 className="journal-entry-title">{journal.title}</h4>
               <div className="journal-entry-meta">
-                <span className="journal-entry-date">{new Date(journal.createdAt).toLocaleDateString()}</span>
+                <span className="journal-entry-date">{formatDate(journal.createdAt, lang)}</span>
               </div>
             </button>
             

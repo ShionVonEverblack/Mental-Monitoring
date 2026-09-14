@@ -69,29 +69,52 @@
     "title": "Jurnal",
     "newEntry": "Jurnal Anyar",
     "templates": {
-      "free": "Tulis Bebas",
+      "free": "Nulis Bebas",
       "cbt": "CBT Terstruktur",
-      "gratitude": "Sukur",
+      "gratitude": "Syukur",
       "reflection": "Refleksi"
     },
     "placeholder": "Tulis rasanipun panjenengan ing mriki...",
     "save": "Simpen",
     "history": "Riwayat Jurnal",
     "empty": "Dereng wonten jurnal",
-    "private": "Pribadi"
+    "private": "Pribadi",
+    "templateDesc": {
+      "free": "Serat punapa kemawon ingkang wonten ing penggalih",
+      "cbt": "Analisis pikiran adhedhasar kerangka Cognitive Behavioral Therapy",
+      "gratitude": "Fokus dhumateng perkawis positif dinten puniki",
+      "reflection": "Evaluasi dhiri lan tuwuh pribadi"
+    },
+    "prompts": {
+      "cbt": {
+        "0": "Kahanan: Punapa ingkang kedadosan?",
+        "1": "Pikiran Otomatis: Punapa ingkang melintas ing penggalih?",
+        "2": "Emosi: Punapa ingkang sampeyan raosaken?",
+        "3": "Wangsulan Alternatif: Kados pundi mirsani kanthi langkung objektif?"
+      },
+      "gratitude": {
+        "0": "3 perkawis ingkang kula syukuri dinten puniki...",
+        "1": "Perkawis paling sae dinten puniki..."
+      },
+      "reflection": {
+        "0": "Punapa ingkang kula sinau babagan dhiri dinten puniki?",
+        "1": "Punapa ingkang badhe kula dandani mbenjing?"
+      }
+    }
   },
   "forum": {
     "title": "Forum Komunitas",
     "newPost": "Damel Postingan",
     "anonymous": "Anonim",
     "categories": {
-      "anxiety": "Kuwatos",
+      "anxiety": "Kecemasan",
       "depression": "Depresi",
       "relationships": "Sesambungan",
-      "work": "Padamelan",
-      "family": "Kaluwarga",
-      "selfCare": "Self-Care",
-      "other": "Sanesipun"
+      "work": "Pedamelan",
+      "family": "Kulawarga",
+      "selfCare": "Ngrumat Dhiri",
+      "other": "Liyané",
+      "self-care": "Ngrumat Dhiri"
     },
     "reply": "Wangsul",
     "support": "Dukung",
@@ -216,7 +239,8 @@
     "understand": "Kula Ngertos",
     "print": "Cetak / Simpen PDF",
     "on": "ON",
-    "off": "OFF"
+    "off": "OFF",
+    "loadingSafeSpace": "Ngamot Papan Aman..."
   },
   "insights": {
     "weeklyTitle": "Insight Minggon",
@@ -252,7 +276,16 @@
   },
   "education": {
     "title": "Edukasi Kesehatan Mental",
-    "subtitle": "Sinau babagan kesehatan mental panjenengan"
+    "subtitle": "Sinau babagan kesehatan mental panjenengan",
+    "readingTime": "{{count}} menit",
+    "categoryList": {
+      "all": "Sedaya",
+      "anxiety": "Kecemasan",
+      "depression": "Depresi",
+      "stress": "Manajemen Stres",
+      "self-care": "Ngrumat Dhiri",
+      "professional": "Pitulungan Profesional"
+    }
   },
   "escalation": {
     "level1": "Kadosipun panjenengan saweg kirang sae sapuniki. Mboten menapa-menapa rumaos mekaten. Cobi luangaken wekdal kagem diri panjenengan piyambak.",
@@ -279,7 +312,28 @@
     "bpjsOnly": "Nampi BPJS",
     "call": "Telpon",
     "disclaimer": "RIMA boten afiliasi kaliyan layanan ing nginggil. Informasi dipunsediakaken minangka referensi umum.",
-    "noResults": "Boten wonten layanan ingkang cocok kaliyan filter."
+    "noResults": "Boten wonten layanan ingkang cocok kaliyan filter.",
+    "servicesCount": "{{count}} layanan",
+    "onlineBadge": "Online",
+    "bpjsBadge": "BPJS",
+    "website": "Situs",
+    "provinces": {
+      "all": "Sedaya Provinsi",
+      "dki-jakarta": "DKI Jakarta",
+      "jawa-barat": "Jawa Kulon",
+      "jawa-tengah": "Jawa Tengah",
+      "jawa-timur": "Jawa Wétan",
+      "bali": "Bali",
+      "yogyakarta": "DI Yogyakarta",
+      "online": "Online"
+    },
+    "types": {
+      "all": "Sedaya",
+      "psikolog": "Psikolog",
+      "psikiater": "Psikiater",
+      "konselor": "Konselor",
+      "lembaga": "Lembaga/LSM"
+    }
   },
   "analytics": {
     "title": "Dashboard Analitik",
@@ -360,7 +414,7 @@
   "crisis.interceptorGuide": "Utawi bikak Rencana Keselamatan ingkang sampun sampeyan damel.",
   "disclaimer.crisis": "Deteksi puniki otomatis lan sanes diagnosis klinis.",
   "accessibility.skipToContent": "Langkahi menyang konten utama",
-  "accessibility.quickExit": "Medal cepet",
+  "accessibility.quickExit": "Metu Cepet",
   "sidebar.offlineReady": "Siap Offline",
   "sidebar.logMoodToday": "Cathet Mood Dinten Puniki",
   "common.dismiss": "Tutup",
@@ -488,5 +542,70 @@
   "assessment.gad7.recMinimal": "Your anxiety levels are well within the standard range. Keep up your balanced habits.",
   "assessment.gad7.recMild": "Mild tension or worry detected. Schedule intentional pause times and gentle breathing relaxation.",
   "assessment.gad7.recModerate": "Anxiety is impacting your sense of calm. Practice the 5-4-3-2-1 grounding technique to soothe your nervous system.",
-  "assessment.gad7.recSevere": "High anxiety levels detected which may drain daily energy. Consultation with a mental health professional is recommended."
+  "assessment.gad7.recSevere": "High anxiety levels detected which may drain daily energy. Consultation with a mental health professional is recommended.",
+  "accessibility.quickExitAria": "Metu cepet menyang kaca aman",
+  "sos.buttonAria": "SOS - Butuh Pitulungan",
+  "sidebar.expand": "Bukak menu sisih",
+  "sidebar.collapse": "Tutup menu sisih",
+  "common.loadingSafeSpace": "Ngamot Papan Aman...",
+  "assessment.phq9Tab": "Depresi (PHQ-9)",
+  "assessment.gad7Tab": "Kecemasan (GAD-7)",
+  "assessment.scoreLabel": "Skor",
+  "assessment.severityLabel": "Tingkat Keratan",
+  "assessment.scoreOfMax": "Skor {{type}}: {{score}} saking maksimal {{max}}",
+  "assessment.answeredCount": "{{answered}} saking {{total}} kawangsulan",
+  "grounding.stepAria": "Jangkah {{step}}: {{title}}",
+  "hotlines.itl": "Layanan nyegah bunuh diri lan kasarasan mental.",
+  "hotlines.lsm-jbd": "Layanan panyengkuyung darurat kangge tiyang kanthi risiko.",
+  "hotlines.pulih": "Layanan konseling psikologis trauma.",
+  "hotlines.sejiwa": "Layanan kasarasan jiwa saking Kementerian Kesehatan RI.",
+  "hotlines.emergency": "Nomer darurat nasional.",
+  "journal.templates.free": "Nulis Bebas",
+  "journal.templates.cbt": "CBT Terstruktur",
+  "journal.templates.gratitude": "Syukur",
+  "journal.templates.reflection": "Refleksi",
+  "journal.templateDesc.free": "Serat punapa kemawon ingkang wonten ing penggalih",
+  "journal.templateDesc.cbt": "Analisis pikiran adhedhasar kerangka Cognitive Behavioral Therapy",
+  "journal.templateDesc.gratitude": "Fokus dhumateng perkawis positif dinten puniki",
+  "journal.templateDesc.reflection": "Evaluasi dhiri lan tuwuh pribadi",
+  "journal.prompts.cbt.0": "Kahanan: Punapa ingkang kedadosan?",
+  "journal.prompts.cbt.1": "Pikiran Otomatis: Punapa ingkang melintas ing penggalih?",
+  "journal.prompts.cbt.2": "Emosi: Punapa ingkang sampeyan raosaken?",
+  "journal.prompts.cbt.3": "Wangsulan Alternatif: Kados pundi mirsani kanthi langkung objektif?",
+  "journal.prompts.gratitude.0": "3 perkawis ingkang kula syukuri dinten puniki...",
+  "journal.prompts.gratitude.1": "Perkawis paling sae dinten puniki...",
+  "journal.prompts.reflection.0": "Punapa ingkang kula sinau babagan dhiri dinten puniki?",
+  "journal.prompts.reflection.1": "Punapa ingkang badhe kula dandani mbenjing?",
+  "forum.categories.anxiety": "Kecemasan",
+  "forum.categories.depression": "Depresi",
+  "forum.categories.relationships": "Sesambungan",
+  "forum.categories.work": "Pedamelan",
+  "forum.categories.family": "Kulawarga",
+  "forum.categories.self-care": "Ngrumat Dhiri",
+  "forum.categories.selfCare": "Ngrumat Dhiri",
+  "forum.categories.other": "Liyané",
+  "professional.servicesCount": "{{count}} layanan",
+  "professional.onlineBadge": "Online",
+  "professional.bpjsBadge": "BPJS",
+  "professional.website": "Situs",
+  "professional.provinces.all": "Sedaya Provinsi",
+  "professional.provinces.dki-jakarta": "DKI Jakarta",
+  "professional.provinces.jawa-barat": "Jawa Kulon",
+  "professional.provinces.jawa-tengah": "Jawa Tengah",
+  "professional.provinces.jawa-timur": "Jawa Wétan",
+  "professional.provinces.bali": "Bali",
+  "professional.provinces.yogyakarta": "DI Yogyakarta",
+  "professional.provinces.online": "Online",
+  "professional.types.all": "Sedaya",
+  "professional.types.psikolog": "Psikolog",
+  "professional.types.psikiater": "Psikiater",
+  "professional.types.konselor": "Konselor",
+  "professional.types.lembaga": "Lembaga/LSM",
+  "education.readingTime": "{{count}} menit",
+  "education.categoryList.all": "Sedaya",
+  "education.categoryList.anxiety": "Kecemasan",
+  "education.categoryList.depression": "Depresi",
+  "education.categoryList.stress": "Manajemen Stres",
+  "education.categoryList.self-care": "Ngrumat Dhiri",
+  "education.categoryList.professional": "Pitulungan Profesional"
 }

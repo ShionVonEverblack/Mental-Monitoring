@@ -5,15 +5,17 @@ import { MoodSelector } from '../components/ui/MoodSelector';
 import { useMood } from '../hooks/useMood';
 import { MOOD_FACTORS } from '../utils/constants';
 import type { MoodScore, MoodEmoji } from '../types';
+import { formatDate, formatRelativeTime } from '../utils/helpers';
 
 export const MoodTracker: React.FC = () => {
   const { t, i18n } = useTranslation();
   const { addMood, getMoods, getMoodStats } = useMood();
+  const lang = i18n.language?.split('-')[0] || 'id';
   
   const history = getMoods().map((m) => ({ 
     ...m, 
-    date: new Date(m.createdAt).toLocaleDateString(), 
-    relativeTime: new Date(m.createdAt).toLocaleDateString() 
+    date: formatDate(m.createdAt, lang), 
+    relativeTime: formatRelativeTime(m.createdAt, lang) 
   }));
   const stats = getMoodStats();
   
@@ -22,8 +24,6 @@ export const MoodTracker: React.FC = () => {
   const [selectedFactors, setSelectedFactors] = useState<string[]>([]);
   const [note, setNote] = useState('');
   const [timeRange, setTimeRange] = useState<'week' | 'month'>('week');
-
-  const lang = i18n.language as 'id' | 'en';
 
   const handleSave = () => {
     if (selectedScore && selectedEmoji) {
@@ -156,7 +156,7 @@ export const MoodTracker: React.FC = () => {
                 <div className="mood-history-factors">
                   {entry.factors.map(f => {
                     const factorObj = MOOD_FACTORS.find(x => x.id === f);
-                    const fLabel = factorObj ? (lang === 'en' ? factorObj.labelEn : factorObj.labelId) : f;
+                    const fLabel = t(`mood.factorList.${f}`, factorObj ? (lang === 'en' ? factorObj.labelEn : factorObj.labelId) : f);
                     return <span key={f} className="factor-chip active">{fLabel}</span>
                   })}
                 </div>

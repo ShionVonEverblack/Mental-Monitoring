@@ -67,6 +67,7 @@ export const MoodSelector: React.FC<MoodSelectorProps> = ({ value, onChange }) =
               onClick={() => onChange(score, mood.emoji)}
               className={`mood-option ${isSelected ? 'selected' : ''}`}
               data-mood={score}
+              aria-label={t(`mood.scores.${score}`, i18n.language === 'en' ? mood.labelEn : mood.labelId)}
             >
               <span className="mood-emoji">{mood.emoji}</span>
               <span className="mood-label">

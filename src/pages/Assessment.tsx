@@ -16,9 +16,11 @@ import { ClinicalDisclaimer } from '../components/common/ClinicalDisclaimer';
 import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { History, RotateCcw, ArrowRight, ShieldCheck } from 'lucide-react';
+import { formatDate } from '../utils/helpers';
 
 export const Assessment: React.FC = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const lang = i18n.language?.split('-')[0] || 'id';
   const navigate = useNavigate();
 
   const [activeTab, setActiveTab] = useState<AssessmentType | 'history'>('phq9');
@@ -129,13 +131,13 @@ export const Assessment: React.FC = () => {
           className={`category-chip ${activeTab === 'phq9' ? 'active' : ''}`}
           onClick={() => switchTab('phq9')}
         >
-          Depresi (PHQ-9)
+          {t('assessment.phq9Tab', 'Depresi (PHQ-9)')}
         </button>
         <button
           className={`category-chip ${activeTab === 'gad7' ? 'active' : ''}`}
           onClick={() => switchTab('gad7')}
         >
-          Kecemasan (GAD-7)
+          {t('assessment.gad7Tab', 'Kecemasan (GAD-7)')}
         </button>
         <button
           className={`category-chip ${activeTab === 'history' ? 'active' : ''}`}
@@ -164,15 +166,15 @@ export const Assessment: React.FC = () => {
                         {entry.type.toUpperCase()}
                       </span>
                       <strong style={{ fontSize: '1rem', color: 'var(--text-primary)' }}>
-                        Skor: {entry.score} / {entry.maxScore}
+                        {t('assessment.scoreLabel', 'Skor')}: {entry.score} / {entry.maxScore}
                       </strong>
                     </div>
                     <span style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)' }}>
-                      {new Date(entry.createdAt).toLocaleDateString('id-ID', { dateStyle: 'medium' })}
+                      {formatDate(entry.createdAt, lang)}
                     </span>
                   </div>
                   <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginTop: '8px', margin: '8px 0 0' }}>
-                    Tingkat Keparahan: <strong>{entry.severity.replace('_', ' ').toUpperCase()}</strong>
+                    {t('assessment.severityLabel', 'Tingkat Keparahan')}: <strong>{t(`assessment.${entry.type}.${entry.severity}`, entry.severity.replace('_', ' ').toUpperCase())}</strong>
                   </p>
                 </Card>
               ))}
@@ -191,7 +193,7 @@ export const Assessment: React.FC = () => {
           </h2>
 
           <p style={{ fontSize: '0.875rem', color: 'var(--text-tertiary)', marginBottom: 'var(--spacing-md)' }}>
-            Skor {activeTab.toUpperCase()}: {result.score} dari maksimal {result.maxScore}
+            {t('assessment.scoreOfMax', 'Skor {{type}}: {{score}} dari maksimal {{max}}', { type: activeTab.toUpperCase(), score: result.score, max: result.maxScore })}
           </p>
 
           <div style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border-subtle)', borderRadius: 'var(--radius-md)', padding: 'var(--spacing-md)', maxWidth: '540px', margin: '0 auto var(--spacing-lg)', textAlign: 'left' }}>
@@ -268,7 +270,7 @@ export const Assessment: React.FC = () => {
 
           <div style={{ marginTop: 'var(--spacing-xl)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <span style={{ fontSize: '0.813rem', color: 'var(--text-tertiary)' }}>
-              {Object.keys(answers).length} dari {currentQuestions.length} terjawab
+              {t('assessment.answeredCount', '{{answered}} dari {{total}} terjawab', { answered: Object.keys(answers).length, total: currentQuestions.length })}
             </span>
 
             <Button

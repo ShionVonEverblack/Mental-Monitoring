@@ -66,7 +66,7 @@ export const SOSButton: React.FC = () => {
       <button
         onClick={() => setIsOpen(true)}
         className="btn btn-danger btn-icon sos-float"
-        aria-label="SOS - Butuh Bantuan"
+        aria-label={t('sos.buttonAria', 'SOS - Butuh Bantuan')}
       >
         <Phone size={28} />
       </button>
@@ -82,7 +82,9 @@ export const SOSButton: React.FC = () => {
               <Card key={idx} padding="sm" className="sos-hotline-card">
                 <div>
                   <h3 className="sos-hotline-name">{hotline.name}</h3>
-                  <p className="sos-hotline-desc">{i18n.language === 'en' ? hotline.descriptionEn : hotline.descriptionId}</p>
+                  <p className="sos-hotline-desc">
+                    {t(`hotlines.${hotline.id}`, i18n.language === 'en' ? hotline.descriptionEn : hotline.descriptionId)}
+                  </p>
                 </div>
                 <a
                   href={`tel:${hotline.phone.includes('ext') ? hotline.phone.replace(/\s*ext\s*/i, ',').replace(/[^0-9+,]/g, '') : hotline.phone.replace(/[^0-9+]/g, '')}`}

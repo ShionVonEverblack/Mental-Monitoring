@@ -12,7 +12,7 @@ import {
 } from '../services/forumService';
 import { detectCrisis } from '../services/crisisDetectionService';
 import { CrisisInterceptor } from '../components/safety/CrisisInterceptor';
-import { generateAnonymousName } from '../utils/helpers';
+import { generateAnonymousName, formatDate } from '../utils/helpers';
 import { ShieldAlert, MessageCircle, AlertTriangle, Send, Phone, CheckCircle, Flag } from 'lucide-react';
 
 export const Forum: React.FC = () => {
@@ -45,7 +45,7 @@ export const Forum: React.FC = () => {
   const [hasMore, setHasMore] = useState(false);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
 
-  const lang = i18n.language as 'id' | 'en' | 'jv';
+  const lang = i18n.language?.split('-')[0] || 'id';
 
   useEffect(() => {
     loadPosts(0, false);
@@ -246,13 +246,14 @@ export const Forum: React.FC = () => {
         </button>
         {FORUM_CATEGORIES.map(cat => {
           const count = posts.filter(p => p.category === cat.id).length;
+          const catKey = cat.id === 'self-care' ? 'selfCare' : cat.id;
           return (
             <button
               key={cat.id}
               className={`category-chip ${activeCategory === cat.id ? 'active' : ''}`}
               onClick={() => setActiveCategory(cat.id)}
             >
-              {lang === 'en' ? cat.labelEn : cat.labelId} ({count})
+              {t(`forum.categories.${catKey}`, lang === 'en' ? cat.labelEn : cat.labelId)} ({count})
             </button>
           );
         })}
@@ -299,9 +300,14 @@ export const Forum: React.FC = () => {
               value={newCategory}
               onChange={e => setNewCategory(e.target.value as ForumCategory)}
             >
-              {FORUM_CATEGORIES.map(c => (
-                <option key={c.id} value={c.id}>{lang === 'en' ? c.labelEn : c.labelId}</option>
-              ))}
+              {FORUM_CATEGORIES.map(c => {
+                const catKey = c.id === 'self-care' ? 'selfCare' : c.id;
+                return (
+                  <option key={c.id} value={c.id}>
+                    {t(`forum.categories.${catKey}`, lang === 'en' ? c.labelEn : c.labelId)}
+                  </option>
+                );
+              })}
             </select>
 
             <input
@@ -342,6 +348,9 @@ export const Forum: React.FC = () => {
           filteredPosts.map(post => {
             const isExpanded = expandedPostId === post.id;
             const comments = commentsMap[post.id] || [];
+            const cat = FORUM_CATEGORIES.find(c => c.id === post.category);
+            const catKey = cat?.id === 'self-care' ? 'selfCare' : cat?.id;
+            const catLabel = cat ? t(`forum.categories.${catKey}`, lang === 'en' ? cat.labelEn : cat.labelId) : post.category;
 
             return (
               <div key={post.id} className="forum-post-card">
@@ -352,11 +361,11 @@ export const Forum: React.FC = () => {
                   <div>
                     <span className="forum-post-author">{post.authorName}</span>
                     <span className="badge badge-primary" style={{ marginLeft: '8px' }}>
-                      {FORUM_CATEGORIES.find(c => c.id === post.category)?.[lang === 'en' ? 'labelEn' : 'labelId'] || post.category}
+                      {catLabel}
                     </span>
                   </div>
                   <span className="forum-post-time">
-                    {new Date(post.createdAt).toLocaleDateString(lang === 'id' ? 'id-ID' : 'en-US')}
+                    {formatDate(post.createdAt, lang)}
                   </span>
                 </div>
 

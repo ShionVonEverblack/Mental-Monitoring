@@ -78,7 +78,29 @@
     "save": "Simpan",
     "history": "Riwayat Jurnal",
     "empty": "Belum ada jurnal",
-    "private": "Privat"
+    "private": "Privat",
+    "templateDesc": {
+      "free": "Tulis apapun yang ada di pikiranmu",
+      "cbt": "Analisis pikiran berdasarkan kerangka Cognitive Behavioral Therapy",
+      "gratitude": "Fokus pada hal positif hari ini",
+      "reflection": "Evaluasi diri dan pertumbuhan pribadi"
+    },
+    "prompts": {
+      "cbt": {
+        "0": "Situasi: Apa yang terjadi?",
+        "1": "Pikiran Otomatis: Apa yang melintas di pikiran?",
+        "2": "Emosi: Apa yang kamu rasakan?",
+        "3": "Respon Alternatif: Bagaimana cara melihat ini dengan lebih objektif?"
+      },
+      "gratitude": {
+        "0": "3 hal yang saya syukuri hari ini adalah...",
+        "1": "Hal terbaik yang terjadi hari ini..."
+      },
+      "reflection": {
+        "0": "Apa yang saya pelajari tentang diri saya hari ini?",
+        "1": "Apa yang ingin saya perbaiki besok?"
+      }
+    }
   },
   "forum": {
     "title": "Forum Komunitas",
@@ -91,7 +113,8 @@
       "work": "Pekerjaan",
       "family": "Keluarga",
       "selfCare": "Self-Care",
-      "other": "Lainnya"
+      "other": "Lainnya",
+      "self-care": "Self-Care"
     },
     "reply": "Balas",
     "support": "Dukung",
@@ -216,7 +239,8 @@
     "understand": "Saya Mengerti",
     "print": "Cetak / Simpan PDF",
     "on": "ON",
-    "off": "OFF"
+    "off": "OFF",
+    "loadingSafeSpace": "Memuat Ruang Aman..."
   },
   "insights": {
     "weeklyTitle": "Insight Mingguan",
@@ -252,7 +276,16 @@
   },
   "education": {
     "title": "Edukasi Kesehatan Mental",
-    "subtitle": "Pelajari tentang kesehatan mentalmu"
+    "subtitle": "Pelajari tentang kesehatan mentalmu",
+    "readingTime": "{{count}} mnt",
+    "categoryList": {
+      "all": "Semua",
+      "anxiety": "Kecemasan",
+      "depression": "Depresi",
+      "stress": "Manajemen Stres",
+      "self-care": "Perawatan Diri",
+      "professional": "Bantuan Profesional"
+    }
   },
   "escalation": {
     "level1": "Sepertinya kamu sedang kurang baik belakangan ini. Tidak apa-apa untuk merasa begitu. Coba luangkan waktu untuk dirimu sendiri.",
@@ -279,7 +312,28 @@
     "bpjsOnly": "Menerima BPJS",
     "call": "Telepon",
     "disclaimer": "RIMA tidak terafiliasi dengan layanan di atas. Informasi disediakan sebagai referensi umum.",
-    "noResults": "Tidak ada layanan yang cocok dengan filter."
+    "noResults": "Tidak ada layanan yang cocok dengan filter.",
+    "servicesCount": "{{count}} layanan",
+    "onlineBadge": "Online",
+    "bpjsBadge": "BPJS",
+    "website": "Website",
+    "provinces": {
+      "all": "Semua Provinsi",
+      "dki-jakarta": "DKI Jakarta",
+      "jawa-barat": "Jawa Barat",
+      "jawa-tengah": "Jawa Tengah",
+      "jawa-timur": "Jawa Timur",
+      "bali": "Bali",
+      "yogyakarta": "DI Yogyakarta",
+      "online": "Online"
+    },
+    "types": {
+      "all": "Semua",
+      "psikolog": "Psikolog",
+      "psikiater": "Psikiater",
+      "konselor": "Konselor",
+      "lembaga": "Lembaga/LSM"
+    }
   },
   "analytics": {
     "title": "Dashboard Analytics",
@@ -360,7 +414,7 @@
   "crisis.interceptorGuide": "Atau buka Rencana Keselamatan yang sudah kamu susun untuk panduan langkah selanjutnya.",
   "disclaimer.crisis": "Deteksi ini bersifat otomatis dan bukan diagnosis klinis. Jika Anda merasa aman, silakan abaikan pesan ini.",
   "accessibility.skipToContent": "Lewati ke konten utama",
-  "accessibility.quickExit": "Keluar cepat",
+  "accessibility.quickExit": "Quick Exit",
   "sidebar.offlineReady": "Offline-Ready",
   "sidebar.logMoodToday": "Catat Mood Hari Ini",
   "common.dismiss": "Tutup",
@@ -488,5 +542,70 @@
   "assessment.gad7.recMinimal": "Tingkat kecemasan Anda berada pada batas normal. Lanjutkan kebiasaan hidup sehat Anda.",
   "assessment.gad7.recMild": "Ada sedikit kegelisahan atau kekhawatiran yang terdeteksi. Luangkan waktu untuk jeda dan relaksasi mandiri.",
   "assessment.gad7.recModerate": "Kecemasan mulai mengganggu ketenangan Anda. Cobalah teknik grounding 5-4-3-2-1 dan latihan pernapasan untuk menenangkan sistem saraf.",
-  "assessment.gad7.recSevere": "Kecemasan Anda berada pada tingkat tinggi yang mungkin menguras energi harian. Sangat dianjurkan untuk berkonsultasi dengan profesional kesehatan mental."
+  "assessment.gad7.recSevere": "Kecemasan Anda berada pada tingkat tinggi yang mungkin menguras energi harian. Sangat dianjurkan untuk berkonsultasi dengan profesional kesehatan mental.",
+  "accessibility.quickExitAria": "Keluar cepat ke halaman aman",
+  "sos.buttonAria": "SOS - Butuh Bantuan",
+  "sidebar.expand": "Buka menu samping",
+  "sidebar.collapse": "Tutup menu samping",
+  "common.loadingSafeSpace": "Memuat Ruang Aman...",
+  "assessment.phq9Tab": "Depresi (PHQ-9)",
+  "assessment.gad7Tab": "Kecemasan (GAD-7)",
+  "assessment.scoreLabel": "Skor",
+  "assessment.severityLabel": "Tingkat Keparahan",
+  "assessment.scoreOfMax": "Skor {{type}}: {{score}} dari maksimal {{max}}",
+  "assessment.answeredCount": "{{answered}} dari {{total}} terjawab",
+  "grounding.stepAria": "Langkah {{step}}: {{title}}",
+  "hotlines.itl": "Layanan pencegahan bunuh diri dan kesehatan mental.",
+  "hotlines.lsm-jbd": "Layanan dukungan darurat untuk individu berisiko.",
+  "hotlines.pulih": "Layanan konseling psikologis trauma.",
+  "hotlines.sejiwa": "Layanan kesehatan jiwa dari Kementerian Kesehatan RI.",
+  "hotlines.emergency": "Nomor darurat nasional.",
+  "journal.templates.free": "Tulis Bebas",
+  "journal.templates.cbt": "CBT Terstruktur",
+  "journal.templates.gratitude": "Syukur",
+  "journal.templates.reflection": "Refleksi",
+  "journal.templateDesc.free": "Tulis apapun yang ada di pikiranmu",
+  "journal.templateDesc.cbt": "Analisis pikiran berdasarkan kerangka Cognitive Behavioral Therapy",
+  "journal.templateDesc.gratitude": "Fokus pada hal positif hari ini",
+  "journal.templateDesc.reflection": "Evaluasi diri dan pertumbuhan pribadi",
+  "journal.prompts.cbt.0": "Situasi: Apa yang terjadi?",
+  "journal.prompts.cbt.1": "Pikiran Otomatis: Apa yang melintas di pikiran?",
+  "journal.prompts.cbt.2": "Emosi: Apa yang kamu rasakan?",
+  "journal.prompts.cbt.3": "Respon Alternatif: Bagaimana cara melihat ini dengan lebih objektif?",
+  "journal.prompts.gratitude.0": "3 hal yang saya syukuri hari ini adalah...",
+  "journal.prompts.gratitude.1": "Hal terbaik yang terjadi hari ini...",
+  "journal.prompts.reflection.0": "Apa yang saya pelajari tentang diri saya hari ini?",
+  "journal.prompts.reflection.1": "Apa yang ingin saya perbaiki besok?",
+  "forum.categories.anxiety": "Kecemasan",
+  "forum.categories.depression": "Depresi",
+  "forum.categories.relationships": "Hubungan",
+  "forum.categories.work": "Pekerjaan",
+  "forum.categories.family": "Keluarga",
+  "forum.categories.self-care": "Self-Care",
+  "forum.categories.selfCare": "Self-Care",
+  "forum.categories.other": "Lainnya",
+  "professional.servicesCount": "{{count}} layanan",
+  "professional.onlineBadge": "Online",
+  "professional.bpjsBadge": "BPJS",
+  "professional.website": "Website",
+  "professional.provinces.all": "Semua Provinsi",
+  "professional.provinces.dki-jakarta": "DKI Jakarta",
+  "professional.provinces.jawa-barat": "Jawa Barat",
+  "professional.provinces.jawa-tengah": "Jawa Tengah",
+  "professional.provinces.jawa-timur": "Jawa Timur",
+  "professional.provinces.bali": "Bali",
+  "professional.provinces.yogyakarta": "DI Yogyakarta",
+  "professional.provinces.online": "Online",
+  "professional.types.all": "Semua",
+  "professional.types.psikolog": "Psikolog",
+  "professional.types.psikiater": "Psikiater",
+  "professional.types.konselor": "Konselor",
+  "professional.types.lembaga": "Lembaga/LSM",
+  "education.readingTime": "{{count}} mnt",
+  "education.categoryList.all": "Semua",
+  "education.categoryList.anxiety": "Kecemasan",
+  "education.categoryList.depression": "Depresi",
+  "education.categoryList.stress": "Manajemen Stres",
+  "education.categoryList.self-care": "Perawatan Diri",
+  "education.categoryList.professional": "Bantuan Profesional"
 }

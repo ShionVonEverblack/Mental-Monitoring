@@ -6,9 +6,10 @@ export interface CardProps {
   variant?: 'default' | 'glass';
   padding?: 'none' | 'sm' | 'md' | 'lg';
   onClick?: () => void;
+  style?: React.CSSProperties;
 }
 
-export const Card = ({ children, className = '', variant = 'default', padding = 'md', onClick }: CardProps) => {
+export const Card = ({ children, className = '', variant = 'default', padding = 'md', onClick, style }: CardProps) => {
   const cardClass = variant === 'glass' ? 'card card-glass' : 'card';
   const paddingStyle = padding === 'none' ? { padding: 0 } : padding === 'sm' ? { padding: 'var(--spacing-sm)' } : padding === 'lg' ? { padding: 'var(--spacing-xl)' } : {};
   const clickableStyle = onClick ? { cursor: 'pointer' } : {};
@@ -23,7 +24,7 @@ export const Card = ({ children, className = '', variant = 'default', padding = 
   return (
     <div 
       className={`${cardClass} ${className}`} 
-      style={{ ...paddingStyle, ...clickableStyle }} 
+      style={{ ...paddingStyle, ...clickableStyle, ...style }} 
       onClick={onClick}
       {...(onClick ? { role: 'button', tabIndex: 0, onKeyDown: handleKeyDown } : {})}
     >

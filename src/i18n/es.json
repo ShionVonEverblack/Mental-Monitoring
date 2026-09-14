@@ -69,8 +69,8 @@
     "title": "Diario Emocional",
     "newEntry": "Nueva Entrada",
     "templates": {
-      "free": "Escritura Libre",
-      "cbt": "TCC Estructurada",
+      "free": "Escritura libre",
+      "cbt": "TCC estructurada",
       "gratitude": "Gratitud",
       "reflection": "Reflexión"
     },
@@ -78,7 +78,29 @@
     "save": "Guardar",
     "history": "Historial de Entradas",
     "empty": "Aún no hay entradas en el diario",
-    "private": "Privado"
+    "private": "Privado",
+    "templateDesc": {
+      "free": "Escribe cualquier cosa que tengas en mente",
+      "cbt": "Analiza pensamientos según el marco de Terapia Cognitivo-Conductual",
+      "gratitude": "Enfócate en las cosas positivas de hoy",
+      "reflection": "Autoevaluación y crecimiento personal"
+    },
+    "prompts": {
+      "cbt": {
+        "0": "Situación: ¿Qué sucedió?",
+        "1": "Pensamiento automático: ¿Qué cruzó por tu mente?",
+        "2": "Emoción: ¿Qué sentiste?",
+        "3": "Respuesta alternativa: ¿Cómo puedes ver esto de manera más objetiva?"
+      },
+      "gratitude": {
+        "0": "3 cosas por las que estoy agradecido hoy...",
+        "1": "Lo mejor que me sucedió hoy..."
+      },
+      "reflection": {
+        "0": "¿Qué aprendí sobre mí mismo hoy?",
+        "1": "¿Qué quiero mejorar mañana?"
+      }
+    }
   },
   "forum": {
     "title": "Comunidad de Apoyo",
@@ -91,7 +113,8 @@
       "work": "Trabajo",
       "family": "Familia",
       "selfCare": "Autocuidado",
-      "other": "Otros"
+      "other": "Otro",
+      "self-care": "Autocuidado"
     },
     "reply": "Responder",
     "support": "Apoyar",
@@ -216,7 +239,8 @@
     "understand": "Entendido",
     "print": "Imprimir / Guardar PDF",
     "on": "ON",
-    "off": "OFF"
+    "off": "OFF",
+    "loadingSafeSpace": "Cargando espacio seguro..."
   },
   "insights": {
     "weeklyTitle": "Perspectivas Semanales",
@@ -252,7 +276,16 @@
   },
   "education": {
     "title": "Educación en Salud Mental",
-    "subtitle": "Aprende sobre el cuidado y funcionamiento de tu mente"
+    "subtitle": "Aprende sobre el cuidado y funcionamiento de tu mente",
+    "readingTime": "{{count}} min de lectura",
+    "categoryList": {
+      "all": "Todos",
+      "anxiety": "Ansiedad",
+      "depression": "Depresión",
+      "stress": "Manejo del estrés",
+      "self-care": "Autocuidado",
+      "professional": "Ayuda profesional"
+    }
   },
   "escalation": {
     "level1": "Parece que no te has sentido del todo bien últimamente. Es completamente normal. Tómate un tiempo para ti.",
@@ -279,7 +312,28 @@
     "bpjsOnly": "Acepta seguro/BPJS",
     "call": "Llamar",
     "disclaimer": "RIMA no está afiliada a los servicios mencionados. La información se ofrece como referencia general.",
-    "noResults": "No se encontraron servicios que coincidan con los filtros."
+    "noResults": "No se encontraron servicios que coincidan con los filtros.",
+    "servicesCount": "{{count}} servicios",
+    "onlineBadge": "En línea",
+    "bpjsBadge": "BPJS",
+    "website": "Sitio web",
+    "provinces": {
+      "all": "Todas las provincias",
+      "dki-jakarta": "DKI Yakarta",
+      "jawa-barat": "Java Occidental",
+      "jawa-tengah": "Java Central",
+      "jawa-timur": "Java Oriental",
+      "bali": "Bali",
+      "yogyakarta": "DI Yogyakarta",
+      "online": "En línea"
+    },
+    "types": {
+      "all": "Todos",
+      "psikolog": "Psicólogo",
+      "psikiater": "Psiquiatra",
+      "konselor": "Consejero",
+      "lembaga": "Organización/ONG"
+    }
   },
   "analytics": {
     "title": "Panel de Analíticas",
@@ -488,5 +542,70 @@
   "assessment.gad7.recMinimal": "Your anxiety levels are well within the standard range. Keep up your balanced habits.",
   "assessment.gad7.recMild": "Mild tension or worry detected. Schedule intentional pause times and gentle breathing relaxation.",
   "assessment.gad7.recModerate": "Anxiety is impacting your sense of calm. Practice the 5-4-3-2-1 grounding technique to soothe your nervous system.",
-  "assessment.gad7.recSevere": "High anxiety levels detected which may drain daily energy. Consultation with a mental health professional is recommended."
+  "assessment.gad7.recSevere": "High anxiety levels detected which may drain daily energy. Consultation with a mental health professional is recommended.",
+  "accessibility.quickExitAria": "Salida rápida a una página segura",
+  "sos.buttonAria": "SOS - Necesito ayuda",
+  "sidebar.expand": "Expandir barra lateral",
+  "sidebar.collapse": "Colapsar barra lateral",
+  "common.loadingSafeSpace": "Cargando espacio seguro...",
+  "assessment.phq9Tab": "Depresión (PHQ-9)",
+  "assessment.gad7Tab": "Ansiedad (GAD-7)",
+  "assessment.scoreLabel": "Puntuación",
+  "assessment.severityLabel": "Nivel de gravedad",
+  "assessment.scoreOfMax": "Puntuación {{type}}: {{score}} de un máximo de {{max}}",
+  "assessment.answeredCount": "{{answered}} de {{total}} respondidas",
+  "grounding.stepAria": "Paso {{step}}: {{title}}",
+  "hotlines.itl": "Servicio de prevención del suicidio y salud mental.",
+  "hotlines.lsm-jbd": "Servicio de apoyo de emergencia para personas en riesgo.",
+  "hotlines.pulih": "Servicio de asesoramiento psicológico para el trauma.",
+  "hotlines.sejiwa": "Servicio de salud mental del Ministerio de Salud de Indonesia.",
+  "hotlines.emergency": "Número de emergencia nacional.",
+  "journal.templates.free": "Escritura libre",
+  "journal.templates.cbt": "TCC estructurada",
+  "journal.templates.gratitude": "Gratitud",
+  "journal.templates.reflection": "Reflexión",
+  "journal.templateDesc.free": "Escribe cualquier cosa que tengas en mente",
+  "journal.templateDesc.cbt": "Analiza pensamientos según el marco de Terapia Cognitivo-Conductual",
+  "journal.templateDesc.gratitude": "Enfócate en las cosas positivas de hoy",
+  "journal.templateDesc.reflection": "Autoevaluación y crecimiento personal",
+  "journal.prompts.cbt.0": "Situación: ¿Qué sucedió?",
+  "journal.prompts.cbt.1": "Pensamiento automático: ¿Qué cruzó por tu mente?",
+  "journal.prompts.cbt.2": "Emoción: ¿Qué sentiste?",
+  "journal.prompts.cbt.3": "Respuesta alternativa: ¿Cómo puedes ver esto de manera más objetiva?",
+  "journal.prompts.gratitude.0": "3 cosas por las que estoy agradecido hoy...",
+  "journal.prompts.gratitude.1": "Lo mejor que me sucedió hoy...",
+  "journal.prompts.reflection.0": "¿Qué aprendí sobre mí mismo hoy?",
+  "journal.prompts.reflection.1": "¿Qué quiero mejorar mañana?",
+  "forum.categories.anxiety": "Ansiedad",
+  "forum.categories.depression": "Depresión",
+  "forum.categories.relationships": "Relaciones",
+  "forum.categories.work": "Trabajo",
+  "forum.categories.family": "Familia",
+  "forum.categories.self-care": "Autocuidado",
+  "forum.categories.selfCare": "Autocuidado",
+  "forum.categories.other": "Otro",
+  "professional.servicesCount": "{{count}} servicios",
+  "professional.onlineBadge": "En línea",
+  "professional.bpjsBadge": "BPJS",
+  "professional.website": "Sitio web",
+  "professional.provinces.all": "Todas las provincias",
+  "professional.provinces.dki-jakarta": "DKI Yakarta",
+  "professional.provinces.jawa-barat": "Java Occidental",
+  "professional.provinces.jawa-tengah": "Java Central",
+  "professional.provinces.jawa-timur": "Java Oriental",
+  "professional.provinces.bali": "Bali",
+  "professional.provinces.yogyakarta": "DI Yogyakarta",
+  "professional.provinces.online": "En línea",
+  "professional.types.all": "Todos",
+  "professional.types.psikolog": "Psicólogo",
+  "professional.types.psikiater": "Psiquiatra",
+  "professional.types.konselor": "Consejero",
+  "professional.types.lembaga": "Organización/ONG",
+  "education.readingTime": "{{count}} min de lectura",
+  "education.categoryList.all": "Todos",
+  "education.categoryList.anxiety": "Ansiedad",
+  "education.categoryList.depression": "Depresión",
+  "education.categoryList.stress": "Manejo del estrés",
+  "education.categoryList.self-care": "Autocuidado",
+  "education.categoryList.professional": "Ayuda profesional"
 }

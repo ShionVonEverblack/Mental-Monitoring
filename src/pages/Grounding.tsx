@@ -141,7 +141,7 @@ export const Grounding: React.FC = () => {
                 key={s.step}
                 className={`grounding-dot ${idx === currentStepIndex ? 'active' : idx < currentStepIndex ? 'done' : ''}`}
                 onClick={() => setCurrentStepIndex(idx)}
-                aria-label={`Langkah ${idx + 1}: ${t(s.titleKey, s.titleFallback)}`}
+                aria-label={t('grounding.stepAria', 'Langkah {{step}}: {{title}}', { step: idx + 1, title: t(s.titleKey, s.titleFallback) })}
               >
                 {s.count}
               </button>
