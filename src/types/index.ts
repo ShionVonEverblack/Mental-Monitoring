@@ -93,3 +93,15 @@ export interface AppState {
   journals: JournalEntry[];
   safetyPlan: SafetyPlan | null;
 }
+
+export type AssessmentType = 'phq9' | 'gad7';
+
+export interface AssessmentResult {
+  id: string;
+  type: AssessmentType;
+  score: number;
+  maxScore: number;
+  severity: 'minimal' | 'mild' | 'moderate' | 'moderately_severe' | 'severe';
+  answers: Record<number, number>;
+  createdAt: string;
+}

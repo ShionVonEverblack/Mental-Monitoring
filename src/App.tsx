@@ -20,6 +20,8 @@ const Education = lazy(() => import('./pages/Education').then(module => ({ defau
 const ProfessionalHelp = lazy(() => import('./pages/ProfessionalHelp').then(module => ({ default: module.ProfessionalHelp })));
 const Analytics = lazy(() => import('./pages/Analytics').then(module => ({ default: module.Analytics })));
 const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy').then(module => ({ default: module.PrivacyPolicy })));
+const Grounding = lazy(() => import('./pages/Grounding').then(module => ({ default: module.Grounding })));
+const Assessment = lazy(() => import('./pages/Assessment').then(module => ({ default: module.Assessment })));
 import { ConsentModal } from './components/common/ConsentModal';
 
 const App: React.FC = () => {
@@ -61,6 +63,8 @@ const App: React.FC = () => {
               <Route path="/professional-help" element={<ProfessionalHelp />} />
               <Route path="/analytics" element={<Analytics />} />
               <Route path="/privacy" element={<PrivacyPolicy />} />
+              <Route path="/grounding" element={<Grounding />} />
+              <Route path="/assessment" element={<Assessment />} />
             </Routes>
           </Suspense>
         </AppShell>

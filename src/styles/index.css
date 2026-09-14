@@ -578,3 +578,23 @@ button.journal-entry-toggle { background: none; border: none; font: inherit; col
 .profile-spiritual-sources { display: flex; flex-wrap: wrap; gap: var(--spacing-sm); padding: var(--spacing-sm) var(--spacing-md); }
 .clickable { cursor: pointer; }
 .chip-active { background: var(--color-primary) !important; color: #fff !important; border-color: var(--color-primary) !important; }
+
+/* Grounding Page */
+.grounding-page { animation: fadeInUp 0.5s ease-out; }
+.grounding-header { text-align: center; margin-bottom: var(--spacing-xl); }
+.grounding-subtitle { color: var(--text-secondary); font-size: 0.938rem; max-width: 580px; margin: 0 auto; line-height: 1.5; }
+.grounding-progress { display: flex; justify-content: center; gap: var(--spacing-sm); margin-bottom: var(--spacing-md); }
+.grounding-dot { width: 36px; height: 36px; border-radius: 50%; border: 2px solid var(--border-subtle); background: var(--bg-card); color: var(--text-secondary); font-weight: 700; font-size: 0.875rem; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; transition: all var(--transition-fast); }
+.grounding-dot.active { border-color: var(--color-primary); background: var(--color-primary); color: #fff; transform: scale(1.1); }
+.grounding-dot.done { border-color: var(--color-secondary); background: hsla(165, 45%, 50%, 0.15); color: var(--color-secondary); }
+
+/* Assessment Page */
+.assessment-page { animation: fadeInUp 0.5s ease-out; }
+.assessment-header { text-align: center; margin-bottom: var(--spacing-xl); }
+.assessment-subtitle { color: var(--text-secondary); font-size: 0.938rem; max-width: 580px; margin: 0 auto; line-height: 1.5; }
+.assessment-form { max-width: 680px; margin: 0 auto; }
+.assessment-history { max-width: 680px; margin: 0 auto; }
+
+/* Quick Action Colors for Home */
+.quick-action-btn.grounding { color: var(--color-accent); }
+.quick-action-btn.assessment { color: var(--color-secondary); }

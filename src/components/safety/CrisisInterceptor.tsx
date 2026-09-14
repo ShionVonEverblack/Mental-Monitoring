@@ -21,7 +21,7 @@ interface CrisisInterceptorProps {
  * Replaces abrupt popup interruptions with gentle, supportive full-screen modal.
  */
 export const CrisisInterceptor: React.FC<CrisisInterceptorProps> = ({ isOpen, onClose, matchedKeywords }) => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   if (!isOpen) return null;
 

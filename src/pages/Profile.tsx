@@ -7,6 +7,8 @@ import { useNotifications } from '../hooks/useNotifications';
 import {
   exportAllDataAsJSON,
   exportMoodsAsCSV,
+  exportJournalsAsCSV,
+  generateClinicalSummaryHTML,
   importDataFromJSON
 } from '../utils/exportImport';
 import { Card } from '../components/ui/Card';
@@ -19,6 +21,7 @@ import {
   Bell,
   Download,
   FileSpreadsheet,
+  FileText,
   Upload,
   RefreshCw,
   Shield,
@@ -29,7 +32,9 @@ import {
   Stethoscope,
   ShieldCheck,
   Trash2,
-  AlertTriangle
+  AlertTriangle,
+  ClipboardCheck,
+  MoonStar
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useLocalStorage } from '../hooks/useLocalStorage';
@@ -44,7 +49,16 @@ export const Profile: React.FC = () => {
   const { theme, toggleTheme } = useTheme();
   const { getMoodStats } = useMood();
   const { user, updateDisplayName, regenerateAnonymousName, isSupabaseConfigured } = useAuth();
-  const { enabled: notifEnabled, reminderTime, toggleNotifications, setReminderTime, sendTestNotification } = useNotifications();
+  const {
+    enabled: notifEnabled,
+    reminderTime,
+    quietHoursStart,
+    quietHoursEnd,
+    toggleNotifications,
+    setReminderTime,
+    setQuietHours,
+    sendTestNotification
+  } = useNotifications();
   const navigate = useNavigate();
 
   const [isEditingName, setIsEditingName] = useState(false);
@@ -89,6 +103,33 @@ export const Profile: React.FC = () => {
   const handleRegenerate = () => {
     regenerateAnonymousName();
     showToast(t('profile.nameRegenerated', 'Nama anonim baru dibuat!'));
+  };
+
+  const handleExportMoods = () => {
+    const ok = exportMoodsAsCSV();
+    if (ok) {
+      showToast(t('profile.exportMoodsSuccess', 'Laporan mood CSV berhasil diunduh!'));
+    } else {
+      showToast(t('profile.noMoodsToExport', 'Belum ada data mood untuk diekspor.'));
+    }
+  };
+
+  const handleExportJournals = () => {
+    const ok = exportJournalsAsCSV();
+    if (ok) {
+      showToast(t('profile.exportJournalsSuccess', 'Laporan jurnal CSV berhasil diunduh!'));
+    } else {
+      showToast(t('profile.noJournalsToExport', 'Belum ada entri jurnal untuk diekspor.'));
+    }
+  };
+
+  const handleExportClinical = () => {
+    const ok = generateClinicalSummaryHTML();
+    if (ok) {
+      showToast(t('profile.exportClinicalSuccess', 'Laporan klinis HTML berhasil dibuat!'));
+    } else {
+      showToast(t('profile.noClinicalDataToExport', 'Belum ada data mood atau jurnal yang cukup.'));
+    }
   };
 
   const handleImportFile = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -301,6 +342,15 @@ export const Profile: React.FC = () => {
               </div>
             </Card>
           </div>
+
+          <div style={{ marginTop: '12px' }}>
+            <Card onClick={() => navigate('/assessment')} className="clickable">
+              <div className="profile-setting-item">
+                <ClipboardCheck size={20} />
+                <span className="profile-setting-label">{t('profile.assessment', 'Skrining Mandiri (PHQ-9 & GAD-7)')}</span>
+              </div>
+            </Card>
+          </div>
         </div>
       </div>
 
@@ -318,23 +368,53 @@ export const Profile: React.FC = () => {
           </button>
 
           {notifEnabled && (
-            <div className="settings-item" style={{ backgroundColor: 'var(--bg-secondary)' }}>
-              <div className="settings-item-left">
-                <span style={{ fontSize: '0.875rem' }}>{t('profile.reminderTime', 'Waktu Pengingat:')}</span>
+            <>
+              <div className="settings-item" style={{ backgroundColor: 'var(--bg-secondary)' }}>
+                <div className="settings-item-left">
+                  <span style={{ fontSize: '0.875rem' }}>{t('profile.reminderTime', 'Waktu Pengingat:')}</span>
+                </div>
+                <div className="settings-item-right" style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                  <input
+                    type="time"
+                    className="input"
+                    style={{ padding: '4px 8px', fontSize: '0.875rem', width: 'auto' }}
+                    value={reminderTime}
+                    onChange={(e) => setReminderTime(e.target.value)}
+                  />
+                  <Button variant="ghost" size="sm" onClick={sendTestNotification}>
+                    {t('profile.testNotif', 'Uji Notifikasi')}
+                  </Button>
+                </div>
               </div>
-              <div className="settings-item-right" style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                <input
-                  type="time"
-                  className="input"
-                  style={{ padding: '4px 8px', fontSize: '0.875rem', width: 'auto' }}
-                  value={reminderTime}
-                  onChange={(e) => setReminderTime(e.target.value)}
-                />
-                <Button variant="ghost" size="sm" onClick={sendTestNotification}>
-                  {t('profile.testNotif', 'Uji Notifikasi')}
-                </Button>
+
+              <div className="settings-item" style={{ backgroundColor: 'var(--bg-secondary)', flexDirection: 'column', alignItems: 'flex-start', gap: '8px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-primary)', fontSize: '0.875rem' }}>
+                  <MoonStar size={16} style={{ color: 'var(--color-primary)' }} />
+                  <strong>{t('profile.quietHours', 'Jam Tenang (Quiet Hours)')}</strong>
+                </div>
+                <p style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)', margin: 0 }}>
+                  {t('profile.quietHoursDesc', 'Notifikasi diredam otomatis saat jam tidur untuk melindungi siklus istirahat Anda.')}
+                </p>
+                <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap', marginTop: '4px' }}>
+                  <span style={{ fontSize: '0.813rem', color: 'var(--text-secondary)' }}>{t('common.start', 'Mulai')}:</span>
+                  <input
+                    type="time"
+                    className="input"
+                    style={{ padding: '4px 8px', fontSize: '0.813rem', width: 'auto' }}
+                    value={quietHoursStart}
+                    onChange={(e) => setQuietHours(e.target.value, quietHoursEnd)}
+                  />
+                  <span style={{ fontSize: '0.813rem', color: 'var(--text-secondary)' }}>{t('common.end', 'Selesai')}:</span>
+                  <input
+                    type="time"
+                    className="input"
+                    style={{ padding: '4px 8px', fontSize: '0.813rem', width: 'auto' }}
+                    value={quietHoursEnd}
+                    onChange={(e) => setQuietHours(quietHoursStart, e.target.value)}
+                  />
+                </div>
               </div>
-            </div>
+            </>
           )}
         </div>
       </div>
@@ -354,7 +434,7 @@ export const Profile: React.FC = () => {
             </div>
           </button>
 
-          <button className="settings-item" type="button" onClick={exportMoodsAsCSV}>
+          <button className="settings-item" type="button" onClick={handleExportMoods}>
             <div className="settings-item-left">
               <FileSpreadsheet size={18} />
               <span>{t('profile.exportCSV', 'Ekspor Laporan Mood ke Terapis (CSV)')}</span>
@@ -362,6 +442,30 @@ export const Profile: React.FC = () => {
             <div className="settings-item-right">
               <Button variant="ghost" size="sm" icon={<FileSpreadsheet size={14} />}>
                 CSV
+              </Button>
+            </div>
+          </button>
+
+          <button className="settings-item" type="button" onClick={handleExportJournals}>
+            <div className="settings-item-left">
+              <FileText size={18} />
+              <span>{t('profile.exportJournalsCSV', 'Ekspor Catatan Jurnal (CSV)')}</span>
+            </div>
+            <div className="settings-item-right">
+              <Button variant="ghost" size="sm" icon={<FileText size={14} />}>
+                CSV
+              </Button>
+            </div>
+          </button>
+
+          <button className="settings-item" type="button" onClick={handleExportClinical}>
+            <div className="settings-item-left">
+              <Stethoscope size={18} style={{ color: 'var(--color-primary)' }} />
+              <span>{t('profile.exportClinicalHTML', 'Ekspor Ringkasan Klinis untuk Terapis (HTML)')}</span>
+            </div>
+            <div className="settings-item-right">
+              <Button variant="ghost" size="sm" icon={<Download size={14} />}>
+                HTML
               </Button>
             </div>
           </button>

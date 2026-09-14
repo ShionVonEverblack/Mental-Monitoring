@@ -6,6 +6,11 @@ import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
 
+interface SuggestionItem {
+  key: string;
+  fallback: string;
+}
+
 interface PlanSection {
   id: string;
   titleKey: string;
@@ -13,7 +18,7 @@ interface PlanSection {
   icon: string;
   color: string;
   bg: string;
-  suggestions: string[];
+  suggestions: SuggestionItem[];
   items: string[];
 }
 
@@ -25,7 +30,12 @@ const INITIAL_PLAN: PlanSection[] = [
     icon: 'AlertTriangle',
     color: 'var(--color-danger)',
     bg: 'hsla(0, 65%, 55%, 0.12)',
-    suggestions: ['Jantung berdebar keras', 'Sulit tidur 2 hari berturut-turut', 'Menarik diri dari teman', 'Pikiran berpacu tanpa henti'],
+    suggestions: [
+      { key: 'safety.sug.warn1', fallback: 'Jantung berdebar keras' },
+      { key: 'safety.sug.warn2', fallback: 'Sulit tidur 2 hari berturut-turut' },
+      { key: 'safety.sug.warn3', fallback: 'Menarik diri dari teman' },
+      { key: 'safety.sug.warn4', fallback: 'Pikiran berpacu tanpa henti' },
+    ],
     items: [],
   },
   {
@@ -35,7 +45,12 @@ const INITIAL_PLAN: PlanSection[] = [
     icon: 'Heart',
     color: 'var(--color-secondary)',
     bg: 'hsla(165, 45%, 50%, 0.12)',
-    suggestions: ['Teknik napas 4-7-8', 'Jalan santai di luar ruangan', 'Mendengarkan musik tenang', 'Mandi air hangat'],
+    suggestions: [
+      { key: 'safety.sug.cope1', fallback: 'Teknik napas 4-7-8 atau Coherent' },
+      { key: 'safety.sug.cope2', fallback: 'Jalan santai di luar ruangan' },
+      { key: 'safety.sug.cope3', fallback: 'Mendengarkan musik tenang' },
+      { key: 'safety.sug.cope4', fallback: 'Mandi air hangat & grounding 5-4-3-2-1' },
+    ],
     items: [],
   },
   {
@@ -45,7 +60,11 @@ const INITIAL_PLAN: PlanSection[] = [
     icon: 'Phone',
     color: 'var(--color-primary)',
     bg: 'hsla(215, 65%, 55%, 0.12)',
-    suggestions: ['Telepon/chat teman dekat', 'Duduk di tempat umum/kafe', 'Berkumpul bersama keluarga'],
+    suggestions: [
+      { key: 'safety.sug.soc1', fallback: 'Telepon/chat teman dekat' },
+      { key: 'safety.sug.soc2', fallback: 'Duduk di tempat umum/kafe' },
+      { key: 'safety.sug.soc3', fallback: 'Berkumpul bersama keluarga' },
+    ],
     items: [],
   },
   {
@@ -55,7 +74,11 @@ const INITIAL_PLAN: PlanSection[] = [
     icon: 'LifeBuoy',
     color: 'var(--color-warm)',
     bg: 'hsla(35, 75%, 60%, 0.12)',
-    suggestions: ['Into The Light: 119 ext 8', 'Yayasan Pulih: 021-788-42580', 'Psikolog / Dokter Jiwa terdekat'],
+    suggestions: [
+      { key: 'safety.sug.prof1', fallback: 'Into The Light: 119 ext 8' },
+      { key: 'safety.sug.prof2', fallback: 'Yayasan Pulih: 021-788-42580' },
+      { key: 'safety.sug.prof3', fallback: 'Psikolog / Dokter Jiwa terdekat' },
+    ],
     items: [],
   },
   {
@@ -65,7 +88,11 @@ const INITIAL_PLAN: PlanSection[] = [
     icon: 'ShieldCheck',
     color: 'var(--color-accent)',
     bg: 'hsla(270, 50%, 65%, 0.12)',
-    suggestions: ['Amankan barang berbahaya', 'Minta teman menyimpan obat berlebih', 'Jauhi tempat terisolasi saat sedih'],
+    suggestions: [
+      { key: 'safety.sug.env1', fallback: 'Amankan barang berbahaya' },
+      { key: 'safety.sug.env2', fallback: 'Minta teman menyimpan obat berlebih' },
+      { key: 'safety.sug.env3', fallback: 'Jauhi tempat terisolasi saat sedih' },
+    ],
     items: [],
   },
   {
@@ -75,7 +102,12 @@ const INITIAL_PLAN: PlanSection[] = [
     icon: 'Sparkles',
     color: 'var(--color-warm)',
     bg: 'hsla(35, 75%, 60%, 0.15)',
-    suggestions: ['Kucing/hewan peliharaan saya', 'Impian yang ingin dicapai', 'Orang-orang yang menyayangi saya', 'Masa depan yang lebih cerah'],
+    suggestions: [
+      { key: 'safety.sug.live1', fallback: 'Kucing/hewan peliharaan saya' },
+      { key: 'safety.sug.live2', fallback: 'Impian yang ingin dicapai' },
+      { key: 'safety.sug.live3', fallback: 'Orang-orang yang menyayangi saya' },
+      { key: 'safety.sug.live4', fallback: 'Masa depan yang lebih cerah' },
+    ],
     items: [],
   },
 ];
@@ -216,16 +248,17 @@ export const SafetyPlan: React.FC = () => {
 
               {section.suggestions.length > 0 && (
                 <div className="safety-suggestions">
-                  {section.suggestions.map((suggestion, sIdx) => {
-                    const isAdded = section.items.includes(suggestion);
+                  {section.suggestions.map((sug, sIdx) => {
+                    const text = t(sug.key, sug.fallback);
+                    const isAdded = section.items.includes(text);
                     if (isAdded) return null;
                     return (
                       <button
                         key={sIdx}
-                        onClick={() => handleAddItem(section.id, suggestion)}
+                        onClick={() => handleAddItem(section.id, text)}
                         className="safety-suggestion-chip"
                       >
-                        + {suggestion}
+                        + {text}
                       </button>
                     );
                   })}
