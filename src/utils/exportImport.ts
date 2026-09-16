@@ -58,6 +58,15 @@ const getActiveLang = (lang?: string): string => {
   return 'id';
 };
 
+export function sanitizeCSVCell(val: string): string {
+  const escaped = (val || '').replace(/"/g, '""');
+  // OWASP CSV Injection defense: prepend single quote if cell begins with =, +, -, @, tab, or carriage return
+  if (/^[=+\-@\t\r]/.test(escaped)) {
+    return `'${escaped}`;
+  }
+  return escaped;
+}
+
 export function exportMoodsAsCSV(lang?: string): boolean {
   const activeLang = getActiveLang(lang);
   const localeTag = getLocaleTag(activeLang);
@@ -86,7 +95,7 @@ export function exportMoodsAsCSV(lang?: string): boolean {
     m.score,
     `"${m.emoji}"`,
     `"${(m.factors || []).join(', ')}"`,
-    `"${(m.note || '').replace(/"/g, '""')}"`
+    `"${sanitizeCSVCell(m.note || '')}"`
   ]);
 
   const csvContent = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
@@ -133,8 +142,8 @@ export function exportJournalsAsCSV(lang?: string): boolean {
   const rows = journals.map(j => [
     `"${new Date(j.createdAt).toLocaleString(localeTag)}"`,
     `"${j.template || 'free'}"`,
-    `"${(j.title || '').replace(/"/g, '""')}"`,
-    `"${(j.content || '').replace(/"/g, '""').replace(/\n/g, ' ')}"`,
+    `"${sanitizeCSVCell(j.title || '')}"`,
+    `"${sanitizeCSVCell(j.content || '').replace(/\n/g, ' ')}"`,
   ]);
 
   const csvContent = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');

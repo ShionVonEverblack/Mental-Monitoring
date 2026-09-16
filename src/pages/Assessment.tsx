@@ -245,6 +245,7 @@ export const Assessment: React.FC = () => {
                         key={opt.score}
                         type="button"
                         onClick={() => handleSelectOption(q.id, opt.score)}
+                        aria-pressed={isSelected}
                         style={{
                           padding: '10px 8px',
                           borderRadius: 'var(--radius-md)',

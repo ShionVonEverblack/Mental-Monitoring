@@ -58,6 +58,30 @@ describe('exportImport Utilities (Localization & Data Portability)', () => {
     expect(idSuccess).toBe(true);
   });
 
+  it('sanitizes CSV cells starting with formula triggers (=, +, -, @) to prevent CSV injection', () => {
+    const mockMoods = [
+      { id: '1', score: 4, emoji: '🙂', factors: ['work'], note: '=CMD("calc")', createdAt: '2026-09-01T10:00:00.000Z' },
+      { id: '2', score: 3, emoji: '😐', factors: ['work'], note: '+12345', createdAt: '2026-09-01T11:00:00.000Z' },
+      { id: '3', score: 2, emoji: '😟', factors: ['work'], note: '-danger', createdAt: '2026-09-01T12:00:00.000Z' },
+      { id: '4', score: 1, emoji: '😢', factors: ['work'], note: '@SUM(A1:A10)', createdAt: '2026-09-01T13:00:00.000Z' },
+    ];
+    localStorage.setItem('rima-moods', JSON.stringify(mockMoods));
+
+    let exportedBlobContent = '';
+    const originalBlob = globalThis.Blob;
+    vi.spyOn(globalThis, 'Blob').mockImplementation(function (blobParts: any, options: any) {
+      exportedBlobContent = blobParts.join('');
+      return new originalBlob(blobParts, options);
+    });
+
+    const success = exportMoodsAsCSV('en');
+    expect(success).toBe(true);
+    expect(exportedBlobContent).toContain("\"'=CMD(\"\"calc\"\")\"");
+    expect(exportedBlobContent).toContain("\"'+12345\"");
+    expect(exportedBlobContent).toContain("\"'-danger\"");
+    expect(exportedBlobContent).toContain("\"'@SUM(A1:A10)\"");
+  });
+
   it('correctly backs up and restores data via JSON', () => {
     const mockMoods = [
       { id: '1', score: 4, emoji: '🙂', factors: ['sleep'], note: 'Rested well', createdAt: '2026-09-01T10:00:00.000Z' }
