@@ -23,6 +23,7 @@ const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy').then(module => 
 const Grounding = lazy(() => import('./pages/Grounding').then(module => ({ default: module.Grounding })));
 const Assessment = lazy(() => import('./pages/Assessment').then(module => ({ default: module.Assessment })));
 import { ConsentModal } from './components/common/ConsentModal';
+import { AppLockScreen } from './components/security/AppLockScreen';
 
 import { useTranslation } from 'react-i18next';
 
@@ -37,6 +38,7 @@ const App: React.FC = () => {
   return (
     <ErrorBoundary>
       <BrowserRouter>
+        <AppLockScreen />
         <ConsentModal />
         <AppShell>
           <Suspense fallback={<LoadingSpinner message={t('common.loadingSafeSpace', 'Memuat Ruang Aman...')} />}>

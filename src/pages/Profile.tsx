@@ -34,12 +34,15 @@ import {
   Trash2,
   AlertTriangle,
   ClipboardCheck,
-  MoonStar
+  MoonStar,
+  Lock,
+  KeyRound
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { SPIRITUAL_SOURCES } from '../data/spiritualContent';
 import { Modal } from '../components/ui/Modal';
+import { SetPinModal } from '../components/security/SetPinModal';
 import { wipeAllData } from '../utils/dataWipe';
 import { AVAILABLE_LANGUAGES } from '../utils/constants';
 import type { Language } from '../types';
@@ -69,6 +72,11 @@ export const Profile: React.FC = () => {
   const [spiritualSource, setSpiritualSource] = useLocalStorage<string>('rima-spiritual-source', 'universal');
   const [showWipeModal, setShowWipeModal] = useState(false);
   const [isWiping, setIsWiping] = useState(false);
+
+  // App Lock (4-digit PIN) states
+  const [isLockEnabled] = useLocalStorage<boolean>('rima-app-lock-enabled', false);
+  const [pinModalOpen, setPinModalOpen] = useState(false);
+  const [pinModalMode, setPinModalMode] = useState<'set' | 'change' | 'disable'>('set');
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -158,6 +166,36 @@ export const Profile: React.FC = () => {
   const showToast = (msg: string) => {
     setToastMsg(msg);
     setTimeout(() => setToastMsg(null), 3000);
+  };
+
+  const handleToggleLock = () => {
+    if (isLockEnabled) {
+      setPinModalMode('disable');
+    } else {
+      setPinModalMode('set');
+    }
+    setPinModalOpen(true);
+  };
+
+  const handleChangePin = () => {
+    setPinModalMode('change');
+    setPinModalOpen(true);
+  };
+
+  const handleLockNow = () => {
+    sessionStorage.removeItem('rima-app-unlocked');
+    window.dispatchEvent(new Event('local-storage'));
+    showToast(t('appLock.lockedToast', 'Aplikasi telah dikunci.'));
+  };
+
+  const handlePinModalSuccess = () => {
+    if (pinModalMode === 'set') {
+      showToast(t('appLock.pinSetSuccess', 'PIN berhasil diatur!'));
+    } else if (pinModalMode === 'change') {
+      showToast(t('appLock.pinChangedSuccess', 'PIN berhasil diubah!'));
+    } else if (pinModalMode === 'disable') {
+      showToast(t('appLock.pinDisabledSuccess', 'Kunci PIN berhasil dinonaktifkan.'));
+    }
   };
 
   return (
@@ -509,6 +547,54 @@ export const Profile: React.FC = () => {
       </div>
 
       <div className="settings-section">
+        <h2 className="settings-title">{t('appLock.sectionTitle', 'KEAMANAN & KUNCI APLIKASI (APP LOCK)')}</h2>
+        <div className="settings-list">
+          <button className="settings-item" type="button" onClick={handleToggleLock}>
+            <div className="settings-item-left">
+              <Lock size={18} style={{ color: isLockEnabled ? 'var(--color-primary)' : 'var(--text-tertiary)' }} />
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+                <span style={{ fontWeight: 600 }}>{t('appLock.title', 'Kunci Aplikasi (PIN 4-Digit)')}</span>
+                <span style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)', marginTop: '2px' }}>
+                  {t('appLock.desc', 'Lindungi privasi jurnal dan data Anda saat perangkat digunakan orang lain.')}
+                </span>
+              </div>
+            </div>
+            <div className="settings-item-right">
+              <div className={`toggle-switch ${isLockEnabled ? 'active' : ''}`} />
+            </div>
+          </button>
+
+          {isLockEnabled && (
+            <>
+              <button className="settings-item" type="button" onClick={handleChangePin}>
+                <div className="settings-item-left">
+                  <KeyRound size={18} />
+                  <span>{t('appLock.changePin', 'Ubah PIN')}</span>
+                </div>
+                <div className="settings-item-right">
+                  <Button variant="ghost" size="sm">
+                    {t('common.edit', 'Ubah')}
+                  </Button>
+                </div>
+              </button>
+
+              <button className="settings-item" type="button" onClick={handleLockNow}>
+                <div className="settings-item-left">
+                  <Shield size={18} style={{ color: 'var(--color-warning)' }} />
+                  <span>{t('appLock.lockNow', 'Kunci Sekarang')}</span>
+                </div>
+                <div className="settings-item-right">
+                  <Button variant="ghost" size="sm">
+                    {t('appLock.lockNowBtn', 'Kunci')}
+                  </Button>
+                </div>
+              </button>
+            </>
+          )}
+        </div>
+      </div>
+
+      <div className="settings-section">
         <h2 className="settings-title">{t('profile.privacyTitle', 'HAK DATA & KEBIJAKAN PRIVASI (UU PDP)')}</h2>
         <div className="settings-list">
           <button className="settings-item" type="button" onClick={() => navigate('/privacy')}>
@@ -570,6 +656,16 @@ export const Profile: React.FC = () => {
             </div>
           </div>
         </Modal>
+      )}
+
+      {/* Set/Change PIN Modal */}
+      {pinModalOpen && (
+        <SetPinModal
+          isOpen={pinModalOpen}
+          onClose={() => setPinModalOpen(false)}
+          mode={pinModalMode}
+          onSuccess={handlePinModalSuccess}
+        />
       )}
 
       <div className="about-section">

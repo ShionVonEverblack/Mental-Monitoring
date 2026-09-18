@@ -8,17 +8,28 @@ import {
   addReactionToPost,
   fetchPostComments,
   addCommentToPost,
-  checkCrisisKeywords
+  checkCrisisKeywords,
+  getBookmarkedPostIds,
+  toggleBookmarkPost,
+  getReportedPostIds,
+  reportForumPost
 } from '../services/forumService';
 import { detectCrisis } from '../services/crisisDetectionService';
 import { CrisisInterceptor } from '../components/safety/CrisisInterceptor';
+import { Modal } from '../components/ui/Modal';
 import { generateAnonymousName, formatDate } from '../utils/helpers';
-import { ShieldAlert, MessageCircle, AlertTriangle, Send, Phone, CheckCircle, Flag } from 'lucide-react';
+import { ShieldAlert, MessageCircle, AlertTriangle, Send, Phone, CheckCircle, Flag, Bookmark } from 'lucide-react';
 
 export const Forum: React.FC = () => {
   const { t, i18n } = useTranslation();
   const [posts, setPosts] = useState<ForumPost[]>([]);
   const [activeCategory, setActiveCategory] = useState<string>('all');
+  const [bookmarkedIds, setBookmarkedIds] = useState<string[]>(() => getBookmarkedPostIds());
+  const [reportedIds, setReportedIds] = useState<string[]>(() => getReportedPostIds());
+  const [reportingPostId, setReportingPostId] = useState<string | null>(null);
+  const [reportReason, setReportReason] = useState<string>('spam');
+  const [reportDetails, setReportDetails] = useState<string>('');
+  const [isSubmittingReport, setIsSubmittingReport] = useState(false);
   const [showGuidelines, setShowGuidelines] = useState<boolean>(
     !localStorage.getItem('rima-forum-guidelines-seen')
   );
@@ -170,8 +181,36 @@ export const Forum: React.FC = () => {
     }
   };
 
-  const handleReportPost = () => {
-    triggerToast(t('forum.reportSent', 'Laporan telah diterima. Tim moderasi akan meninjau postingan ini.'));
+  const handleOpenReport = (postId: string) => {
+    setReportingPostId(postId);
+    setReportReason('spam');
+    setReportDetails('');
+  };
+
+  const handleToggleBookmark = (postId: string) => {
+    const updated = toggleBookmarkPost(postId);
+    setBookmarkedIds(updated);
+    if (updated.includes(postId)) {
+      triggerToast(t('forum.bookmarkedToast', 'Postingan berhasil disimpan.'));
+    } else {
+      triggerToast(t('forum.unbookmarkedToast', 'Postingan dihapus dari simpanan.'));
+    }
+  };
+
+  const handleSubmitReport = async () => {
+    if (!reportingPostId || isSubmittingReport) return;
+    setIsSubmittingReport(true);
+    try {
+      await reportForumPost(reportingPostId, reportReason, reportDetails);
+      setReportedIds(prev => [...prev, reportingPostId]);
+      setReportingPostId(null);
+      triggerToast(t('forum.reportSuccess', 'Laporan diterima dan postingan disembunyikan. Terima kasih telah menjaga ruang aman ini.'));
+    } catch (e) {
+      console.error(e);
+      triggerToast(t('common.error', 'Terjadi kesalahan'));
+    } finally {
+      setIsSubmittingReport(false);
+    }
   };
 
   const triggerToast = (msg: string) => {
@@ -186,6 +225,8 @@ export const Forum: React.FC = () => {
 
   const filteredPosts = activeCategory === 'all'
     ? posts
+    : activeCategory === 'saved'
+    ? posts.filter(p => bookmarkedIds.includes(p.id))
     : posts.filter(p => p.category === activeCategory);
 
   return (
@@ -243,6 +284,12 @@ export const Forum: React.FC = () => {
           onClick={() => setActiveCategory('all')}
         >
           {t('forum.all', 'Semua')} ({posts.length})
+        </button>
+        <button
+          className={`category-chip ${activeCategory === 'saved' ? 'active' : ''}`}
+          onClick={() => setActiveCategory('saved')}
+        >
+          ⭐ {t('forum.saved', 'Tersimpan')} ({bookmarkedIds.length})
         </button>
         {FORUM_CATEGORIES.map(cat => {
           const count = posts.filter(p => p.category === cat.id).length;
@@ -341,16 +388,43 @@ export const Forum: React.FC = () => {
       <div className="forum-posts">
         {filteredPosts.length === 0 ? (
           <div className="forum-empty">
-            <div className="forum-empty-icon">💬</div>
-            <p>{t('forum.empty', 'Belum ada cerita di kategori ini. Jadilah yang pertama berbagi.')}</p>
+            <div className="forum-empty-icon">{activeCategory === 'saved' ? '⭐' : '💬'}</div>
+            <p>
+              {activeCategory === 'saved'
+                ? t('forum.noSavedPosts', 'Belum ada postingan yang disimpan. Klik ikon bookmark untuk menyimpan cerita yang menginspirasi.')
+                : t('forum.empty', 'Belum ada cerita di kategori ini. Jadilah yang pertama berbagi.')}
+            </p>
           </div>
         ) : (
           filteredPosts.map(post => {
+            if (reportedIds.includes(post.id)) {
+              return (
+                <div
+                  key={post.id}
+                  className="forum-post-card"
+                  style={{
+                    padding: '16px',
+                    opacity: 0.7,
+                    border: '1px dashed var(--border-subtle)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '10px'
+                  }}
+                >
+                  <Flag size={16} style={{ color: 'var(--text-tertiary)', flexShrink: 0 }} />
+                  <span style={{ fontSize: '0.813rem', color: 'var(--text-tertiary)' }}>
+                    {t('forum.reportedPostHidden', 'Postingan ini telah dilaporkan dan disembunyikan dari linimasa Anda.')}
+                  </span>
+                </div>
+              );
+            }
+
             const isExpanded = expandedPostId === post.id;
             const comments = commentsMap[post.id] || [];
             const cat = FORUM_CATEGORIES.find(c => c.id === post.category);
             const catKey = cat?.id === 'self-care' ? 'selfCare' : cat?.id;
             const catLabel = cat ? t(`forum.categories.${catKey}`, lang === 'en' ? cat.labelEn : cat.labelId) : post.category;
+            const isBookmarked = bookmarkedIds.includes(post.id);
 
             return (
               <div key={post.id} className="forum-post-card">
@@ -389,7 +463,25 @@ export const Forum: React.FC = () => {
                     <MessageCircle size={14} /> {post.commentCount || 0} {t('forum.comments', 'Komentar')}
                   </button>
 
-                  <button className="btn btn-ghost btn-sm" onClick={handleReportPost} title={t('forum.reportPost', 'Laporkan Postingan')}>
+                  <button
+                    type="button"
+                    className="btn btn-ghost btn-sm"
+                    onClick={() => handleToggleBookmark(post.id)}
+                    title={isBookmarked ? t('forum.unbookmark', 'Hapus dari Simpanan') : t('forum.bookmark', 'Simpan Postingan')}
+                    aria-label={isBookmarked ? t('forum.unbookmark', 'Hapus dari Simpanan') : t('forum.bookmark', 'Simpan Postingan')}
+                    aria-pressed={isBookmarked}
+                    style={{ color: isBookmarked ? 'var(--color-primary)' : 'var(--text-tertiary)' }}
+                  >
+                    <Bookmark size={15} fill={isBookmarked ? 'var(--color-primary)' : 'none'} />
+                  </button>
+
+                  <button
+                    type="button"
+                    className="btn btn-ghost btn-sm"
+                    onClick={() => handleOpenReport(post.id)}
+                    title={t('forum.reportPost', 'Laporkan Postingan')}
+                    aria-label={t('forum.reportPost', 'Laporkan Postingan')}
+                  >
                     <Flag size={14} style={{ color: 'var(--text-tertiary)' }} />
                   </button>
                 </div>
@@ -455,6 +547,91 @@ export const Forum: React.FC = () => {
           </div>
         )}
       </div>
+
+      {/* Report Post Modal */}
+      {reportingPostId && (
+        <Modal
+          isOpen={Boolean(reportingPostId)}
+          onClose={() => setReportingPostId(null)}
+          title={t('forum.reportModalTitle', 'Laporkan Postingan')}
+        >
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', margin: 0 }}>
+              {t('forum.reportReasonLabel', 'Pilih alasan pelaporan postingan ini:')}
+            </p>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              {[
+                { id: 'spam', label: t('forum.reportReasons.spam', 'Spam atau promosi tidak pantas') },
+                { id: 'harassment', label: t('forum.reportReasons.harassment', 'Pelecehan atau perundungan') },
+                { id: 'hate', label: t('forum.reportReasons.hate', 'Ujaran kebencian atau diskriminasi') },
+                { id: 'selfHarm', label: t('forum.reportReasons.selfHarm', 'Konten pemicu atau membahayakan diri') },
+                { id: 'other', label: t('forum.reportReasons.other', 'Lainnya') }
+              ].map(reason => (
+                <label
+                  key={reason.id}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '10px',
+                    padding: '10px 14px',
+                    borderRadius: '10px',
+                    backgroundColor: reportReason === reason.id ? 'hsla(215, 65%, 55%, 0.1)' : 'var(--bg-secondary)',
+                    border: reportReason === reason.id ? '1px solid var(--color-primary)' : '1px solid var(--border-subtle)',
+                    cursor: 'pointer',
+                    fontSize: '0.875rem',
+                    color: 'var(--text-primary)'
+                  }}
+                >
+                  <input
+                    type="radio"
+                    name="reportReason"
+                    value={reason.id}
+                    checked={reportReason === reason.id}
+                    onChange={() => setReportReason(reason.id)}
+                    style={{ accentColor: 'var(--color-primary)' }}
+                  />
+                  <span>{reason.label}</span>
+                </label>
+              ))}
+            </div>
+
+            <div>
+              <label style={{ display: 'block', fontSize: '0.813rem', color: 'var(--text-secondary)', marginBottom: '6px' }}>
+                {t('forum.reportDetailsLabel', 'Catatan tambahan (opsional):')}
+              </label>
+              <textarea
+                className="input"
+                rows={3}
+                placeholder={t('forum.reportDetailPlaceholder', 'Tuliskan detail tambahan untuk tim moderasi...')}
+                value={reportDetails}
+                onChange={e => setReportDetails(e.target.value)}
+                style={{ width: '100%', resize: 'vertical' }}
+              />
+            </div>
+
+            <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end', marginTop: '8px' }}>
+              <button
+                type="button"
+                className="btn btn-ghost"
+                onClick={() => setReportingPostId(null)}
+                disabled={isSubmittingReport}
+              >
+                {t('common.cancel', 'Batal')}
+              </button>
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={handleSubmitReport}
+                disabled={isSubmittingReport}
+                style={{ backgroundColor: 'var(--color-danger)', borderColor: 'var(--color-danger)' }}
+              >
+                {isSubmittingReport ? t('common.loading', 'Memuat...') : t('forum.submitReport', 'Kirim Laporan')}
+              </button>
+            </div>
+          </div>
+        </Modal>
+      )}
 
       {/* Crisis Interceptor — shown when user tries to post severe crisis content */}
       <CrisisInterceptor
