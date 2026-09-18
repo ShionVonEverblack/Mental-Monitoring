@@ -617,5 +617,10 @@
   "journal.editTitle": "Editar diario",
   "journal.update": "Actualizar diario",
   "journal.deleteConfirm": "¿Estás seguro de que deseas eliminar esta entrada del diario?",
-  "moodTracker.noDataRange": "No hay datos de estado de ánimo en este rango de tiempo."
+  "moodTracker.noDataRange": "No hay datos de estado de ánimo en este rango de tiempo.",
+  "assessment.chartTitle": "Gráfico de tendencias de evaluación",
+  "assessment.clinicalCutoff": "Límite clínico (10)",
+  "assessment.filterAll": "Todos",
+  "breathe.soundOn": "Sonido: Activado",
+  "breathe.soundOff": "Sonido: Desactivado"
 }

@@ -617,5 +617,10 @@
   "journal.editTitle": "تعديل اليومية",
   "journal.update": "تحديث اليومية",
   "journal.deleteConfirm": "هل أنت متأكد أنك تريد حذف هذه المذكرة؟",
-  "moodTracker.noDataRange": "لا توجد بيانات مزاجية في هذه الفترة الزمنية."
+  "moodTracker.noDataRange": "لا توجد بيانات مزاجية في هذه الفترة الزمنية.",
+  "assessment.chartTitle": "مخطط مسار التقييم",
+  "assessment.clinicalCutoff": "الحد السريري (10)",
+  "assessment.filterAll": "الكل",
+  "breathe.soundOn": "الصوت: مفعل",
+  "breathe.soundOff": "الصوت: معطل"
 }

@@ -617,5 +617,10 @@
   "journal.editTitle": "ジャーナルを編集",
   "journal.update": "ジャーナルを更新",
   "journal.deleteConfirm": "このジャーナルを削除してもよろしいですか？",
-  "moodTracker.noDataRange": "この期間の気分データはまだありません。"
+  "moodTracker.noDataRange": "この期間の気分データはまだありません。",
+  "assessment.chartTitle": "スクリーニング推移グラフ",
+  "assessment.clinicalCutoff": "臨床基準値 (10)",
+  "assessment.filterAll": "すべて",
+  "breathe.soundOn": "サウンド: オン",
+  "breathe.soundOff": "サウンド: オフ"
 }

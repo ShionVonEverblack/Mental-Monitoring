@@ -1,6 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+  ReferenceLine,
+  Legend,
+} from 'recharts';
 import {
   PHQ9_QUESTIONS,
   GAD7_QUESTIONS,
@@ -24,6 +34,7 @@ export const Assessment: React.FC = () => {
   const navigate = useNavigate();
 
   const [activeTab, setActiveTab] = useState<AssessmentType | 'history'>('phq9');
+  const [historyFilter, setHistoryFilter] = useState<'all' | 'phq9' | 'gad7'>('all');
   const [answers, setAnswers] = useState<Record<number, number>>({});
   const [result, setResult] = useState<{
     score: number;
@@ -39,6 +50,27 @@ export const Assessment: React.FC = () => {
   useEffect(() => {
     setHistory(getAssessmentHistory());
   }, []);
+
+  const chartData = useMemo(() => {
+    // Sort chronologically ascending
+    const sorted = [...history].sort(
+      (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+    );
+
+    return sorted.map(entry => ({
+      date: formatDate(entry.createdAt, lang),
+      rawDate: entry.createdAt,
+      type: entry.type,
+      phq9: entry.type === 'phq9' ? entry.score : undefined,
+      gad7: entry.type === 'gad7' ? entry.score : undefined,
+      score: entry.score,
+    }));
+  }, [history, lang]);
+
+  const filteredHistory = useMemo(() => {
+    if (historyFilter === 'all') return history;
+    return history.filter(h => h.type === historyFilter);
+  }, [history, historyFilter]);
 
   const handleSelectOption = (questionId: number, score: number) => {
     setAnswers(prev => ({ ...prev, [questionId]: score }));
@@ -157,28 +189,118 @@ export const Assessment: React.FC = () => {
               </p>
             </Card>
           ) : (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-md)' }}>
-              {history.map(entry => (
-                <Card key={entry.id} style={{ padding: 'var(--spacing-md)' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <div>
-                      <span className="badge badge-primary" style={{ marginRight: '8px' }}>
-                        {entry.type.toUpperCase()}
-                      </span>
-                      <strong style={{ fontSize: '1rem', color: 'var(--text-primary)' }}>
-                        {t('assessment.scoreLabel', 'Skor')}: {entry.score} / {entry.maxScore}
-                      </strong>
-                    </div>
-                    <span style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)' }}>
-                      {formatDate(entry.createdAt, lang)}
-                    </span>
+            <>
+              {/* History Filter Chips */}
+              <div style={{ display: 'flex', gap: '8px', marginBottom: 'var(--spacing-md)', flexWrap: 'wrap' }}>
+                <button
+                  type="button"
+                  className={`chip ${historyFilter === 'all' ? 'chip-active' : ''}`}
+                  onClick={() => setHistoryFilter('all')}
+                >
+                  {t('assessment.filterAll', 'Semua')} ({history.length})
+                </button>
+                <button
+                  type="button"
+                  className={`chip ${historyFilter === 'phq9' ? 'chip-active' : ''}`}
+                  onClick={() => setHistoryFilter('phq9')}
+                >
+                  {t('assessment.phq9Tab', 'Depresi (PHQ-9)')} ({history.filter(h => h.type === 'phq9').length})
+                </button>
+                <button
+                  type="button"
+                  className={`chip ${historyFilter === 'gad7' ? 'chip-active' : ''}`}
+                  onClick={() => setHistoryFilter('gad7')}
+                >
+                  {t('assessment.gad7Tab', 'Kecemasan (GAD-7)')} ({history.filter(h => h.type === 'gad7').length})
+                </button>
+              </div>
+
+              {/* Longitudinal Trend Chart (if at least 2 entries exist) */}
+              {chartData.length >= 2 && (
+                <Card style={{ padding: 'var(--spacing-lg)', marginBottom: 'var(--spacing-lg)' }}>
+                  <h3 style={{ fontSize: '1rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: 'var(--spacing-xs)' }}>
+                    {t('assessment.chartTitle', 'Grafik Tren Skrining')}
+                  </h3>
+                  <div style={{ width: '100%', height: 260, marginTop: 'var(--spacing-sm)' }}>
+                    <ResponsiveContainer width="100%" height="100%">
+                      <LineChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                        <XAxis dataKey="date" tick={{ fontSize: 11, fill: 'var(--text-tertiary)' }} />
+                        <YAxis domain={[0, 27]} tick={{ fontSize: 11, fill: 'var(--text-tertiary)' }} />
+                        <Tooltip
+                          contentStyle={{
+                            backgroundColor: 'var(--bg-card)',
+                            borderColor: 'var(--border-subtle)',
+                            borderRadius: 'var(--radius-md)',
+                            color: 'var(--text-primary)',
+                            fontSize: '0.813rem',
+                          }}
+                        />
+                        <Legend />
+                        <ReferenceLine
+                          y={10}
+                          stroke="var(--color-danger)"
+                          strokeDasharray="4 4"
+                          label={{
+                            value: t('assessment.clinicalCutoff', 'Batas Klinis (10)'),
+                            fill: 'var(--color-danger)',
+                            fontSize: 10,
+                            position: 'insideTopRight',
+                          }}
+                        />
+                        {(historyFilter === 'all' || historyFilter === 'phq9') && (
+                          <Line
+                            type="monotone"
+                            dataKey="phq9"
+                            name={t('assessment.phq9Tab', 'Depresi (PHQ-9)')}
+                            stroke="var(--color-primary)"
+                            strokeWidth={2}
+                            dot={{ r: 4, fill: 'var(--color-primary)' }}
+                            activeDot={{ r: 6 }}
+                            connectNulls
+                          />
+                        )}
+                        {(historyFilter === 'all' || historyFilter === 'gad7') && (
+                          <Line
+                            type="monotone"
+                            dataKey="gad7"
+                            name={t('assessment.gad7Tab', 'Kecemasan (GAD-7)')}
+                            stroke="var(--color-secondary)"
+                            strokeWidth={2}
+                            dot={{ r: 4, fill: 'var(--color-secondary)' }}
+                            activeDot={{ r: 6 }}
+                            connectNulls
+                          />
+                        )}
+                      </LineChart>
+                    </ResponsiveContainer>
                   </div>
-                  <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginTop: '8px', margin: '8px 0 0' }}>
-                    {t('assessment.severityLabel', 'Tingkat Keparahan')}: <strong>{t(`assessment.${entry.type}.${entry.severity}`, entry.severity.replace('_', ' ').toUpperCase())}</strong>
-                  </p>
                 </Card>
-              ))}
-            </div>
+              )}
+
+              {/* Assessment Records List */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-md)' }}>
+                {filteredHistory.map(entry => (
+                  <Card key={entry.id} style={{ padding: 'var(--spacing-md)' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <div>
+                        <span className="badge badge-primary" style={{ marginRight: '8px' }}>
+                          {entry.type.toUpperCase()}
+                        </span>
+                        <strong style={{ fontSize: '1rem', color: 'var(--text-primary)' }}>
+                          {t('assessment.scoreLabel', 'Skor')}: {entry.score} / {entry.maxScore}
+                        </strong>
+                      </div>
+                      <span style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)' }}>
+                        {formatDate(entry.createdAt, lang)}
+                      </span>
+                    </div>
+                    <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginTop: '8px', margin: '8px 0 0' }}>
+                      {t('assessment.severityLabel', 'Tingkat Keparahan')}: <strong>{t(`assessment.${entry.type}.${entry.severity}`, entry.severity.replace('_', ' ').toUpperCase())}</strong>
+                    </p>
+                  </Card>
+                ))}
+              </div>
+            </>
           )}
         </div>
       ) : result ? (

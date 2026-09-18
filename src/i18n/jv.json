@@ -617,5 +617,10 @@
   "journal.editTitle": "Bebener Jurnal",
   "journal.update": "Anyari Jurnal",
   "journal.deleteConfirm": "Apa sampeyan yakin arep mbusek cathetan jurnal iki?",
-  "moodTracker.noDataRange": "Durung ana data mood ing wektu iki."
+  "moodTracker.noDataRange": "Durung ana data mood ing wektu iki.",
+  "assessment.chartTitle": "Grafik Tren Skrining",
+  "assessment.clinicalCutoff": "Wates Klinis (10)",
+  "assessment.filterAll": "Kabeh",
+  "breathe.soundOn": "Swara: Urip",
+  "breathe.soundOff": "Swara: Mati"
 }

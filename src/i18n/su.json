@@ -617,5 +617,10 @@
   "journal.editTitle": "Robi Jurnal",
   "journal.update": "Anyarkeun Jurnal",
   "journal.deleteConfirm": "Naha anjeun yakin hoyong mupus catetan jurnal ieu?",
-  "moodTracker.noDataRange": "Teu acan aya data mood dina rentang waktos ieu."
+  "moodTracker.noDataRange": "Teu acan aya data mood dina rentang waktos ieu.",
+  "assessment.chartTitle": "Grafik Tren Skrining",
+  "assessment.clinicalCutoff": "Wates Klinis (10)",
+  "assessment.filterAll": "Sadaya",
+  "breathe.soundOn": "Sora: Hurung",
+  "breathe.soundOff": "Sora: Pareum"
 }

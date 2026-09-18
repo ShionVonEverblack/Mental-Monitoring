@@ -617,5 +617,10 @@
   "journal.editTitle": "编辑日记",
   "journal.update": "更新日记",
   "journal.deleteConfirm": "您确定要删除此日记记录吗？",
-  "moodTracker.noDataRange": "此时间范围内暂无心情数据。"
+  "moodTracker.noDataRange": "此时间范围内暂无心情数据。",
+  "assessment.chartTitle": "评估趋势图",
+  "assessment.clinicalCutoff": "临床警戒线 (10)",
+  "assessment.filterAll": "全部",
+  "breathe.soundOn": "声音: 开",
+  "breathe.soundOff": "声音: 关"
 }

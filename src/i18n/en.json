@@ -617,5 +617,10 @@
   "journal.editTitle": "Edit Journal",
   "journal.update": "Update Journal",
   "journal.deleteConfirm": "Are you sure you want to delete this journal entry?",
-  "moodTracker.noDataRange": "No mood data recorded in this time range."
+  "moodTracker.noDataRange": "No mood data recorded in this time range.",
+  "assessment.chartTitle": "Assessment Trend Chart",
+  "assessment.clinicalCutoff": "Clinical Cutoff (10)",
+  "assessment.filterAll": "All",
+  "breathe.soundOn": "Sound: On",
+  "breathe.soundOff": "Sound: Off"
 }

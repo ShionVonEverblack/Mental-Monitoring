@@ -617,5 +617,10 @@
   "journal.editTitle": "Edit Jurnal",
   "journal.update": "Perbarui Jurnal",
   "journal.deleteConfirm": "Apakah kamu yakin ingin menghapus catatan jurnal ini?",
-  "moodTracker.noDataRange": "Belum ada data mood pada rentang waktu ini."
+  "moodTracker.noDataRange": "Belum ada data mood pada rentang waktu ini.",
+  "assessment.chartTitle": "Grafik Tren Skrining",
+  "assessment.clinicalCutoff": "Batas Klinis (10)",
+  "assessment.filterAll": "Semua",
+  "breathe.soundOn": "Suara: Aktif",
+  "breathe.soundOff": "Suara: Mati"
 }

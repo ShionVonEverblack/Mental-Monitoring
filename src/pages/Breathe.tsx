@@ -83,6 +83,49 @@ const TECHNIQUES: Technique[] = [
   }
 ];
 
+// Native Web Audio API Tibetan Singing Bowl Synthesizer (Zero-latency, zero-bundle download)
+let audioCtx: AudioContext | null = null;
+
+function playSingingBowlTone(phase: 'inhale' | 'hold' | 'exhale' | 'holdOut') {
+  try {
+    const AudioContextClass = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+    if (!AudioContextClass) return;
+    if (!audioCtx) {
+      audioCtx = new AudioContextClass();
+    }
+    if (audioCtx.state === 'suspended') {
+      audioCtx.resume();
+    }
+
+    // Solfeggio meditative frequencies:
+    // Inhale: 432Hz (Root calming pitch)
+    // Hold: 528Hz (Mindful transformation/clarity)
+    // Exhale: 396Hz (Grounding tension release)
+    // HoldOut: 432Hz
+    const baseFreq = phase === 'inhale' ? 432 : phase === 'exhale' ? 396 : 528;
+
+    const now = audioCtx.currentTime;
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(baseFreq, now);
+
+    // Exponential bell envelope for soothing Tibetan singing bowl resonance
+    gain.gain.setValueAtTime(0.001, now);
+    gain.gain.exponentialRampToValueAtTime(0.12, now + 0.06);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + 1.2);
+
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+
+    osc.start(now);
+    osc.stop(now + 1.3);
+  } catch (err) {
+    console.debug('Web Audio API not supported or user blocked:', err);
+  }
+}
+
 export const Breathe: FC = () => {
   const { t } = useTranslation();
   
@@ -93,6 +136,7 @@ export const Breathe: FC = () => {
   const [cyclesCompleted, setCyclesCompleted] = useState(0);
   const [totalSeconds, setTotalSeconds] = useState(0);
   const [hapticEnabled, setHapticEnabled] = useState(true);
+  const [audioEnabled, setAudioEnabled] = useLocalStorage<boolean>('rima-breathe-audio', true);
   
   // Post-session reflection state
   const [showReflection, setShowReflection] = useState(false);
@@ -113,6 +157,13 @@ export const Breathe: FC = () => {
       navigator.vibrate(70); // gentle 70ms pulse
     }
   }, [hapticEnabled]);
+
+  // Audio tone cue on phase transitions (Meditation bell for eyes-closed relaxation)
+  const triggerAudio = useCallback((phase: 'inhale' | 'hold' | 'exhale' | 'holdOut') => {
+    if (audioEnabled) {
+      playSingingBowlTone(phase);
+    }
+  }, [audioEnabled]);
   
   const stopExercise = useCallback(() => {
     setIsActive(false);
@@ -137,7 +188,8 @@ export const Breathe: FC = () => {
     setSessionJustEnded(false);
     sessionStartRef.current = Date.now();
     triggerHaptic();
-  }, [activeTech, triggerHaptic]);
+    triggerAudio(activeTech.phases[0].phase);
+  }, [activeTech, triggerHaptic, triggerAudio]);
 
   const toggleExercise = useCallback(() => {
     if (isActive) {
@@ -177,6 +229,7 @@ export const Breathe: FC = () => {
           }
           setCurrentPhaseIndex(nextIndex);
           triggerHaptic(); // Haptic on phase transition
+          triggerAudio(activeTech.phases[nextIndex].phase); // Singing bowl tone on phase transition
           return activeTech.phases[nextIndex].duration;
         }
         return prev - 1;
@@ -188,7 +241,7 @@ export const Breathe: FC = () => {
         window.clearInterval(timerRef.current);
       }
     };
-  }, [isActive, currentPhaseIndex, activeTech, triggerHaptic]);
+  }, [isActive, currentPhaseIndex, activeTech, triggerHaptic, triggerAudio]);
 
   // Reset when technique changes
   useEffect(() => {
@@ -266,11 +319,23 @@ export const Breathe: FC = () => {
           {isActive ? t('breathe.stop', 'Berhenti') : t('breathe.start', 'Mulai')}
         </button>
         
+        <button 
+          type="button"
+          className="btn btn-ghost btn-sm"
+          onClick={() => setAudioEnabled(!audioEnabled)}
+          style={{ marginLeft: '8px', fontSize: '0.813rem' }}
+          aria-pressed={audioEnabled}
+        >
+          {audioEnabled ? '🔔 ' + t('breathe.soundOn', 'Suara: Aktif') : '🔕 ' + t('breathe.soundOff', 'Suara: Mati')}
+        </button>
+
         {supportsHaptic && (
           <button 
+            type="button"
             className="btn btn-ghost btn-sm"
             onClick={() => setHapticEnabled(!hapticEnabled)}
             style={{ marginLeft: '8px', fontSize: '0.813rem' }}
+            aria-pressed={hapticEnabled}
           >
             {hapticEnabled ? '📳 ' + t('breathe.hapticOn', 'Getar: Aktif') : '📴 ' + t('breathe.hapticOff', 'Getar: Mati')}
           </button>
