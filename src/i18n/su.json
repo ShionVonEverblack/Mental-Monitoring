@@ -607,5 +607,15 @@
   "education.categoryList.depression": "Déprési",
   "education.categoryList.stress": "Manajemén Stres",
   "education.categoryList.self-care": "Ngurus Diri",
-  "education.categoryList.professional": "Bantosan Profesional"
+  "education.categoryList.professional": "Bantosan Profesional",
+  "common.edit": "Robi",
+  "common.delete": "Pupus",
+  "common.deleteConfirmTitle": "Konfirmasi Mupus",
+  "common.cancel": "Bolay",
+  "common.save": "Simpen",
+  "mood.deleteConfirm": "Naha anjeun yakin hoyong mupus catetan rasa ieu?",
+  "journal.editTitle": "Robi Jurnal",
+  "journal.update": "Anyarkeun Jurnal",
+  "journal.deleteConfirm": "Naha anjeun yakin hoyong mupus catetan jurnal ieu?",
+  "moodTracker.noDataRange": "Teu acan aya data mood dina rentang waktos ieu."
 }

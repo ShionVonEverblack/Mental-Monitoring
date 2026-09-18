@@ -607,5 +607,15 @@
   "education.categoryList.depression": "Depresi",
   "education.categoryList.stress": "Manajemen Stres",
   "education.categoryList.self-care": "Perawatan Diri",
-  "education.categoryList.professional": "Bantuan Profesional"
+  "education.categoryList.professional": "Bantuan Profesional",
+  "common.edit": "Edit",
+  "common.delete": "Hapus",
+  "common.deleteConfirmTitle": "Konfirmasi Hapus",
+  "common.cancel": "Batal",
+  "common.save": "Simpan",
+  "mood.deleteConfirm": "Apakah kamu yakin ingin menghapus catatan mood ini?",
+  "journal.editTitle": "Edit Jurnal",
+  "journal.update": "Perbarui Jurnal",
+  "journal.deleteConfirm": "Apakah kamu yakin ingin menghapus catatan jurnal ini?",
+  "moodTracker.noDataRange": "Belum ada data mood pada rentang waktu ini."
 }

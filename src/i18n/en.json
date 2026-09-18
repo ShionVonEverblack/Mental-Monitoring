@@ -607,5 +607,15 @@
   "education.categoryList.depression": "Depression",
   "education.categoryList.stress": "Stress Management",
   "education.categoryList.self-care": "Self-Care",
-  "education.categoryList.professional": "Professional Help"
+  "education.categoryList.professional": "Professional Help",
+  "common.edit": "Edit",
+  "common.delete": "Delete",
+  "common.deleteConfirmTitle": "Confirm Deletion",
+  "common.cancel": "Cancel",
+  "common.save": "Save",
+  "mood.deleteConfirm": "Are you sure you want to delete this mood entry?",
+  "journal.editTitle": "Edit Journal",
+  "journal.update": "Update Journal",
+  "journal.deleteConfirm": "Are you sure you want to delete this journal entry?",
+  "moodTracker.noDataRange": "No mood data recorded in this time range."
 }

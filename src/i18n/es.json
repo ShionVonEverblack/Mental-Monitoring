@@ -607,5 +607,15 @@
   "education.categoryList.depression": "Depresión",
   "education.categoryList.stress": "Manejo del estrés",
   "education.categoryList.self-care": "Autocuidado",
-  "education.categoryList.professional": "Ayuda profesional"
+  "education.categoryList.professional": "Ayuda profesional",
+  "common.edit": "Editar",
+  "common.delete": "Eliminar",
+  "common.deleteConfirmTitle": "Confirmar eliminación",
+  "common.cancel": "Cancelar",
+  "common.save": "Guardar",
+  "mood.deleteConfirm": "¿Estás seguro de que deseas eliminar este registro de estado de ánimo?",
+  "journal.editTitle": "Editar diario",
+  "journal.update": "Actualizar diario",
+  "journal.deleteConfirm": "¿Estás seguro de que deseas eliminar esta entrada del diario?",
+  "moodTracker.noDataRange": "No hay datos de estado de ánimo en este rango de tiempo."
 }

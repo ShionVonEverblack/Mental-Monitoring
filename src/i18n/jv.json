@@ -607,5 +607,15 @@
   "education.categoryList.depression": "Depresi",
   "education.categoryList.stress": "Manajemen Stres",
   "education.categoryList.self-care": "Ngrumat Dhiri",
-  "education.categoryList.professional": "Pitulungan Profesional"
+  "education.categoryList.professional": "Pitulungan Profesional",
+  "common.edit": "Bebener",
+  "common.delete": "Busek",
+  "common.deleteConfirmTitle": "Konfirmasi Pambusakan",
+  "common.cancel": "Batal",
+  "common.save": "Simpen",
+  "mood.deleteConfirm": "Apa sampeyan yakin arep mbusek cathetan mood iki?",
+  "journal.editTitle": "Bebener Jurnal",
+  "journal.update": "Anyari Jurnal",
+  "journal.deleteConfirm": "Apa sampeyan yakin arep mbusek cathetan jurnal iki?",
+  "moodTracker.noDataRange": "Durung ana data mood ing wektu iki."
 }

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import { Edit3, Trash2 } from 'lucide-react';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { JOURNAL_TEMPLATES } from '../utils/constants';
 import type { JournalTemplate, JournalEntry } from '../types';
@@ -15,6 +16,8 @@ export const Journal: React.FC = () => {
   const [journals, setJournals] = useLocalStorage<JournalEntry[]>('rima-journals', []);
   const [selectedTemplate, setSelectedTemplate] = useState<JournalTemplate | null>(null);
   
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [deletingJournalId, setDeletingJournalId] = useState<string | null>(null);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [expandedId, setExpandedId] = useState<string | null>(null);
@@ -22,21 +25,53 @@ export const Journal: React.FC = () => {
 
   const lang = i18n.language?.split('-')[0] || 'id';
 
+  const handleStartEdit = (journal: JournalEntry) => {
+    setEditingId(journal.id);
+    setTitle(journal.title);
+    setContent(journal.content);
+    setSelectedTemplate(journal.template);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleCancelEditor = () => {
+    setSelectedTemplate(null);
+    setEditingId(null);
+    setTitle('');
+    setContent('');
+  };
+
   const handleSave = () => {
-    if (!title || !content) return;
+    if (!title.trim() || !content.trim()) return;
     
     const now = new Date().toISOString();
-    const newJournal: JournalEntry = {
-      id: Date.now().toString(),
-      title,
-      content,
-      template: selectedTemplate || 'free',
-      isPrivate: false,
-      createdAt: now,
-      updatedAt: now,
-    };
-    
-    setJournals([newJournal, ...journals]);
+
+    if (editingId) {
+      setJournals(prev => prev.map(j => {
+        if (j.id === editingId) {
+          return {
+            ...j,
+            title: title.trim(),
+            content: content.trim(),
+            template: selectedTemplate || j.template,
+            updatedAt: now,
+          };
+        }
+        return j;
+      }));
+      setEditingId(null);
+    } else {
+      const newJournal: JournalEntry = {
+        id: Date.now().toString(),
+        title: title.trim(),
+        content: content.trim(),
+        template: selectedTemplate || 'free',
+        isPrivate: false,
+        createdAt: now,
+        updatedAt: now,
+      };
+      setJournals([newJournal, ...journals]);
+    }
+
     setSelectedTemplate(null);
     setTitle('');
     
@@ -72,14 +107,20 @@ export const Journal: React.FC = () => {
           </div>
         ) : (
           <div className="journal-editor">
-            <div className="editor-header">
+            <div className="editor-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <h3>
-                {(() => {
-                  const tmpl = JOURNAL_TEMPLATES.find(t => t.id === selectedTemplate);
-                  return tmpl ? t(`journal.templates.${tmpl.id}`, lang === 'en' ? tmpl.labelEn : tmpl.labelId) : '';
-                })()}
+                {editingId
+                  ? t('journal.editTitle', 'Edit Jurnal')
+                  : (() => {
+                      const tmpl = JOURNAL_TEMPLATES.find(t => t.id === selectedTemplate);
+                      return tmpl ? t(`journal.templates.${tmpl.id}`, lang === 'en' ? tmpl.labelEn : tmpl.labelId) : '';
+                    })()}
               </h3>
-              <button onClick={() => setSelectedTemplate(null)}>
+              <button 
+                type="button" 
+                className="btn btn-ghost btn-sm"
+                onClick={handleCancelEditor}
+              >
                 {t('common.cancel', { defaultValue: 'Batal' })}
               </button>
             </div>
@@ -109,7 +150,9 @@ export const Journal: React.FC = () => {
             />
             
             <button onClick={handleSave} className="btn btn-primary" style={{ width: '100%', marginTop: 'var(--spacing-md)' }}>
-              {t('common.save', { defaultValue: 'Simpan Jurnal' })}
+              {editingId
+                ? t('journal.update', 'Perbarui Jurnal')
+                : t('common.save', { defaultValue: 'Simpan Jurnal' })}
             </button>
           </div>
         )}
@@ -119,21 +162,64 @@ export const Journal: React.FC = () => {
         <h3>{t('journal.history', { defaultValue: 'Catatan Sebelumnya' })}</h3>
         {journals.map(journal => (
           <div key={journal.id} className="journal-entry-card">
-            <button 
-              type="button"
-              className="journal-entry-toggle"
-              onClick={() => setExpandedId(expandedId === journal.id ? null : journal.id)}
-              aria-expanded={expandedId === journal.id}
-            >
-              <h4 className="journal-entry-title">{journal.title}</h4>
-              <div className="journal-entry-meta">
-                <span className="journal-entry-date">{formatDate(journal.createdAt, lang)}</span>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <button 
+                type="button"
+                className="journal-entry-toggle"
+                onClick={() => setExpandedId(expandedId === journal.id ? null : journal.id)}
+                aria-expanded={expandedId === journal.id}
+                style={{ flex: 1, textAlign: 'left', background: 'none', border: 'none', cursor: 'pointer', padding: 'var(--spacing-sm) 0' }}
+              >
+                <h4 className="journal-entry-title">{journal.title}</h4>
+                <div className="journal-entry-meta">
+                  <span className="journal-entry-date">{formatDate(journal.createdAt, lang)}</span>
+                </div>
+              </button>
+              <div style={{ display: 'flex', gap: '4px', paddingLeft: '8px' }}>
+                <button
+                  type="button"
+                  className="btn-icon"
+                  onClick={() => handleStartEdit(journal)}
+                  aria-label={t('common.edit', 'Edit')}
+                  style={{
+                    background: 'transparent',
+                    border: 'none',
+                    color: 'var(--text-tertiary)',
+                    cursor: 'pointer',
+                    padding: '6px',
+                    borderRadius: 'var(--radius-sm)',
+                    transition: 'color 0.2s ease',
+                  }}
+                  onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--color-primary)')}
+                  onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--text-tertiary)')}
+                >
+                  <Edit3 size={16} />
+                </button>
+                <button
+                  type="button"
+                  className="btn-icon"
+                  onClick={() => setDeletingJournalId(journal.id)}
+                  aria-label={t('common.delete', 'Hapus')}
+                  style={{
+                    background: 'transparent',
+                    border: 'none',
+                    color: 'var(--text-tertiary)',
+                    cursor: 'pointer',
+                    padding: '6px',
+                    borderRadius: 'var(--radius-sm)',
+                    transition: 'color 0.2s ease',
+                  }}
+                  onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--color-danger)')}
+                  onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--text-tertiary)')}
+                >
+                  <Trash2 size={16} />
+                </button>
               </div>
-            </button>
+            </div>
             
             {expandedId === journal.id ? (
               <div className="journal-entry-preview">
-                <p>{journal.content}</p>
+                <p style={{ whiteSpace: 'pre-wrap' }}>{journal.content}</p>
               </div>
             ) : null}
           </div>
@@ -142,6 +228,42 @@ export const Journal: React.FC = () => {
           <p>{t('journal.empty', { defaultValue: 'Belum ada catatan. Mulai menulis hari ini!' })}</p>
         )}
       </section>
+
+      {deletingJournalId && (
+        <Modal
+          isOpen={!!deletingJournalId}
+          onClose={() => setDeletingJournalId(null)}
+          title={t('common.deleteConfirmTitle', 'Konfirmasi Hapus')}
+        >
+          <p style={{ color: 'var(--text-secondary)', marginBottom: 'var(--spacing-lg)', lineHeight: 1.5 }}>
+            {t('journal.deleteConfirm', 'Apakah kamu yakin ingin menghapus catatan jurnal ini?')}
+          </p>
+          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '8px' }}>
+            <button
+              type="button"
+              className="btn btn-ghost"
+              onClick={() => setDeletingJournalId(null)}
+            >
+              {t('common.cancel', 'Batal')}
+            </button>
+            <button
+              type="button"
+              className="btn btn-danger"
+              onClick={() => {
+                if (deletingJournalId) {
+                  setJournals(prev => prev.filter(j => j.id !== deletingJournalId));
+                  if (editingId === deletingJournalId) {
+                    handleCancelEditor();
+                  }
+                  setDeletingJournalId(null);
+                }
+              }}
+            >
+              {t('common.delete', 'Hapus')}
+            </button>
+          </div>
+        </Modal>
+      )}
 
       {crisisResult && (
         <Modal 

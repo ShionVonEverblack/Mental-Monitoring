@@ -607,5 +607,15 @@
   "education.categoryList.depression": "الاكتئاب",
   "education.categoryList.stress": "إدارة التوتر",
   "education.categoryList.self-care": "العناية بالذات",
-  "education.categoryList.professional": "المساعدة المهنية"
+  "education.categoryList.professional": "المساعدة المهنية",
+  "common.edit": "تعديل",
+  "common.delete": "حذف",
+  "common.deleteConfirmTitle": "تأكيد الحذف",
+  "common.cancel": "إلغاء",
+  "common.save": "حفظ",
+  "mood.deleteConfirm": "هل أنت متأكد أنك تريد حذف هذا المزاج؟",
+  "journal.editTitle": "تعديل اليومية",
+  "journal.update": "تحديث اليومية",
+  "journal.deleteConfirm": "هل أنت متأكد أنك تريد حذف هذه المذكرة؟",
+  "moodTracker.noDataRange": "لا توجد بيانات مزاجية في هذه الفترة الزمنية."
 }

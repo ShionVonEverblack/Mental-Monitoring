@@ -607,5 +607,15 @@
   "education.categoryList.depression": "うつ",
   "education.categoryList.stress": "ストレス管理",
   "education.categoryList.self-care": "セルフケア",
-  "education.categoryList.professional": "専門的サポート"
+  "education.categoryList.professional": "専門的サポート",
+  "common.edit": "編集",
+  "common.delete": "削除",
+  "common.deleteConfirmTitle": "削除の確認",
+  "common.cancel": "キャンセル",
+  "common.save": "保存",
+  "mood.deleteConfirm": "この気分の記録を削除してもよろしいですか？",
+  "journal.editTitle": "ジャーナルを編集",
+  "journal.update": "ジャーナルを更新",
+  "journal.deleteConfirm": "このジャーナルを削除してもよろしいですか？",
+  "moodTracker.noDataRange": "この期間の気分データはまだありません。"
 }

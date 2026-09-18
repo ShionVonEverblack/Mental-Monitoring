@@ -607,5 +607,15 @@
   "education.categoryList.depression": "抑郁",
   "education.categoryList.stress": "压力管理",
   "education.categoryList.self-care": "自我关怀",
-  "education.categoryList.professional": "专业援助"
+  "education.categoryList.professional": "专业援助",
+  "common.edit": "编辑",
+  "common.delete": "删除",
+  "common.deleteConfirmTitle": "确认删除",
+  "common.cancel": "取消",
+  "common.save": "保存",
+  "mood.deleteConfirm": "您确定要删除此心情记录吗？",
+  "journal.editTitle": "编辑日记",
+  "journal.update": "更新日记",
+  "journal.deleteConfirm": "您确定要删除此日记记录吗？",
+  "moodTracker.noDataRange": "此时间范围内暂无心情数据。"
 }

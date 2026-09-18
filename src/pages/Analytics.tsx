@@ -32,12 +32,20 @@ export const Analytics: React.FC = () => {
         counts[m.score as keyof typeof counts]++;
       }
     });
-    return Object.entries(counts).map(([score, count]) => ({
-      score: Number(score),
-      label: MOOD_EMOJIS[Number(score) as keyof typeof MOOD_EMOJIS] || score,
-      count
-    })).filter(item => item.count > 0);
-  }, [moods]);
+    const currentLang = lang?.split('-')[0] || 'id';
+    return Object.entries(counts).map(([score, count]) => {
+      const s = Number(score) as keyof typeof MOOD_EMOJIS;
+      const emojiData = MOOD_EMOJIS[s];
+      const text = emojiData
+        ? `${emojiData.emoji} ${currentLang === 'en' ? emojiData.labelEn : emojiData.labelId}`
+        : `Score ${score}`;
+      return {
+        score: Number(score),
+        label: text,
+        count
+      };
+    }).filter(item => item.count > 0);
+  }, [moods, lang]);
 
   // Mood by Day
   const moodByDay = useMemo(() => {
