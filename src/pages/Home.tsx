@@ -1,18 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { Book, MessageCircle, Heart, Flame, Wind, BookOpen, Globe, Sparkles, ClipboardCheck } from 'lucide-react';
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, Cell, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { MoodSelector } from '../components/ui/MoodSelector';
 import { Modal } from '../components/ui/Modal';
 import { useMood } from '../hooks/useMood';
 import { useLocalStorage } from '../hooks/useLocalStorage';
-import { getGreeting } from '../utils/helpers';
-import { DAILY_AFFIRMATIONS, AVAILABLE_LANGUAGES } from '../utils/constants';
+import { getGreeting, formatDate } from '../utils/helpers';
+import { DAILY_AFFIRMATIONS, AVAILABLE_LANGUAGES, MOOD_EMOJIS } from '../utils/constants';
 import { SPIRITUAL_CONTENT } from '../data/spiritualContent';
 import { EscalationBanner } from '../components/common/EscalationBanner';
 import { generateInsights } from '../services/moodAnalysisService';
-import type { Language } from '../types';
+import type { Language, MoodScore } from '../types';
 
 export const Home: React.FC = () => {
   const { t, i18n } = useTranslation();
@@ -20,19 +20,36 @@ export const Home: React.FC = () => {
   const { moods, getTodayMood, getWeeklyMoods, addMood, getMoodStats } = useMood();
   const [showLangModal, setShowLangModal] = useState(false);
   
+  const currentLang = (i18n.language?.split('-')[0] || 'id') as Language;
   const todayMood = getTodayMood();
   const weeklyMoods = getWeeklyMoods();
-  const recentMoods = weeklyMoods.map((m) => ({ 
-    date: new Date(m.createdAt).toLocaleDateString(), 
-    score: m.score 
-  }));
+
+  // Chronologically sorted (past -> present) and localized mood records for the chart
+  const recentMoods = useMemo(() => {
+    return [...weeklyMoods]
+      .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime())
+      .map((m) => {
+        const score = m.score as MoodScore;
+        const moodInfo = MOOD_EMOJIS[score];
+        const moodLabel = moodInfo
+          ? (currentLang === 'en' ? moodInfo.labelEn : moodInfo.labelId)
+          : `${score}`;
+        return {
+          date: formatDate(m.createdAt, currentLang),
+          score: m.score,
+          label: moodLabel,
+          emoji: moodInfo?.emoji || '😐',
+          color: moodInfo?.color || 'var(--color-primary)'
+        };
+      });
+  }, [weeklyMoods, currentLang]);
+
   const stats = getMoodStats();
   const currentStreak = stats.streak;
   const isGrace = stats.isGrace;
   
   const affirmationIndex = new Date().getDay() % DAILY_AFFIRMATIONS.length;
   const affirmation = DAILY_AFFIRMATIONS[affirmationIndex];
-  const currentLang = (i18n.language?.split('-')[0] || 'id') as Language;
   const currentLangObj = AVAILABLE_LANGUAGES.find(l => l.code === currentLang) || AVAILABLE_LANGUAGES[0];
   const affirmationText = affirmation[currentLang] || affirmation.en || affirmation.id;
   const insights = generateInsights(weeklyMoods);
@@ -210,12 +227,44 @@ export const Home: React.FC = () => {
         <h3>{t('home.recentMoods', { defaultValue: 'Mood 7 Hari Terakhir' })}</h3>
         {recentMoods.length > 0 ? (
           <div className="chart-card">
-            <ResponsiveContainer width="100%" height={200}>
-              <BarChart data={recentMoods}>
-                <XAxis dataKey="date" />
-                <YAxis domain={[1, 5]} hide />
-                <Tooltip />
-                <Bar dataKey="score" fill="var(--color-primary)" radius={[4, 4, 0, 0]} />
+            <ResponsiveContainer width="100%" height={220}>
+              <BarChart data={recentMoods} margin={{ top: 16, right: 16, left: 16, bottom: 6 }}>
+                <XAxis 
+                  dataKey="date" 
+                  tick={{ fill: 'var(--text-secondary)', fontSize: 12 }} 
+                  axisLine={{ stroke: 'var(--border-subtle)' }}
+                  tickLine={false}
+                />
+                <YAxis domain={[0, 5.5]} hide />
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: 'var(--bg-elevated)',
+                    borderColor: 'var(--border-strong)',
+                    borderRadius: '12px',
+                    color: 'var(--text-primary)',
+                    boxShadow: 'var(--shadow-elevated)',
+                    padding: '8px 12px'
+                  }}
+                  formatter={(value: unknown) => {
+                    const score = Number(value) as MoodScore;
+                    const moodInfo = MOOD_EMOJIS[score];
+                    const label = moodInfo
+                      ? (currentLang === 'en' ? moodInfo.labelEn : moodInfo.labelId)
+                      : `${score}`;
+                    const emoji = moodInfo?.emoji || '';
+                    return [`${emoji} ${label} (${score}/5)`, t('home.todayMood', 'Mood')];
+                  }}
+                />
+                <Bar 
+                  dataKey="score" 
+                  fill="var(--color-primary)" 
+                  radius={[8, 8, 0, 0]} 
+                  maxBarSize={42} 
+                >
+                  {recentMoods.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={entry.color} />
+                  ))}
+                </Bar>
               </BarChart>
             </ResponsiveContainer>
           </div>

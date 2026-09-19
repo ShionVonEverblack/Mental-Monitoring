@@ -168,7 +168,7 @@ export const Analytics: React.FC = () => {
                   <XAxis dataKey="day" />
                   <YAxis domain={[0, 5]} />
                   <Tooltip />
-                  <Bar dataKey="average" fill="var(--color-primary)" radius={[4,4,0,0]} />
+                  <Bar dataKey="average" fill="var(--color-primary)" radius={[4,4,0,0]} maxBarSize={36} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
