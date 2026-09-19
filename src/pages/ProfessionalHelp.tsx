@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { PROFESSIONAL_SERVICES, SERVICE_TYPES, PROVINCES } from '../data/professionalServices';
 import type { ProfessionalService } from '../data/professionalServices';
@@ -11,14 +11,16 @@ export const ProfessionalHelp: React.FC = () => {
   const [onlineOnly, setOnlineOnly] = useState(false);
   const [bpjsOnly, setBpjsOnly] = useState(false);
 
-  const filtered = PROFESSIONAL_SERVICES.filter((service: ProfessionalService) => {
-    if (search && !service.name.toLowerCase().includes(search.toLowerCase())) return false;
-    if (province && service.province !== province) return false;
-    if (serviceType && service.type !== serviceType) return false;
-    if (onlineOnly && !service.online) return false;
-    if (bpjsOnly && !service.bpjs) return false;
-    return true;
-  });
+  const filtered = useMemo(() => {
+    return PROFESSIONAL_SERVICES.filter((service: ProfessionalService) => {
+      if (search && !service.name.toLowerCase().includes(search.toLowerCase())) return false;
+      if (province && service.province !== province) return false;
+      if (serviceType && service.type !== serviceType) return false;
+      if (onlineOnly && !service.online) return false;
+      if (bpjsOnly && !service.bpjs) return false;
+      return true;
+    });
+  }, [search, province, serviceType, onlineOnly, bpjsOnly]);
 
   const lang = i18n.language?.split('-')[0] || 'id';
 

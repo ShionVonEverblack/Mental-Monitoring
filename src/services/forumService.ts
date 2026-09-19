@@ -208,11 +208,12 @@ export async function addReactionToPost(postId: string, reactionType: 'heart' | 
   if (isSupabaseConfigured && supabase) {
     const target = updated.find(p => p.id === postId);
     if (target) {
-      supabase
-        .from('forum_posts')
-        .update({ reactions: target.reactions })
-        .eq('id', postId)
-        .then(() => {}, err => console.warn('Supabase sync failed:', err));
+      Promise.resolve(
+        supabase
+          .from('forum_posts')
+          .update({ reactions: target.reactions })
+          .eq('id', postId)
+      ).catch((err: unknown) => console.warn('Supabase sync failed:', err));
     }
   }
 
@@ -291,18 +292,21 @@ export async function addCommentToPost(postId: string, content: string, authorNa
   window.dispatchEvent(new Event('local-storage'));
 
   if (isSupabaseConfigured && supabase) {
-    supabase.from('forum_comments').insert([{
-      id: newComment.id,
-      post_id: postId,
-      author_name: newComment.authorName,
-      content: newComment.content,
-      is_supportive: newComment.isSupportive
-    }]).then(() => {}, err => console.warn('Supabase comment insert failed:', err));
+    Promise.resolve(
+      supabase.from('forum_comments').insert([{
+        id: newComment.id,
+        post_id: postId,
+        author_name: newComment.authorName,
+        content: newComment.content,
+        is_supportive: newComment.isSupportive
+      }])
+    ).catch((err: unknown) => console.warn('Supabase comment insert failed:', err));
 
-    supabase.from('forum_posts')
-      .update({ comment_count: updatedPosts.find(p => p.id === postId)?.commentCount || 1 })
-      .eq('id', postId)
-      .then(() => {}, err => console.warn('Supabase comment count update failed:', err));
+    Promise.resolve(
+      supabase.from('forum_posts')
+        .update({ comment_count: updatedPosts.find(p => p.id === postId)?.commentCount || 1 })
+        .eq('id', postId)
+    ).catch((err: unknown) => console.warn('Supabase comment count update failed:', err));
   }
 
   return newComment;

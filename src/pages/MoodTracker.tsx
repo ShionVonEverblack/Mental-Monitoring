@@ -189,20 +189,9 @@ export const MoodTracker: React.FC = () => {
             </div>
             <button
               type="button"
-              className="btn-icon"
+              className="btn-icon btn-icon-danger"
               onClick={() => setDeletingMoodId(entry.id)}
               aria-label={t('common.delete', 'Hapus')}
-              style={{
-                background: 'transparent',
-                border: 'none',
-                color: 'var(--text-tertiary)',
-                cursor: 'pointer',
-                padding: '6px',
-                borderRadius: 'var(--radius-sm)',
-                transition: 'color 0.2s ease',
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--color-danger)')}
-              onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--text-tertiary)')}
             >
               <Trash2 size={16} />
             </button>

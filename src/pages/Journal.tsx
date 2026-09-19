@@ -69,7 +69,7 @@ export const Journal: React.FC = () => {
         createdAt: now,
         updatedAt: now,
       };
-      setJournals([newJournal, ...journals]);
+      setJournals(prev => [newJournal, ...prev]);
     }
 
     setSelectedTemplate(null);
@@ -181,36 +181,14 @@ export const Journal: React.FC = () => {
                   className="btn-icon"
                   onClick={() => handleStartEdit(journal)}
                   aria-label={t('common.edit', 'Edit')}
-                  style={{
-                    background: 'transparent',
-                    border: 'none',
-                    color: 'var(--text-tertiary)',
-                    cursor: 'pointer',
-                    padding: '6px',
-                    borderRadius: 'var(--radius-sm)',
-                    transition: 'color 0.2s ease',
-                  }}
-                  onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--color-primary)')}
-                  onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--text-tertiary)')}
                 >
                   <Edit3 size={16} />
                 </button>
                 <button
                   type="button"
-                  className="btn-icon"
+                  className="btn-icon btn-icon-danger"
                   onClick={() => setDeletingJournalId(journal.id)}
                   aria-label={t('common.delete', 'Hapus')}
-                  style={{
-                    background: 'transparent',
-                    border: 'none',
-                    color: 'var(--text-tertiary)',
-                    cursor: 'pointer',
-                    padding: '6px',
-                    borderRadius: 'var(--radius-sm)',
-                    transition: 'color 0.2s ease',
-                  }}
-                  onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--color-danger)')}
-                  onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--text-tertiary)')}
                 >
                   <Trash2 size={16} />
                 </button>

@@ -77,9 +77,38 @@
 }
 
 .btn-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   padding: var(--spacing-sm);
   border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: color var(--transition-fast), background-color var(--transition-fast), transform var(--transition-fast);
 }
+
+button.btn-icon:not(.btn) {
+  background: transparent;
+  border: none;
+  color: var(--text-tertiary);
+  padding: 6px;
+  border-radius: var(--radius-sm);
+}
+
+button.btn-icon:not(.btn):hover:not(:disabled) {
+  color: var(--color-primary);
+  background-color: var(--bg-elevated);
+}
+
+button.btn-icon:not(.btn):focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+button.btn-icon.btn-icon-danger:not(.btn):hover:not(:disabled) {
+  color: var(--color-danger);
+  background-color: rgba(239, 68, 68, 0.1);
+}
+
 
 /* Cards (Glassmorphism) */
 .card {
