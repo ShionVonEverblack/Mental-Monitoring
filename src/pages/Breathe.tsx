@@ -3,7 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import type { FC } from 'react';
 
-type TechniqueId = '4-7-8' | 'box' | 'calm' | 'coherent';
+type TechniqueId = 'sighing' | '4-7-8' | 'box' | 'calm' | 'coherent';
+type BreathingPhase = 'inhale' | 'inhale2' | 'hold' | 'exhale' | 'holdOut';
 
 interface Technique {
   id: TechniqueId;
@@ -12,8 +13,9 @@ interface Technique {
   descKey: string;
   descFallback: string;
   icon: string;
+  evidenceBadge?: string;
   phases: {
-    phase: 'inhale' | 'hold' | 'exhale' | 'holdOut';
+    phase: BreathingPhase;
     duration: number; // in seconds
   }[];
 }
@@ -28,6 +30,22 @@ export interface BreathingSession {
 }
 
 const TECHNIQUES: Technique[] = [
+  {
+    // Cyclic Sighing (Physiological Sigh) — Balban, Spiegel, Huberman et al., Stanford 2023 (Cell Reports Medicine)
+    id: 'sighing',
+    nameKey: 'breathe.tech.sighing',
+    nameFallback: 'Cyclic Sighing',
+    descKey: 'breathe.desc.sighing',
+    descFallback: 'Hirup 2x + Embusan Panjang (Riset Stanford)',
+    icon: '🫁',
+    evidenceBadge: 'Stanford RCT 2023',
+    phases: [
+      { phase: 'inhale', duration: 3 },
+      { phase: 'inhale2', duration: 2 },
+      { phase: 'exhale', duration: 6 },
+      { phase: 'holdOut', duration: 1 }
+    ]
+  },
   {
     id: '4-7-8',
     nameKey: 'breathe.tech.478',
@@ -86,7 +104,7 @@ const TECHNIQUES: Technique[] = [
 // Native Web Audio API Tibetan Singing Bowl Synthesizer (Zero-latency, zero-bundle download)
 let audioCtx: AudioContext | null = null;
 
-function playSingingBowlTone(phase: 'inhale' | 'hold' | 'exhale' | 'holdOut') {
+function playSingingBowlTone(phase: BreathingPhase) {
   try {
     const AudioContextClass = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
     if (!AudioContextClass) return;
@@ -99,10 +117,14 @@ function playSingingBowlTone(phase: 'inhale' | 'hold' | 'exhale' | 'holdOut') {
 
     // Solfeggio meditative frequencies:
     // Inhale: 432Hz (Root calming pitch)
-    // Hold: 528Hz (Mindful transformation/clarity)
+    // Inhale2: 528Hz (Higher harmonic for secondary inspiration)
+    // Hold: 480Hz
     // Exhale: 396Hz (Grounding tension release)
     // HoldOut: 432Hz
-    const baseFreq = phase === 'inhale' ? 432 : phase === 'exhale' ? 396 : 528;
+    let baseFreq = 432;
+    if (phase === 'inhale2') baseFreq = 528;
+    else if (phase === 'exhale') baseFreq = 396;
+    else if (phase === 'hold') baseFreq = 480;
 
     const now = audioCtx.currentTime;
     const osc = audioCtx.createOscillator();
@@ -129,7 +151,7 @@ function playSingingBowlTone(phase: 'inhale' | 'hold' | 'exhale' | 'holdOut') {
 export const Breathe: FC = () => {
   const { t } = useTranslation();
   
-  const [selectedTechnique, setSelectedTechnique] = useState<TechniqueId>('4-7-8');
+  const [selectedTechnique, setSelectedTechnique] = useState<TechniqueId>('sighing');
   const [isActive, setIsActive] = useState(false);
   const [currentPhaseIndex, setCurrentPhaseIndex] = useState(0);
   const [secondsRemaining, setSecondsRemaining] = useState(0);
@@ -152,14 +174,20 @@ export const Breathe: FC = () => {
   const currentPhaseDef = activeTech.phases[currentPhaseIndex];
 
   // Haptic feedback on phase transitions (Polyvagal Theory — eyes-closed pacing)
-  const triggerHaptic = useCallback(() => {
-    if (hapticEnabled && navigator.vibrate) {
-      navigator.vibrate(70); // gentle 70ms pulse
+  const triggerHaptic = useCallback((phase?: BreathingPhase) => {
+    if (hapticEnabled && typeof navigator !== 'undefined' && navigator.vibrate) {
+      if (phase === 'inhale2') {
+        navigator.vibrate([40, 40, 40]); // Distinct double-tap for top-up inhale
+      } else if (phase === 'exhale') {
+        navigator.vibrate(100); // Elongated smooth vibration for release
+      } else {
+        navigator.vibrate(60); // Standard gentle transition pulse
+      }
     }
   }, [hapticEnabled]);
 
   // Audio tone cue on phase transitions (Meditation bell for eyes-closed relaxation)
-  const triggerAudio = useCallback((phase: 'inhale' | 'hold' | 'exhale' | 'holdOut') => {
+  const triggerAudio = useCallback((phase: BreathingPhase) => {
     if (audioEnabled) {
       playSingingBowlTone(phase);
     }
@@ -187,7 +215,7 @@ export const Breathe: FC = () => {
     setShowReflection(false);
     setSessionJustEnded(false);
     sessionStartRef.current = Date.now();
-    triggerHaptic();
+    triggerHaptic(activeTech.phases[0].phase);
     triggerAudio(activeTech.phases[0].phase);
   }, [activeTech, triggerHaptic, triggerAudio]);
 
@@ -228,7 +256,7 @@ export const Breathe: FC = () => {
             setCyclesCompleted(c => c + 1);
           }
           setCurrentPhaseIndex(nextIndex);
-          triggerHaptic(); // Haptic on phase transition
+          triggerHaptic(activeTech.phases[nextIndex].phase); // Haptic on phase transition
           triggerAudio(activeTech.phases[nextIndex].phase); // Singing bowl tone on phase transition
           return activeTech.phases[nextIndex].duration;
         }
@@ -261,9 +289,10 @@ export const Breathe: FC = () => {
     return `${m}:${s}`;
   };
 
-  const getPhaseLabel = (phase: string) => {
+  const getPhaseLabel = (phase: BreathingPhase) => {
     switch (phase) {
       case 'inhale': return t('breathe.phase.inhale', 'Tarik Napas');
+      case 'inhale2': return t('breathe.phase.inhale2', 'Tarik Lagi');
       case 'hold': return t('breathe.phase.hold', 'Tahan');
       case 'exhale': return t('breathe.phase.exhale', 'Buang Napas');
       case 'holdOut': return t('breathe.phase.hold', 'Tahan');
@@ -292,12 +321,43 @@ export const Breathe: FC = () => {
             disabled={isActive}
             aria-pressed={selectedTechnique === tech.id}
           >
-            <span className="breathe-tech-icon" aria-hidden="true">{tech.icon}</span>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', marginBottom: '4px' }}>
+              <span className="breathe-tech-icon" aria-hidden="true">{tech.icon}</span>
+              {tech.evidenceBadge && (
+                <span style={{ 
+                  fontSize: '0.625rem', 
+                  fontWeight: 600, 
+                  color: 'var(--color-primary)', 
+                  background: 'hsla(215, 65%, 55%, 0.12)', 
+                  padding: '2px 6px', 
+                  borderRadius: 'var(--radius-full)' 
+                }}>
+                  ⭐ {tech.evidenceBadge}
+                </span>
+              )}
+            </div>
             <span className="breathe-tech-name">{t(tech.nameKey, tech.nameFallback)}</span>
             <span className="breathe-tech-desc">{t(tech.descKey, tech.descFallback)}</span>
           </button>
         ))}
       </div>
+
+      {selectedTechnique === 'sighing' && (
+        <div style={{ 
+          maxWidth: '480px', 
+          margin: '0 auto var(--spacing-sm)', 
+          padding: '8px 14px', 
+          background: 'var(--bg-secondary)', 
+          borderRadius: 'var(--radius-md)', 
+          border: '1px solid var(--border-subtle)', 
+          fontSize: '0.78rem', 
+          color: 'var(--text-secondary)',
+          textAlign: 'center',
+          lineHeight: 1.4
+        }}>
+          💡 <strong>{t('breathe.evidence.sighing', 'Riset Stanford 2023')}:</strong> {t('breathe.evidence.sighingDesc', 'Dua kali tarikan napas membuka kembali kantung udara paru-paru (alveoli) dan embusan panjang merangsang saraf vagus untuk menurunkan detak jantung secara instan.')}
+        </div>
+      )}
       
       <div className="breathe-circle-container">
         {/* aria-live for screen readers — Polyvagal pacing for visually impaired users */}

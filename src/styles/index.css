@@ -458,6 +458,7 @@ button.journal-entry-toggle { background: none; border: none; font: inherit; col
 .breathe-circle-container { display: flex; justify-content: center; align-items: center; padding: var(--spacing-2xl) 0; }
 .breathe-circle { width: 200px; height: 200px; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; background: hsla(215, 65%, 55%, 0.15); border: 3px solid var(--color-primary); transition: transform 0.5s ease-in-out, background 0.5s ease-in-out; }
 .breathe-circle.inhale { transform: scale(1.3); background: hsla(215, 65%, 55%, 0.25); border-color: var(--color-primary); }
+.breathe-circle.inhale2 { transform: scale(1.45); background: hsla(215, 75%, 60%, 0.35); border-color: var(--color-primary-hover); box-shadow: 0 0 24px hsla(215, 75%, 60%, 0.35); }
 .breathe-circle.hold { transform: scale(1.3); background: hsla(270, 50%, 65%, 0.2); border-color: var(--color-accent); }
 .breathe-circle.exhale { transform: scale(0.8); background: hsla(165, 45%, 50%, 0.15); border-color: var(--color-secondary); }
 .breathe-circle.holdOut { transform: scale(0.8); background: hsla(165, 45%, 50%, 0.1); border-color: var(--color-secondary); }
