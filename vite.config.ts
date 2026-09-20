@@ -2,8 +2,11 @@ import { defineConfig } from 'vitest/config'
 import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
 
+import path from 'path'
+
 // https://vite.dev/config/
 export default defineConfig({
+  root: path.resolve(import.meta.dirname, '.'),
   plugins: [
     react(),
     VitePWA({
@@ -71,7 +74,7 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      '@': '/src'
+      '@': path.resolve(import.meta.dirname, './src')
     }
   },
   test: {

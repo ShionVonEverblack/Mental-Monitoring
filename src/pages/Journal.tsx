@@ -3,8 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { Edit3, Trash2 } from 'lucide-react';
 import { useLocalStorage } from '../hooks/useLocalStorage';
-import { JOURNAL_TEMPLATES } from '../utils/constants';
-import type { JournalTemplate, JournalEntry } from '../types';
+import { JOURNAL_TEMPLATES, COGNITIVE_DISTORTIONS } from '../utils/constants';
+import type { JournalTemplate, JournalEntry, CbtThoughtRecord } from '../types';
+import { CbtWizard } from '../components/journal/CbtWizard';
 import { detectCrisis } from '../services/crisisDetectionService';
 import { Modal } from '../components/ui/Modal';
 import type { CrisisDetectionResult } from '../services/crisisDetectionService';
@@ -38,6 +39,50 @@ export const Journal: React.FC = () => {
     setEditingId(null);
     setTitle('');
     setContent('');
+  };
+
+  const editingJournal = journals.find(j => j.id === editingId);
+
+  const handleSaveCbt = (payload: { title: string; content: string; cbtRecord: CbtThoughtRecord }) => {
+    const now = new Date().toISOString();
+
+    if (editingId) {
+      setJournals(prev => prev.map(j => {
+        if (j.id === editingId) {
+          return {
+            ...j,
+            title: payload.title,
+            content: payload.content,
+            template: 'cbt',
+            cbtRecord: payload.cbtRecord,
+            updatedAt: now,
+          };
+        }
+        return j;
+      }));
+      setEditingId(null);
+    } else {
+      const newJournal: JournalEntry = {
+        id: Date.now().toString(),
+        title: payload.title,
+        content: payload.content,
+        template: 'cbt',
+        cbtRecord: payload.cbtRecord,
+        isPrivate: false,
+        createdAt: now,
+        updatedAt: now,
+      };
+      setJournals(prev => [newJournal, ...prev]);
+    }
+
+    setSelectedTemplate(null);
+    setTitle('');
+    setContent('');
+
+    const result = detectCrisis(payload.content);
+    if (result.isDetected) {
+      setCrisisResult(result);
+    }
   };
 
   const handleSave = () => {
@@ -105,6 +150,13 @@ export const Journal: React.FC = () => {
               </button>
             ))}
           </div>
+        ) : selectedTemplate === 'cbt' ? (
+          <CbtWizard
+            initialData={editingJournal?.cbtRecord}
+            initialTitle={editingJournal?.title}
+            onSave={handleSaveCbt}
+            onCancel={handleCancelEditor}
+          />
         ) : (
           <div className="journal-editor">
             <div className="editor-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -197,7 +249,42 @@ export const Journal: React.FC = () => {
             
             {expandedId === journal.id ? (
               <div className="journal-entry-preview">
-                <p style={{ whiteSpace: 'pre-wrap' }}>{journal.content}</p>
+                {journal.cbtRecord ? (
+                  <div className="journal-cbt-summary">
+                    <div className="journal-cbt-header">
+                      <span className="journal-cbt-intensity-pill">
+                        {t('cbt.initialIntensityLabel', 'Intensitas:')} {journal.cbtRecord.initialIntensity}/10 ➔ {journal.cbtRecord.finalIntensity}/10
+                      </span>
+                    </div>
+
+                    {journal.cbtRecord.distortions.length > 0 && (
+                      <div className="journal-cbt-distortions">
+                        {journal.cbtRecord.distortions.map(distId => {
+                          const distortion = COGNITIVE_DISTORTIONS.find(d => d.id === distId);
+                          return (
+                            <span key={distId} className="journal-cbt-distortion-badge">
+                              {distortion ? `${distortion.icon} ${t(distortion.nameKey, distortion.nameFallback)}` : distId}
+                            </span>
+                          );
+                        })}
+                      </div>
+                    )}
+
+                    {journal.cbtRecord.balancedThought && (
+                      <div className="journal-cbt-balanced-box">
+                        <label>{t('cbt.balancedLabel', 'Pikiran Seimbang Baru:')}</label>
+                        <p>"{journal.cbtRecord.balancedThought}"</p>
+                      </div>
+                    )}
+
+                    <details className="journal-cbt-details">
+                      <summary>{t('cbt.viewFullDetails', 'Lihat Rekam Analisis Lengkap')}</summary>
+                      <p style={{ whiteSpace: 'pre-wrap', marginTop: '8px' }}>{journal.content}</p>
+                    </details>
+                  </div>
+                ) : (
+                  <p style={{ whiteSpace: 'pre-wrap' }}>{journal.content}</p>
+                )}
               </div>
             ) : null}
           </div>

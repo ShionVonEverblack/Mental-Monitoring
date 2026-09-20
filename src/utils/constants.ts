@@ -1,4 +1,4 @@
-import type { CrisisResource, MoodScore, MoodEmoji, ForumCategory, JournalTemplate, Language } from '../types';
+import type { CrisisResource, MoodScore, MoodEmoji, ForumCategory, JournalTemplate, Language, CognitiveDistortionId } from '../types';
 
 export const CRISIS_HOTLINES: CrisisResource[] = [
   {
@@ -113,6 +113,80 @@ export const JOURNAL_TEMPLATES: { id: JournalTemplate; labelId: string; labelEn:
       { id: 'Apa yang saya pelajari tentang diri saya hari ini?', en: 'What did I learn about myself today?' },
       { id: 'Apa yang ingin saya perbaiki besok?', en: 'What do I want to improve tomorrow?' },
     ],
+  },
+];
+
+export const COGNITIVE_DISTORTIONS: {
+  id: CognitiveDistortionId;
+  icon: string;
+  nameKey: string;
+  nameFallback: string;
+  descKey: string;
+  descFallback: string;
+}[] = [
+  {
+    id: 'catastrophizing',
+    icon: '🌋',
+    nameKey: 'cbt.distortion.catastrophizing',
+    nameFallback: 'Katastrofisasi',
+    descKey: 'cbt.desc.catastrophizing',
+    descFallback: 'Membayangkan skenario terburuk seolah pasti terjadi.',
+  },
+  {
+    id: 'all_or_nothing',
+    icon: '⚖️',
+    nameKey: 'cbt.distortion.all_or_nothing',
+    nameFallback: 'Hitam-Putih',
+    descKey: 'cbt.desc.all_or_nothing',
+    descFallback: 'Melihat situasi hanya sebagai sukses sempurna atau gagal total.',
+  },
+  {
+    id: 'mind_reading',
+    icon: '🔮',
+    nameKey: 'cbt.distortion.mind_reading',
+    nameFallback: 'Membaca Pikiran',
+    descKey: 'cbt.desc.mind_reading',
+    descFallback: 'Yakin orang lain menilai negatif tanpa bukti yang jelas.',
+  },
+  {
+    id: 'overgeneralization',
+    icon: '🔄',
+    nameKey: 'cbt.distortion.overgeneralization',
+    nameFallback: 'Generalisasi Berlebih',
+    descKey: 'cbt.desc.overgeneralization',
+    descFallback: 'Menganggap satu peristiwa buruk sebagai pola kegagalan tanpa akhir.',
+  },
+  {
+    id: 'emotional_reasoning',
+    icon: '💔',
+    nameKey: 'cbt.distortion.emotional_reasoning',
+    nameFallback: 'Penalaran Emosional',
+    descKey: 'cbt.desc.emotional_reasoning',
+    descFallback: 'Merasa cemas/bersalah sehingga mengira situasinya pasti buruk.',
+  },
+  {
+    id: 'should_statements',
+    icon: '📌',
+    nameKey: 'cbt.distortion.should_statements',
+    nameFallback: 'Tuntutan "Harus"',
+    descKey: 'cbt.desc.should_statements',
+    descFallback: 'Menekan diri atau orang lain dengan aturan kaku "harus/seharusnya".',
+  },
+  {
+    id: 'personalization',
+    icon: '🎯',
+    nameKey: 'cbt.distortion.personalization',
+    nameFallback: 'Personalisasi',
+    descKey: 'cbt.desc.personalization',
+    descFallback: 'Menyalahkan diri sendiri atas kejadian di luar kendali pribadi.',
+  },
+  {
+    id: 'mental_filter',
+    icon: '🔍',
+    nameKey: 'cbt.distortion.mental_filter',
+    nameFallback: 'Filter Negatif',
+    descKey: 'cbt.desc.mental_filter',
+    descFallback: 'Hanya berfokus pada satu hal negatif dan melupakan semua hal positif.',
   },
 ];
 

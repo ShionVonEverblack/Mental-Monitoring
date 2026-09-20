@@ -344,6 +344,354 @@ a:hover {
 .journal-entry-meta { display: flex; align-items: center; gap: 8px; }
 .journal-entry-date { font-size: 0.75rem; color: var(--text-tertiary); }
 
+/* CBT Thought Restructuring Wizard */
+.cbt-wizard-container {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xl);
+  padding: 24px;
+  margin-bottom: 24px;
+  animation: fadeIn 0.3s;
+}
+.cbt-wizard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.cbt-step-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-primary);
+  background: hsla(215, 65%, 55%, 0.12);
+  padding: 3px 8px;
+  border-radius: var(--radius-full);
+  margin-bottom: 6px;
+}
+.cbt-wizard-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+}
+.cbt-progress-track {
+  width: 100%;
+  height: 6px;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+.cbt-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+  transition: width 0.3s ease;
+  border-radius: var(--radius-full);
+}
+.cbt-step-content {
+  min-height: 280px;
+}
+.cbt-step-pane {
+  animation: fadeIn 0.25s ease-out;
+}
+.cbt-step-name {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+}
+.cbt-step-desc {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin-bottom: 16px;
+}
+.cbt-textarea {
+  width: 100%;
+  padding: 14px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  font-family: var(--font-family-base);
+  font-size: 0.938rem;
+  line-height: 1.6;
+  resize: vertical;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+.cbt-textarea:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: var(--glow-primary);
+}
+.cbt-field-label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+.cbt-emotion-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.cbt-emotion-chip {
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  font-size: 0.813rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.cbt-emotion-chip:hover {
+  border-color: var(--border-strong);
+  color: var(--text-primary);
+}
+.cbt-emotion-chip.active {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #fff;
+}
+.cbt-intensity-badge {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  background: hsla(215, 65%, 55%, 0.12);
+  padding: 2px 8px;
+  border-radius: var(--radius-md);
+}
+.cbt-slider {
+  width: 100%;
+  height: 8px;
+  border-radius: var(--radius-full);
+  background: var(--bg-secondary);
+  outline: none;
+  margin: 12px 0 6px;
+  accent-color: var(--color-primary);
+  cursor: pointer;
+}
+.cbt-slider-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
+}
+.cbt-tip-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 14px;
+  background: hsla(215, 65%, 55%, 0.08);
+  border: 1px solid hsla(215, 65%, 55%, 0.2);
+  border-radius: var(--radius-md);
+  margin-top: 16px;
+  font-size: 0.813rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+.cbt-distortions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 12px;
+}
+.cbt-distortion-card {
+  text-align: left;
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: var(--font-family-base);
+}
+.cbt-distortion-card:hover {
+  border-color: var(--border-strong);
+  background: var(--bg-card);
+}
+.cbt-distortion-card.selected {
+  border-color: var(--color-primary);
+  background: hsla(215, 65%, 55%, 0.08);
+  box-shadow: 0 0 0 1px var(--color-primary);
+}
+.cbt-dist-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+.cbt-dist-icon {
+  font-size: 1.1rem;
+}
+.cbt-dist-name {
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: var(--text-primary);
+  flex: 1;
+}
+.cbt-dist-check {
+  color: var(--color-primary);
+}
+.cbt-dist-desc {
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
+  line-height: 1.4;
+  margin: 0;
+}
+.cbt-evidence-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+@media (max-width: 640px) {
+  .cbt-evidence-container {
+    grid-template-columns: 1fr;
+  }
+}
+.cbt-evidence-column {
+  padding: 14px;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-subtle);
+}
+.cbt-evidence-label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+.cbt-evidence-hint {
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
+  margin-bottom: 10px;
+  line-height: 1.4;
+}
+.cbt-relief-card {
+  margin-top: 18px;
+  padding: 16px;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-subtle);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+.cbt-relief-metric {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+.cbt-relief-before {
+  color: var(--color-danger);
+}
+.cbt-relief-arrow {
+  color: var(--text-tertiary);
+}
+.cbt-relief-after {
+  color: var(--color-secondary);
+}
+.cbt-relief-message {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.813rem;
+  text-align: center;
+}
+.cbt-relief-message.success {
+  color: var(--color-secondary);
+  font-weight: 600;
+}
+.cbt-relief-message.neutral {
+  color: var(--text-secondary);
+}
+.cbt-wizard-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border-subtle);
+}
+
+/* Journal History CBT Card Enhancements */
+.journal-cbt-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.journal-cbt-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.journal-cbt-intensity-pill {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  background: var(--bg-secondary);
+  padding: 3px 8px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-subtle);
+}
+.journal-cbt-distortions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.journal-cbt-distortion-badge {
+  font-size: 0.688rem;
+  font-weight: 600;
+  color: var(--color-primary);
+  background: hsla(215, 65%, 55%, 0.1);
+  padding: 2px 7px;
+  border-radius: var(--radius-sm);
+  border: 1px solid hsla(215, 65%, 55%, 0.2);
+}
+.journal-cbt-balanced-box {
+  padding: 10px 12px;
+  background: hsla(165, 45%, 50%, 0.1);
+  border-left: 3px solid var(--color-secondary);
+  border-radius: var(--radius-sm);
+}
+.journal-cbt-balanced-box label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--color-secondary);
+  margin-bottom: 2px;
+}
+.journal-cbt-balanced-box p {
+  font-size: 0.85rem;
+  font-style: italic;
+  color: var(--text-primary);
+  margin: 0;
+  line-height: 1.5;
+}
+.journal-cbt-details {
+  font-size: 0.813rem;
+  color: var(--text-tertiary);
+  cursor: pointer;
+}
+.journal-cbt-details summary {
+  user-select: none;
+  font-weight: 500;
+}
+.journal-cbt-details summary:hover {
+  color: var(--text-primary);
+}
+
 /* Forum Page */
 .forum-page { animation: fadeInUp 0.5s ease-out; }
 .forum-page .page-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 8px; }

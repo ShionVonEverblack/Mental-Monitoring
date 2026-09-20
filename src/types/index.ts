@@ -13,6 +13,28 @@ export interface MoodEntry {
 
 export type JournalTemplate = 'free' | 'cbt' | 'gratitude' | 'reflection';
 
+export type CognitiveDistortionId =
+  | 'catastrophizing'
+  | 'all_or_nothing'
+  | 'mind_reading'
+  | 'overgeneralization'
+  | 'emotional_reasoning'
+  | 'should_statements'
+  | 'personalization'
+  | 'mental_filter';
+
+export interface CbtThoughtRecord {
+  situation: string;
+  initialEmotion: string;
+  initialIntensity: number; // 1-10
+  automaticThought: string;
+  distortions: CognitiveDistortionId[];
+  evidenceFor: string;
+  evidenceAgainst: string;
+  balancedThought: string;
+  finalIntensity: number; // 1-10
+}
+
 export interface JournalEntry {
   id: string;
   title: string;
@@ -20,6 +42,7 @@ export interface JournalEntry {
   template: JournalTemplate;
   moodId?: string;
   isPrivate: boolean;
+  cbtRecord?: CbtThoughtRecord;
   createdAt: string;
   updatedAt: string;
 }
