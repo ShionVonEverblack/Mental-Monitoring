@@ -1,6 +1,11 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
+import i18n from '../../i18n/config';
 import { SOSButton } from '../safety/SOSButton';
+
+beforeEach(async () => {
+  await i18n.changeLanguage('id');
+});
 
 describe('SOSButton Component', () => {
   it('renders floating SOS button with accessible label', () => {
