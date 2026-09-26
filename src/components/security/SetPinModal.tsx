@@ -1,8 +1,15 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Modal } from '../ui/Modal';
-import { hashPin, verifyPin } from '../../utils/security';
-import { Lock, Delete } from 'lucide-react';
+import {
+  hashPin,
+  verifyPin,
+  getLockoutStatus,
+  recordFailedAttempt,
+  resetLockout,
+  type LockoutStatus
+} from '../../utils/security';
+import { Lock, Delete, AlertTriangle } from 'lucide-react';
 
 interface SetPinModalProps {
   isOpen: boolean;
@@ -31,6 +38,7 @@ export const SetPinModal: React.FC<SetPinModalProps> = ({
   const [newPinCandidate, setNewPinCandidate] = useState<string>('');
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [lockout, setLockout] = useState<LockoutStatus>(() => getLockoutStatus());
 
   useEffect(() => {
     if (isOpen) {
@@ -38,30 +46,61 @@ export const SetPinModal: React.FC<SetPinModalProps> = ({
       setNewPinCandidate('');
       setErrorMsg(null);
       setStep(mode === 'set' ? 'enter-new' : 'verify-current');
+      setLockout(getLockoutStatus());
     }
   }, [isOpen, mode]);
 
+  // Live countdown timer during lockout when verifying current PIN
+  useEffect(() => {
+    if (!lockout.isLockedOut || step !== 'verify-current') return;
+
+    const interval = setInterval(() => {
+      const current = getLockoutStatus();
+      setLockout(current);
+      if (!current.isLockedOut) {
+        setErrorMsg(null);
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [lockout.isLockedOut, step]);
+
+  const isKeypadDisabled = isProcessing || (step === 'verify-current' && lockout.isLockedOut);
+
   const handleDigit = useCallback((digit: string) => {
+    if (isKeypadDisabled) return;
     setErrorMsg(null);
     setPinInput(prev => {
       if (prev.length >= 4) return prev;
       return prev + digit;
     });
-  }, []);
+  }, [isKeypadDisabled]);
 
   const handleDelete = useCallback(() => {
+    if (isKeypadDisabled) return;
     setErrorMsg(null);
     setPinInput(prev => prev.slice(0, -1));
-  }, []);
+  }, [isKeypadDisabled]);
 
   const handleClear = useCallback(() => {
+    if (isKeypadDisabled) return;
     setErrorMsg(null);
     setPinInput('');
-  }, []);
+  }, [isKeypadDisabled]);
 
   // Submit step when 4 digits are entered
   const processPin = useCallback(async (pinToProcess: string) => {
     if (pinToProcess.length !== 4) return;
+
+    if (step === 'verify-current') {
+      const currentLockout = getLockoutStatus();
+      if (currentLockout.isLockedOut) {
+        setLockout(currentLockout);
+        setPinInput('');
+        return;
+      }
+    }
+
     setIsProcessing(true);
 
     try {
@@ -70,11 +109,31 @@ export const SetPinModal: React.FC<SetPinModalProps> = ({
       if (step === 'verify-current') {
         const isValid = await verifyPin(pinToProcess, storedHash);
         if (!isValid) {
-          setErrorMsg(t('appLock.incorrectPin', 'PIN salah. Silakan coba lagi.'));
+          const updatedStatus = recordFailedAttempt();
+          setLockout(updatedStatus);
           setPinInput('');
           setIsProcessing(false);
+
+          if (updatedStatus.isLockedOut) {
+            setErrorMsg(
+              t('appLock.tooManyAttempts', 'Terlalu banyak percobaan gagal. Silakan coba lagi dalam {{seconds}} detik.', {
+                seconds: updatedStatus.remainingSeconds
+              })
+            );
+          } else {
+            const remaining = updatedStatus.maxAttempts - updatedStatus.failedAttempts;
+            setErrorMsg(
+              t('appLock.attemptsRemaining', 'PIN salah. Sisa percobaan: {{count}}', {
+                count: remaining
+              })
+            );
+          }
           return;
         }
+
+        // Valid current PIN
+        resetLockout();
+        setLockout(getLockoutStatus());
 
         if (mode === 'disable') {
           localStorage.removeItem('rima-app-lock-pin');
@@ -130,6 +189,8 @@ export const SetPinModal: React.FC<SetPinModalProps> = ({
     if (!isOpen) return;
 
     const handleKeyDown = (e: KeyboardEvent) => {
+      if (step === 'verify-current' && lockout.isLockedOut) return;
+
       if (e.key >= '0' && e.key <= '9') {
         handleDigit(e.key);
       } else if (e.key === 'Backspace') {
@@ -141,10 +202,11 @@ export const SetPinModal: React.FC<SetPinModalProps> = ({
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, handleDigit, handleDelete, onClose]);
+  }, [isOpen, step, lockout.isLockedOut, handleDigit, handleDelete, onClose]);
 
   const getStepTitle = () => {
     if (step === 'verify-current') {
+      if (lockout.isLockedOut) return t('appLock.lockedOutTitle', 'Akses Dikunci Sementara');
       return t('appLock.enterCurrentPin', 'Masukkan PIN Saat Ini');
     }
     if (step === 'enter-new') {
@@ -155,6 +217,7 @@ export const SetPinModal: React.FC<SetPinModalProps> = ({
 
   const getStepDesc = () => {
     if (step === 'verify-current') {
+      if (lockout.isLockedOut) return t('appLock.lockedOutDesc', 'Keamanan aktif: batasi percobaan berulang');
       return mode === 'disable'
         ? t('appLock.verifyToDisable', 'Verifikasi identitas Anda untuk menonaktifkan kunci aplikasi.')
         : t('appLock.verifyToChange', 'Verifikasi identitas Anda sebelum mengatur PIN baru.');
@@ -176,14 +239,19 @@ export const SetPinModal: React.FC<SetPinModalProps> = ({
           width: '56px',
           height: '56px',
           borderRadius: '50%',
-          backgroundColor: 'hsla(215, 65%, 55%, 0.15)',
-          color: 'var(--color-primary)',
+          backgroundColor: (step === 'verify-current' && lockout.isLockedOut)
+            ? 'hsla(0, 84%, 60%, 0.15)'
+            : 'hsla(215, 65%, 55%, 0.15)',
+          color: (step === 'verify-current' && lockout.isLockedOut)
+            ? 'var(--color-danger)'
+            : 'var(--color-primary)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          marginBottom: '16px'
+          marginBottom: '16px',
+          transition: 'all 0.3s'
         }}>
-          <Lock size={26} />
+          {(step === 'verify-current' && lockout.isLockedOut) ? <AlertTriangle size={26} /> : <Lock size={26} />}
         </div>
 
         <h3 style={{ fontSize: '1.125rem', fontWeight: 600, color: 'var(--text-primary)', margin: '0 0 4px', textAlign: 'center' }}>
@@ -194,7 +262,13 @@ export const SetPinModal: React.FC<SetPinModalProps> = ({
         </p>
 
         {/* 4 Pin Dots */}
-        <div style={{ display: 'flex', gap: '16px', marginBottom: '24px', alignItems: 'center' }}>
+        <div style={{
+          display: 'flex',
+          gap: '16px',
+          marginBottom: '24px',
+          alignItems: 'center',
+          opacity: (step === 'verify-current' && lockout.isLockedOut) ? 0.4 : 1
+        }}>
           {[0, 1, 2, 3].map(index => {
             const isFilled = index < pinInput.length;
             return (
@@ -221,7 +295,8 @@ export const SetPinModal: React.FC<SetPinModalProps> = ({
             marginBottom: '16px',
             textAlign: 'center',
             fontWeight: 500,
-            animation: 'fadeIn 0.2s'
+            animation: 'fadeIn 0.2s',
+            maxWidth: '280px'
           }}>
             {errorMsg}
           </div>
@@ -234,14 +309,17 @@ export const SetPinModal: React.FC<SetPinModalProps> = ({
           gap: '12px',
           width: '100%',
           maxWidth: '280px',
-          marginBottom: '16px'
+          marginBottom: '16px',
+          opacity: isKeypadDisabled ? 0.4 : 1,
+          pointerEvents: isKeypadDisabled ? 'none' : 'auto',
+          transition: 'opacity 0.2s'
         }}>
           {['1', '2', '3', '4', '5', '6', '7', '8', '9'].map(num => (
             <button
               key={num}
               type="button"
               className="btn btn-ghost"
-              disabled={isProcessing}
+              disabled={isKeypadDisabled}
               style={{
                 height: '52px',
                 fontSize: '1.25rem',
@@ -260,7 +338,7 @@ export const SetPinModal: React.FC<SetPinModalProps> = ({
           <button
             type="button"
             className="btn btn-ghost"
-            disabled={isProcessing || pinInput.length === 0}
+            disabled={isKeypadDisabled || pinInput.length === 0}
             style={{
               height: '52px',
               fontSize: '0.875rem',
@@ -275,7 +353,7 @@ export const SetPinModal: React.FC<SetPinModalProps> = ({
           <button
             type="button"
             className="btn btn-ghost"
-            disabled={isProcessing}
+            disabled={isKeypadDisabled}
             style={{
               height: '52px',
               fontSize: '1.25rem',
@@ -293,7 +371,7 @@ export const SetPinModal: React.FC<SetPinModalProps> = ({
           <button
             type="button"
             className="btn btn-ghost"
-            disabled={isProcessing || pinInput.length === 0}
+            disabled={isKeypadDisabled || pinInput.length === 0}
             style={{
               height: '52px',
               borderRadius: '16px',

@@ -1,7 +1,13 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { verifyPin } from '../../utils/security';
-import { Shield, Lock, Delete, LogOut } from 'lucide-react';
+import {
+  verifyPin,
+  getLockoutStatus,
+  recordFailedAttempt,
+  resetLockout,
+  type LockoutStatus
+} from '../../utils/security';
+import { Shield, Lock, Delete, LogOut, AlertTriangle } from 'lucide-react';
 
 export const AppLockScreen: React.FC = () => {
   const { t } = useTranslation();
@@ -17,11 +23,13 @@ export const AppLockScreen: React.FC = () => {
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [isShaking, setIsShaking] = useState(false);
   const [isVerifying, setIsVerifying] = useState(false);
+  const [lockout, setLockout] = useState<LockoutStatus>(() => getLockoutStatus());
 
   // Synchronize lock state on storage events (e.g. user toggled or locked from Profile)
   useEffect(() => {
     const checkState = () => {
       setIsLocked(isLockEnabled() && !isUnlockedThisSession());
+      setLockout(getLockoutStatus());
     };
 
     window.addEventListener('storage', checkState);
@@ -32,26 +40,53 @@ export const AppLockScreen: React.FC = () => {
     };
   }, []);
 
+  // Live countdown timer during lockout
+  useEffect(() => {
+    if (!lockout.isLockedOut) return;
+
+    const interval = setInterval(() => {
+      const current = getLockoutStatus();
+      setLockout(current);
+      if (!current.isLockedOut) {
+        setErrorMsg(null);
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [lockout.isLockedOut]);
+
   const handleDigit = useCallback((digit: string) => {
+    if (lockout.isLockedOut || isVerifying) return;
     setErrorMsg(null);
     setPin(prev => {
       if (prev.length >= 4) return prev;
       return prev + digit;
     });
-  }, []);
+  }, [lockout.isLockedOut, isVerifying]);
 
   const handleDelete = useCallback(() => {
+    if (lockout.isLockedOut || isVerifying) return;
     setErrorMsg(null);
     setPin(prev => prev.slice(0, -1));
-  }, []);
+  }, [lockout.isLockedOut, isVerifying]);
 
   const handleClear = useCallback(() => {
+    if (lockout.isLockedOut || isVerifying) return;
     setErrorMsg(null);
     setPin('');
-  }, []);
+  }, [lockout.isLockedOut, isVerifying]);
 
   const verifyAndUnlock = useCallback(async (pinInput: string) => {
     if (pinInput.length !== 4) return;
+
+    // Check lockout status prior to verification
+    const currentLockout = getLockoutStatus();
+    if (currentLockout.isLockedOut) {
+      setLockout(currentLockout);
+      setPin('');
+      return;
+    }
+
     setIsVerifying(true);
 
     try {
@@ -59,17 +94,36 @@ export const AppLockScreen: React.FC = () => {
       const isValid = await verifyPin(pinInput, storedHash);
 
       if (isValid) {
+        resetLockout();
+        setLockout(getLockoutStatus());
         sessionStorage.setItem('rima-app-unlocked', 'true');
         setIsLocked(false);
         setPin('');
         setErrorMsg(null);
       } else {
-        setErrorMsg(t('appLock.incorrectPin', 'PIN salah. Silakan coba lagi.'));
+        const updatedStatus = recordFailedAttempt();
+        setLockout(updatedStatus);
         setIsShaking(true);
+
         setTimeout(() => {
           setIsShaking(false);
           setPin('');
         }, 500);
+
+        if (updatedStatus.isLockedOut) {
+          setErrorMsg(
+            t('appLock.tooManyAttempts', 'Terlalu banyak percobaan gagal. Silakan coba lagi dalam {{seconds}} detik.', {
+              seconds: updatedStatus.remainingSeconds
+            })
+          );
+        } else {
+          const remaining = updatedStatus.maxAttempts - updatedStatus.failedAttempts;
+          setErrorMsg(
+            t('appLock.attemptsRemaining', 'PIN salah. Sisa percobaan: {{count}}', {
+              count: remaining
+            })
+          );
+        }
       }
     } catch (err) {
       console.error('Error verifying PIN:', err);
@@ -81,16 +135,18 @@ export const AppLockScreen: React.FC = () => {
   }, [t]);
 
   useEffect(() => {
-    if (pin.length === 4) {
+    if (pin.length === 4 && !lockout.isLockedOut) {
       verifyAndUnlock(pin);
     }
-  }, [pin, verifyAndUnlock]);
+  }, [pin, lockout.isLockedOut, verifyAndUnlock]);
 
   // Physical keyboard listener
   useEffect(() => {
     if (!isLocked) return;
 
     const handleKeyDown = (e: KeyboardEvent) => {
+      if (lockout.isLockedOut) return;
+
       if (e.key >= '0' && e.key <= '9') {
         handleDigit(e.key);
       } else if (e.key === 'Backspace') {
@@ -100,7 +156,7 @@ export const AppLockScreen: React.FC = () => {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isLocked, handleDigit, handleDelete]);
+  }, [isLocked, lockout.isLockedOut, handleDigit, handleDelete]);
 
   if (!isLocked) return null;
 
@@ -154,15 +210,18 @@ export const AppLockScreen: React.FC = () => {
           width: '72px',
           height: '72px',
           borderRadius: '50%',
-          backgroundColor: 'hsla(215, 65%, 55%, 0.12)',
-          color: 'var(--color-primary)',
+          backgroundColor: lockout.isLockedOut ? 'hsla(0, 84%, 60%, 0.12)' : 'hsla(215, 65%, 55%, 0.12)',
+          color: lockout.isLockedOut ? 'var(--color-danger)' : 'var(--color-primary)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           marginBottom: '20px',
-          boxShadow: '0 0 24px hsla(215, 65%, 55%, 0.18)'
+          boxShadow: lockout.isLockedOut
+            ? '0 0 24px hsla(0, 84%, 60%, 0.2)'
+            : '0 0 24px hsla(215, 65%, 55%, 0.18)',
+          transition: 'all 0.3s ease'
         }}>
-          <Lock size={32} />
+          {lockout.isLockedOut ? <AlertTriangle size={32} /> : <Lock size={32} />}
         </div>
 
         <h1 style={{
@@ -172,7 +231,7 @@ export const AppLockScreen: React.FC = () => {
           margin: '0 0 8px',
           textAlign: 'center'
         }}>
-          {t('appLock.enterPin', 'Masukkan PIN 4-Digit')}
+          {lockout.isLockedOut ? t('appLock.lockedOutTitle', 'Akses Dikunci Sementara') : t('appLock.enterPin', 'Masukkan PIN 4-Digit')}
         </h1>
 
         <p style={{
@@ -181,7 +240,9 @@ export const AppLockScreen: React.FC = () => {
           margin: '0 0 28px',
           textAlign: 'center'
         }}>
-          {t('appLock.protectedPrompt', 'Ruang pribadi Anda terlindungi')}
+          {lockout.isLockedOut
+            ? t('appLock.lockedOutDesc', 'Keamanan aktif: batasi percobaan berulang')
+            : t('appLock.protectedPrompt', 'Ruang pribadi Anda terlindungi')}
         </p>
 
         {/* 4 Pin Indicator Dots */}
@@ -192,7 +253,8 @@ export const AppLockScreen: React.FC = () => {
             marginBottom: '28px',
             alignItems: 'center',
             transform: isShaking ? 'translateX(-8px)' : 'none',
-            transition: isShaking ? 'transform 0.08s ease-in-out' : 'none'
+            transition: isShaking ? 'transform 0.08s ease-in-out' : 'none',
+            opacity: lockout.isLockedOut ? 0.4 : 1
           }}
         >
           {[0, 1, 2, 3].map(index => {
@@ -215,7 +277,27 @@ export const AppLockScreen: React.FC = () => {
           })}
         </div>
 
-        {errorMsg && (
+        {/* Lockout or Error Banner */}
+        {lockout.isLockedOut ? (
+          <div style={{
+            color: 'var(--color-danger)',
+            backgroundColor: 'hsla(0, 84%, 60%, 0.08)',
+            border: '1px solid hsla(0, 84%, 60%, 0.25)',
+            borderRadius: '12px',
+            padding: '10px 14px',
+            fontSize: '0.813rem',
+            marginBottom: '20px',
+            textAlign: 'center',
+            fontWeight: 500,
+            width: '100%',
+            maxWidth: '280px',
+            animation: 'fadeIn 0.2s ease-out'
+          }}>
+            {t('appLock.tooManyAttempts', 'Terlalu banyak percobaan gagal. Silakan coba lagi dalam {{seconds}} detik.', {
+              seconds: lockout.remainingSeconds
+            })}
+          </div>
+        ) : errorMsg && (
           <div style={{
             color: 'var(--color-danger)',
             fontSize: '0.875rem',
@@ -234,14 +316,17 @@ export const AppLockScreen: React.FC = () => {
           gap: '14px',
           width: '100%',
           maxWidth: '280px',
-          marginBottom: '20px'
+          marginBottom: '20px',
+          opacity: lockout.isLockedOut ? 0.4 : 1,
+          pointerEvents: lockout.isLockedOut ? 'none' : 'auto',
+          transition: 'opacity 0.2s'
         }}>
           {['1', '2', '3', '4', '5', '6', '7', '8', '9'].map(num => (
             <button
               key={num}
               type="button"
               className="btn btn-ghost"
-              disabled={isVerifying}
+              disabled={isVerifying || lockout.isLockedOut}
               style={{
                 height: '56px',
                 fontSize: '1.375rem',
@@ -261,7 +346,7 @@ export const AppLockScreen: React.FC = () => {
           <button
             type="button"
             className="btn btn-ghost"
-            disabled={isVerifying || pin.length === 0}
+            disabled={isVerifying || lockout.isLockedOut || pin.length === 0}
             style={{
               height: '56px',
               fontSize: '0.875rem',
@@ -277,7 +362,7 @@ export const AppLockScreen: React.FC = () => {
           <button
             type="button"
             className="btn btn-ghost"
-            disabled={isVerifying}
+            disabled={isVerifying || lockout.isLockedOut}
             style={{
               height: '56px',
               fontSize: '1.375rem',
@@ -295,7 +380,7 @@ export const AppLockScreen: React.FC = () => {
           <button
             type="button"
             className="btn btn-ghost"
-            disabled={isVerifying || pin.length === 0}
+            disabled={isVerifying || lockout.isLockedOut || pin.length === 0}
             style={{
               height: '56px',
               borderRadius: '18px',
