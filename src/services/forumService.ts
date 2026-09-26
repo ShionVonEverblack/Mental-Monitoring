@@ -72,11 +72,12 @@ export async function fetchForumPosts(page = 0, limit = 20): Promise<PaginatedPo
         .order('created_at', { ascending: false })
         .range(from, to);
 
-      // Fallback if view hasn't been migrated yet
+      // Fallback if view hasn't been migrated yet (strictly query unflagged posts)
       if (error) {
         const fallback = await supabase
           .from('forum_posts')
           .select('*', { count: 'exact' })
+          .eq('is_flagged', false)
           .order('created_at', { ascending: false })
           .range(from, to);
         data = fallback.data;
@@ -92,7 +93,7 @@ export async function fetchForumPosts(page = 0, limit = 20): Promise<PaginatedPo
           content: item.content,
           reactions: item.reactions || { heart: 0, strength: 0, hug: 0 },
           commentCount: item.comment_count || 0,
-          isFlagged: false, // Hidden for user privacy
+          isFlagged: false, // Filtered and hidden for user privacy & safety
           createdAt: item.created_at
         }));
         return {
@@ -105,7 +106,7 @@ export async function fetchForumPosts(page = 0, limit = 20): Promise<PaginatedPo
     }
   }
 
-  // Local storage fallback
+  // Local storage fallback (strictly exclude flagged posts from community view)
   const raw = localStorage.getItem(LOCAL_STORAGE_KEY);
   let allPosts: ForumPost[] = DEFAULT_POSTS;
   if (!raw) {
@@ -118,12 +119,13 @@ export async function fetchForumPosts(page = 0, limit = 20): Promise<PaginatedPo
     }
   }
 
+  const visiblePosts = allPosts.filter(p => !p.isFlagged);
   const from = page * limit;
-  const paginated = allPosts.slice(from, from + limit);
+  const paginated = visiblePosts.slice(from, from + limit);
   return {
     posts: paginated,
-    hasMore: from + limit < allPosts.length,
-    total: allPosts.length
+    hasMore: from + limit < visiblePosts.length,
+    total: visiblePosts.length
   };
 }
 

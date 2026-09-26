@@ -10,7 +10,7 @@ A privacy-focused, anonymous, evidence-based digital mental health platform.
 [![TypeScript](https://img.shields.io/badge/TypeScript-6.0-3178C6?style=flat-square&logo=typescript)](https://typescriptlang.org)
 [![Vite](https://img.shields.io/badge/Vite-8.2-646CFF?style=flat-square&logo=vite)](https://vite.dev)
 [![PWA Ready](https://img.shields.io/badge/PWA-Ready-5A0FC8?style=flat-square&logo=pwa)](https://web.dev/progressive-web-apps)
-[![Tests Passing](https://img.shields.io/badge/Vitest-72%2F72%20passing-brightgreen?style=flat-square&logo=vitest)](https://vitest.dev)
+[![Tests Passing](https://img.shields.io/badge/Vitest-78%2F78%20passing-brightgreen?style=flat-square&logo=vitest)](https://vitest.dev)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)](LICENSE)
 
 [English](#about) · [Features](#-core-features) · [Tech Stack](#-tech-stack) · [Roadmap](#-roadmap) · [Getting Started](#-getting-started)
@@ -275,7 +275,7 @@ Open **http://localhost:5173/** in your browser.
 | `npm run dev` | Start development server with Hot Module Replacement (HMR) |
 | `npm run build` | Compile TypeScript and build production bundle with Vite |
 | `npm run preview` | Locally preview production build |
-| `npm test` | Run Vitest unit test suite (72 test cases across 11 test suites) |
+| `npm test` | Run Vitest unit test suite (78 test cases across 12 test suites) |
 | `npm run lint` | Run code quality checks with oxlint |
 
 ---
@@ -382,7 +382,7 @@ RIMA incorporates a trauma-informed design system tailored for mental wellness:
 - [x] **App PIN Security Lock**:
   - Offline 4-digit PIN authentication with PBKDF2-SHA256 salted hashing and brute-force rate limiting protection
 - [x] **Expanded Test Suite**:
-  - 72 unit test cases across 11 test suites with 100% pass rate
+  - 78 unit test cases across 12 test suites with 100% pass rate
 
 ---
 
