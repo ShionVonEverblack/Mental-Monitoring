@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { Book, MessageCircle, Heart, Flame, Wind, BookOpen, Globe, Sparkles, ClipboardCheck } from 'lucide-react';
+import { Book, MessageCircle, Heart, Flame, Wind, BookOpen, Globe, Sparkles, ClipboardCheck, Snowflake } from 'lucide-react';
 import { BarChart, Bar, Cell, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { MoodSelector } from '../components/ui/MoodSelector';
 import { Modal } from '../components/ui/Modal';
@@ -212,6 +212,10 @@ export const Home: React.FC = () => {
         <button className="quick-action-btn grounding" onClick={() => navigate('/grounding')}>
           <Sparkles className="action-icon" />
           <span>{t('home.grounding', 'Grounding 5-4-3-2-1')}</span>
+        </button>
+        <button className="quick-action-btn tipp" onClick={() => navigate('/tipp')}>
+          <Snowflake className="action-icon" />
+          <span>{t('home.tippCrisis', 'TIPP Krisis')}</span>
         </button>
         <button className="quick-action-btn assessment" onClick={() => navigate('/assessment')}>
           <ClipboardCheck className="action-icon" />

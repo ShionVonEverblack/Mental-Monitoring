@@ -92,6 +92,12 @@ export function calculateEscalation(moods: MoodEntry[], latestJournalContent?: s
       messageFallback: 'Sepertinya akhir-akhir ini terasa berat. Anda tidak sendirian.',
       suggestedActions: [
         {
+          labelKey: 'escalation.actionTipp',
+          labelFallback: 'TIPP Krisis',
+          route: '/tipp',
+          icon: '🧊'
+        },
+        {
           labelKey: 'escalation.actionForum',
           labelFallback: 'Forum Dukungan',
           route: '/forum',

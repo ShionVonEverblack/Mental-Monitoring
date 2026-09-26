@@ -1,4 +1,4 @@
-import type { CrisisResource, MoodScore, MoodEmoji, ForumCategory, JournalTemplate, Language, CognitiveDistortionId } from '../types';
+import type { CrisisResource, MoodScore, MoodEmoji, ForumCategory, JournalTemplate, Language, CognitiveDistortionId, TippModuleId } from '../types';
 
 export const CRISIS_HOTLINES: CrisisResource[] = [
   {
@@ -187,6 +187,78 @@ export const COGNITIVE_DISTORTIONS: {
     nameFallback: 'Filter Negatif',
     descKey: 'cbt.desc.mental_filter',
     descFallback: 'Hanya berfokus pada satu hal negatif dan melupakan semua hal positif.',
+  },
+];
+
+export interface TippModuleConfig {
+  id: TippModuleId;
+  icon: string;
+  color: string;
+  durationSeconds: number;
+}
+
+export const TIPP_MODULES: TippModuleConfig[] = [
+  { id: 'temperature', icon: '🧊', color: 'var(--color-primary)', durationSeconds: 30 },
+  { id: 'exercise', icon: '🏃', color: 'var(--color-warm)', durationSeconds: 60 },
+  { id: 'breathing', icon: '🌬️', color: 'var(--color-secondary)', durationSeconds: 0 },
+  { id: 'pmr', icon: '💆', color: 'var(--color-accent)', durationSeconds: 75 },
+];
+
+export interface PmrBodyZone {
+  id: 'hands' | 'shoulders' | 'jaw' | 'abdomen' | 'legs';
+  nameKey: string;
+  nameFallback: string;
+  instructionKey: string;
+  instructionFallback: string;
+  tensionSeconds: number;
+  releaseSeconds: number;
+}
+
+export const PMR_BODY_ZONES: PmrBodyZone[] = [
+  {
+    id: 'hands',
+    nameKey: 'tipp.pmrHands',
+    nameFallback: 'Kepalan Tangan & Lengan',
+    instructionKey: 'tipp.pmrHandsDesc',
+    instructionFallback: 'Kepalkan kedua tangan sekuat tenaga, kencangkan otot bisep dan lengan.',
+    tensionSeconds: 5,
+    releaseSeconds: 10,
+  },
+  {
+    id: 'shoulders',
+    nameKey: 'tipp.pmrShoulders',
+    nameFallback: 'Bahu & Leher',
+    instructionKey: 'tipp.pmrShouldersDesc',
+    instructionFallback: 'Angkat bahu tinggi-tinggi mendekati telinga, rasakan ketegangan di leher.',
+    tensionSeconds: 5,
+    releaseSeconds: 10,
+  },
+  {
+    id: 'jaw',
+    nameKey: 'tipp.pmrJaw',
+    nameFallback: 'Rahang & Wajah',
+    instructionKey: 'tipp.pmrJawDesc',
+    instructionFallback: 'Katupkan gigi rapat-rapat dan kerutkan dahi serta mata Anda.',
+    tensionSeconds: 5,
+    releaseSeconds: 10,
+  },
+  {
+    id: 'abdomen',
+    nameKey: 'tipp.pmrAbdomen',
+    nameFallback: 'Perut & Dada',
+    instructionKey: 'tipp.pmrAbdomenDesc',
+    instructionFallback: 'Tarik dan kunci otot perut ke dalam seperti menahan benturan, kencangkan dada.',
+    tensionSeconds: 5,
+    releaseSeconds: 10,
+  },
+  {
+    id: 'legs',
+    nameKey: 'tipp.pmrLegs',
+    nameFallback: 'Kaki & Betis',
+    instructionKey: 'tipp.pmrLegsDesc',
+    instructionFallback: 'Tekuk jari kaki ke arah dalam dan kencangkan paha serta betis Anda.',
+    tensionSeconds: 5,
+    releaseSeconds: 10,
   },
 ];
 

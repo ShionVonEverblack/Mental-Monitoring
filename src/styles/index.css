@@ -947,3 +947,62 @@ button.journal-entry-toggle { background: none; border: none; font: inherit; col
 /* Quick Action Colors for Home */
 .quick-action-btn.grounding { color: var(--color-accent); }
 .quick-action-btn.assessment { color: var(--color-secondary); }
+.quick-action-btn.tipp { color: var(--color-primary); }
+
+/* DBT TIPP Crisis Hub */
+.tipp-page { animation: fadeInUp 0.5s ease-out; max-width: 800px; margin: 0 auto; }
+.tipp-header { text-align: center; margin-bottom: var(--spacing-xl); }
+.tipp-subtitle { color: var(--text-secondary); font-size: 0.938rem; max-width: 600px; margin: 0 auto var(--spacing-md); line-height: 1.5; }
+.tipp-suds-box { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: var(--spacing-lg); margin-bottom: var(--spacing-xl); text-align: center; }
+.tipp-suds-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--spacing-sm); }
+.tipp-suds-title { font-weight: 600; font-size: 0.938rem; color: var(--text-primary); }
+.tipp-suds-value { font-size: 1.5rem; font-weight: 800; border-radius: var(--radius-md); padding: 2px 12px; }
+.tipp-suds-slider { width: 100%; height: 8px; border-radius: var(--radius-full); -webkit-appearance: none; appearance: none; background: linear-gradient(to right, var(--color-secondary), var(--color-warm), var(--color-danger)); outline: none; cursor: pointer; margin: var(--spacing-md) 0 var(--spacing-xs); }
+.tipp-suds-slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 24px; height: 24px; border-radius: 50%; background: #ffffff; border: 3px solid var(--color-primary); cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.3); transition: transform 0.15s ease; }
+.tipp-suds-slider::-webkit-slider-thumb:hover { transform: scale(1.15); }
+.tipp-suds-slider::-moz-range-thumb { width: 24px; height: 24px; border-radius: 50%; background: #ffffff; border: 3px solid var(--color-primary); cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.3); }
+.tipp-suds-labels { display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-tertiary); }
+.tipp-module-grid { display: grid; grid-template-columns: 1fr; gap: var(--spacing-md); margin-bottom: var(--spacing-xl); }
+@media (min-width: 640px) { .tipp-module-grid { grid-template-columns: repeat(2, 1fr); } }
+.tipp-module-card { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: var(--spacing-lg); text-align: left; cursor: pointer; transition: all var(--transition-fast); display: flex; flex-direction: column; position: relative; }
+.tipp-module-card:hover { transform: translateY(-3px); border-color: var(--color-primary); box-shadow: 0 8px 24px rgba(0,0,0,0.12); }
+.tipp-module-card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: var(--spacing-md); }
+.tipp-module-icon-wrap { width: 52px; height: 52px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.6rem; }
+.tipp-module-badge { font-size: 0.75rem; font-weight: 600; padding: 4px 10px; border-radius: var(--radius-full); background: var(--bg-secondary); color: var(--text-secondary); }
+.tipp-module-title { font-size: 1.125rem; font-weight: 700; color: var(--text-primary); margin-bottom: var(--spacing-xs); }
+.tipp-module-desc { font-size: 0.844rem; color: var(--text-secondary); line-height: 1.5; flex: 1; margin-bottom: var(--spacing-md); }
+.tipp-module-action { display: inline-flex; align-items: center; gap: 6px; font-size: 0.875rem; font-weight: 600; color: var(--color-primary); margin-top: auto; }
+.tipp-active-module { animation: fadeInUp 0.4s ease-out; }
+.tipp-back-btn { display: inline-flex; align-items: center; gap: 6px; font-size: 0.875rem; color: var(--text-secondary); background: none; border: none; cursor: pointer; margin-bottom: var(--spacing-md); padding: 6px 12px; border-radius: var(--radius-md); transition: background var(--transition-fast); }
+.tipp-back-btn:hover { background: var(--bg-card); color: var(--text-primary); }
+.tipp-timer-container { text-align: center; margin: var(--spacing-xl) 0; }
+.tipp-timer-circle { width: 140px; height: 140px; border-radius: 50%; border: 4px solid var(--color-primary); display: inline-flex; flex-direction: column; align-items: center; justify-content: center; background: hsla(215, 65%, 55%, 0.08); margin-bottom: var(--spacing-lg); transition: all 0.3s ease; }
+.tipp-timer-circle.active { border-color: var(--color-warm); transform: scale(1.04); box-shadow: 0 0 24px hsla(35, 75%, 60%, 0.3); }
+.tipp-timer-circle.tension { border-color: var(--color-warm); background: hsla(35, 75%, 60%, 0.12); }
+.tipp-timer-circle.release { border-color: var(--color-secondary); background: hsla(165, 45%, 50%, 0.12); }
+.tipp-timer-number { font-size: 2.5rem; font-weight: 800; color: var(--text-primary); line-height: 1; }
+.tipp-timer-label { font-size: 0.75rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px; }
+.tipp-timer-controls { display: flex; justify-content: center; gap: var(--spacing-md); flex-wrap: wrap; margin-bottom: var(--spacing-lg); }
+.tipp-instruction-box { background: var(--bg-secondary); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: var(--spacing-lg); margin-bottom: var(--spacing-lg); text-align: left; }
+.tipp-instruction-box h3 { font-size: 1rem; font-weight: 700; color: var(--text-primary); margin-bottom: var(--spacing-sm); display: flex; align-items: center; gap: 8px; }
+.tipp-instruction-box ol, .tipp-instruction-box ul { padding-left: 20px; margin: 0; }
+.tipp-instruction-box li { font-size: 0.875rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 6px; }
+.tipp-science-callout { background: hsla(215, 65%, 55%, 0.08); border-left: 4px solid var(--color-primary); border-radius: 0 var(--radius-md) var(--radius-md) 0; padding: var(--spacing-md); margin-bottom: var(--spacing-lg); font-size: 0.813rem; color: var(--text-secondary); line-height: 1.5; text-align: left; }
+.tipp-science-callout strong { color: var(--text-primary); }
+.tipp-exercise-options { display: flex; flex-wrap: wrap; gap: var(--spacing-sm); margin-bottom: var(--spacing-md); justify-content: center; }
+.tipp-exercise-chip { padding: 8px 14px; border-radius: var(--radius-full); border: 1px solid var(--border-subtle); background: var(--bg-card); color: var(--text-secondary); font-size: 0.844rem; font-weight: 500; cursor: pointer; transition: all var(--transition-fast); }
+.tipp-exercise-chip.active { background: var(--color-warm); color: #fff; border-color: var(--color-warm); font-weight: 600; }
+.tipp-pmr-phases { display: flex; justify-content: center; gap: var(--spacing-sm); margin-bottom: var(--spacing-lg); }
+.tipp-pmr-phase-pill { padding: 6px 16px; border-radius: var(--radius-full); font-size: 0.813rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+.tipp-pmr-phase-pill.tension { background: hsla(35, 75%, 60%, 0.2); color: var(--color-warm); border: 1px solid var(--color-warm); }
+.tipp-pmr-phase-pill.release { background: hsla(165, 45%, 50%, 0.2); color: var(--color-secondary); border: 1px solid var(--color-secondary); }
+.tipp-completion-card { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: var(--spacing-xl); text-align: center; animation: scaleIn 0.4s ease-out; }
+.tipp-delta-container { display: flex; align-items: center; justify-content: center; gap: var(--spacing-lg); margin: var(--spacing-lg) 0; }
+.tipp-delta-item { text-align: center; }
+.tipp-delta-value { font-size: 2.25rem; font-weight: 800; }
+.tipp-delta-label { font-size: 0.75rem; color: var(--text-tertiary); text-transform: uppercase; }
+.tipp-delta-arrow { font-size: 1.5rem; color: var(--text-tertiary); }
+.tipp-delta-badge { display: inline-block; padding: 6px 14px; border-radius: var(--radius-full); font-weight: 700; font-size: 0.938rem; margin-bottom: var(--spacing-md); }
+.tipp-delta-badge.improved { background: hsla(165, 45%, 50%, 0.15); color: var(--color-secondary); }
+.tipp-delta-badge.same { background: hsla(215, 65%, 55%, 0.15); color: var(--color-primary); }
+.tipp-delta-badge.elevated { background: hsla(0, 65%, 55%, 0.15); color: var(--color-danger); }

@@ -22,6 +22,7 @@ const Analytics = lazy(() => import('./pages/Analytics').then(module => ({ defau
 const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy').then(module => ({ default: module.PrivacyPolicy })));
 const Grounding = lazy(() => import('./pages/Grounding').then(module => ({ default: module.Grounding })));
 const Assessment = lazy(() => import('./pages/Assessment').then(module => ({ default: module.Assessment })));
+const TippCrisisHub = lazy(() => import('./pages/TippCrisisHub').then(module => ({ default: module.TippCrisisHub })));
 import { ConsentModal } from './components/common/ConsentModal';
 import { AppLockScreen } from './components/security/AppLockScreen';
 
@@ -56,6 +57,7 @@ const App: React.FC = () => {
               <Route path="/privacy" element={<PrivacyPolicy />} />
               <Route path="/grounding" element={<Grounding />} />
               <Route path="/assessment" element={<Assessment />} />
+              <Route path="/tipp" element={<TippCrisisHub />} />
             </Routes>
           </Suspense>
         </AppShell>

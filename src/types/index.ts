@@ -128,3 +128,13 @@ export interface AssessmentResult {
   answers: Record<number, number>;
   createdAt: string;
 }
+
+export type TippModuleId = 'temperature' | 'exercise' | 'breathing' | 'pmr';
+
+export interface TippSessionLog {
+  id: string;
+  moduleId: TippModuleId;
+  preDistress: number; // 1-10
+  postDistress: number; // 1-10
+  completedAt: string;
+}
