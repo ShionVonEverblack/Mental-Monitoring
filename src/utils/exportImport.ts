@@ -67,6 +67,21 @@ export function sanitizeCSVCell(val: string): string {
   return escaped;
 }
 
+/**
+ * HTML Entity Encoder — OWASP Cross-Site Scripting (XSS) defense for exported documents.
+ * Encodes special characters to prevent stored/exported HTML injection when opening reports in browsers.
+ */
+export function escapeHTML(val: unknown): string {
+  if (val === null || val === undefined) return '';
+  const str = String(val);
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
 export function exportMoodsAsCSV(lang?: string): boolean {
   const activeLang = getActiveLang(lang);
   const localeTag = getLocaleTag(activeLang);
@@ -302,47 +317,47 @@ export function generateClinicalSummaryHTML(lang?: string): boolean {
   </div>
 
   ${topFactors.length > 0 ? `
-  <h2>${tDict.topFactorsTitle}</h2>
+  <h2>${escapeHTML(tDict.topFactorsTitle)}</h2>
   <table>
-    <tr><th>${tDict.factor}</th><th>${tDict.frequency}</th></tr>
-    ${topFactors.map(([f, c]) => `<tr><td>${f}</td><td>${c}x</td></tr>`).join('\n    ')}
+    <tr><th>${escapeHTML(tDict.factor)}</th><th>${escapeHTML(tDict.frequency)}</th></tr>
+    ${topFactors.map(([f, c]) => `<tr><td>${escapeHTML(f)}</td><td>${Number(c)}x</td></tr>`).join('\n    ')}
   </table>
   ` : ''}
 
-  <h2>${tDict.historyTitle}</h2>
+  <h2>${escapeHTML(tDict.historyTitle)}</h2>
   <table>
-    <tr><th>${tDict.colDate}</th><th>${tDict.colScore}</th><th>${tDict.colEmoji}</th><th>${tDict.colFactors}</th><th>${tDict.colNotes}</th></tr>
+    <tr><th>${escapeHTML(tDict.colDate)}</th><th>${escapeHTML(tDict.colScore)}</th><th>${escapeHTML(tDict.colEmoji)}</th><th>${escapeHTML(tDict.colFactors)}</th><th>${escapeHTML(tDict.colNotes)}</th></tr>
     ${sortedMoods.slice(0, 30).map(m => `<tr>
-      <td>${new Date(m.createdAt).toLocaleDateString(localeTag)}</td>
-      <td>${m.score}/5</td>
-      <td>${m.emoji}</td>
-      <td>${(m.factors || []).join(', ') || '-'}</td>
-      <td>${(m.note || '-').substring(0, 100)}</td>
+      <td>${escapeHTML(new Date(m.createdAt).toLocaleDateString(localeTag))}</td>
+      <td>${escapeHTML(m.score)}/5</td>
+      <td>${escapeHTML(m.emoji)}</td>
+      <td>${escapeHTML((m.factors || []).join(', ') || '-')}</td>
+      <td>${escapeHTML(m.note || '-')}</td>
     </tr>`).join('\n    ')}
   </table>
 
   ${escalationLog.length > 0 ? `
-  <h2 class="severe">${tDict.escalationTitle}</h2>
+  <h2 class="severe">${escapeHTML(tDict.escalationTitle)}</h2>
   <table>
-    <tr><th>${tDict.colDate}</th><th>${tDict.level}</th><th>${tDict.description}</th></tr>
+    <tr><th>${escapeHTML(tDict.colDate)}</th><th>${escapeHTML(tDict.level)}</th><th>${escapeHTML(tDict.description)}</th></tr>
     ${escalationLog.map((e: { timestamp: string; level: number; messageKey: string }) => `<tr>
-      <td>${new Date(e.timestamp).toLocaleDateString(localeTag)}</td>
-      <td class="${e.level >= 3 ? 'severe' : ''}">${e.level}</td>
-      <td>${e.messageKey}</td>
+      <td>${escapeHTML(new Date(e.timestamp).toLocaleDateString(localeTag))}</td>
+      <td class="${e.level >= 3 ? 'severe' : ''}">${escapeHTML(e.level)}</td>
+      <td>${escapeHTML(e.messageKey)}</td>
     </tr>`).join('\n    ')}
   </table>
   ` : ''}
 
   ${backup.safetyPlan ? `
-  <h2>${tDict.safetyPlanTitle}</h2>
+  <h2>${escapeHTML(tDict.safetyPlanTitle)}</h2>
   <table>
-    <tr><th>${tDict.component}</th><th>${tDict.content}</th></tr>
-    <tr><td>${tDict.warningSigns}</td><td>${(backup.safetyPlan.warningSigns || []).join(', ') || '-'}</td></tr>
-    <tr><td>${tDict.copingStrategies}</td><td>${(backup.safetyPlan.copingStrategies || []).join(', ') || '-'}</td></tr>
-    <tr><td>${tDict.socialContacts}</td><td>${(backup.safetyPlan.peopleToContact || []).map(c => c.name).join(', ') || '-'}</td></tr>
-    <tr><td>${tDict.professionals}</td><td>${(backup.safetyPlan.professionalContacts || []).map(c => c.name).join(', ') || '-'}</td></tr>
-    <tr><td>${tDict.safeEnvironment}</td><td>${(backup.safetyPlan.safeEnvironment || []).join(', ') || '-'}</td></tr>
-    <tr><td>${tDict.reasonsToLive}</td><td>${(backup.safetyPlan.reasonsToLive || []).join(', ') || '-'}</td></tr>
+    <tr><th>${escapeHTML(tDict.component)}</th><th>${escapeHTML(tDict.content)}</th></tr>
+    <tr><td>${escapeHTML(tDict.warningSigns)}</td><td>${escapeHTML((backup.safetyPlan.warningSigns || []).join(', ') || '-')}</td></tr>
+    <tr><td>${escapeHTML(tDict.copingStrategies)}</td><td>${escapeHTML((backup.safetyPlan.copingStrategies || []).join(', ') || '-')}</td></tr>
+    <tr><td>${escapeHTML(tDict.socialContacts)}</td><td>${escapeHTML((backup.safetyPlan.peopleToContact || []).map(c => c.name).join(', ') || '-')}</td></tr>
+    <tr><td>${escapeHTML(tDict.professionals)}</td><td>${escapeHTML((backup.safetyPlan.professionalContacts || []).map(c => c.name).join(', ') || '-')}</td></tr>
+    <tr><td>${escapeHTML(tDict.safeEnvironment)}</td><td>${escapeHTML((backup.safetyPlan.safeEnvironment || []).join(', ') || '-')}</td></tr>
+    <tr><td>${escapeHTML(tDict.reasonsToLive)}</td><td>${escapeHTML((backup.safetyPlan.reasonsToLive || []).join(', ') || '-')}</td></tr>
   </table>
   ` : ''}
 

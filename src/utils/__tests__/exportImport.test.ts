@@ -4,7 +4,8 @@ import {
   exportJournalsAsCSV,
   generateClinicalSummaryHTML,
   generateBackupData,
-  importDataFromJSON
+  importDataFromJSON,
+  escapeHTML
 } from '../exportImport';
 
 describe('exportImport Utilities (Localization & Data Portability)', () => {
@@ -96,5 +97,42 @@ describe('exportImport Utilities (Localization & Data Portability)', () => {
     const result = importDataFromJSON(JSON.stringify(backup));
     expect(result.success).toBe(true);
     expect(localStorage.getItem('rima-moods')).toContain('Rested well');
+  });
+
+  it('escapes HTML special characters using escapeHTML to prevent XSS injection', () => {
+    expect(escapeHTML('<script>alert("XSS")</script>')).toBe('&lt;script&gt;alert(&quot;XSS&quot;)&lt;/script&gt;');
+    expect(escapeHTML("John's & Jane's > 5")).toBe('John&#039;s &amp; Jane&#039;s &gt; 5');
+    expect(escapeHTML(null)).toBe('');
+    expect(escapeHTML(undefined)).toBe('');
+  });
+
+  it('escapes malicious HTML payloads in clinical summary HTML export', () => {
+    const maliciousMood = [
+      {
+        id: 'xss-1',
+        score: 3,
+        emoji: '😐',
+        factors: ['<img src=x onerror=alert(1)>'],
+        note: '<script>evilScript()</script>',
+        createdAt: '2026-09-01T10:00:00.000Z'
+      }
+    ];
+    localStorage.setItem('rima-moods', JSON.stringify(maliciousMood));
+
+    let exportedHTML = '';
+    const originalBlob = globalThis.Blob;
+    vi.spyOn(globalThis, 'Blob').mockImplementation(function (blobParts: any, options: any) {
+      exportedHTML = blobParts.join('');
+      return new originalBlob(blobParts, options);
+    });
+
+    const success = generateClinicalSummaryHTML('en');
+    expect(success).toBe(true);
+    // Raw script and onerror tags must NOT be present
+    expect(exportedHTML).not.toContain('<script>evilScript()</script>');
+    expect(exportedHTML).not.toContain('<img src=x onerror=alert(1)>');
+    // Must be sanitized to HTML entities
+    expect(exportedHTML).toContain('&lt;script&gt;evilScript()&lt;/script&gt;');
+    expect(exportedHTML).toContain('&lt;img src=x onerror=alert(1)&gt;');
   });
 });
