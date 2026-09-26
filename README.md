@@ -10,7 +10,7 @@ A privacy-focused, anonymous, evidence-based digital mental health platform.
 [![TypeScript](https://img.shields.io/badge/TypeScript-6.0-3178C6?style=flat-square&logo=typescript)](https://typescriptlang.org)
 [![Vite](https://img.shields.io/badge/Vite-8.2-646CFF?style=flat-square&logo=vite)](https://vite.dev)
 [![PWA Ready](https://img.shields.io/badge/PWA-Ready-5A0FC8?style=flat-square&logo=pwa)](https://web.dev/progressive-web-apps)
-[![Tests Passing](https://img.shields.io/badge/Vitest-30%2F30%20passing-brightgreen?style=flat-square&logo=vitest)](https://vitest.dev)
+[![Tests Passing](https://img.shields.io/badge/Vitest-63%2F63%20passing-brightgreen?style=flat-square&logo=vitest)](https://vitest.dev)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)](LICENSE)
 
 [English](#about) · [Features](#-core-features) · [Tech Stack](#-tech-stack) · [Roadmap](#-roadmap) · [Getting Started](#-getting-started)
@@ -43,12 +43,35 @@ RIMA serves as a **safe, zero-judgment, completely anonymous first step** before
 - **Factor Correlations**: Identify key triggers (sleep, exercise, work, relationships, family, weather, and physical health).
 - **Grace-Based Streaks**: Includes a compassionate *Recovery Day* mechanism so missing a single check-in day does not induce shame or wipe out progress.
 
-### 📝 Structured Journaling
+### 📝 Therapeutic Journaling & Interactive CBT Wizard
 Four evidence-based therapeutic writing templates:
+- **Interactive 5-Step CBT Wizard (*Pembedah Pikiran*)** — Step-by-step cognitive restructuring grounded in Beck & Burns taxonomies:
+  1. *Situational Trigger* & Initial Emotional Intensity (1–10 SUDS slider)
+  2. *Automatic Negative Thought (NAT)* capture
+  3. *Cognitive Distortion Detector* (8 clinical traps: Catastrophizing, All-or-Nothing, Mind Reading, Overgeneralization, Emotional Reasoning, Should Statements, Personalization, Mental Filter)
+  4. *Objective Evidence Examination* (Facts For vs. Facts Against)
+  5. *Alternative Balanced Reframe* with post-intervention emotional relief calculation.
 - **Free Writing** — Unfiltered stream-of-consciousness expression.
-- **Structured CBT** — Thought record analysis based on Cognitive Behavioral Therapy (Situation → Automatic Thoughts → Evidence → Balanced Perspective).
 - **Gratitude Journal** — Focus on positive anchors and gratitude.
-- **Self-Reflection** — Structured prompt for self-discovery and growth.
+- **Self-Reflection** — Structured prompt for self-discovery and personal growth.
+
+### 🧊 DBT TIPP Crisis Hub (`/tipp`)
+Evidence-based somatic distress tolerance protocol from Dialectical Behavior Therapy (*Linehan 2014 & Valentine et al. 2015*) for acute emotional crisis (SUDS $\ge 7/10$):
+- **T — Cold Temperature**: 30-second guided timer triggering the *Mammalian Dive Reflex* (sinus bradycardia via trigeminal-vagal stimulation, reducing heart rate by 10–25 bpm).
+- **I — Intense Exercise**: 60-second animated timer for brief motor discharge (Jumping Jacks, High Knees, Wall Push-Ups) to burn off panic-induced adrenaline and glucose.
+- **P — Paced Breathing**: Prolonged exhalation pacer activating parasympathetic vagal tone and baroreflex.
+- **P — Paired Muscle Relaxation (PMR)**: Structured 5-zone body cycle (Hands, Shoulders/Neck, Jaw/Face, Abdomen, Legs) alternating between 5s Tension and 10s Release.
+- **SUDS Pre/Post Delta Rating**: Real-time evaluation of distress attenuation with immediate emergency hotline interceptor if distress remains severe.
+
+### 🧘 Somatic 5-4-3-2-1 Sensory Grounding (`/grounding`)
+- Structured somatic sensory regulation: 5 things you see, 4 you feel/touch, 3 you hear, 2 you smell, and 1 gratitude anchor.
+- Integrated haptic feedback (`navigator.vibrate`) and post-session reflection logging.
+
+### 📋 Standardized Psychometric Screening (`/assessment`)
+- **Indonesian-Validated PHQ-9 (Depression)** & **GAD-7 (Anxiety)** instruments (*Arjadi et al., 2024, Asian J Psychiatry*).
+- Calibrated 4-tier clinical cutoffs: Minimal (0–4), Mild (5–9), Moderate (10–14), Severe (15+).
+- **Item 9 Safety Interceptor**: Automatic crisis trigger on PHQ-9 suicide/self-harm ideation regardless of total score.
+- Private local screening history with date tracking.
 
 ### 💬 Anonymous Community Forum
 - **Zero-Stigma Peer Support**: Post and reply anonymously using randomized pseudonym avatars (e.g., *"Kupu-kupu Berani"*).
@@ -65,13 +88,14 @@ Four evidence-based therapeutic writing templates:
   - Yayasan Pulih: `021-788-42580`
   - Emergency Services: `112`
 
-### 🛡️ Privacy & Indonesian UU PDP Compliance
-- **100% Offline-First by Default**: Personal mood logs, journal entries, and safety plans reside in local device storage.
+### 🛡️ Privacy, Security & Indonesian UU PDP Compliance
+- **100% Offline-First by Default**: Personal mood logs, CBT records, journal entries, and safety plans reside entirely in local device storage.
+- **App Security PIN Lock**: 4-digit numeric PIN protection with auto-lock on inactivity to safeguard personal mental records from shared devices.
 - **Client-Side Crisis NLP**: Emergency keyword detection runs 100% on the browser with zero external transmission of sensitive thoughts.
-- **Statutory Data Rights**: Dedicated Privacy Policy page (`/privacy`), Onboarding Consent Modal, JSON/CSV data portability, and a one-click **Permanent Data Erasure** (`wipeAllData`) tool.
+- **Statutory Data Rights**: Dedicated Privacy Policy page (`/privacy`), Onboarding Consent Modal, JSON/CSV/HTML data portability, and a one-click **Permanent Data Erasure** (`wipeAllData`) tool.
 
 ### 🌐 8 Supported Popular Languages
-Full 100% translation parity across ~180 UI keys:
+Full 100% translation parity across **400+ UI keys** (315 top-level keys + 62 TIPP sub-keys + 40 CBT sub-keys):
 - 🇮🇩 **Bahasa Indonesia (`id`)** — Default & national language
 - 🇬🇧 **English (`en`)** — Global international standard
 - 🇮🇩 **Basa Jawa (`jv`)** — Javanese (Krama Madya)
@@ -83,7 +107,9 @@ Full 100% translation parity across ~180 UI keys:
 - Includes dynamic time greetings (*getGreeting*) and localized BCP-47 date formats.
 
 ### 🌬️ Interactive Breathing Exercises (`/breathe`)
-Three guided breathing techniques with harmonic animations:
+Evidence-based guided respiration techniques with Web Audio Tibetan singing bowl acoustic resonance (432Hz/528Hz/396Hz) and haptic pulsing:
+- **Cyclic Sighing (Physiological Sigh)** — Balban, Spiegel, Huberman et al., Stanford 2023 (*Cell Reports Medicine*): Double nasal inhale (3s + 2s) and prolonged oral sigh (6s) for rapid positive affect and anxiety reduction.
+- **Coherent Breathing** — 6s Inhale, 6s Exhale (~5.5 breaths/min for optimal Heart Rate Variability resonance).
 - **4-7-8 Breathing** — 4s inhale, 7s hold, 8s exhale (parasympathetic nervous system activation).
 - **Box Breathing** — Equal 4s phases (used by first responders and athletes).
 - **Simple Calm** — 4s inhale, 4s exhale for gentle centering.
@@ -100,6 +126,7 @@ Interactive visual analytics using Recharts:
 
 ### 🏥 Professional Services Directory (`/professional`)
 Curated database of 25 Indonesian mental health institutions, psychological clinics, and teleconsultation services, filterable by Province, Facility Type, Online Availability, and BPJS Health Insurance acceptance.
+
 
 ---
 
@@ -131,17 +158,25 @@ mental monitoring/
 ├── src/
 │   ├── components/
 │   │   ├── common/
+│   │   │   ├── ClinicalDisclaimer.tsx # Trauma-informed clinical governance disclaimer
 │   │   │   ├── ConsentModal.tsx     # UU PDP onboarding consent modal
 │   │   │   ├── ErrorBoundary.tsx    # Graceful runtime error boundary
 │   │   │   ├── EscalationBanner.tsx # Adaptive mood escalation banner
-│   │   │   └── LoadingSpinner.tsx   # Accessible loading state
+│   │   │   ├── LoadingSpinner.tsx   # Accessible loading state
+│   │   │   └── SessionAwareness.tsx # Gentle session time reminder & quiet hours
+│   │   ├── journal/
+│   │   │   └── CbtWizard.tsx        # 5-step CBT Thought Restructuring Wizard
 │   │   ├── layout/
 │   │   │   ├── AppShell.tsx         # Responsive layout wrapper
 │   │   │   ├── BottomNav.tsx        # Mobile tab navigation
 │   │   │   └── Sidebar.tsx          # Desktop navigation sidebar
 │   │   ├── safety/
+│   │   │   ├── CrisisInterceptor.tsx # Immediate crisis interceptor modal
 │   │   │   ├── SOSButton.tsx        # Floating SOS button & crisis dialog
-│   │   │   └── SafetyPlan.tsx       # Interactive safety plan editor
+│   │   │   └── SafetyPlan.tsx       # Interactive safety plan editor (Stanley-Brown SPI)
+│   │   ├── security/
+│   │   │   ├── AppLockScreen.tsx    # 4-digit PIN lock screen
+│   │   │   └── SetPinModal.tsx      # PIN setup and reset modal
 │   │   └── ui/
 │   │       ├── Button.tsx           # Accessible button variants
 │   │       ├── Card.tsx             # Glassmorphism container
@@ -159,7 +194,7 @@ mental monitoring/
 │   │   └── useTheme.ts              # Dark / light theme toggle
 │   ├── i18n/
 │   │   ├── config.ts                # i18next configuration & language detector
-│   │   ├── id.json                  # Indonesian translation
+│   │   ├── id.json                  # Indonesian translation (400+ keys)
 │   │   ├── en.json                  # English translation
 │   │   ├── jv.json                  # Javanese translation
 │   │   ├── su.json                  # Sundanese translation
@@ -170,10 +205,13 @@ mental monitoring/
 │   ├── pages/
 │   │   ├── Home.tsx                 # Dashboard, daily affirmation, & insights
 │   │   ├── MoodTracker.tsx          # Mood logging, history, & factor tracking
-│   │   ├── Journal.tsx              # Therapeutic journaling & crisis alert
+│   │   ├── Journal.tsx              # Therapeutic journaling & CBT Wizard
+│   │   ├── TippCrisisHub.tsx        # DBT TIPP Crisis Hub (Temperature, Exercise, Breath, PMR)
+│   │   ├── Grounding.tsx            # Somatic 5-4-3-2-1 Sensory Grounding
+│   │   ├── Assessment.tsx           # Standardized PHQ-9 & GAD-7 psychometrics
 │   │   ├── Forum.tsx                # Anonymous peer support forum
-│   │   ├── Profile.tsx              # Settings, language picker, & data controls
-│   │   ├── Breathe.tsx              # 3 animated breathing exercise modes
+│   │   ├── Profile.tsx              # Settings, PIN security, language picker, & data controls
+│   │   ├── Breathe.tsx              # 5 animated breathing modes (incl. Cyclic Sighing)
 │   │   ├── Education.tsx            # Mental wellness knowledge library
 │   │   ├── ProfessionalHelp.tsx     # Verified clinic & hospital directory
 │   │   ├── Analytics.tsx            # Local data visualization dashboard
@@ -237,7 +275,7 @@ Open **http://localhost:5173/** in your browser.
 | `npm run dev` | Start development server with Hot Module Replacement (HMR) |
 | `npm run build` | Compile TypeScript and build production bundle with Vite |
 | `npm run preview` | Locally preview production build |
-| `npm test` | Run Vitest unit test suite (30 test cases) |
+| `npm test` | Run Vitest unit test suite (63 test cases across 11 test suites) |
 | `npm run lint` | Run code quality checks with oxlint |
 
 ---
@@ -316,9 +354,35 @@ RIMA incorporates a trauma-informed design system tailored for mental wellness:
   - 🇨🇳 **简体中文 (`zh`)** — Simplified Chinese
   - 🇪🇸 **Español (`es`)** — Spanish
   - 🇸🇦 **العربية (`ar`)** — Modern Standard Arabic
-- [x] **100% Translation Parity**: All ~180 keys translated across all 8 languages
+- [x] **100% Translation Parity**: All 400+ keys translated with zero missing strings across all 8 languages
 - [x] **Responsive Language Selector**: Flag-badged autonym selection grid in Profile
 - [x] **Localized Dynamic Greetings & Dates**: Time-appropriate greetings and BCP-47 locale dates
+
+### ✅ Phase 7 — Evidence-Based Clinical Interventions & DTx Framework (Completed)
+- [x] **Interactive 5-Step CBT Thought Restructuring Wizard (*Pembedah Pikiran*)**:
+  - Sequential mobile cognitive reappraisal based on Beck & Burns frameworks
+  - 8 cognitive distortion trap cards with clinical explanations and examples
+  - Objective evidence testing (Facts Supporting vs. Facts Refuting)
+  - Pre/post emotional distress intensity tracking with immediate relief feedback
+- [x] **DBT TIPP Crisis Hub (`/tipp`)**:
+  - Linehan (2014) distress tolerance protocol for acute emotional arousal (SUDS $\ge 7/10$)
+  - **T (Temperature)**: 30-second guided timer triggering the *Mammalian Dive Reflex*
+  - **I (Intense Exercise)**: 60-second motor discharge timer for burning stress hormones
+  - **P (Paced Breathing)**: Baroreflex prolonged exhalation pacer and breathing launchers
+  - **P (Paired Muscle Relaxation - PMR)**: 5-zone body cycle with alternating tension (5s) and release (10s)
+  - Real-time SUDS pre/post rating with automated emergency hotline fallback
+- [x] **Somatic 5-4-3-2-1 Sensory Grounding (`/grounding`)**:
+  - Evidence-based grounding with interactive progress, haptic cues, and post-session reflection
+- [x] **Standardized Psychometric Screening (`/assessment`)**:
+  - Indonesian-validated PHQ-9 (Depression) and GAD-7 (Anxiety) instruments (*Arjadi et al., 2024*)
+  - Tiered clinical recommendations and automated item 9 crisis interceptor
+- [x] **Stanford Breathwork Protocol in `/breathe`**:
+  - Cyclic Sighing (Physiological Sigh) from Stanford RCT 2023 (*Balban, Spiegel, Huberman et al.*)
+  - Web Audio synthesized Tibetan singing bowl frequencies (432Hz/528Hz/396Hz)
+- [x] **App PIN Security Lock**:
+  - Offline 4-digit PIN authentication with inactivity timeout protection
+- [x] **Expanded Test Suite**:
+  - 63 unit test cases across 11 test suites with 100% pass rate
 
 ---
 
@@ -326,6 +390,13 @@ RIMA incorporates a trauma-informed design system tailored for mental wellness:
 
 RIMA is constructed on empirical findings from **60+ academic publications, randomized controlled trials (RCTs), institutional clinical guidelines (NICE, APA, SAMHSA, ORCHA), and open-source GitHub projects** across multiple languages (Indonesian, English, Japanese, German, Spanish, and Chinese):
 
+- **Balban, M.Y., Spiegel, D., Huberman, A.D., et al.** *Brief structured respiration practices enhance mood and reduce physiological arousal.* **Cell Reports Medicine**, 4(1), 100895. (2023)
+- **Firth, J., Torous, J., et al.** *The efficacy of smartphone-based mental health interventions for depressive symptoms: a meta-analysis of randomized controlled trials.* **World Psychiatry**, 16(3), 287–298. (2017)
+- **Linardon, J., Cuijpers, P., et al.** *The current status of smartphone-delivered interventions for mental health problems: An updated meta-analysis.* **World Psychiatry**, 23(2), 260–273. (2024)
+- **Linehan, M.M.** *DBT Skills Training Manual (2nd ed.).* Guilford Press. (2014)
+- **Valentine, S.E., et al.** *The use of dialectical behavior therapy skills training as stand-alone treatments: A systematic review.* **Psychiatry Research**, 229(3), 675–685. (2015)
+- **Lieberman, M.D., et al.** *Putting feelings into words: Affect labeling disrupts amygdala activity.* **Psychological Science**, 18(5), 421–428. (2007)
+- **Arjadi, R., et al.** *Diagnostic accuracy and clinical validity of the Indonesian versions of PHQ-9 and GAD-7 in psychiatric outpatients.* **Asian Journal of Psychiatry**, 92, 103890. (2024)
 - **World Health Organization (WHO)**. *Guidelines on Digital Interventions for Health System Strengthening.* (2019)
 - **National Institute for Health and Care Excellence (NICE)**. *Evidence Standards Framework for Digital Health Technologies.* (2021)
 - **American Psychiatric Association (APA)**. *The App Advisor Evaluation Framework for Mental Health Apps.* (2021)
@@ -338,7 +409,8 @@ RIMA is constructed on empirical findings from **60+ academic publications, rand
 - **Pennebaker, J.W. & Beall, S.K.** *Confronting a Traumatic Event: Toward an Understanding of Inhibition and Disease.* Journal of Abnormal Psychology (1986)
 - **Indonesian Ministry of Health (Kemenkes RI)**. *Riset Kesehatan Dasar (Riskesdas 2018) & Survei Kesehatan Indonesia (SKI 2023).*
 
-📖 For the full multidisciplinary scientific dossier, see [`RESEARCH_FOUNDATIONS.md`](./RESEARCH_FOUNDATIONS.md).
+📖 For the full multidisciplinary scientific dossier, see [`RESEARCH_FOUNDATIONS.md`](./RESEARCH_FOUNDATIONS.md) and [`deep_research_scientific_evidence.md`](./deep_research_scientific_evidence.md).
+
 
 ---
 
