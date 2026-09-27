@@ -6,6 +6,7 @@ import {
   getLockoutStatus,
   recordFailedAttempt,
   resetLockout,
+  parseCspDirectives,
   MAX_FAILED_ATTEMPTS
 } from '../security';
 
@@ -134,6 +135,26 @@ describe('security utils', () => {
       expect(status.isLockedOut).toBe(false);
       expect(status.remainingSeconds).toBe(0);
       vi.useRealTimers();
+    });
+  });
+
+  describe('Content Security Policy (CSP)', () => {
+    it('parses and validates CSP directives correctly', () => {
+      const sampleCsp = "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' https://fonts.googleapis.com; object-src 'none'; base-uri 'self'; form-action 'self'; connect-src 'self' https://*.supabase.co;";
+      const parsed = parseCspDirectives(sampleCsp);
+
+      expect(parsed['default-src']).toEqual(["'self'"]);
+      expect(parsed['object-src']).toEqual(["'none'"]);
+      expect(parsed['base-uri']).toEqual(["'self'"]);
+      expect(parsed['form-action']).toEqual(["'self'"]);
+      expect(parsed['connect-src']).toContain('https://*.supabase.co');
+      expect(parsed['style-src']).toContain('https://fonts.googleapis.com');
+    });
+
+    it('handles empty or malformed CSP strings safely', () => {
+      expect(parseCspDirectives('')).toEqual({});
+      expect(parseCspDirectives(';; ;')).toEqual({});
+      expect(parseCspDirectives(null as unknown as string)).toEqual({});
     });
   });
 });

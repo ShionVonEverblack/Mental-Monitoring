@@ -195,3 +195,24 @@ export function resetLockout(): void {
     // ignore
   }
 }
+
+/**
+ * Utility to parse and inspect Content Security Policy (CSP) directive strings
+ */
+export function parseCspDirectives(csp: string): Record<string, string[]> {
+  const result: Record<string, string[]> = {};
+  if (!csp || typeof csp !== 'string') return result;
+
+  csp.split(';').forEach(part => {
+    const trimmed = part.trim();
+    if (!trimmed) return;
+    const tokens = trimmed.split(/\s+/);
+    const directive = tokens[0];
+    const sources = tokens.slice(1);
+    if (directive) {
+      result[directive] = sources;
+    }
+  });
+
+  return result;
+}

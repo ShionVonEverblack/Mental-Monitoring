@@ -7,6 +7,12 @@
     <meta name="theme-color" content="#1a1f2e" />
     <meta name="description" content="Platform kesehatan mental digital. Ruang aman untuk mood tracking, journaling, dan peer support anonim." />
     
+    <!-- Content Security Policy (CSP) — Browser-level Defense against XSS & Injection -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https:; connect-src 'self' https://*.supabase.co wss://*.supabase.co ws://localhost:* ws://127.0.0.1:*; media-src 'self' blob: data:; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self';"
+    />
+    
     <title>RIMA — Ruang Interaksi Mental Aman</title>
     
     <!-- Open Graph Meta Tags -->
