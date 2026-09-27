@@ -135,4 +135,93 @@ describe('exportImport Utilities (Localization & Data Portability)', () => {
     expect(exportedHTML).toContain('&lt;script&gt;evilScript()&lt;/script&gt;');
     expect(exportedHTML).toContain('&lt;img src=x onerror=alert(1)&gt;');
   });
+
+  describe('JSON Backup Schema Validation & Sanitization', () => {
+    it('rejects empty input or strings exceeding size limit', () => {
+      expect(importDataFromJSON('')).toEqual({
+        success: false,
+        message: 'File kosong atau tidak terbaca.'
+      });
+
+      const oversized = 'a'.repeat(10 * 1024 * 1024 + 1);
+      expect(importDataFromJSON(oversized)).toEqual({
+        success: false,
+        message: 'Ukuran file cadangan melebihi batas aman (maksimum 10MB).'
+      });
+    });
+
+    it('rejects malformed JSON and arrays as root', () => {
+      expect(importDataFromJSON('{ invalid json')).toEqual({
+        success: false,
+        message: expect.stringContaining('Gagal membaca file')
+      });
+
+      expect(importDataFromJSON('["an", "array"]')).toEqual({
+        success: false,
+        message: 'Format file JSON tidak valid.'
+      });
+    });
+
+    it('filters out invalid mood entries (out-of-range score, invalid date, non-string id)', () => {
+      const payload = {
+        moods: [
+          { id: 'm-valid', score: 4, emoji: '😊', factors: ['sleep'], createdAt: '2026-09-01T10:00:00.000Z' },
+          { id: 'm-invalid-score-high', score: 10, createdAt: '2026-09-01T10:00:00.000Z' },
+          { id: 'm-invalid-score-low', score: 0, createdAt: '2026-09-01T10:00:00.000Z' },
+          { id: 'm-invalid-score-string', score: '5', createdAt: '2026-09-01T10:00:00.000Z' },
+          { id: 'm-invalid-date', score: 3, createdAt: 'not-a-date' },
+          { id: '', score: 3, createdAt: '2026-09-01T10:00:00.000Z' }
+        ]
+      };
+
+      const result = importDataFromJSON(JSON.stringify(payload));
+      expect(result.success).toBe(true);
+
+      const storedMoods = JSON.parse(localStorage.getItem('rima-moods') || '[]');
+      expect(storedMoods.length).toBe(1);
+      expect(storedMoods[0].id).toBe('m-valid');
+    });
+
+    it('sanitizes and isolates malformed safety plans preventing runtime crashes', () => {
+      const payload = {
+        safetyPlan: {
+          id: 'sp-1',
+          warningSigns: 'not an array should be filtered to empty',
+          copingStrategies: ['deep breathing', 12345], // non-string item filtered
+          peopleToContact: [
+            { name: 'Dr. Jane', phone: '123' },
+            { name: '', phone: 'empty-name-should-be-dropped' },
+            'not an object'
+          ],
+          professionalContacts: null,
+          safeEnvironment: ['Keep away sharp objects'],
+          reasonsToLive: ['Family'],
+          updatedAt: '2026-09-01T10:00:00.000Z'
+        }
+      };
+
+      const result = importDataFromJSON(JSON.stringify(payload));
+      expect(result.success).toBe(true);
+
+      const stored = JSON.parse(localStorage.getItem('rima-safety-plan') || '{}');
+      expect(Array.isArray(stored.warningSigns)).toBe(true);
+      expect(stored.warningSigns).toHaveLength(0);
+      expect(stored.copingStrategies).toEqual(['deep breathing']);
+      expect(stored.peopleToContact).toEqual([{ name: 'Dr. Jane', phone: '123' }]);
+      expect(Array.isArray(stored.professionalContacts)).toBe(true);
+    });
+
+    it('returns error when file contains no valid RIMA records', () => {
+      const payload = {
+        moods: [],
+        journals: [],
+        randomKey: 'garbage data'
+      };
+
+      const result = importDataFromJSON(JSON.stringify(payload));
+      expect(result.success).toBe(false);
+      expect(result.message).toBe('File tidak memuat data RIMA yang valid.');
+    });
+  });
 });
+

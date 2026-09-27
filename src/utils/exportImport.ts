@@ -1,4 +1,17 @@
-import type { MoodEntry, JournalEntry, SafetyPlan, UserProfile } from '../types';
+import type {
+  MoodEntry,
+  MoodScore,
+  MoodEmoji,
+  JournalEntry,
+  SafetyPlan,
+  UserProfile,
+  ContactInfo,
+  CbtThoughtRecord,
+  CognitiveDistortionId,
+  Language,
+  Theme,
+  JournalTemplate
+} from '../types';
 import { getLocaleTag } from './helpers';
 
 export interface RimaBackupData {
@@ -380,49 +393,264 @@ export function generateClinicalSummaryHTML(lang?: string): boolean {
   return true;
 }
 
-function isValidMoodEntry(item: unknown): boolean {
-  if (typeof item !== 'object' || item === null) return false;
-  const obj = item as Record<string, unknown>;
-  return typeof obj.id === 'string' && typeof obj.score === 'number' && typeof obj.createdAt === 'string';
+const MAX_JSON_STRING_LENGTH = 10 * 1024 * 1024; // 10MB limit against memory exhaustion attacks
+const MAX_MOOD_ENTRIES = 5000;
+const MAX_JOURNAL_ENTRIES = 2000;
+
+const VALID_LANGUAGES: Language[] = ['id', 'en', 'jv', 'su', 'ja', 'zh', 'es', 'ar'];
+const VALID_THEMES: Theme[] = ['dark', 'light'];
+
+export function isValidISODate(str: unknown): boolean {
+  if (typeof str !== 'string' || !str) return false;
+  const time = Date.parse(str);
+  return !Number.isNaN(time);
 }
 
-function isValidJournalEntry(item: unknown): boolean {
-  if (typeof item !== 'object' || item === null) return false;
+export function validateMoodEntry(item: unknown): MoodEntry | null {
+  if (typeof item !== 'object' || item === null || Array.isArray(item)) return null;
   const obj = item as Record<string, unknown>;
-  return typeof obj.id === 'string' && typeof obj.title === 'string' && typeof obj.content === 'string';
+
+  if (typeof obj.id !== 'string' || obj.id.trim() === '' || obj.id.length > 128) return null;
+  if (typeof obj.score !== 'number' || !Number.isInteger(obj.score) || obj.score < 1 || obj.score > 5) return null;
+  if (!isValidISODate(obj.createdAt)) return null;
+
+  const validEmojis: MoodEmoji[] = ['😢', '😟', '😐', '🙂', '😊'];
+  const scoreToEmoji: Record<number, MoodEmoji> = {
+    1: '😢',
+    2: '😟',
+    3: '😐',
+    4: '🙂',
+    5: '😊'
+  };
+  const emoji: MoodEmoji = validEmojis.includes(obj.emoji as MoodEmoji)
+    ? (obj.emoji as MoodEmoji)
+    : (scoreToEmoji[obj.score as number] || '😐');
+
+  const note = typeof obj.note === 'string' ? obj.note.slice(0, 5000) : undefined;
+
+  let factors: string[] = [];
+  if (Array.isArray(obj.factors)) {
+    factors = obj.factors
+      .filter((f): f is string => typeof f === 'string' && f.trim() !== '')
+      .map(f => f.slice(0, 100))
+      .slice(0, 50);
+  }
+
+  return {
+    id: obj.id,
+    score: obj.score as MoodScore,
+    emoji,
+    factors,
+    note,
+    createdAt: obj.createdAt as string
+  };
+}
+
+export function validateJournalEntry(item: unknown): JournalEntry | null {
+  if (typeof item !== 'object' || item === null || Array.isArray(item)) return null;
+  const obj = item as Record<string, unknown>;
+
+  if (typeof obj.id !== 'string' || obj.id.trim() === '' || obj.id.length > 128) return null;
+  if (typeof obj.title !== 'string' || obj.title.length > 255) return null;
+  if (typeof obj.content !== 'string' || obj.content.length > 50000) return null;
+  if (!isValidISODate(obj.createdAt)) return null;
+
+  const template = (typeof obj.template === 'string' && obj.template.length <= 64 ? obj.template : 'free') as JournalTemplate;
+  const isPrivate = typeof obj.isPrivate === 'boolean' ? obj.isPrivate : true;
+  const moodId = typeof obj.moodId === 'string' && obj.moodId.length <= 128 ? obj.moodId : undefined;
+  const updatedAt = isValidISODate(obj.updatedAt) ? (obj.updatedAt as string) : (obj.createdAt as string);
+
+  let cbtRecord: CbtThoughtRecord | undefined = undefined;
+  if (typeof obj.cbtRecord === 'object' && obj.cbtRecord !== null && !Array.isArray(obj.cbtRecord)) {
+    const cbt = obj.cbtRecord as Record<string, unknown>;
+    const situation = typeof cbt.situation === 'string' ? cbt.situation.slice(0, 2000) : '';
+    const initialEmotion = typeof cbt.initialEmotion === 'string' ? cbt.initialEmotion.slice(0, 500) : 'Neutral';
+    const initialIntensity = typeof cbt.initialIntensity === 'number' && cbt.initialIntensity >= 1 && cbt.initialIntensity <= 10
+      ? Math.round(cbt.initialIntensity)
+      : 5;
+    const automaticThought = typeof cbt.automaticThought === 'string' ? cbt.automaticThought.slice(0, 2000) : '';
+    const evidenceFor = typeof cbt.evidenceFor === 'string' ? cbt.evidenceFor.slice(0, 2000) : '';
+    const evidenceAgainst = typeof cbt.evidenceAgainst === 'string' ? cbt.evidenceAgainst.slice(0, 2000) : '';
+    const balancedThought = typeof cbt.balancedThought === 'string' ? cbt.balancedThought.slice(0, 2000) : '';
+    const finalIntensity = typeof cbt.finalIntensity === 'number' && cbt.finalIntensity >= 1 && cbt.finalIntensity <= 10
+      ? Math.round(cbt.finalIntensity)
+      : 5;
+    const distortions = Array.isArray(cbt.distortions)
+      ? (cbt.distortions.filter((d): d is CognitiveDistortionId => typeof d === 'string').slice(0, 20))
+      : [];
+
+    cbtRecord = {
+      situation,
+      initialEmotion,
+      initialIntensity,
+      automaticThought,
+      distortions,
+      evidenceFor,
+      evidenceAgainst,
+      balancedThought,
+      finalIntensity
+    };
+  }
+
+  return {
+    id: obj.id,
+    title: obj.title,
+    content: obj.content,
+    template,
+    moodId,
+    isPrivate,
+    cbtRecord,
+    createdAt: obj.createdAt as string,
+    updatedAt
+  };
+}
+
+export function validateContactInfo(item: unknown): ContactInfo | null {
+  if (typeof item !== 'object' || item === null || Array.isArray(item)) return null;
+  const obj = item as Record<string, unknown>;
+  if (typeof obj.name !== 'string' || obj.name.trim() === '') return null;
+
+  return {
+    name: obj.name.slice(0, 128),
+    phone: typeof obj.phone === 'string' ? obj.phone.slice(0, 32) : undefined,
+    relationship: typeof obj.relationship === 'string' ? obj.relationship.slice(0, 64) : undefined
+  };
+}
+
+export function validateSafetyPlan(item: unknown): SafetyPlan | null {
+  if (typeof item !== 'object' || item === null || Array.isArray(item)) return null;
+  const obj = item as Record<string, unknown>;
+
+  const id = typeof obj.id === 'string' && obj.id.trim() !== '' ? obj.id.slice(0, 128) : 'safety-plan';
+  const updatedAt = isValidISODate(obj.updatedAt) ? (obj.updatedAt as string) : new Date().toISOString();
+
+  const sanitizeStringArray = (arr: unknown, maxItems = 50, maxLen = 300): string[] => {
+    if (!Array.isArray(arr)) return [];
+    return arr
+      .filter((s): s is string => typeof s === 'string' && s.trim() !== '')
+      .map(s => s.slice(0, maxLen))
+      .slice(0, maxItems);
+  };
+
+  const sanitizeContacts = (arr: unknown, maxItems = 20): ContactInfo[] => {
+    if (!Array.isArray(arr)) return [];
+    return arr
+      .map(validateContactInfo)
+      .filter((c): c is ContactInfo => c !== null)
+      .slice(0, maxItems);
+  };
+
+  return {
+    id,
+    warningSigns: sanitizeStringArray(obj.warningSigns),
+    copingStrategies: sanitizeStringArray(obj.copingStrategies),
+    peopleToContact: sanitizeContacts(obj.peopleToContact),
+    professionalContacts: sanitizeContacts(obj.professionalContacts),
+    safeEnvironment: sanitizeStringArray(obj.safeEnvironment),
+    reasonsToLive: sanitizeStringArray(obj.reasonsToLive),
+    updatedAt
+  };
+}
+
+export function validateUserProfile(item: unknown): UserProfile | null {
+  if (typeof item !== 'object' || item === null || Array.isArray(item)) return null;
+  const obj = item as Record<string, unknown>;
+
+  const id = typeof obj.id === 'string' && obj.id.trim() !== '' ? obj.id.slice(0, 128) : 'user';
+  const displayName = typeof obj.displayName === 'string' ? obj.displayName.slice(0, 64) : 'Sahabat RIMA';
+  const avatarSeed = typeof obj.avatarSeed === 'string' ? obj.avatarSeed.slice(0, 64) : 'default';
+  const language = VALID_LANGUAGES.includes(obj.language as Language) ? (obj.language as Language) : 'id';
+  const theme = VALID_THEMES.includes(obj.theme as Theme) ? (obj.theme as Theme) : 'dark';
+  const createdAt = isValidISODate(obj.createdAt) ? (obj.createdAt as string) : new Date().toISOString();
+
+  return {
+    id,
+    displayName,
+    avatarSeed,
+    language,
+    theme,
+    createdAt
+  };
 }
 
 export function importDataFromJSON(jsonString: string): { success: boolean; message: string } {
+  if (!jsonString || typeof jsonString !== 'string') {
+    return { success: false, message: 'File kosong atau tidak terbaca.' };
+  }
+
+  if (jsonString.length > MAX_JSON_STRING_LENGTH) {
+    return { success: false, message: 'Ukuran file cadangan melebihi batas aman (maksimum 10MB).' };
+  }
+
   try {
-    const parsed = JSON.parse(jsonString) as RimaBackupData;
-    if (!parsed || typeof parsed !== 'object') {
+    const parsed = JSON.parse(jsonString);
+    if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
       return { success: false, message: 'Format file JSON tidak valid.' };
     }
 
-    let importedCount = 0;
+    let importedMoodCount = 0;
+    let importedJournalCount = 0;
+    let hasSafetyPlan = false;
+    let hasUserProfile = false;
 
     if (Array.isArray(parsed.moods)) {
-      const validMoods = parsed.moods.filter(isValidMoodEntry);
+      const validMoods: MoodEntry[] = [];
+      for (const item of parsed.moods) {
+        const validated = validateMoodEntry(item);
+        if (validated) {
+          validMoods.push(validated);
+          if (validMoods.length >= MAX_MOOD_ENTRIES) break;
+        }
+      }
+
       localStorage.setItem('rima-moods', JSON.stringify(validMoods));
-      importedCount += validMoods.length;
+      importedMoodCount = validMoods.length;
     }
+
     if (Array.isArray(parsed.journals)) {
-      const validJournals = parsed.journals.filter(isValidJournalEntry);
+      const validJournals: JournalEntry[] = [];
+      for (const item of parsed.journals) {
+        const validated = validateJournalEntry(item);
+        if (validated) {
+          validJournals.push(validated);
+          if (validJournals.length >= MAX_JOURNAL_ENTRIES) break;
+        }
+      }
+
       localStorage.setItem('rima-journals', JSON.stringify(validJournals));
-      importedCount += validJournals.length;
+      importedJournalCount = validJournals.length;
     }
-    if (parsed.safetyPlan && typeof parsed.safetyPlan === 'object') {
-      localStorage.setItem('rima-safety-plan', JSON.stringify(parsed.safetyPlan));
+
+    if (parsed.safetyPlan) {
+      const validSafetyPlan = validateSafetyPlan(parsed.safetyPlan);
+      if (validSafetyPlan) {
+        localStorage.setItem('rima-safety-plan', JSON.stringify(validSafetyPlan));
+        hasSafetyPlan = true;
+      }
     }
-    if (parsed.user && typeof parsed.user === 'object') {
-      localStorage.setItem('rima-user-profile', JSON.stringify(parsed.user));
+
+    if (parsed.user) {
+      const validUser = validateUserProfile(parsed.user);
+      if (validUser) {
+        localStorage.setItem('rima-user-profile', JSON.stringify(validUser));
+        hasUserProfile = true;
+      }
+    }
+
+    const totalItems = importedMoodCount + importedJournalCount;
+    if (totalItems === 0 && !hasSafetyPlan && !hasUserProfile) {
+      return { success: false, message: 'File tidak memuat data RIMA yang valid.' };
     }
 
     window.dispatchEvent(new CustomEvent('local-storage', { detail: { key: 'rima-moods' } }));
     window.dispatchEvent(new CustomEvent('local-storage', { detail: { key: 'rima-journals' } }));
     window.dispatchEvent(new CustomEvent('local-storage', { detail: { key: 'rima-safety-plan' } }));
     window.dispatchEvent(new CustomEvent('local-storage', { detail: { key: 'rima-user-profile' } }));
-    return { success: true, message: `Data RIMA berhasil dipulihkan! (${importedCount} entri)` };
+
+    return {
+      success: true,
+      message: `Data RIMA berhasil dipulihkan! (${totalItems} entri)${hasSafetyPlan ? ', rencana keselamatan' : ''}`
+    };
   } catch (err) {
     return { success: false, message: `Gagal membaca file: ${(err as Error).message}` };
   }
