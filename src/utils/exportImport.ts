@@ -13,6 +13,7 @@ import type {
   JournalTemplate
 } from '../types';
 import { getLocaleTag } from './helpers';
+import { useMoodStore } from '../stores/moodStore';
 
 export interface RimaBackupData {
   version: string;
@@ -21,6 +22,48 @@ export interface RimaBackupData {
   moods: MoodEntry[];
   journals: JournalEntry[];
   safetyPlan: SafetyPlan | null;
+}
+
+/**
+ * Safely retrieve mood entries from localStorage, supporting both Zustand persist wrapper
+ * ({"state":{"moods":[...]},"version":0}) and legacy raw array format ([...]).
+ */
+export function getStoredMoods(): MoodEntry[] {
+  try {
+    const raw = localStorage.getItem('rima-moods');
+    if (!raw) return [];
+    const parsed = JSON.parse(raw);
+    if (Array.isArray(parsed)) return parsed;
+    if (parsed && typeof parsed === 'object' && Array.isArray(parsed.state?.moods)) {
+      return parsed.state.moods;
+    }
+    return [];
+  } catch {
+    return [];
+  }
+}
+
+/**
+ * Persist mood entries into localStorage using the Zustand persist schema format
+ * so that useMoodStore rehydrates properly without losing state.
+ */
+export function setStoredMoods(moods: MoodEntry[]): void {
+  const existingRaw = localStorage.getItem('rima-moods');
+  let persistWrapper: { state: Record<string, unknown>; version: number } = {
+    state: { moods },
+    version: 0
+  };
+  try {
+    if (existingRaw) {
+      const parsed = JSON.parse(existingRaw);
+      if (parsed && typeof parsed === 'object' && parsed.state && typeof parsed.state === 'object') {
+        persistWrapper = { ...parsed, state: { ...parsed.state, moods } };
+      }
+    }
+  } catch {
+    // fallback to default wrapper
+  }
+  localStorage.setItem('rima-moods', JSON.stringify(persistWrapper));
 }
 
 export function generateBackupData(): RimaBackupData {
@@ -37,7 +80,7 @@ export function generateBackupData(): RimaBackupData {
     version: '1.0.0',
     exportedAt: new Date().toISOString(),
     user: getItem<UserProfile | null>('rima-user-profile', null),
-    moods: getItem<MoodEntry[]>('rima-moods', []),
+    moods: getStoredMoods(),
     journals: getItem<JournalEntry[]>('rima-journals', []),
     safetyPlan: getItem<SafetyPlan | null>('rima-safety-plan', null),
   };
@@ -100,14 +143,7 @@ export function exportMoodsAsCSV(lang?: string): boolean {
   const localeTag = getLocaleTag(activeLang);
   const isEn = activeLang === 'en';
 
-  const moods: MoodEntry[] = (() => {
-    try {
-      const item = localStorage.getItem('rima-moods');
-      return item ? JSON.parse(item) : [];
-    } catch {
-      return [];
-    }
-  })();
+  const moods: MoodEntry[] = getStoredMoods();
 
   if (moods.length === 0) {
     // Caller should show gentle toast instead of alert() — Calm Technology
@@ -603,7 +639,12 @@ export function importDataFromJSON(jsonString: string): { success: boolean; mess
         }
       }
 
-      localStorage.setItem('rima-moods', JSON.stringify(validMoods));
+      setStoredMoods(validMoods);
+      try {
+        useMoodStore.setState({ moods: validMoods });
+      } catch {
+        // Fallback for environments where store is uninitialized
+      }
       importedMoodCount = validMoods.length;
     }
 

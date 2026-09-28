@@ -5,7 +5,9 @@ import {
   generateClinicalSummaryHTML,
   generateBackupData,
   importDataFromJSON,
-  escapeHTML
+  escapeHTML,
+  getStoredMoods,
+  setStoredMoods
 } from '../exportImport';
 
 describe('exportImport Utilities (Localization & Data Portability)', () => {
@@ -177,9 +179,14 @@ describe('exportImport Utilities (Localization & Data Portability)', () => {
       const result = importDataFromJSON(JSON.stringify(payload));
       expect(result.success).toBe(true);
 
-      const storedMoods = JSON.parse(localStorage.getItem('rima-moods') || '[]');
+      const storedMoods = getStoredMoods();
       expect(storedMoods.length).toBe(1);
       expect(storedMoods[0].id).toBe('m-valid');
+
+      // Verify stored in Zustand persist schema format
+      const rawStored = JSON.parse(localStorage.getItem('rima-moods') || '{}');
+      expect(rawStored.state?.moods).toHaveLength(1);
+      expect(rawStored.state.moods[0].id).toBe('m-valid');
     });
 
     it('sanitizes and isolates malformed safety plans preventing runtime crashes', () => {
@@ -221,6 +228,52 @@ describe('exportImport Utilities (Localization & Data Portability)', () => {
       const result = importDataFromJSON(JSON.stringify(payload));
       expect(result.success).toBe(false);
       expect(result.message).toBe('File tidak memuat data RIMA yang valid.');
+    });
+
+    it('seamlessly exports data when moods are stored in Zustand persist schema format', () => {
+      const zustandFormat = {
+        state: {
+          moods: [
+            { id: 'z-1', score: 5, emoji: '😊', factors: ['exercise'], note: 'Feeling energized', createdAt: '2026-09-01T10:00:00.000Z' }
+          ]
+        },
+        version: 0
+      };
+      localStorage.setItem('rima-moods', JSON.stringify(zustandFormat));
+
+      const storedMoods = getStoredMoods();
+      expect(storedMoods).toHaveLength(1);
+      expect(storedMoods[0].id).toBe('z-1');
+
+      const backup = generateBackupData();
+      expect(backup.moods).toHaveLength(1);
+      expect(backup.moods[0].note).toBe('Feeling energized');
+
+      expect(exportMoodsAsCSV('en')).toBe(true);
+      expect(generateClinicalSummaryHTML('en')).toBe(true);
+    });
+
+    it('saves moods in Zustand persist wrapper format with setStoredMoods', () => {
+      setStoredMoods([{ id: 'm-direct', score: 3, emoji: '😐', factors: [], createdAt: '2026-09-01T10:00:00.000Z' }]);
+      expect(getStoredMoods()).toHaveLength(1);
+      expect(getStoredMoods()[0].id).toBe('m-direct');
+    });
+
+    it('persists moods in Zustand persist schema format preserving state hydration', () => {
+      const payload = {
+        moods: [
+          { id: 'm-hydrate', score: 4, emoji: '🙂', factors: ['sleep'], note: 'Good sleep', createdAt: '2026-09-01T10:00:00.000Z' }
+        ]
+      };
+
+      const result = importDataFromJSON(JSON.stringify(payload));
+      expect(result.success).toBe(true);
+
+      const parsed = JSON.parse(localStorage.getItem('rima-moods') || '{}');
+      expect(parsed).toHaveProperty('state');
+      expect(parsed.state).toHaveProperty('moods');
+      expect(parsed.state.moods).toHaveLength(1);
+      expect(parsed.state.moods[0].id).toBe('m-hydrate');
     });
   });
 });
