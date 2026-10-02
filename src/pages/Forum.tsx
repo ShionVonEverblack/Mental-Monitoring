@@ -18,14 +18,15 @@ import { detectCrisis } from '../services/crisisDetectionService';
 import { CrisisInterceptor } from '../components/safety/CrisisInterceptor';
 import { Modal } from '../components/ui/Modal';
 import { generateAnonymousName, formatDate } from '../utils/helpers';
-import { ShieldAlert, MessageCircle, AlertTriangle, Send, Phone, CheckCircle, Flag, Bookmark } from 'lucide-react';
+import { ShieldAlert, MessageCircle, AlertTriangle, Send, Phone, CheckCircle, Flag, Bookmark, X } from 'lucide-react';
 
 export const Forum: React.FC = () => {
   const { t, i18n } = useTranslation();
   const [posts, setPosts] = useState<ForumPost[]>([]);
   const [activeCategory, setActiveCategory] = useState<string>('all');
   const [bookmarkedIds, setBookmarkedIds] = useState<string[]>(() => getBookmarkedPostIds());
-  const [reportedIds, setReportedIds] = useState<string[]>(() => getReportedPostIds());
+  const [reportedIds, setReportedIds] = useState<string[]>([]);
+  const [dismissedReportIds, setDismissedReportIds] = useState<string[]>(() => getReportedPostIds());
   const [reportingPostId, setReportingPostId] = useState<string | null>(null);
   const [reportReason, setReportReason] = useState<string>('spam');
   const [reportDetails, setReportDetails] = useState<string>('');
@@ -174,7 +175,7 @@ export const Forum: React.FC = () => {
       }));
       setNewCommentText('');
       triggerToast(t('forum.commentSent', 'Dukunganmu telah terkirim!'));
-      loadPosts();
+      setPosts(prev => prev.map(p => p.id === postId ? { ...p, commentCount: (p.commentCount || 0) + 1 } : p));
     } catch (error) {
       console.error('Failed to add comment:', error);
       triggerToast(t('common.error', 'Terjadi kesalahan'));
@@ -223,11 +224,13 @@ export const Forum: React.FC = () => {
     setShowGuidelines(false);
   };
 
+  const visiblePosts = posts.filter(p => !dismissedReportIds.includes(p.id));
+
   const filteredPosts = activeCategory === 'all'
-    ? posts
+    ? visiblePosts
     : activeCategory === 'saved'
-    ? posts.filter(p => bookmarkedIds.includes(p.id))
-    : posts.filter(p => p.category === activeCategory);
+    ? visiblePosts.filter(p => bookmarkedIds.includes(p.id))
+    : visiblePosts.filter(p => p.category === activeCategory);
 
   return (
     <div className="forum-page">
@@ -283,16 +286,16 @@ export const Forum: React.FC = () => {
           className={`category-chip ${activeCategory === 'all' ? 'active' : ''}`}
           onClick={() => setActiveCategory('all')}
         >
-          {t('forum.all', 'Semua')} ({posts.length})
+          {t('forum.all', 'Semua')} ({visiblePosts.length})
         </button>
         <button
           className={`category-chip ${activeCategory === 'saved' ? 'active' : ''}`}
           onClick={() => setActiveCategory('saved')}
         >
-          ⭐ {t('forum.saved', 'Tersimpan')} ({bookmarkedIds.length})
+          ⭐ {t('forum.saved', 'Tersimpan')} ({visiblePosts.filter(p => bookmarkedIds.includes(p.id)).length})
         </button>
         {FORUM_CATEGORIES.map(cat => {
-          const count = posts.filter(p => p.category === cat.id).length;
+          const count = visiblePosts.filter(p => p.category === cat.id).length;
           const catKey = cat.id === 'self-care' ? 'selfCare' : cat.id;
           return (
             <button
@@ -403,18 +406,31 @@ export const Forum: React.FC = () => {
                   key={post.id}
                   className="forum-post-card"
                   style={{
-                    padding: '16px',
-                    opacity: 0.7,
+                    padding: '14px 16px',
+                    opacity: 0.75,
                     border: '1px dashed var(--border-subtle)',
                     display: 'flex',
                     alignItems: 'center',
+                    justifyContent: 'space-between',
                     gap: '10px'
                   }}
                 >
-                  <Flag size={16} style={{ color: 'var(--text-tertiary)', flexShrink: 0 }} />
-                  <span style={{ fontSize: '0.813rem', color: 'var(--text-tertiary)' }}>
-                    {t('forum.reportedPostHidden', 'Postingan ini telah dilaporkan dan disembunyikan dari linimasa Anda.')}
-                  </span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <Flag size={16} style={{ color: 'var(--text-tertiary)', flexShrink: 0 }} />
+                    <span style={{ fontSize: '0.813rem', color: 'var(--text-tertiary)' }}>
+                      {t('forum.reportedPostHidden', 'Postingan ini telah dilaporkan dan disembunyikan dari linimasa Anda.')}
+                    </span>
+                  </div>
+                  <button
+                    type="button"
+                    className="btn-icon"
+                    onClick={() => setDismissedReportIds(prev => [...prev, post.id])}
+                    aria-label={t('common.dismiss', 'Tutup')}
+                    title={t('common.dismiss', 'Tutup')}
+                    style={{ padding: '4px' }}
+                  >
+                    <X size={14} />
+                  </button>
                 </div>
               );
             }

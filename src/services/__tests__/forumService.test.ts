@@ -101,5 +101,8 @@ describe('forumService', () => {
     await reportForumPost(postId, 'spam', 'Konten tidak relevan');
     const reportedIds = getReportedPostIds();
     expect(reportedIds).toContain(postId);
+
+    await reportForumPost('post-456', 'harassment');
+    expect(getReportedPostIds()).toEqual(expect.arrayContaining([postId, 'post-456']));
   });
 });
