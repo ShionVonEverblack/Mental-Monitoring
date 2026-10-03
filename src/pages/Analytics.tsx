@@ -16,7 +16,9 @@ export const Analytics: React.FC = () => {
   const { moods, getMoodStats } = useMood();
   const [journals] = useLocalStorage('rima-journals', []);
   
-  const stats = useMemo(() => getMoodStats(), [getMoodStats]);
+  // `moods` is included so stats recompute on add/delete (getMoodStats has a stable reference).
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const stats = useMemo(() => getMoodStats(), [moods, getMoodStats]);
   const totalEntries = stats.totalEntries;
   const averageMood = stats.average;
   const streak = stats.streak;

@@ -11,7 +11,7 @@ import { formatDate, formatRelativeTime } from '../utils/helpers';
 
 export const MoodTracker: React.FC = () => {
   const { t, i18n } = useTranslation();
-  const { addMood, deleteMood, getMoods, getWeeklyMoods, getMonthlyMoods, getMoodStats } = useMood();
+  const { moods, addMood, deleteMood, getMoods, getWeeklyMoods, getMonthlyMoods, getMoodStats } = useMood();
   const lang = i18n.language?.split('-')[0] || 'id';
   
   const history = getMoods().map((m) => ({ 
@@ -37,7 +37,10 @@ export const MoodTracker: React.FC = () => {
         ...m,
         date: formatDate(m.createdAt, lang),
       }));
-  }, [timeRange, getWeeklyMoods, getMonthlyMoods, lang]);
+    // `moods` is included so the chart recomputes when entries are added/deleted
+    // (store getter functions have stable references and never trigger recomputation).
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [moods, timeRange, getWeeklyMoods, getMonthlyMoods, lang]);
 
   const handleSave = () => {
     if (selectedScore && selectedEmoji) {
