@@ -124,4 +124,58 @@ describe('TippCrisisHub Component', () => {
 
     expect(screen.getByRole('heading', { level: 1, name: /Protokol TIPP/i })).toBeInTheDocument();
   });
+
+  it('runs countdown timer and allows pause and restart after completion', () => {
+    vi.useFakeTimers();
+    try {
+      render(
+        <MemoryRouter>
+          <TippCrisisHub />
+        </MemoryRouter>
+      );
+
+      // Open temperature module
+      fireEvent.click(screen.getByRole('button', { name: /Suhu Dingin \(Temperature\)/i }));
+      expect(screen.getByText('30')).toBeInTheDocument();
+
+      // Start timer
+      const startBtn = screen.getByRole('button', { name: /Mulai/i });
+      act(() => {
+        fireEvent.click(startBtn);
+      });
+
+      // Advance by 3 seconds
+      act(() => {
+        vi.advanceTimersByTime(3000);
+      });
+      expect(screen.getByText('27')).toBeInTheDocument();
+
+      // Pause timer
+      const pauseBtn = screen.getByRole('button', { name: /Jeda/i });
+      act(() => {
+        fireEvent.click(pauseBtn);
+      });
+
+      // Resume timer
+      const resumeBtn = screen.getByRole('button', { name: /Lanjut/i });
+      act(() => {
+        fireEvent.click(resumeBtn);
+      });
+
+      // Advance until finish (27 seconds)
+      act(() => {
+        vi.advanceTimersByTime(27000);
+      });
+      expect(screen.getByText('0')).toBeInTheDocument();
+
+      // When at 0, start button appears and clicking it restarts to 30
+      const restartBtn = screen.getByRole('button', { name: /Mulai/i });
+      act(() => {
+        fireEvent.click(restartBtn);
+      });
+      expect(screen.getByText('30')).toBeInTheDocument();
+    } finally {
+      vi.useRealTimers();
+    }
+  });
 });

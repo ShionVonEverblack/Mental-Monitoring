@@ -100,7 +100,7 @@ export const TippCrisisHub: React.FC = () => {
 
   // Generic Timer effect for Temperature / Exercise
   useEffect(() => {
-    if (isTimerRunning && timerSeconds > 0) {
+    if (isTimerRunning) {
       timerRef.current = setInterval(() => {
         setTimerSeconds(prev => {
           if (prev <= 1) {
@@ -122,7 +122,7 @@ export const TippCrisisHub: React.FC = () => {
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
     };
-  }, [isTimerRunning, timerSeconds]);
+  }, [isTimerRunning]);
 
   // PMR Timer effect
   useEffect(() => {
@@ -539,11 +539,15 @@ export const TippCrisisHub: React.FC = () => {
               {!isTimerRunning ? (
                 <button 
                   className="btn btn-primary" 
-                  onClick={() => { triggerHaptic(60); setIsTimerRunning(true); }}
+                  onClick={() => {
+                    triggerHaptic(60);
+                    if (timerSeconds <= 0) setTimerSeconds(30);
+                    setIsTimerRunning(true);
+                  }}
                   style={{ minWidth: '120px' }}
                 >
                   <Play size={16} />
-                  <span>{timerSeconds === 30 ? t('common.start', 'Mulai') : t('common.resume', 'Lanjut')}</span>
+                  <span>{timerSeconds === 30 || timerSeconds <= 0 ? t('common.start', 'Mulai') : t('common.resume', 'Lanjut')}</span>
                 </button>
               ) : (
                 <button 
@@ -624,11 +628,15 @@ export const TippCrisisHub: React.FC = () => {
               {!isTimerRunning ? (
                 <button 
                   className="btn btn-primary" 
-                  onClick={() => { triggerHaptic([60, 40]); setIsTimerRunning(true); }}
+                  onClick={() => {
+                    triggerHaptic([60, 40]);
+                    if (timerSeconds <= 0) setTimerSeconds(60);
+                    setIsTimerRunning(true);
+                  }}
                   style={{ minWidth: '120px', background: 'var(--color-warm)', borderColor: 'var(--color-warm)' }}
                 >
                   <Play size={16} />
-                  <span>{timerSeconds === 60 ? t('common.start', 'Mulai') : t('common.resume', 'Lanjut')}</span>
+                  <span>{timerSeconds === 60 || timerSeconds <= 0 ? t('common.start', 'Mulai') : t('common.resume', 'Lanjut')}</span>
                 </button>
               ) : (
                 <button 
