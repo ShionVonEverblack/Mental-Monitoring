@@ -128,7 +128,7 @@ export const calculateGraceStreak = (moods: MoodEntry[]): GraceStreakResult => {
   const mostRecentDate = new Date(sorted[0].createdAt);
   mostRecentDate.setHours(0, 0, 0, 0);
   
-  const diffFromToday = Math.floor((today.getTime() - mostRecentDate.getTime()) / (1000 * 3600 * 24));
+  const diffFromToday = Math.round((today.getTime() - mostRecentDate.getTime()) / (1000 * 3600 * 24));
   
   // If last logged > 2 days ago, streak is broken even with 1 grace day
   if (diffFromToday > 2) return { streak: 0, isGrace: false };
@@ -141,7 +141,7 @@ export const calculateGraceStreak = (moods: MoodEntry[]): GraceStreakResult => {
   for (let i = 1; i < sorted.length; i++) {
     const d = new Date(sorted[i].createdAt);
     d.setHours(0, 0, 0, 0);
-    const diff = Math.floor((prevDate.getTime() - d.getTime()) / (1000 * 3600 * 24));
+    const diff = Math.round((prevDate.getTime() - d.getTime()) / (1000 * 3600 * 24));
     
     if (diff === 0) {
       continue; // Same day entry

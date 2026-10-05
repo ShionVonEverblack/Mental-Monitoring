@@ -82,6 +82,26 @@ describe('Helper Utilities', () => {
     expect(result.streak).toBe(2);
   });
 
+  it('calculateGraceStreak handles DST 23-hour and 25-hour day shifts gracefully', () => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    // Simulate entry 23 hours prior (short DST day transition)
+    const dstShortYesterday = new Date(today.getTime() - 23 * 3600 * 1000);
+    // Simulate entry 25 hours before that (long DST day transition)
+    const dstLongDayBefore = new Date(dstShortYesterday.getTime() - 25 * 3600 * 1000);
+
+    const moods: MoodEntry[] = [
+      { id: '1', score: 4, emoji: '🙂', factors: [], createdAt: today.toISOString() },
+      { id: '2', score: 5, emoji: '😊', factors: [], createdAt: dstShortYesterday.toISOString() },
+      { id: '3', score: 3, emoji: '😐', factors: [], createdAt: dstLongDayBefore.toISOString() }
+    ];
+
+    const result = calculateGraceStreak(moods);
+    expect(result.streak).toBe(3);
+    expect(result.isGrace).toBe(false);
+  });
+
   it('clamp restricts value within range', () => {
     expect(clamp(10, 1, 5)).toBe(5);
     expect(clamp(-2, 1, 5)).toBe(1);
