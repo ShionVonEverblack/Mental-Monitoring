@@ -142,6 +142,8 @@ export const Profile: React.FC = () => {
 
   const handleImportFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
+    // Reset file input value so selecting the same file again triggers onChange
+    e.target.value = '';
     if (!file) return;
 
     const reader = new FileReader();
@@ -460,55 +462,85 @@ export const Profile: React.FC = () => {
       <div className="settings-section">
         <h2 className="settings-title">{t('profile.backupExport', 'EKSPOR, IMPOR & CADANGAN DATA')}</h2>
         <div className="settings-list">
-          <button className="settings-item" type="button" onClick={exportAllDataAsJSON}>
+          <div 
+            className="settings-item" 
+            role="button" 
+            tabIndex={0} 
+            onClick={exportAllDataAsJSON}
+            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') exportAllDataAsJSON(); }}
+          >
             <div className="settings-item-left">
               <Download size={18} />
               <span>{t('profile.exportJSON', 'Ekspor Cadangan Lengkap (JSON)')}</span>
             </div>
             <div className="settings-item-right">
-              <Button variant="ghost" size="sm" icon={<Download size={14} />}>
+              <Button variant="ghost" size="sm" icon={<Download size={14} />} tabIndex={-1}>
                 {t('common.download', 'Unduh')}
               </Button>
             </div>
-          </button>
+          </div>
 
-          <button className="settings-item" type="button" onClick={handleExportMoods}>
+          <div 
+            className="settings-item" 
+            role="button" 
+            tabIndex={0} 
+            onClick={handleExportMoods}
+            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleExportMoods(); }}
+          >
             <div className="settings-item-left">
               <FileSpreadsheet size={18} />
               <span>{t('profile.exportCSV', 'Ekspor Laporan Mood ke Terapis (CSV)')}</span>
             </div>
             <div className="settings-item-right">
-              <Button variant="ghost" size="sm" icon={<FileSpreadsheet size={14} />}>
+              <Button variant="ghost" size="sm" icon={<FileSpreadsheet size={14} />} tabIndex={-1}>
                 CSV
               </Button>
             </div>
-          </button>
+          </div>
 
-          <button className="settings-item" type="button" onClick={handleExportJournals}>
+          <div 
+            className="settings-item" 
+            role="button" 
+            tabIndex={0} 
+            onClick={handleExportJournals}
+            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleExportJournals(); }}
+          >
             <div className="settings-item-left">
               <FileText size={18} />
               <span>{t('profile.exportJournalsCSV', 'Ekspor Catatan Jurnal (CSV)')}</span>
             </div>
             <div className="settings-item-right">
-              <Button variant="ghost" size="sm" icon={<FileText size={14} />}>
+              <Button variant="ghost" size="sm" icon={<FileText size={14} />} tabIndex={-1}>
                 CSV
               </Button>
             </div>
-          </button>
+          </div>
 
-          <button className="settings-item" type="button" onClick={handleExportClinical}>
+          <div 
+            className="settings-item" 
+            role="button" 
+            tabIndex={0} 
+            onClick={handleExportClinical}
+            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleExportClinical(); }}
+          >
             <div className="settings-item-left">
               <Stethoscope size={18} style={{ color: 'var(--color-primary)' }} />
               <span>{t('profile.exportClinicalHTML', 'Ekspor Ringkasan Klinis untuk Terapis (HTML)')}</span>
             </div>
             <div className="settings-item-right">
-              <Button variant="ghost" size="sm" icon={<Download size={14} />}>
+              <Button variant="ghost" size="sm" icon={<Download size={14} />} tabIndex={-1}>
                 HTML
               </Button>
             </div>
-          </button>
+          </div>
 
-          <button className="settings-item" type="button" onClick={() => fileInputRef.current?.click()}>
+          <div 
+            className="settings-item" 
+            role="button" 
+            tabIndex={0} 
+            onClick={() => fileInputRef.current?.click()}
+            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') fileInputRef.current?.click(); }}
+          >
             <div className="settings-item-left">
               <Upload size={18} />
               <span>{t('profile.importJSON', 'Pulihkan Data dari File JSON')}</span>
@@ -521,11 +553,11 @@ export const Profile: React.FC = () => {
                 accept=".json"
                 onChange={handleImportFile}
               />
-              <Button variant="ghost" size="sm" icon={<Upload size={14} />}>
+              <Button variant="ghost" size="sm" icon={<Upload size={14} />} tabIndex={-1}>
                 {t('profile.selectFile', 'Pilih File')}
               </Button>
             </div>
-          </button>
+          </div>
         </div>
       </div>
 
@@ -566,29 +598,41 @@ export const Profile: React.FC = () => {
 
           {isLockEnabled && (
             <>
-              <button className="settings-item" type="button" onClick={handleChangePin}>
+              <div 
+                className="settings-item" 
+                role="button" 
+                tabIndex={0} 
+                onClick={handleChangePin}
+                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleChangePin(); }}
+              >
                 <div className="settings-item-left">
                   <KeyRound size={18} />
                   <span>{t('appLock.changePin', 'Ubah PIN')}</span>
                 </div>
                 <div className="settings-item-right">
-                  <Button variant="ghost" size="sm">
+                  <Button variant="ghost" size="sm" tabIndex={-1}>
                     {t('common.edit', 'Ubah')}
                   </Button>
                 </div>
-              </button>
+              </div>
 
-              <button className="settings-item" type="button" onClick={handleLockNow}>
+              <div 
+                className="settings-item" 
+                role="button" 
+                tabIndex={0} 
+                onClick={handleLockNow}
+                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleLockNow(); }}
+              >
                 <div className="settings-item-left">
                   <Shield size={18} style={{ color: 'var(--color-warning)' }} />
                   <span>{t('appLock.lockNow', 'Kunci Sekarang')}</span>
                 </div>
                 <div className="settings-item-right">
-                  <Button variant="ghost" size="sm">
+                  <Button variant="ghost" size="sm" tabIndex={-1}>
                     {t('appLock.lockNowBtn', 'Kunci')}
                   </Button>
                 </div>
-              </button>
+              </div>
             </>
           )}
         </div>
@@ -597,17 +641,23 @@ export const Profile: React.FC = () => {
       <div className="settings-section">
         <h2 className="settings-title">{t('profile.privacyTitle', 'HAK DATA & KEBIJAKAN PRIVASI (UU PDP)')}</h2>
         <div className="settings-list">
-          <button className="settings-item" type="button" onClick={() => navigate('/privacy')}>
+          <div 
+            className="settings-item" 
+            role="button" 
+            tabIndex={0} 
+            onClick={() => navigate('/privacy')}
+            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') navigate('/privacy'); }}
+          >
             <div className="settings-item-left">
               <ShieldCheck size={18} style={{ color: 'var(--color-primary)' }} />
               <span>{t('profile.privacyPolicyLink', 'Kebijakan Privasi & Hak Pengguna')}</span>
             </div>
             <div className="settings-item-right">
-              <Button variant="ghost" size="sm">
+              <Button variant="ghost" size="sm" tabIndex={-1}>
                 {t('common.view', 'Lihat')}
               </Button>
             </div>
-          </button>
+          </div>
 
           <button className="settings-item" type="button" onClick={() => setShowWipeModal(true)}>
             <div className="settings-item-left">
