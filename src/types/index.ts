@@ -169,3 +169,40 @@ export interface CssrsResult {
   createdAt: string;
 }
 
+export type BaDomain = 'pleasure' | 'mastery' | 'spiritual' | 'social';
+
+export interface BaActivity {
+  id: string;
+  title: string;
+  titleKey?: string;
+  domain: BaDomain;
+  scheduledDate: string; // YYYY-MM-DD
+  scheduledTime?: string; // HH:mm
+  predictedMood: number; // 1-10
+  actualMood?: number; // 1-10 (post-completion rating)
+  isCompleted: boolean;
+  completedAt?: string;
+  reflection?: string;
+  createdAt: string;
+}
+
+export interface BaCatalogItem {
+  id: string;
+  titleKey: string;
+  titleFallback: string;
+  domain: BaDomain;
+  iconName: string;
+  defaultDurationMinutes: number;
+}
+
+export interface BaStatistics {
+  totalScheduled: number;
+  totalCompleted: number;
+  completionRate: number; // 0-100%
+  averagePredictedMood: number;
+  averageActualMood: number;
+  averageMoodDelta: number; // e.g. +2.3
+  domainCounts: Record<BaDomain, number>;
+}
+
+
