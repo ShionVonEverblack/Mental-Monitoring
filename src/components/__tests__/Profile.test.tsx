@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, fireEvent, waitFor } from '@testing-library/react';
+import { render, fireEvent, waitFor, act } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import i18n from '../../i18n/config';
 import { Profile } from '../../pages/Profile';
@@ -51,5 +51,27 @@ describe('Profile Component - Import File Handling', () => {
     await waitFor(() => {
       expect(importSpy).toHaveBeenCalledTimes(1);
     });
+  });
+
+  it('toggles Low-Stimulation sensory mode and applies data-sensory attribute', async () => {
+    const { getByRole } = render(
+      <MemoryRouter>
+        <Profile />
+      </MemoryRouter>
+    );
+
+    const sensoryBtn = getByRole('button', { name: /Mode Sensori Tenang/i });
+    expect(sensoryBtn).toBeInTheDocument();
+    expect(document.documentElement.hasAttribute('data-sensory')).toBe(false);
+
+    await act(async () => {
+      fireEvent.click(sensoryBtn);
+    });
+    expect(document.documentElement.getAttribute('data-sensory')).toBe('calm');
+
+    await act(async () => {
+      fireEvent.click(sensoryBtn);
+    });
+    expect(document.documentElement.hasAttribute('data-sensory')).toBe(false);
   });
 });

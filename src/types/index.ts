@@ -117,13 +117,14 @@ export interface AppState {
   safetyPlan: SafetyPlan | null;
 }
 
-export type AssessmentType = 'phq9' | 'gad7';
+export type AssessmentType = 'phq9' | 'gad7' | 'who5';
 
 export interface AssessmentResult {
   id: string;
   type: AssessmentType;
   score: number;
   maxScore: number;
+  percentageScore?: number;
   severity: 'minimal' | 'mild' | 'moderate' | 'moderately_severe' | 'severe';
   answers: Record<number, number>;
   createdAt: string;
@@ -204,5 +205,31 @@ export interface BaStatistics {
   averageMoodDelta: number; // e.g. +2.3
   domainCounts: Record<BaDomain, number>;
 }
+
+export interface SleepDiaryEntry {
+  id: string;
+  date: string; // YYYY-MM-DD
+  bedTime: string; // HH:mm
+  wakeTime: string; // HH:mm
+  latencyMinutes: number; // minutes to fall asleep
+  awakeningsCount: number; // number of nighttime awakenings
+  awakeningsDurationMinutes: number; // total minutes awake during night
+  quality: 1 | 2 | 3 | 4 | 5; // 1: very poor to 5: excellent
+  totalSleepMinutes: number;
+  timeInBedMinutes: number;
+  sleepEfficiency: number; // 0-100%
+  factors?: string[]; // e.g. 'caffeine', 'screen', 'stress', 'noise'
+  notes?: string;
+  createdAt: string;
+}
+
+export interface SleepStatistics {
+  totalEntries: number;
+  avgEfficiency: number; // e.g. 86%
+  avgSleepDurationMinutes: number; // e.g. 420 (7h)
+  avgQuality: number; // e.g. 3.8
+  efficiencyStatus: 'optimal' | 'moderate' | 'needs_improvement';
+}
+
 
 

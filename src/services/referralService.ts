@@ -1,8 +1,9 @@
 import { getStoredMoods } from '../utils/exportImport';
 import { getAssessmentHistory } from './assessmentService';
 import { getCssrsHistory } from './cssrsService';
+import { calculateSleepStats } from './sleepService';
 import { getLocaleTag } from '../utils/helpers';
-import type { AssessmentResult, CssrsResult } from '../types';
+import type { AssessmentResult, CssrsResult, SleepStatistics } from '../types';
 
 export interface BpjsStep {
   number: number;
@@ -107,7 +108,9 @@ export interface ClinicalHandoverData {
   generatedAt: string;
   latestPhq9: AssessmentResult | null;
   latestGad7: AssessmentResult | null;
+  latestWho5: AssessmentResult | null;
   latestCssrs: CssrsResult | null;
+  sleepStats: SleepStatistics | null;
   avgMoodScore: number | null;
   totalMoodLogs: number;
   topFactors: string[];
@@ -117,9 +120,12 @@ export function getClinicalHandoverData(): ClinicalHandoverData {
   const assessments = getAssessmentHistory();
   const latestPhq9 = assessments.find(a => a.type === 'phq9') || null;
   const latestGad7 = assessments.find(a => a.type === 'gad7') || null;
+  const latestWho5 = assessments.find(a => a.type === 'who5') || null;
 
   const cssrsList = getCssrsHistory();
   const latestCssrs = cssrsList.length > 0 ? cssrsList[0] : null;
+
+  const sleepStats = calculateSleepStats(14);
 
   const moods = getStoredMoods();
   const totalMoodLogs = moods.length;
@@ -145,7 +151,9 @@ export function getClinicalHandoverData(): ClinicalHandoverData {
     generatedAt: new Date().toISOString(),
     latestPhq9,
     latestGad7,
+    latestWho5,
     latestCssrs,
+    sleepStats,
     avgMoodScore,
     totalMoodLogs,
     topFactors,
@@ -185,9 +193,17 @@ export function generateDoctorHandoverBriefHTML(lang = 'id', customPatientNote =
     ? `${data.latestGad7.score}/21 (${formatSeverityLabel(data.latestGad7.severity, isEn)}) — ${new Date(data.latestGad7.createdAt).toLocaleDateString(localeTag)}`
     : isEn ? 'No GAD-7 screening recorded' : 'Belum ada data skrining GAD-7';
 
+  const who5Text = data.latestWho5
+    ? `${data.latestWho5.percentageScore ?? data.latestWho5.score * 4}% (${data.latestWho5.score}/25) — ${new Date(data.latestWho5.createdAt).toLocaleDateString(localeTag)}`
+    : isEn ? 'No WHO-5 index recorded' : 'Belum ada data indeks WHO-5';
+
   const cssrsText = data.latestCssrs
     ? `Tingkat Risiko: ${data.latestCssrs.evaluation.riskLevel.toUpperCase()} — ${new Date(data.latestCssrs.createdAt).toLocaleDateString(localeTag)}`
     : isEn ? 'Not assessed / None' : 'Tidak ada evaluasi risiko aktif';
+
+  const sleepText = data.sleepStats && data.sleepStats.totalEntries > 0
+    ? `${data.sleepStats.avgEfficiency}% ${isEn ? 'efficiency' : 'efisiensi'} (${(data.sleepStats.avgSleepDurationMinutes / 60).toFixed(1)} ${isEn ? 'hrs/night' : 'jam/malam'}, ⭐ ${data.sleepStats.avgQuality}/5)`
+    : isEn ? 'No sleep diary recorded' : 'Belum ada catatan tidur';
 
   const avgMoodText = data.avgMoodScore !== null
     ? `${data.avgMoodScore} / 5 (${data.totalMoodLogs} catatan)`
@@ -357,17 +373,32 @@ export function generateDoctorHandoverBriefHTML(lang = 'id', customPatientNote =
 
   <div class="grid">
     <div class="card">
+      <h3>${isEn ? 'WHO-5 Well-Being Index' : 'Indeks Kesejahteraan WHO-5'}</h3>
+      <div class="value">${who5Text}</div>
+    </div>
+    <div class="card">
+      <h3>${isEn ? 'Sleep Architecture & Efficiency (CBT-I)' : 'Arsitektur & Efisiensi Tidur (CBT-I)'}</h3>
+      <div class="value">${sleepText}</div>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="card">
       <h3>${isEn ? 'C-SSRS Safety Assessment' : 'Evaluasi Keselamatan C-SSRS'}</h3>
       <div class="value">${cssrsText}</div>
     </div>
     <div class="card">
-      <h3>${isEn ? '30-Day Mood Baseline' : 'Rata-rata Suasana Hati 30 Hari'}</h3>
+      <h3>${isEn ? '30-Day Longitudinal Mood Baseline' : 'Rata-rata Suasana Hati 30 Hari'}</h3>
       <div class="value">${avgMoodText}</div>
     </div>
   </div>
 
   <div class="section">
-    <h3>${isEn ? 'Primary Distress Triggers & Factors' : 'Faktor Pemicu & Konteks Distres'}</h3>
+    <h3>${isEn ? '30-Day Longitudinal Mood Baseline & Distress Factors' : 'Rata-rata Suasana Hati 30 Hari & Konteks Distres'}</h3>
+    <div class="soap-row">
+      <span class="soap-label">${isEn ? 'Average Mood Score:' : 'Rata-rata Skor Suasana Hati:'}</span>
+      <span>${avgMoodText}</span>
+    </div>
     <div class="soap-row">
       <span class="soap-label">${isEn ? 'Top Life Factors:' : 'Faktor Utama:'}</span>
       <span>${factorsText}</span>

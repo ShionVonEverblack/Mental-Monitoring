@@ -77,4 +77,49 @@ describe('Assessment Page & C-SSRS Escalation', () => {
     expect(screen.getByText(/Skrining Keselamatan Diri \(C-SSRS\)/i)).toBeInTheDocument();
     expect(screen.getByText(/Kamu mengindikasikan adanya pikiran yang berat/i)).toBeInTheDocument();
   });
+
+  it('renders WHO-5 tab and switches to WHO-5 positive well-being questionnaire', () => {
+    render(
+      <MemoryRouter>
+        <Assessment />
+      </MemoryRouter>
+    );
+
+    const who5Tab = screen.getByRole('button', { name: /Kesejahteraan \(WHO-5\)/i });
+    expect(who5Tab).toBeInTheDocument();
+
+    fireEvent.click(who5Tab);
+
+    expect(screen.getByText(/Saya merasa ceria dan dalam suasana hati yang baik/i)).toBeInTheDocument();
+    expect(screen.getByText(/Saya bangun tidur dengan rasa segar dan bugar/i)).toBeInTheDocument();
+  });
+
+  it('completes WHO-5 assessment with low score and presents gentle non-stigma recovery card', () => {
+    render(
+      <MemoryRouter>
+        <Assessment />
+      </MemoryRouter>
+    );
+
+    // Switch to WHO-5 tab
+    const who5Tab = screen.getByRole('button', { name: /Kesejahteraan \(WHO-5\)/i });
+    fireEvent.click(who5Tab);
+
+    // Answer all 5 questions with "Sesekali / Kadang-kadang (1)" -> Raw: 5, Percentage: 20% (<50%)
+    const options1 = screen.getAllByRole('button', { name: /Sesekali \/ Kadang-kadang/i });
+    expect(options1.length).toBe(5);
+
+    options1.forEach(btn => fireEvent.click(btn));
+
+    // Submit
+    const submitBtn = screen.getByRole('button', { name: /Lihat Hasil Skrining/i });
+    fireEvent.click(submitBtn);
+
+    // Result card should show percentage (20%), raw score (5 of 25), and gentle recovery card
+    expect(screen.getByText('20%')).toBeInTheDocument();
+    expect(screen.getByText(/Kesejahteraan Sangat Rendah/i)).toBeInTheDocument();
+    expect(screen.getByText(/Saran Pendampingan & Pemulihan/i)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Lanjut ke Skrining PHQ-9/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Aktivasi Perilaku/i })).toBeInTheDocument();
+  });
 });

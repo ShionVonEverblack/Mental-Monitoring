@@ -24,6 +24,7 @@ const Grounding = lazy(() => import('./pages/Grounding').then(module => ({ defau
 const Assessment = lazy(() => import('./pages/Assessment').then(module => ({ default: module.Assessment })));
 const TippCrisisHub = lazy(() => import('./pages/TippCrisisHub').then(module => ({ default: module.TippCrisisHub })));
 const BehavioralActivation = lazy(() => import('./pages/BehavioralActivation').then(module => ({ default: module.BehavioralActivation })));
+const SleepTracker = lazy(() => import('./pages/SleepTracker').then(module => ({ default: module.SleepTracker })));
 import { ConsentModal } from './components/common/ConsentModal';
 import { AppLockScreen } from './components/security/AppLockScreen';
 
@@ -60,6 +61,7 @@ const App: React.FC = () => {
               <Route path="/assessment" element={<Assessment />} />
               <Route path="/tipp" element={<TippCrisisHub />} />
               <Route path="/activation" element={<BehavioralActivation />} />
+              <Route path="/sleep" element={<SleepTracker />} />
             </Routes>
           </Suspense>
         </AppShell>

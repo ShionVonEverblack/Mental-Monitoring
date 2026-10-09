@@ -15,6 +15,7 @@
 html {
   scroll-behavior: smooth;
   font-size: 16px;
+  scroll-padding-bottom: 96px; /* WCAG 2.4.11 Focus Not Obscured by Bottom Nav */
 }
 
 body {
@@ -25,6 +26,25 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   transition: background-color var(--transition-normal), color var(--transition-normal);
+}
+
+/* Zero Motion & Neuro-Inclusion Animations Suppression (WCAG 2.2 / Sensory Calm) */
+[data-sensory='calm'] *,
+[data-sensory='calm'] *::before,
+[data-sensory='calm'] *::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+  scroll-behavior: auto !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 img, picture, video, canvas, svg {
@@ -65,10 +85,11 @@ a:hover {
   color: var(--color-primary-hover);
 }
 
-/* Focus Visible */
+/* Focus Visible (WCAG 2.4.11 & 2.4.7 High Contrast Focus Indicator) */
 :focus-visible {
-  outline: 2px solid var(--color-primary);
-  outline-offset: 2px;
+  outline: 3px solid var(--color-primary);
+  outline-offset: 3px;
+  scroll-margin-bottom: 96px;
 }
 
 /* Selection */
@@ -261,6 +282,7 @@ a:hover {
 .quick-action-btn.safety .action-icon { background: hsla(0, 65%, 55%, 0.12); color: var(--color-danger); }
 .quick-action-btn.meditate .action-icon { background: hsla(270, 50%, 65%, 0.12); color: var(--color-accent); }
 .quick-action-btn.activation .action-icon { background: hsla(190, 75%, 45%, 0.12); color: #0284c7; }
+.quick-action-btn.sleep .action-icon { background: hsla(245, 60%, 65%, 0.12); color: #6366f1; }
 
 .chart-section { margin-bottom: 32px; }
 .chart-section h3 { font-size: 1.125rem; font-weight: 600; margin-bottom: 16px; color: var(--text-primary); }

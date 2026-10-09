@@ -1,7 +1,8 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { persist, createJSONStorage } from 'zustand/middleware';
 import type { MoodEntry } from '../types';
 import { generateId, getMoodTrend, calculateGraceStreak } from '../utils/helpers';
+import { rimaAsyncStorage } from '../utils/indexedDb';
 
 export interface MoodStats {
   average: number;
@@ -90,6 +91,7 @@ export const useMoodStore = create<MoodState>()(
     }),
     {
       name: 'rima-moods',
+      storage: createJSONStorage(() => rimaAsyncStorage),
     }
   )
 );

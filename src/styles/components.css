@@ -14,6 +14,7 @@
   transition: all var(--transition-fast);
   background: transparent;
   color: var(--text-primary);
+  min-height: 48px; /* WCAG 2.2 SC 2.5.8 Target Size Minimum */
 }
 .btn:disabled {
   opacity: 0.6;
@@ -68,12 +69,14 @@
   padding: var(--spacing-xs) var(--spacing-sm);
   font-size: var(--font-size-sm);
   border-radius: var(--radius-sm);
+  min-height: 44px; /* WCAG 2.2 SC 2.5.8 */
 }
 
 .btn-lg {
   padding: var(--spacing-md) var(--spacing-lg);
   font-size: var(--font-size-lg);
   border-radius: var(--radius-lg);
+  min-height: 52px;
 }
 
 .btn-icon {
@@ -84,14 +87,21 @@
   border-radius: var(--radius-full);
   cursor: pointer;
   transition: color var(--transition-fast), background-color var(--transition-fast), transform var(--transition-fast);
+  min-width: 44px;
+  min-height: 44px;
 }
 
 button.btn-icon:not(.btn) {
   background: transparent;
   border: none;
   color: var(--text-tertiary);
-  padding: 6px;
+  padding: 8px;
   border-radius: var(--radius-sm);
+  min-width: 44px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 button.btn-icon:not(.btn):hover:not(:disabled) {

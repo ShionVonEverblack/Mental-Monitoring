@@ -34,6 +34,7 @@ describe('referralService', () => {
     const data = getClinicalHandoverData();
     expect(data.latestPhq9).toBeNull();
     expect(data.latestGad7).toBeNull();
+    expect(data.latestWho5).toBeNull();
     expect(data.latestCssrs).toBeNull();
     expect(data.avgMoodScore).toBeNull();
     expect(data.totalMoodLogs).toBe(0);

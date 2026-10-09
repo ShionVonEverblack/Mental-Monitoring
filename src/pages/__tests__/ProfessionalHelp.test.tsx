@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, act } from '@testing-library/react';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { ProfessionalHelp } from '../ProfessionalHelp';
 import * as referralService from '../../services/referralService';
@@ -55,7 +55,9 @@ describe('ProfessionalHelp Page', () => {
     fireEvent.click(anxietyPill);
 
     const copyBtn = screen.getByRole('button', { name: /Salin Skrip/i });
-    fireEvent.click(copyBtn);
+    await act(async () => {
+      fireEvent.click(copyBtn);
+    });
 
     expect(writeTextMock).toHaveBeenCalled();
   });

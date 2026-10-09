@@ -38,11 +38,28 @@ export const GAD7_QUESTIONS: AssessmentQuestion[] = [
   { id: 7, textKey: 'assessment.gad7.q7', textFallback: 'Merasa takut seolah-olah sesuatu yang buruk akan terjadi' },
 ];
 
+export const WHO5_QUESTIONS: AssessmentQuestion[] = [
+  { id: 1, textKey: 'assessment.who5.q1', textFallback: 'Saya merasa ceria dan dalam suasana hati yang baik' },
+  { id: 2, textKey: 'assessment.who5.q2', textFallback: 'Saya merasa tenang dan rileks' },
+  { id: 3, textKey: 'assessment.who5.q3', textFallback: 'Saya merasa aktif dan bertenaga' },
+  { id: 4, textKey: 'assessment.who5.q4', textFallback: 'Saya bangun tidur dengan rasa segar dan bugar' },
+  { id: 5, textKey: 'assessment.who5.q5', textFallback: 'Kehidupan sehari-hari saya dipenuhi dengan hal-hal yang menarik bagi saya' },
+];
+
 export const FREQUENCY_OPTIONS = [
   { score: 0, labelKey: 'assessment.opt0', labelFallback: 'Tidak pernah (0 hari)' },
   { score: 1, labelKey: 'assessment.opt1', labelFallback: 'Beberapa hari (1-7 hari)' },
   { score: 2, labelKey: 'assessment.opt2', labelFallback: 'Lebih dari separuh waktu (>7 hari)' },
   { score: 3, labelKey: 'assessment.opt3', labelFallback: 'Hampir setiap hari' },
+];
+
+export const WHO5_OPTIONS = [
+  { score: 0, labelKey: 'assessment.who5.opt0', labelFallback: 'Tidak pernah (0)' },
+  { score: 1, labelKey: 'assessment.who5.opt1', labelFallback: 'Sesekali / Kadang-kadang (1)' },
+  { score: 2, labelKey: 'assessment.who5.opt2', labelFallback: 'Kurang dari separuh waktu (2)' },
+  { score: 3, labelKey: 'assessment.who5.opt3', labelFallback: 'Lebih dari separuh waktu (3)' },
+  { score: 4, labelKey: 'assessment.who5.opt4', labelFallback: 'Sebagian besar waktu (4)' },
+  { score: 5, labelKey: 'assessment.who5.opt5', labelFallback: 'Sepanjang waktu (5)' },
 ];
 
 export interface SeverityEvaluation {
@@ -53,6 +70,7 @@ export interface SeverityEvaluation {
   recommendationKey: string;
   recommendationFallback: string;
   isCrisisTriggered: boolean;
+  suggestPhq9?: boolean;
 }
 
 /**
@@ -165,6 +183,74 @@ export function evaluateGAD7(answers: Record<number, number>): { score: number; 
       recommendationKey,
       recommendationFallback,
       isCrisisTriggered: false,
+    },
+  };
+}
+
+/**
+ * Evaluates WHO-5 Well-Being Index score according to World Health Organization / Topp et al. (2015).
+ * Raw score range: 0-25. Percentage score range: 0-100 (rawScore * 4).
+ * Cutoffs:
+ * - >= 70: Optimal / High well-being
+ * - 50-69: Moderate well-being
+ * - 29-49: Low well-being (standard clinical cutoff < 50 for screening depression)
+ * - <= 28: Very low well-being (indicates significant depressive symptomatology)
+ */
+export function evaluateWHO5(answers: Record<number, number>): {
+  score: number;
+  percentageScore: number;
+  eval: SeverityEvaluation;
+} {
+  const scores = Object.values(answers);
+  const rawScore = scores.reduce((sum, val) => sum + val, 0);
+  const percentageScore = rawScore * 4;
+
+  let severity: SeverityEvaluation['severity'] = 'minimal';
+  let labelKey = 'assessment.who5.high';
+  let labelFallback = 'Tingkat Kesejahteraan Baik & Optimal';
+  let color = 'var(--color-secondary)';
+  let recommendationKey = 'assessment.who5.recHigh';
+  let recommendationFallback = 'Kondisi psikologis Anda sangat positif dan berdaya. Terus pertahankan pola hidup sehat dan rawat aktivitas bermakna.';
+  let suggestPhq9 = false;
+
+  if (percentageScore <= 28) {
+    severity = 'severe';
+    labelKey = 'assessment.who5.veryLow';
+    labelFallback = 'Tingkat Kesejahteraan Sangat Rendah';
+    color = 'var(--color-danger)';
+    recommendationKey = 'assessment.who5.recVeryLow';
+    recommendationFallback = 'Skor Anda menunjukkan penurunan energi emosional yang signifikan. Sangat disarankan untuk melengkapi evaluasi dengan Skrining PHQ-9 atau berdiskusi dengan tenaga profesional.';
+    suggestPhq9 = true;
+  } else if (percentageScore < 50) {
+    severity = 'moderate';
+    labelKey = 'assessment.who5.low';
+    labelFallback = 'Tingkat Kesejahteraan Rendah';
+    color = 'var(--color-warm)';
+    recommendationKey = 'assessment.who5.recLow';
+    recommendationFallback = 'Kesejahteraan emosional Anda berada di bawah batas optimal (<50). Kami menyarankan untuk melakukan skrining depresi (PHQ-9) atau mencoba latihan Aktivasi Perilaku.';
+    suggestPhq9 = true;
+  } else if (percentageScore < 70) {
+    severity = 'mild';
+    labelKey = 'assessment.who5.moderate';
+    labelFallback = 'Tingkat Kesejahteraan Cukup / Sedang';
+    color = 'var(--color-primary)';
+    recommendationKey = 'assessment.who5.recModerate';
+    recommendationFallback = 'Kesejahteraan Anda dalam batas memadai, namun masih ada ruang untuk memulihkan energi dan ketenangan batin. Luangkan waktu untuk istirahat dan jeda mindful.';
+    suggestPhq9 = false;
+  }
+
+  return {
+    score: rawScore,
+    percentageScore,
+    eval: {
+      severity,
+      labelKey,
+      labelFallback,
+      color,
+      recommendationKey,
+      recommendationFallback,
+      isCrisisTriggered: false,
+      suggestPhq9,
     },
   };
 }

@@ -2,12 +2,13 @@ import { describe, it, expect, beforeEach } from 'vitest';
 import {
   evaluatePHQ9,
   evaluateGAD7,
+  evaluateWHO5,
   saveAssessmentResult,
   getAssessmentHistory,
 } from '../assessmentService';
 import type { AssessmentResult } from '../../types';
 
-describe('Assessment Service (PHQ-9 & GAD-7)', () => {
+describe('Assessment Service (PHQ-9, GAD-7 & WHO-5)', () => {
   beforeEach(() => {
     localStorage.clear();
   });
@@ -89,6 +90,44 @@ describe('Assessment Service (PHQ-9 & GAD-7)', () => {
       const { score, eval: res } = evaluateGAD7(answers);
       expect(score).toBe(16);
       expect(res.severity).toBe('severe');
+    });
+  });
+
+  describe('WHO-5 Scoring & Evaluation', () => {
+    it('evaluates high/optimal well-being correctly (percentage >= 70%)', () => {
+      const answers = { 1: 4, 2: 4, 3: 4, 4: 4, 5: 4 }; // raw: 20, pct: 80%
+      const { score, percentageScore, eval: res } = evaluateWHO5(answers);
+      expect(score).toBe(20);
+      expect(percentageScore).toBe(80);
+      expect(res.severity).toBe('minimal');
+      expect(res.suggestPhq9).toBe(false);
+    });
+
+    it('evaluates moderate well-being correctly (percentage 50-69%)', () => {
+      const answers = { 1: 3, 2: 3, 3: 3, 4: 3, 5: 3 }; // raw: 15, pct: 60%
+      const { score, percentageScore, eval: res } = evaluateWHO5(answers);
+      expect(score).toBe(15);
+      expect(percentageScore).toBe(60);
+      expect(res.severity).toBe('mild');
+      expect(res.suggestPhq9).toBe(false);
+    });
+
+    it('evaluates low well-being correctly and triggers gentle PHQ-9 suggestion (percentage 29-49%)', () => {
+      const answers = { 1: 2, 2: 2, 3: 2, 4: 2, 5: 2 }; // raw: 10, pct: 40%
+      const { score, percentageScore, eval: res } = evaluateWHO5(answers);
+      expect(score).toBe(10);
+      expect(percentageScore).toBe(40);
+      expect(res.severity).toBe('moderate');
+      expect(res.suggestPhq9).toBe(true);
+    });
+
+    it('evaluates very low well-being correctly (percentage <= 28%)', () => {
+      const answers = { 1: 1, 2: 1, 3: 1, 4: 1, 5: 1 }; // raw: 5, pct: 20%
+      const { score, percentageScore, eval: res } = evaluateWHO5(answers);
+      expect(score).toBe(5);
+      expect(percentageScore).toBe(20);
+      expect(res.severity).toBe('severe');
+      expect(res.suggestPhq9).toBe(true);
     });
   });
 

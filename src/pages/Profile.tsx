@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '../hooks/useTheme';
 import { useMood } from '../hooks/useMood';
@@ -36,20 +36,23 @@ import {
   ClipboardCheck,
   MoonStar,
   Lock,
-  KeyRound
+  KeyRound,
+  HardDrive,
+  Feather
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { SPIRITUAL_SOURCES } from '../data/spiritualContent';
 import { Modal } from '../components/ui/Modal';
 import { SetPinModal } from '../components/security/SetPinModal';
+import { getStorageQuotaInfo, requestPersistentStorage, type StorageStatus } from '../utils/indexedDb';
 import { wipeAllData } from '../utils/dataWipe';
 import { AVAILABLE_LANGUAGES } from '../utils/constants';
 import type { Language } from '../types';
 
 export const Profile: React.FC = () => {
   const { t, i18n } = useTranslation();
-  const { theme, toggleTheme } = useTheme();
+  const { theme, toggleTheme, lowStimulation, toggleLowStimulation } = useTheme();
   const { getMoodStats } = useMood();
   const { user, updateDisplayName, regenerateAnonymousName, isSupabaseConfigured } = useAuth();
   const {
@@ -77,6 +80,23 @@ export const Profile: React.FC = () => {
   const [isLockEnabled] = useLocalStorage<boolean>('rima-app-lock-enabled', false);
   const [pinModalOpen, setPinModalOpen] = useState(false);
   const [pinModalMode, setPinModalMode] = useState<'set' | 'change' | 'disable'>('set');
+
+  const [storageInfo, setStorageInfo] = useState<StorageStatus | null>(null);
+
+  useEffect(() => {
+    getStorageQuotaInfo().then(setStorageInfo);
+  }, []);
+
+  const handleRequestPersistence = async () => {
+    const granted = await requestPersistentStorage();
+    const updated = await getStorageQuotaInfo();
+    setStorageInfo(updated);
+    if (granted || updated.persisted) {
+      showToast(t('profile.persistenceEnabledToast', 'Proteksi penyimpanan persisten aktif!'));
+    } else {
+      showToast(t('profile.persistenceFailedToast', 'Izin penyimpanan persisten tidak diberikan oleh peramban.'));
+    }
+  };
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -302,6 +322,34 @@ export const Profile: React.FC = () => {
                 {theme === 'dark' ? t('profile.darkMode', 'Mode Gelap') : t('profile.lightMode', 'Mode Terang')}
               </span>
               <div className={`toggle-switch ${theme === 'dark' ? 'active' : ''}`} />
+            </div>
+          </button>
+
+          <button
+            className="settings-item"
+            type="button"
+            onClick={toggleLowStimulation}
+            aria-pressed={lowStimulation}
+          >
+            <div className="settings-item-left" style={{ alignItems: 'flex-start' }}>
+              <Feather size={18} style={{ marginTop: '2px', flexShrink: 0 }} />
+              <div style={{ textAlign: 'left' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                  <span style={{ fontWeight: 600 }}>{t('profile.sensoryTitle', 'Mode Sensori Tenang (Low-Stimulation)')}</span>
+                  <span className="badge badge-secondary" style={{ fontSize: '0.688rem', padding: '2px 6px' }}>
+                    {t('profile.sensoryBadge', 'Neuro-Inklusif')}
+                  </span>
+                </div>
+                <p style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)', margin: '4px 0 0', lineHeight: 1.4 }}>
+                  {t('profile.sensoryDesc', 'Meredakan saturasi warna, mematikan seluruh animasi/transisi, dan mereduksi silau untuk kenyamanan sensorik (ADHD & Sensory Overload).')}
+                </p>
+              </div>
+            </div>
+            <div className="settings-item-right" style={{ flexShrink: 0, marginLeft: '12px' }}>
+              <span style={{ fontWeight: 600, marginRight: '12px' }}>
+                {lowStimulation ? t('common.on', 'ON') : t('common.off', 'OFF')}
+              </span>
+              <div className={`toggle-switch ${lowStimulation ? 'active' : ''}`} />
             </div>
           </button>
 
@@ -575,6 +623,68 @@ export const Profile: React.FC = () => {
               </span>
             </div>
           </div>
+        </div>
+      </div>
+
+      <div className="settings-section">
+        <h2 className="settings-title">{t('profile.storageTitle', 'PENYIMPANAN PERSISTEN & KETAHANAN DATA')}</h2>
+        <div className="settings-list">
+          <div className="settings-item">
+            <div className="settings-item-left">
+              <HardDrive size={18} />
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+                <span style={{ fontWeight: 600 }}>{t('profile.storageType', 'Tipe Penyimpanan Data')}</span>
+                <span style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)', marginTop: '2px' }}>
+                  {t('profile.storageTypeDesc', 'IndexedDB offline-first dengan kapasitas tinggi & proteksi data lokal')}
+                </span>
+              </div>
+            </div>
+            <div className="settings-item-right">
+              <span className="badge badge-primary">
+                {storageInfo?.isIndexedDbSupported ? 'IndexedDB (Active)' : 'localStorage'}
+              </span>
+            </div>
+          </div>
+
+          <div className="settings-item">
+            <div className="settings-item-left">
+              <ShieldCheck
+                size={18}
+                style={{ color: storageInfo?.persisted ? 'var(--color-secondary)' : 'var(--color-warm)' }}
+              />
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+                <span style={{ fontWeight: 600 }}>{t('profile.persistenceStatus', 'Status Proteksi OS (Storage Persistence)')}</span>
+                <span style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)', marginTop: '2px' }}>
+                  {storageInfo?.persisted
+                    ? t('profile.persistedActive', 'Terlindungi dari pembersihan otomatis oleh browser/iOS')
+                    : t('profile.persistedInactive', 'Belum berstatus persisten penuh')}
+                </span>
+              </div>
+            </div>
+            <div className="settings-item-right">
+              {storageInfo && !storageInfo.persisted ? (
+                <Button variant="secondary" size="sm" onClick={handleRequestPersistence}>
+                  {t('profile.btnEnablePersistence', 'Aktifkan Persisten')}
+                </Button>
+              ) : (
+                <span className="badge badge-primary">✓ Persisted</span>
+              )}
+            </div>
+          </div>
+
+          {storageInfo && storageInfo.quotaMB > 0 && (
+            <div className="settings-item">
+              <div className="settings-item-left">
+                <Database size={18} />
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+                  <span style={{ fontWeight: 600 }}>{t('profile.quotaUsage', 'Kapasitas Penyimpanan Digunakan')}</span>
+                  <span style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)', marginTop: '2px' }}>
+                    {storageInfo.usedMB} MB / {storageInfo.quotaMB} MB ({storageInfo.availableMB} MB tersedia)
+                  </span>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
 

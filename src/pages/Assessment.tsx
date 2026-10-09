@@ -14,9 +14,12 @@ import {
 import {
   PHQ9_QUESTIONS,
   GAD7_QUESTIONS,
+  WHO5_QUESTIONS,
   FREQUENCY_OPTIONS,
+  WHO5_OPTIONS,
   evaluatePHQ9,
   evaluateGAD7,
+  evaluateWHO5,
   saveAssessmentResult,
   getAssessmentHistory,
 } from '../services/assessmentService';
@@ -26,7 +29,7 @@ import { CssrsWizardModal } from '../components/safety/CssrsWizardModal';
 import { ClinicalDisclaimer } from '../components/common/ClinicalDisclaimer';
 import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
-import { History, RotateCcw, ArrowRight, ShieldCheck } from 'lucide-react';
+import { History, RotateCcw, ArrowRight, ShieldCheck, Sparkles } from 'lucide-react';
 import { formatDate } from '../utils/helpers';
 
 export const Assessment: React.FC = () => {
@@ -35,15 +38,17 @@ export const Assessment: React.FC = () => {
   const navigate = useNavigate();
 
   const [activeTab, setActiveTab] = useState<AssessmentType | 'history'>('phq9');
-  const [historyFilter, setHistoryFilter] = useState<'all' | 'phq9' | 'gad7'>('all');
+  const [historyFilter, setHistoryFilter] = useState<'all' | 'phq9' | 'gad7' | 'who5'>('all');
   const [answers, setAnswers] = useState<Record<number, number>>({});
   const [result, setResult] = useState<{
     score: number;
     maxScore: number;
+    percentageScore?: number;
     severity: string;
     label: string;
     recommendation: string;
     color: string;
+    suggestPhq9?: boolean;
   } | null>(null);
   const [history, setHistory] = useState<AssessmentResult[]>([]);
   const [showCrisisModal, setShowCrisisModal] = useState(false);
@@ -65,6 +70,7 @@ export const Assessment: React.FC = () => {
       type: entry.type,
       phq9: entry.type === 'phq9' ? entry.score : undefined,
       gad7: entry.type === 'gad7' ? entry.score : undefined,
+      who5: entry.type === 'who5' ? entry.score : undefined,
       score: entry.score,
     }));
   }, [history, lang]);
@@ -78,7 +84,13 @@ export const Assessment: React.FC = () => {
     setAnswers(prev => ({ ...prev, [questionId]: score }));
   };
 
-  const currentQuestions = activeTab === 'phq9' ? PHQ9_QUESTIONS : GAD7_QUESTIONS;
+  const currentQuestions = activeTab === 'phq9'
+    ? PHQ9_QUESTIONS
+    : activeTab === 'gad7'
+      ? GAD7_QUESTIONS
+      : WHO5_QUESTIONS;
+
+  const currentOptions = activeTab === 'who5' ? WHO5_OPTIONS : FREQUENCY_OPTIONS;
   const isAllAnswered = currentQuestions.every(q => answers[q.id] !== undefined);
 
   const handleSubmit = () => {
@@ -136,6 +148,32 @@ export const Assessment: React.FC = () => {
       };
       saveAssessmentResult(assessmentEntry);
       setHistory(getAssessmentHistory());
+    } else if (activeTab === 'who5') {
+      const evaluation = evaluateWHO5(answers);
+      const resData = {
+        score: evaluation.score,
+        maxScore: 25,
+        percentageScore: evaluation.percentageScore,
+        severity: evaluation.eval.severity,
+        label: t(evaluation.eval.labelKey, evaluation.eval.labelFallback),
+        recommendation: t(evaluation.eval.recommendationKey, evaluation.eval.recommendationFallback),
+        color: evaluation.eval.color,
+        suggestPhq9: evaluation.eval.suggestPhq9,
+      };
+      setResult(resData);
+
+      const assessmentEntry: AssessmentResult = {
+        id: 'asm-' + Date.now(),
+        type: 'who5',
+        score: evaluation.score,
+        maxScore: 25,
+        percentageScore: evaluation.percentageScore,
+        severity: evaluation.eval.severity,
+        answers,
+        createdAt: new Date().toISOString(),
+      };
+      saveAssessmentResult(assessmentEntry);
+      setHistory(getAssessmentHistory());
     }
   };
 
@@ -175,6 +213,12 @@ export const Assessment: React.FC = () => {
             {t('assessment.gad7Tab', 'Kecemasan (GAD-7)')}
           </button>
           <button
+            className={`category-chip ${activeTab === 'who5' ? 'active' : ''}`}
+            onClick={() => switchTab('who5')}
+          >
+            {t('assessment.who5Tab', 'Kesejahteraan (WHO-5)')}
+          </button>
+          <button
             className={`category-chip ${activeTab === 'history' ? 'active' : ''}`}
             onClick={() => switchTab('history')}
           >
@@ -199,7 +243,7 @@ export const Assessment: React.FC = () => {
           {history.length === 0 ? (
             <Card style={{ padding: 'var(--spacing-xl)', textAlign: 'center' }}>
               <p style={{ color: 'var(--text-secondary)' }}>
-                {t('assessment.noHistory', 'Belum ada riwayat pengisian skrining. Pilih PHQ-9 atau GAD-7 untuk memulai skrining mandiri.')}
+                {t('assessment.noHistory', 'Belum ada riwayat pengisian skrining. Pilih instrumen untuk memulai skrining mandiri.')}
               </p>
             </Card>
           ) : (
@@ -226,6 +270,13 @@ export const Assessment: React.FC = () => {
                   onClick={() => setHistoryFilter('gad7')}
                 >
                   {t('assessment.gad7Tab', 'Kecemasan (GAD-7)')} ({history.filter(h => h.type === 'gad7').length})
+                </button>
+                <button
+                  type="button"
+                  className={`chip ${historyFilter === 'who5' ? 'chip-active' : ''}`}
+                  onClick={() => setHistoryFilter('who5')}
+                >
+                  {t('assessment.who5Tab', 'Kesejahteraan (WHO-5)')} ({history.filter(h => h.type === 'who5').length})
                 </button>
               </div>
 
@@ -285,6 +336,18 @@ export const Assessment: React.FC = () => {
                             connectNulls
                           />
                         )}
+                        {(historyFilter === 'all' || historyFilter === 'who5') && (
+                          <Line
+                            type="monotone"
+                            dataKey="who5"
+                            name={t('assessment.who5Tab', 'Kesejahteraan (WHO-5)')}
+                            stroke="#10B981"
+                            strokeWidth={2}
+                            dot={{ r: 4, fill: '#10B981' }}
+                            activeDot={{ r: 6 }}
+                            connectNulls
+                          />
+                        )}
                       </LineChart>
                     </ResponsiveContainer>
                   </div>
@@ -301,7 +364,10 @@ export const Assessment: React.FC = () => {
                           {entry.type.toUpperCase()}
                         </span>
                         <strong style={{ fontSize: '1rem', color: 'var(--text-primary)' }}>
-                          {t('assessment.scoreLabel', 'Skor')}: {entry.score} / {entry.maxScore}
+                          {t('assessment.scoreLabel', 'Skor')}:{' '}
+                          {entry.type === 'who5'
+                            ? `${entry.percentageScore ?? entry.score * 4}% (${entry.score}/${entry.maxScore})`
+                            : `${entry.score} / ${entry.maxScore}`}
                         </strong>
                       </div>
                       <span style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)' }}>
@@ -309,7 +375,12 @@ export const Assessment: React.FC = () => {
                       </span>
                     </div>
                     <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginTop: '8px', margin: '8px 0 0' }}>
-                      {t('assessment.severityLabel', 'Tingkat Keparahan')}: <strong>{t(`assessment.${entry.type}.${entry.severity}`, entry.severity.replace('_', ' ').toUpperCase())}</strong>
+                      {t('assessment.severityLabel', 'Tingkat Keparahan')}:{' '}
+                      <strong>
+                        {entry.type === 'who5'
+                          ? t(`assessment.who5.${entry.severity === 'minimal' ? 'high' : entry.severity === 'mild' ? 'moderate' : entry.severity === 'moderate' ? 'low' : 'veryLow'}`, entry.severity)
+                          : t(`assessment.${entry.type}.${entry.severity}`, entry.severity.replace('_', ' ').toUpperCase())}
+                      </strong>
                     </p>
                   </Card>
                 ))}
@@ -321,7 +392,9 @@ export const Assessment: React.FC = () => {
         /* Result Screen */
         <Card style={{ padding: 'var(--spacing-xl)', textAlign: 'center', animation: 'fadeInUp 0.4s ease-out' }}>
           <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: '80px', height: '80px', borderRadius: '50%', backgroundColor: 'hsla(215, 65%, 55%, 0.1)', color: result.color, marginBottom: 'var(--spacing-md)' }}>
-            <span style={{ fontSize: '2rem', fontWeight: 800 }}>{result.score}</span>
+            <span style={{ fontSize: result.percentageScore !== undefined ? '1.65rem' : '2rem', fontWeight: 800 }}>
+              {result.percentageScore !== undefined ? `${result.percentageScore}%` : result.score}
+            </span>
           </div>
 
           <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: 'var(--spacing-xs)' }}>
@@ -329,8 +402,39 @@ export const Assessment: React.FC = () => {
           </h2>
 
           <p style={{ fontSize: '0.875rem', color: 'var(--text-tertiary)', marginBottom: 'var(--spacing-md)' }}>
-            {t('assessment.scoreOfMax', 'Skor {{type}}: {{score}} dari maksimal {{max}}', { type: activeTab.toUpperCase(), score: result.score, max: result.maxScore })}
+            {result.percentageScore !== undefined
+              ? t('assessment.who5.scoreOfMax', 'Skor Kesejahteraan: {{percent}}% (Skor mentah: {{score}} dari {{max}})', { percent: result.percentageScore, score: result.score, max: result.maxScore })
+              : t('assessment.scoreOfMax', 'Skor {{type}}: {{score}} dari maksimal {{max}}', { type: activeTab.toUpperCase(), score: result.score, max: result.maxScore })}
           </p>
+
+          {/* Gentle non-stigma prompt for low WHO-5 well-being */}
+          {result.suggestPhq9 && (
+            <div style={{
+              background: 'hsla(38, 92%, 50%, 0.08)',
+              border: '1px solid var(--color-warm)',
+              borderRadius: 'var(--radius-md)',
+              padding: 'var(--spacing-md)',
+              maxWidth: '540px',
+              margin: '0 auto var(--spacing-lg)',
+              textAlign: 'left'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--color-warm)', fontWeight: 600, fontSize: '0.875rem', marginBottom: '6px' }}>
+                <Sparkles size={16} />
+                <span>{t('assessment.who5.suggestPromptTitle', 'Saran Pendampingan & Pemulihan')}</span>
+              </div>
+              <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', margin: '0 0 var(--spacing-sm)', lineHeight: 1.5 }}>
+                {t('assessment.who5.suggestPromptDesc', 'Skor kesejahteraan di bawah 50 menunjukkan energi emosional Anda sedang turun. Ingin memeriksa secara lebih mendalam dengan Skrining PHQ-9 atau merancang jadwal aktivitas bernilai?')}
+              </p>
+              <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                <Button variant="primary" size="sm" onClick={() => switchTab('phq9')}>
+                  {t('assessment.who5.startPhq9Btn', 'Lanjut ke Skrining PHQ-9')}
+                </Button>
+                <Button variant="secondary" size="sm" onClick={() => navigate('/behavioral-activation')}>
+                  {t('ba.title', 'Aktivasi Perilaku')}
+                </Button>
+              </div>
+            </div>
+          )}
 
           <div style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border-subtle)', borderRadius: 'var(--radius-md)', padding: 'var(--spacing-md)', maxWidth: '540px', margin: '0 auto var(--spacing-lg)', textAlign: 'left' }}>
             <strong style={{ display: 'block', marginBottom: '6px', fontSize: '0.875rem', color: 'var(--text-primary)' }}>
@@ -359,7 +463,11 @@ export const Assessment: React.FC = () => {
           <div style={{ marginBottom: 'var(--spacing-lg)', borderBottom: '1px solid var(--border-subtle)', paddingBottom: 'var(--spacing-md)' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--color-primary)', fontWeight: 600, fontSize: '0.875rem', marginBottom: '4px' }}>
               <ShieldCheck size={18} />
-              <span>{t('assessment.timeframePrompt', 'Selama 2 MINGGU TERAKHIR, seberapa sering Anda terganggu oleh masalah berikut?')}</span>
+              <span>
+                {activeTab === 'who5'
+                  ? t('assessment.who5.timeframePrompt', 'Selama 2 MINGGU TERAKHIR, seberapa sering Anda merasakan kondisi positif berikut?')
+                  : t('assessment.timeframePrompt', 'Selama 2 MINGGU TERAKHIR, seberapa sering Anda terganggu oleh masalah berikut?')}
+              </span>
             </div>
           </div>
 
@@ -374,7 +482,7 @@ export const Assessment: React.FC = () => {
                 </p>
 
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: 'var(--spacing-xs)' }}>
-                  {FREQUENCY_OPTIONS.map(opt => {
+                  {currentOptions.map(opt => {
                     const isSelected = answers[q.id] === opt.score;
                     return (
                       <button
@@ -392,7 +500,7 @@ export const Assessment: React.FC = () => {
                           fontWeight: isSelected ? 600 : 400,
                           cursor: 'pointer',
                           transition: 'all var(--transition-fast)',
-                          minHeight: '44px',
+                          minHeight: '48px',
                           textAlign: 'center',
                         }}
                       >

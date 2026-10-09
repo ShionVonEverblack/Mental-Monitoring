@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { Book, MessageCircle, Heart, Flame, Wind, BookOpen, Globe, Sparkles, ClipboardCheck, Snowflake, Activity } from 'lucide-react';
+import { Book, MessageCircle, Heart, Flame, Wind, BookOpen, Globe, Sparkles, ClipboardCheck, Snowflake, Activity, MoonStar } from 'lucide-react';
 import { BarChart, Bar, Cell, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { MoodSelector } from '../components/ui/MoodSelector';
 import { Modal } from '../components/ui/Modal';
@@ -224,6 +224,10 @@ export const Home: React.FC = () => {
         <button className="quick-action-btn activation" onClick={() => navigate('/activation')}>
           <Activity className="action-icon" />
           <span>{t('ba.homeAction', 'Aktivasi Perilaku (BA)')}</span>
+        </button>
+        <button className="quick-action-btn sleep" onClick={() => navigate('/sleep')}>
+          <MoonStar className="action-icon" />
+          <span>{t('home.sleepTracker', 'Buku Harian Tidur')}</span>
         </button>
         <button className="quick-action-btn education" onClick={() => navigate('/education')}>
           <BookOpen className="action-icon" />

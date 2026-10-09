@@ -110,3 +110,62 @@
   --color-danger: hsl(0, 70%, 42%);
   --color-danger-hover: hsl(0, 70%, 35%);
 }
+
+/* ==========================================================================
+   Low-Stimulation Sensory Mode Tokens (WCAG 2.2 AA & Neuro-Inclusion)
+   Designed for sensory overload, ADHD, and autism spectrum calming
+   ========================================================================== */
+[data-sensory='calm'] {
+  /* Desaturated Muted Calming Palette */
+  --color-primary: hsl(212, 22%, 48%);
+  --color-primary-hover: hsl(212, 22%, 40%);
+  --color-primary-transparent: hsla(212, 22%, 48%, 0.12);
+  --color-secondary: hsl(138, 15%, 48%);
+  --color-secondary-hover: hsl(138, 15%, 40%);
+  --color-secondary-transparent: hsla(138, 15%, 48%, 0.12);
+  --color-accent: hsl(270, 15%, 54%);
+  --color-warm: hsl(35, 30%, 50%);
+  --color-danger: hsl(14, 40%, 48%);
+  --color-danger-hover: hsl(14, 40%, 40%);
+
+  /* Soften High-Contrast Background Glare (Dark) */
+  --bg-primary: hsl(215, 14%, 12%);
+  --bg-secondary: hsl(215, 12%, 16%);
+  --bg-card: hsl(215, 12%, 18%);
+  --bg-elevated: hsl(215, 10%, 22%);
+
+  /* Softer Text Glare */
+  --text-primary: hsl(210, 15%, 90%);
+  --text-secondary: hsl(210, 10%, 72%);
+  --text-tertiary: hsl(210, 10%, 60%);
+
+  /* Disable all distracting glow effects */
+  --glow-primary: none !important;
+  --glow-secondary: none !important;
+  --glow-danger: none !important;
+
+  /* Subtle borders */
+  --border-subtle: hsla(210, 15%, 80%, 0.1);
+  --border-strong: hsla(210, 15%, 80%, 0.2);
+}
+
+[data-sensory='calm'][data-theme='light'] {
+  /* Warm paper tones instead of high-glare stark white */
+  --bg-primary: hsl(40, 20%, 95%);
+  --bg-secondary: hsl(40, 15%, 91%);
+  --bg-card: hsl(40, 25%, 98%);
+  --bg-elevated: hsl(40, 25%, 98%);
+
+  --text-primary: hsl(215, 20%, 18%);
+  --text-secondary: hsl(215, 12%, 36%);
+  --text-tertiary: hsl(215, 10%, 48%);
+
+  --color-primary: hsl(212, 30%, 40%);
+  --color-primary-hover: hsl(212, 30%, 32%);
+  --color-danger: hsl(14, 45%, 42%);
+  --color-danger-hover: hsl(14, 45%, 34%);
+
+  --border-subtle: hsla(215, 20%, 20%, 0.1);
+  --border-strong: hsla(215, 20%, 20%, 0.2);
+}
+

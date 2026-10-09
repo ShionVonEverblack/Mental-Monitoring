@@ -10,7 +10,7 @@ A privacy-focused, anonymous, evidence-based digital mental health platform.
 [![TypeScript](https://img.shields.io/badge/TypeScript-6.0-3178C6?style=flat-square&logo=typescript)](https://typescriptlang.org)
 [![Vite](https://img.shields.io/badge/Vite-8.2-646CFF?style=flat-square&logo=vite)](https://vite.dev)
 [![PWA Ready](https://img.shields.io/badge/PWA-Ready-5A0FC8?style=flat-square&logo=pwa)](https://web.dev/progressive-web-apps)
-[![Tests Passing](https://img.shields.io/badge/Vitest-126%2F126%20passing-brightgreen?style=flat-square&logo=vitest)](https://vitest.dev)
+[![Tests Passing](https://img.shields.io/badge/Vitest-175%2F175%20passing-brightgreen?style=flat-square&logo=vitest)](https://vitest.dev)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)](LICENSE)
 
 [English](#about) · [Features](#-core-features) · [Tech Stack](#-tech-stack) · [Roadmap](#-roadmap) · [Getting Started](#-getting-started)
@@ -77,10 +77,25 @@ Evidence-based digital intervention grounded in the Indonesian RCT by *Arjadi et
 
 ### 📋 Standardized Psychometric Screening (`/assessment`)
 - **Indonesian-Validated PHQ-9 (Depression)** & **GAD-7 (Anxiety)** instruments (*Arjadi et al., 2024, Asian J Psychiatry*).
+- **WHO-5 Well-Being Index (Non-Stigmatizing)** (*Topp et al., 2015, Psychother Psychosom*): 5 positively phrased wellness questions assessing vitality and psychological flourishing over the past 2 weeks (Score 0–25, converted to 0–100%). Scores $<50\%$ offer gentle, non-stigmatizing invitations to voluntary PHQ-9 reflection.
 - Calibrated 4-tier clinical cutoffs: Minimal (0–4), Mild (5–9), Moderate (10–14), Severe (15+).
 - **Structured Suicide-Risk Escalation via C-SSRS**: Positive endorsement of PHQ-9 Item 9 ($\ge 1$) automatically escalates to the standardized *Columbia-Suicide Severity Rating Scale (C-SSRS) Screener* (6 items with skip logic). Deterministically classifies risk level (Minimal, Low, Moderate, High) with tiered protective interventions.
 - **On-Demand Safety Screener**: C-SSRS screening accessible on demand at any time from the assessment tools.
 - Private local screening history with date tracking.
+
+### 🌙 CBT-I Sleep Diary & Efficiency Tracker (`/sleep`)
+Evidence-based digital Cognitive Behavioral Therapy for Insomnia (CBT-I) module (*van Straten et al., 2018, Sleep Med Rev*, SMD = -0.76 to -0.94):
+- **Clinical Sleep Efficiency Calculator**: Tracks $\text{SE} = (\text{Total Sleep Time} / \text{Time in Bed}) \times 100\%$, with midnight rollover handling, sleep latency, and mid-night awakenings (WASO).
+- **20-Minute Stimulus Control Protocol**: Immediate somatic guidance to leave the bed if unable to sleep within 20 minutes, linking directly to cyclic sighing and 5-4-3-2-1 grounding in low light.
+- **14-Day Sleep Quality Analytics**: Real-time rolling average of sleep efficiency, sleep duration, and quality with clinical threshold badges ($\ge 85\%$ Optimal, $75\text{--}84\%$ Moderate, $<75\%$ Needs Improvement).
+- **Interactive Sleep Hygiene Guide**: 4 evidence-based tips (Stimulus Control, Consistent Wake-up Anchor, 60-min Digital Sunset, 6-hour Caffeine Cutoff).
+
+### ♿ Neuro-Inclusive Low-Stimulation Mode & WCAG 2.2 AA
+Accessibility and sensory regulation engineered for sensory overload, ADHD, autism, and neurodivergence:
+- **Mode Sensori Tenang (Low-Stimulation UI)**: Desaturated earthy paper palette (warm terracotta, sage green, natural stone), disabling all glowing box shadows, gradients, and non-essential visual stimuli.
+- **Strict Reduced Motion**: Automatic synchronization with OS `prefers-reduced-motion` and immediate suppression of all CSS keyframes and transitions.
+- **WCAG 2.2 SC 2.5.8 Touch Target Compliance**: All interactive buttons, chips, and icons enforce minimum dimensions $\ge 44\text{--}48\text{px}$ to prevent accidental activation on small touchscreens.
+- **WCAG 2.2 SC 2.4.11 Non-Obscured Focus**: Form inputs and active elements maintain clean high-contrast focus rings and `scroll-padding-bottom: 96px` to prevent keyboard obstruction.
 
 ### 💬 Anonymous Community Forum
 - **Zero-Stigma Peer Support**: Post and reply anonymously using randomized pseudonym avatars (e.g., *"Kupu-kupu Berani"*).
@@ -97,14 +112,16 @@ Evidence-based digital intervention grounded in the Indonesian RCT by *Arjadi et
   - Ambulans / Gawat Darurat Medis: `119`
   - Yayasan Pulih: `021-788-42580`
 
-### 🛡️ Privacy, Security & Indonesian UU PDP Compliance
+### 🛡️ Privacy, Security & Client-Side Encryption
 - **100% Offline-First by Default**: Personal mood logs, CBT records, journal entries, and safety plans reside entirely in local device storage.
+- **Zero-Knowledge Client-Side AES-GCM-256 Vault (`cryptoVault`)**: Military-grade client-side encryption using Web Crypto API. Derives cryptographic keys via PBKDF2 (100,000 iterations, SHA-256) with unique 16-byte cryptographically secure random salts and 12-byte initialization vectors (IV).
+- **IndexedDB Storage & Persistence API**: High-capacity IndexedDB fallback with automatic `navigator.storage.persist()` registration to prevent browser cache eviction on Android devices.
 - **App Security PIN Lock**: 4-digit numeric PIN protection with auto-lock on inactivity to safeguard personal mental records from shared devices.
 - **Client-Side Crisis NLP**: Emergency keyword detection runs 100% on the browser with zero external transmission of sensitive thoughts.
 - **Statutory Data Rights**: Dedicated Privacy Policy page (`/privacy`), Onboarding Consent Modal, JSON/CSV/HTML data portability, and a one-click **Permanent Data Erasure** (`wipeAllData`) tool.
 
 ### 🌐 8 Supported Popular Languages
-Full 100% translation parity across **500+ UI keys** (including 47 C-SSRS keys and 65 Behavioral Activation keys):
+Full 100% translation parity across **923 UI leaf keys** with zero missing translations:
 - 🇮🇩 **Bahasa Indonesia (`id`)** — Default & national language
 - 🇬🇧 **English (`en`)** — Global international standard
 - 🇮🇩 **Basa Jawa (`jv`)** — Javanese (Krama Madya)
@@ -133,8 +150,11 @@ Interactive visual analytics using Recharts:
 - Life factor impact rankings
 - Monthly mood trajectory trends (LineChart)
 
-### 🏥 Professional Services Directory (`/professional`)
-Curated database of 25 Indonesian mental health institutions, psychological clinics, and teleconsultation services, filterable by Province, Facility Type, Online Availability, and BPJS Health Insurance acceptance.
+### 🏥 Professional Services Directory & BPJS Referral Bridge (`/professional`)
+Curated database of 25 Indonesian mental health institutions, psychological clinics, and teleconsultation services, paired with an interactive primary care referral bridge:
+- **Puskesmas & BPJS Referral Workflow**: 3-step practical walkthrough for obtaining insurance-covered psychiatric care (FKTP Puskesmas $\rightarrow$ Doctor consultation & P-Care referral letter $\rightarrow$ Hospital psychiatric outpatient clinic Sp.KJ).
+- **Doctor Conversation Scripts**: Practical, ready-to-copy consultation scripts tailored for Depression/Fatigue, Anxiety/Panic, and Academic/Student severe stress.
+- **Printable Clinical Handover Brief**: Formatted 1-page A4 medical handover brief summarizing PHQ-9 & GAD-7 scores, C-SSRS safety evaluations, and 30-day mood trajectories for rapid physician anamnesis (<2 min) via direct print (`window.print`) or HTML download.
 
 
 ---
@@ -402,8 +422,18 @@ RIMA incorporates a trauma-informed design system tailored for mental wellness:
   - Scheduling with pre-activity mood prediction (1–10) and post-completion reflection
   - Mood-Activity link with live $\Delta\text{Mood}$ calculation and celebration modal
   - 100% translation parity across 8 languages (65 new `ba.*` keys)
+- [x] **Puskesmas & BPJS Referral Bridge (`/professional`)**:
+  - 3-Step FKTP Puskesmas to RSUD Poli Jiwa workflow walkthrough
+  - Doctor conversation scripts for depression, panic/anxiety, and student stress with clipboard copy
+  - Rapid 1-page A4 clinical handover brief generator with direct print (`window.print`) and HTML download
+  - 100% translation parity across 8 languages (44 new `referral.*` keys)
+- [x] **IndexedDB Storage Migration & Persistence API (`/profile`)**:
+  - Asynchronous `rimaAsyncStorage` conforming to Zustand `StateStorage` with transparent migration from `localStorage`
+  - Browser `navigator.storage.persist()` and `estimate()` integration to prevent OS/Safari 7-day cache eviction
+  - Interactive storage management card in Profile with quota monitoring and one-click persistence activation
+  - 10 new localized keys across all 8 languages for storage controls
 - [x] **Expanded Test Suite**:
-  - 126 unit test cases across 20 test suites with 100% pass rate
+  - 144 unit test cases across 23 test suites with 100% pass rate
 
 ---
 
