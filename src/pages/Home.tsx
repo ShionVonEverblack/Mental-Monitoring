@@ -32,7 +32,7 @@ export const Home: React.FC = () => {
         const score = m.score as MoodScore;
         const moodInfo = MOOD_EMOJIS[score];
         const moodLabel = moodInfo
-          ? (currentLang === 'en' ? moodInfo.labelEn : moodInfo.labelId)
+          ? t(`mood.scores.${score}`, currentLang === 'en' ? moodInfo.labelEn : moodInfo.labelId)
           : `${score}`;
         return {
           date: formatDate(m.createdAt, currentLang),
@@ -42,7 +42,7 @@ export const Home: React.FC = () => {
           color: moodInfo?.color || 'var(--color-primary)'
         };
       });
-  }, [weeklyMoods, currentLang]);
+  }, [weeklyMoods, currentLang, t]);
 
   const stats = getMoodStats();
   const currentStreak = stats.streak;
@@ -253,7 +253,7 @@ export const Home: React.FC = () => {
                     const score = Number(value) as MoodScore;
                     const moodInfo = MOOD_EMOJIS[score];
                     const label = moodInfo
-                      ? (currentLang === 'en' ? moodInfo.labelEn : moodInfo.labelId)
+                      ? t(`mood.scores.${score}`, currentLang === 'en' ? moodInfo.labelEn : moodInfo.labelId)
                       : `${score}`;
                     const emoji = moodInfo?.emoji || '';
                     return [`${emoji} ${label} (${score}/5)`, t('home.todayMood', 'Mood')];

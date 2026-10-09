@@ -38,8 +38,9 @@ export const Analytics: React.FC = () => {
     return Object.entries(counts).map(([score, count]) => {
       const s = Number(score) as keyof typeof MOOD_EMOJIS;
       const emojiData = MOOD_EMOJIS[s];
+      const translatedLabel = t(`mood.scores.${score}`, currentLang === 'en' ? emojiData?.labelEn : emojiData?.labelId);
       const text = emojiData
-        ? `${emojiData.emoji} ${currentLang === 'en' ? emojiData.labelEn : emojiData.labelId}`
+        ? `${emojiData.emoji} ${translatedLabel}`
         : `Score ${score}`;
       return {
         score: Number(score),
@@ -47,7 +48,7 @@ export const Analytics: React.FC = () => {
         count
       };
     }).filter(item => item.count > 0);
-  }, [moods, lang]);
+  }, [moods, lang, t]);
 
   // Mood by Day
   const moodByDay = useMemo(() => {
