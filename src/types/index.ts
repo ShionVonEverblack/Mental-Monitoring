@@ -2,6 +2,18 @@ export type MoodScore = 1 | 2 | 3 | 4 | 5;
 
 export type MoodEmoji = '😢' | '😟' | '😐' | '🙂' | '😊';
 
+export type EmotionQuadrant = 'red' | 'yellow' | 'blue' | 'green';
+
+export interface EmotionDescriptor {
+  id: string;
+  quadrant: EmotionQuadrant;
+  valence: number; // -1.0 to 1.0
+  arousal: number; // -1.0 to 1.0
+  labelKey: string;
+  labelFallback: string;
+  recommendedIntervention: 'tipp' | 'breathe' | 'grounding' | 'activation' | 'journal';
+}
+
 export interface MoodEntry {
   id: string;
   score: MoodScore;
@@ -9,6 +21,10 @@ export interface MoodEntry {
   note?: string;
   factors: string[];
   createdAt: string;
+  valence?: number;
+  arousal?: number;
+  quadrant?: EmotionQuadrant;
+  selectedEmotions?: string[];
 }
 
 export type JournalTemplate = 'free' | 'cbt' | 'gratitude' | 'reflection';

@@ -3,10 +3,12 @@ import { useTranslation } from 'react-i18next';
 import { XAxis, YAxis, Tooltip, ResponsiveContainer, AreaChart, Area } from 'recharts';
 import { Trash2 } from 'lucide-react';
 import { MoodSelector } from '../components/ui/MoodSelector';
+import { MoodMeterCanvas } from '../components/ui/MoodMeterCanvas';
 import { Modal } from '../components/ui/Modal';
 import { useMood } from '../hooks/useMood';
 import { MOOD_FACTORS } from '../utils/constants';
-import type { MoodScore, MoodEmoji } from '../types';
+import { QUADRANT_META, EMOTION_TAXONOMY } from '../data/emotionTaxonomy';
+import type { MoodScore, MoodEmoji, EmotionQuadrant } from '../types';
 import { formatDate, formatRelativeTime } from '../utils/helpers';
 
 export const MoodTracker: React.FC = () => {
@@ -21,12 +23,19 @@ export const MoodTracker: React.FC = () => {
   }));
   const stats = getMoodStats();
   
+  const [inputMode, setInputMode] = useState<'quick' | 'mood_meter'>('quick');
   const [selectedScore, setSelectedScore] = useState<MoodScore | null>(null);
   const [selectedEmoji, setSelectedEmoji] = useState<MoodEmoji | null>(null);
   const [selectedFactors, setSelectedFactors] = useState<string[]>([]);
   const [note, setNote] = useState('');
   const [timeRange, setTimeRange] = useState<'week' | 'month'>('week');
   const [deletingMoodId, setDeletingMoodId] = useState<string | null>(null);
+
+  // 2D Yale Mood Meter State
+  const [valence, setValence] = useState<number>(0);
+  const [arousal, setArousal] = useState<number>(0);
+  const [quadrant, setQuadrant] = useState<EmotionQuadrant>('green');
+  const [selectedNuances, setSelectedNuances] = useState<string[]>([]);
 
   // Chronologically ordered data filtered by selected time range
   const chartData = useMemo(() => {
@@ -48,11 +57,22 @@ export const MoodTracker: React.FC = () => {
         score: selectedScore, 
         emoji: selectedEmoji,
         factors: selectedFactors, 
-        note 
+        note,
+        ...(inputMode === 'mood_meter'
+          ? {
+              valence,
+              arousal,
+              quadrant,
+              selectedEmotions: selectedNuances,
+            }
+          : {}),
       });
-      setSelectedScore(null);
-      setSelectedEmoji(null);
+      if (inputMode === 'quick') {
+        setSelectedScore(null);
+        setSelectedEmoji(null);
+      }
       setSelectedFactors([]);
+      setSelectedNuances([]);
       setNote('');
     }
   };
@@ -72,16 +92,52 @@ export const MoodTracker: React.FC = () => {
       </header>
 
       <section className="mood-input-section">
-        <h3>{t('moodTracker.logMood', { defaultValue: 'Catat Mood' })}</h3>
-        <MoodSelector 
-          onChange={(score, emoji) => {
-            setSelectedScore(score);
-            setSelectedEmoji(emoji);
-          }} 
-        />
+        <h3 style={{ marginBottom: '12px' }}>{t('moodTracker.logMood', { defaultValue: 'Catat Mood' })}</h3>
+
+        {/* Input Mode Selector: Quick Emoji vs 2D Yale Mood Meter */}
+        <div className="mood-tabs" style={{ maxWidth: '380px', margin: '0 auto 16px auto' }}>
+          <button
+            type="button"
+            className={`mood-tab ${inputMode === 'quick' ? 'active' : ''}`}
+            onClick={() => setInputMode('quick')}
+          >
+            😊 {t('moodMeter.mode_quick', 'Emoji Cepat')}
+          </button>
+          <button
+            type="button"
+            className={`mood-tab ${inputMode === 'mood_meter' ? 'active' : ''}`}
+            onClick={() => setInputMode('mood_meter')}
+          >
+            🎯 {t('moodMeter.mode_meter', 'Yale Mood Meter 2D')}
+          </button>
+        </div>
+
+        {inputMode === 'quick' ? (
+          <MoodSelector 
+            value={selectedScore ?? undefined}
+            onChange={(score, emoji) => {
+              setSelectedScore(score);
+              setSelectedEmoji(emoji);
+            }} 
+          />
+        ) : (
+          <MoodMeterCanvas
+            initialValence={valence}
+            initialArousal={arousal}
+            initialSelectedEmotions={selectedNuances}
+            onChange={(newVal, newAr, newQuad, nuances, score, emoji) => {
+              setValence(newVal);
+              setArousal(newAr);
+              setQuadrant(newQuad);
+              setSelectedNuances(nuances);
+              setSelectedScore(score);
+              setSelectedEmoji(emoji);
+            }}
+          />
+        )}
         
         {selectedScore && (
-          <div className="factors-section">
+          <div className="factors-section" style={{ marginTop: '16px' }}>
             <h4 className="factors-title">{t('moodTracker.factors', { defaultValue: 'Apa yang memengaruhi moodmu?' })}</h4>
             <div className="factors-grid">
               {MOOD_FACTORS.map(factor => {
@@ -177,7 +233,48 @@ export const MoodTracker: React.FC = () => {
             <div style={{ display: 'flex', gap: 'var(--spacing-md)', flex: 1 }}>
               <div className="mood-history-emoji">{entry.emoji}</div>
               <div className="mood-history-info">
-                <span className="mood-history-date">{entry.relativeTime}</span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap', marginBottom: '4px' }}>
+                  <span className="mood-history-date">{entry.relativeTime}</span>
+                  {entry.quadrant && (
+                    <span
+                      style={{
+                        fontSize: '0.7rem',
+                        fontWeight: 700,
+                        padding: '2px 8px',
+                        borderRadius: '4px',
+                        backgroundColor: QUADRANT_META[entry.quadrant].bgRgba,
+                        color: QUADRANT_META[entry.quadrant].color,
+                        border: `1px solid ${QUADRANT_META[entry.quadrant].borderRgba}`,
+                      }}
+                    >
+                      {t(QUADRANT_META[entry.quadrant].nameKey, QUADRANT_META[entry.quadrant].nameFallback)}
+                    </span>
+                  )}
+                </div>
+
+                {entry.selectedEmotions && entry.selectedEmotions.length > 0 && (
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px', marginBottom: '6px' }}>
+                    {entry.selectedEmotions.map((emId) => {
+                      const desc = EMOTION_TAXONOMY.find((x) => x.id === emId);
+                      return (
+                        <span
+                          key={emId}
+                          style={{
+                            fontSize: '0.75rem',
+                            padding: '2px 8px',
+                            borderRadius: '12px',
+                            background: 'var(--bg-secondary)',
+                            border: '1px solid var(--border-subtle)',
+                            color: 'var(--text-primary)',
+                            fontWeight: 600,
+                          }}
+                        >
+                          {t(desc?.labelKey || emId, desc?.labelFallback || emId)}
+                        </span>
+                      );
+                    })}
+                  </div>
+                )}
                 {entry.factors.length > 0 && (
                   <div className="mood-history-factors">
                     {entry.factors.map(f => {

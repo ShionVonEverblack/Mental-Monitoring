@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { render, screen, act } from '@testing-library/react';
+import { render, screen, act, fireEvent } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
 import i18n from '../../i18n/config';
 import { MoodTracker } from '../../pages/MoodTracker';
 import { useMoodStore } from '../../stores/moodStore';
@@ -14,7 +15,11 @@ beforeEach(async () => {
 
 describe('MoodTracker chart reactivity', () => {
   it('updates the chart immediately when a mood is added and deleted', () => {
-    render(<MoodTracker />);
+    render(
+      <MemoryRouter>
+        <MoodTracker />
+      </MemoryRouter>
+    );
 
     // Initially empty
     expect(screen.getByText(EMPTY_RANGE_TEXT)).toBeInTheDocument();
@@ -32,4 +37,31 @@ describe('MoodTracker chart reactivity', () => {
     });
     expect(screen.getByText(EMPTY_RANGE_TEXT)).toBeInTheDocument();
   });
+
+  it('switches to Yale Mood Meter 2D mode and logs nuanced mood with quadrant badge', () => {
+    render(
+      <MemoryRouter>
+        <MoodTracker />
+      </MemoryRouter>
+    );
+
+    // Switch to Yale Mood Meter 2D
+    const meterTab = screen.getByRole('button', { name: /Yale Mood Meter 2D/i });
+    fireEvent.click(meterTab);
+
+    // 2D Canvas should be visible
+    expect(screen.getByRole('slider')).toBeInTheDocument();
+
+    // Save button should be visible since initial position produces a valid score
+    const saveBtn = screen.getByRole('button', { name: /Simpan/i });
+    fireEvent.click(saveBtn);
+
+    // Check store
+    const stored = useMoodStore.getState().moods;
+    expect(stored.length).toBe(1);
+    expect(stored[0].quadrant).toBeDefined();
+    expect(stored[0].valence).toBeDefined();
+    expect(stored[0].arousal).toBeDefined();
+  });
 });
+
