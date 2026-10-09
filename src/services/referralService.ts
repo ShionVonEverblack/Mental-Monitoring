@@ -1,7 +1,7 @@
 import { getStoredMoods } from '../utils/exportImport';
 import { getAssessmentHistory } from './assessmentService';
 import { getCssrsHistory } from './cssrsService';
-import { calculateSleepStats } from './sleepService';
+import { calculateSleepStats, getSleepHistory } from './sleepService';
 import { getLocaleTag } from '../utils/helpers';
 import type { AssessmentResult, CssrsResult, SleepStatistics } from '../types';
 
@@ -125,7 +125,7 @@ export function getClinicalHandoverData(): ClinicalHandoverData {
   const cssrsList = getCssrsHistory();
   const latestCssrs = cssrsList.length > 0 ? cssrsList[0] : null;
 
-  const sleepStats = calculateSleepStats(14);
+  const sleepStats = calculateSleepStats(getSleepHistory());
 
   const moods = getStoredMoods();
   const totalMoodLogs = moods.length;

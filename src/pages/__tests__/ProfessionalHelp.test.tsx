@@ -79,4 +79,40 @@ describe('ProfessionalHelp Page', () => {
     fireEvent.click(downloadBtn);
     expect(downloadSpy).toHaveBeenCalledWith('id', '');
   });
+
+  it('displays 5 clinical metrics in handover section and updates patient note', () => {
+    render(<ProfessionalHelp />);
+    const bpjsTab = screen.getByRole('tab', { name: /Panduan BPJS & Ringkasan Dokter/i });
+    fireEvent.click(bpjsTab);
+
+    expect(screen.getByText(/Skrining PHQ-9/i)).toBeInTheDocument();
+    expect(screen.getByText(/Skrining GAD-7/i)).toBeInTheDocument();
+    expect(screen.getByText(/Indeks WHO-5/i)).toBeInTheDocument();
+    expect(screen.getByText(/CBT-I Efisiensi Tidur/i)).toBeInTheDocument();
+    expect(screen.getByText(/Suasana Hati 30 Hari/i)).toBeInTheDocument();
+
+    const noteInput = screen.getByPlaceholderText(/Tambahkan catatan keluhan utama/i);
+    fireEvent.change(noteInput, { target: { value: 'Keluhan insomnia dan cemas' } });
+    expect(noteInput).toHaveValue('Keluhan insomnia dan cemas');
+  });
+
+  it('opens in-app A4 handover brief modal preview and allows closing', () => {
+    render(<ProfessionalHelp />);
+    const bpjsTab = screen.getByRole('tab', { name: /Panduan BPJS & Ringkasan Dokter/i });
+    fireEvent.click(bpjsTab);
+
+    const previewBtn = screen.getByRole('button', { name: /Pratinjau Lembar Rujukan/i });
+    fireEvent.click(previewBtn);
+
+    // Modal title & content should be visible
+    expect(screen.getByText('Pratinjau Lembar Ringkasan Klinis')).toBeInTheDocument();
+    expect(screen.getByText(/Berikut adalah format dokumen A4 yang akan dicetak/i)).toBeInTheDocument();
+    expect(screen.getByText(/Lembar Ringkasan Klinis & Rujukan Pasien/i)).toBeInTheDocument();
+
+    // Close preview
+    const closeBtn = screen.getByRole('button', { name: /Tutup Pratinjau/i });
+    fireEvent.click(closeBtn);
+
+    expect(screen.queryByText('Pratinjau Lembar Ringkasan Klinis')).not.toBeInTheDocument();
+  });
 });

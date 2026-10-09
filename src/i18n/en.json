@@ -1033,7 +1033,17 @@
     "faq_q2": "What about acute emergency situations?",
     "faq_a2": "In acute psychiatric emergencies (e.g. acute suicidal thoughts or severe agitation), you can go directly to the nearest Hospital Emergency Room (IGD) without needing a prior Puskesmas referral.",
     "faq_q3": "How long is a referral letter valid?",
-    "faq_a3": "Online referral letters (P-Care) are generally valid for 90 days (3 months) and can be extended by the hospital specialist."
+    "faq_a3": "Online referral letters (P-Care) are generally valid for 90 days (3 months) and can be extended by the hospital specialist.",
+    "handover_btn_preview": "Preview Referral Brief",
+    "preview_modal_title": "Clinical Handover Brief Preview",
+    "preview_hint": "Below is the standardized A4 handover document format to be printed or presented to the examining physician.",
+    "preview_close": "Close Preview",
+    "metric_phq9": "PHQ-9 Screener",
+    "metric_gad7": "GAD-7 Screener",
+    "metric_who5": "WHO-5 Index",
+    "metric_sleep": "CBT-I Sleep Efficiency",
+    "metric_mood": "30-Day Mood Baseline",
+    "no_data": "Not recorded"
   },
   "sleep": {
     "title": "Sleep Diary & CBT-I",

@@ -67,6 +67,45 @@ describe('referralService', () => {
     expect(data.latestPhq9?.score).toBe(16);
   });
 
+  it('aggregates WHO-5 and CBT-I sleep statistics when recorded', () => {
+    const sleepLogs = [
+      {
+        id: 's1',
+        date: '2026-10-09',
+        bedTime: '23:00',
+        sleepTime: '23:30',
+        wakeTime: '06:30',
+        outOfBedTime: '07:00',
+        totalSleepMinutes: 420,
+        timeInBedMinutes: 480,
+        sleepEfficiency: 88,
+        quality: 4,
+        awakeningsCount: 1,
+        awakeningsDurationMinutes: 10,
+        createdAt: '2026-10-09T07:00:00Z',
+      },
+    ];
+    localStorage.setItem('rima-sleep-diary', JSON.stringify(sleepLogs));
+
+    const assessments = [
+      {
+        id: 'w1',
+        type: 'who5',
+        score: 18,
+        maxScore: 25,
+        percentageScore: 72,
+        answers: {},
+        createdAt: '2026-10-09T10:00:00Z',
+      },
+    ];
+    localStorage.setItem('rima-assessments', JSON.stringify(assessments));
+
+    const data = getClinicalHandoverData();
+    expect(data.latestWho5?.score).toBe(18);
+    expect(data.sleepStats?.totalEntries).toBe(1);
+    expect(data.sleepStats?.avgEfficiency).toBe(88);
+  });
+
   it('generates HTML handover brief in Indonesian with custom patient notes', () => {
     const html = generateDoctorHandoverBriefHTML('id', 'Dok, saya sering terbangun tengah malam karena cemas.');
     expect(html).toContain('Lembar Ringkasan Klinis & Rujukan Pasien');

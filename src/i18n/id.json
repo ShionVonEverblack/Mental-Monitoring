@@ -1033,7 +1033,17 @@
     "faq_q2": "Bagaimana jika situasi darurat / krisis akut?",
     "faq_a2": "Pada kondisi kegawatdaruratan psikiatri (misal: ideasi bunuh diri akut atau gaduh gelisah), Anda dapat langsung menuju IGD Rumah Sakit terdekat tanpa memerlukan surat rujukan FKTP.",
     "faq_q3": "Berapa lama masa berlaku surat rujukan?",
-    "faq_a3": "Surat rujukan online (P-Care) umumnya berlaku selama 90 hari (3 bulan) dan dapat diperpanjang oleh dokter spesialis di RSUD."
+    "faq_a3": "Surat rujukan online (P-Care) umumnya berlaku selama 90 hari (3 bulan) dan dapat diperpanjang oleh dokter spesialis di RSUD.",
+    "handover_btn_preview": "Pratinjau Lembar Rujukan",
+    "preview_modal_title": "Pratinjau Lembar Ringkasan Klinis",
+    "preview_hint": "Berikut adalah format dokumen A4 yang akan dicetak atau diserahkan ke dokter pemeriksa di Puskesmas / RSUD.",
+    "preview_close": "Tutup Pratinjau",
+    "metric_phq9": "Skrining PHQ-9",
+    "metric_gad7": "Skrining GAD-7",
+    "metric_who5": "Indeks WHO-5",
+    "metric_sleep": "CBT-I Efisiensi Tidur",
+    "metric_mood": "Suasana Hati 30 Hari",
+    "no_data": "Belum terisi"
   },
   "sleep": {
     "title": "Buku Harian Tidur & CBT-I",

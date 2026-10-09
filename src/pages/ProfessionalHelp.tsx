@@ -1,5 +1,7 @@
 import { useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Modal } from '../components/ui/Modal';
+import { Button } from '../components/ui/Button';
 import { PROFESSIONAL_SERVICES, SERVICE_TYPES, PROVINCES } from '../data/professionalServices';
 import type { ProfessionalService } from '../data/professionalServices';
 import {
@@ -24,6 +26,7 @@ export const ProfessionalHelp: React.FC = () => {
   const [selectedScriptId, setSelectedScriptId] = useState<'depression' | 'anxiety' | 'stress'>('depression');
   const [copiedScript, setCopiedScript] = useState(false);
   const [patientNote, setPatientNote] = useState('');
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
 
   const handoverData = useMemo(() => getClinicalHandoverData(), []);
 
@@ -315,27 +318,43 @@ export const ProfessionalHelp: React.FC = () => {
 
             <div className="referral-handover-metrics">
               <div className="referral-metric-box">
-                <div className="referral-metric-label">Skrining PHQ-9</div>
+                <div className="referral-metric-label">{t('referral.metric_phq9', 'Skrining PHQ-9')}</div>
                 <div className="referral-metric-value">
                   {handoverData.latestPhq9
                     ? `${handoverData.latestPhq9.score}/27 (${formatSeverityLabel(handoverData.latestPhq9.severity, lang === 'en')})`
-                    : 'Belum terisi'}
+                    : t('referral.no_data', 'Belum terisi')}
                 </div>
               </div>
               <div className="referral-metric-box">
-                <div className="referral-metric-label">Skrining GAD-7</div>
+                <div className="referral-metric-label">{t('referral.metric_gad7', 'Skrining GAD-7')}</div>
                 <div className="referral-metric-value">
                   {handoverData.latestGad7
                     ? `${handoverData.latestGad7.score}/21 (${formatSeverityLabel(handoverData.latestGad7.severity, lang === 'en')})`
-                    : 'Belum terisi'}
+                    : t('referral.no_data', 'Belum terisi')}
                 </div>
               </div>
               <div className="referral-metric-box">
-                <div className="referral-metric-label">Suasana Hati 30 Hari</div>
+                <div className="referral-metric-label">{t('referral.metric_who5', 'Indeks WHO-5')}</div>
+                <div className="referral-metric-value">
+                  {handoverData.latestWho5
+                    ? `${handoverData.latestWho5.percentageScore ?? handoverData.latestWho5.score * 4}% (${handoverData.latestWho5.score}/25)`
+                    : t('referral.no_data', 'Belum terisi')}
+                </div>
+              </div>
+              <div className="referral-metric-box">
+                <div className="referral-metric-label">{t('referral.metric_sleep', 'CBT-I Efisiensi Tidur')}</div>
+                <div className="referral-metric-value">
+                  {handoverData.sleepStats && handoverData.sleepStats.totalEntries > 0
+                    ? `${handoverData.sleepStats.avgEfficiency}% (${(handoverData.sleepStats.avgSleepDurationMinutes / 60).toFixed(1)} jam)`
+                    : t('referral.no_data', 'Belum terisi')}
+                </div>
+              </div>
+              <div className="referral-metric-box">
+                <div className="referral-metric-label">{t('referral.metric_mood', 'Suasana Hati 30 Hari')}</div>
                 <div className="referral-metric-value">
                   {handoverData.avgMoodScore !== null
                     ? `${handoverData.avgMoodScore} / 5 (${handoverData.totalMoodLogs} entri)`
-                    : 'Belum ada data'}
+                    : t('referral.no_data', 'Belum ada data')}
                 </div>
               </div>
             </div>
@@ -351,6 +370,13 @@ export const ProfessionalHelp: React.FC = () => {
             />
 
             <div className="referral-handover-actions">
+              <button
+                type="button"
+                className="btn btn-secondary"
+                onClick={() => setIsPreviewOpen(true)}
+              >
+                👁️ {t('referral.handover_btn_preview', 'Pratinjau Lembar Rujukan')}
+              </button>
               <button
                 type="button"
                 className="btn btn-primary"
@@ -416,6 +442,176 @@ export const ProfessionalHelp: React.FC = () => {
           </div>
         </div>
       )}
+
+      {/* Handover Brief Modal Preview */}
+      <Modal
+        isOpen={isPreviewOpen}
+        onClose={() => setIsPreviewOpen(false)}
+        title={t('referral.preview_modal_title', 'Pratinjau Lembar Ringkasan Klinis')}
+        size="lg"
+      >
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+          <div style={{
+            padding: '10px 14px',
+            borderRadius: 'var(--radius-md, 8px)',
+            backgroundColor: 'var(--bg-secondary, #f8fafc)',
+            border: '1px solid var(--border-subtle, #e2e8f0)',
+            fontSize: '0.85rem',
+            color: 'var(--text-secondary, #475569)',
+          }}>
+            💡 {t('referral.preview_hint', 'Berikut adalah format dokumen A4 yang akan dicetak atau diserahkan ke dokter pemeriksa di Puskesmas / RSUD.')}
+          </div>
+
+          {/* Paper sheet preview container */}
+          <div
+            className="referral-paper-preview"
+            style={{
+              background: '#ffffff',
+              color: '#1e293b',
+              border: '1px solid #cbd5e1',
+              borderRadius: '8px',
+              padding: '24px',
+              maxHeight: '52vh',
+              overflowY: 'auto',
+              boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)',
+              fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+              fontSize: '0.9rem',
+              lineHeight: 1.5,
+            }}
+          >
+            {/* Header */}
+            <div style={{ borderBottom: '2px solid #0284c7', paddingBottom: '12px', marginBottom: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '8px' }}>
+              <div>
+                <h3 style={{ margin: '0 0 4px 0', fontSize: '1.2rem', color: '#0f172a', fontWeight: 700 }}>
+                  {lang === 'en' ? 'Clinical Handover Brief' : 'Lembar Ringkasan Klinis & Rujukan Pasien'}
+                </h3>
+                <p style={{ margin: 0, fontSize: '0.78rem', color: '#64748b' }}>
+                  {lang === 'en' ? 'Standardized Self-Monitoring Summary for General Practitioner' : 'Ringkasan Pemantauan Mandiri Terstandar untuk Dokter Pemeriksa di FKTP (Puskesmas / Klinik)'}
+                </p>
+              </div>
+              <span style={{ fontSize: '0.75rem', color: '#475569', background: '#f1f5f9', padding: '4px 8px', borderRadius: '4px', fontWeight: 600 }}>
+                {new Date().toLocaleDateString(lang === 'en' ? 'en-US' : 'id-ID', { dateStyle: 'medium' })}
+              </span>
+            </div>
+
+            {/* Purpose */}
+            <div style={{ background: '#f0f9ff', borderLeft: '4px solid #0284c7', padding: '8px 12px', fontSize: '0.8rem', color: '#0369a1', borderRadius: '0 6px 6px 0', marginBottom: '16px' }}>
+              <strong>{lang === 'en' ? 'Clinical Purpose: ' : 'Tujuan Klinis: '}</strong>
+              {lang === 'en'
+                ? 'This brief compiles standardized patient-reported outcomes to assist primary care physicians with rapid triage and BPJS psychiatric referral processing.'
+                : 'Lembar ini merangkum data penilaian mandiri terstandar pasien dari aplikasi RIMA untuk mempercepat proses anamnesis dokter umum di Puskesmas dan mempermudah penerbitan Surat Rujukan BPJS ke Poli Jiwa RSUD.'}
+            </div>
+
+            {/* Metric Grid */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '10px', marginBottom: '14px' }}>
+              <div style={{ border: '1px solid #e2e8f0', borderRadius: '6px', padding: '10px', background: '#fafafa' }}>
+                <div style={{ fontSize: '0.72rem', fontWeight: 700, color: '#475569', textTransform: 'uppercase' }}>
+                  {lang === 'en' ? 'PHQ-9 Depression Screener' : 'Skrining Depresi PHQ-9'}
+                </div>
+                <div style={{ fontSize: '0.9rem', fontWeight: 600, color: '#0f172a', marginTop: '4px' }}>
+                  {handoverData.latestPhq9
+                    ? `${handoverData.latestPhq9.score}/27 (${formatSeverityLabel(handoverData.latestPhq9.severity, lang === 'en')})`
+                    : (lang === 'en' ? 'No screening recorded' : 'Belum ada data')}
+                </div>
+              </div>
+
+              <div style={{ border: '1px solid #e2e8f0', borderRadius: '6px', padding: '10px', background: '#fafafa' }}>
+                <div style={{ fontSize: '0.72rem', fontWeight: 700, color: '#475569', textTransform: 'uppercase' }}>
+                  {lang === 'en' ? 'GAD-7 Anxiety Screener' : 'Skrining Kecemasan GAD-7'}
+                </div>
+                <div style={{ fontSize: '0.9rem', fontWeight: 600, color: '#0f172a', marginTop: '4px' }}>
+                  {handoverData.latestGad7
+                    ? `${handoverData.latestGad7.score}/21 (${formatSeverityLabel(handoverData.latestGad7.severity, lang === 'en')})`
+                    : (lang === 'en' ? 'No screening recorded' : 'Belum ada data')}
+                </div>
+              </div>
+
+              <div style={{ border: '1px solid #e2e8f0', borderRadius: '6px', padding: '10px', background: '#fafafa' }}>
+                <div style={{ fontSize: '0.72rem', fontWeight: 700, color: '#475569', textTransform: 'uppercase' }}>
+                  {lang === 'en' ? 'WHO-5 Well-Being Index' : 'Indeks Kesejahteraan WHO-5'}
+                </div>
+                <div style={{ fontSize: '0.9rem', fontWeight: 600, color: '#0f172a', marginTop: '4px' }}>
+                  {handoverData.latestWho5
+                    ? `${handoverData.latestWho5.percentageScore ?? handoverData.latestWho5.score * 4}% (${handoverData.latestWho5.score}/25)`
+                    : (lang === 'en' ? 'No index recorded' : 'Belum ada data')}
+                </div>
+              </div>
+
+              <div style={{ border: '1px solid #e2e8f0', borderRadius: '6px', padding: '10px', background: '#fafafa' }}>
+                <div style={{ fontSize: '0.72rem', fontWeight: 700, color: '#475569', textTransform: 'uppercase' }}>
+                  {lang === 'en' ? 'Sleep Efficiency (CBT-I)' : 'Arsitektur Tidur (CBT-I)'}
+                </div>
+                <div style={{ fontSize: '0.9rem', fontWeight: 600, color: '#0f172a', marginTop: '4px' }}>
+                  {handoverData.sleepStats && handoverData.sleepStats.totalEntries > 0
+                    ? `${handoverData.sleepStats.avgEfficiency}% (${(handoverData.sleepStats.avgSleepDurationMinutes / 60).toFixed(1)} jam/malam)`
+                    : (lang === 'en' ? 'No sleep logs' : 'Belum ada catatan tidur')}
+                </div>
+              </div>
+            </div>
+
+            {/* Longitudinal Mood & Factors */}
+            <div style={{ border: '1px solid #e2e8f0', borderRadius: '6px', padding: '10px 12px', marginBottom: '14px', background: '#ffffff' }}>
+              <div style={{ fontSize: '0.78rem', fontWeight: 700, color: '#1e293b', marginBottom: '4px' }}>
+                {lang === 'en' ? 'Longitudinal Mood Baseline & Factors (30 Days)' : 'Rata-rata Suasana Hati 30 Hari & Faktor Distres'}
+              </div>
+              <div style={{ fontSize: '0.82rem', color: '#334155' }}>
+                <strong>{lang === 'en' ? 'Average Score: ' : 'Skor Rata-rata: '}</strong>
+                {handoverData.avgMoodScore !== null ? `${handoverData.avgMoodScore} / 5 (${handoverData.totalMoodLogs} entri)` : '-'}
+              </div>
+              {handoverData.topFactors.length > 0 && (
+                <div style={{ fontSize: '0.82rem', color: '#334155', marginTop: '2px' }}>
+                  <strong>{lang === 'en' ? 'Reported Life Factors: ' : 'Faktor Distres Utama: '}</strong>
+                  {handoverData.topFactors.join(', ')}
+                </div>
+              )}
+            </div>
+
+            {/* Patient Note Preview */}
+            {patientNote.trim() && (
+              <div style={{ border: '1px solid #e2e8f0', borderRadius: '6px', padding: '10px 12px', marginBottom: '14px', background: '#f8fafc' }}>
+                <div style={{ fontSize: '0.78rem', fontWeight: 700, color: '#1e293b', marginBottom: '4px' }}>
+                  {lang === 'en' ? 'Patient Chief Complaint / Subjective Note:' : 'Keluhan Utama & Catatan Pasien:'}
+                </div>
+                <div style={{ fontSize: '0.82rem', color: '#334155', fontStyle: 'italic', whiteSpace: 'pre-wrap' }}>
+                  {patientNote}
+                </div>
+              </div>
+            )}
+
+            {/* Clinical Recommendation */}
+            <div style={{ border: '1px solid #e2e8f0', borderRadius: '6px', padding: '10px 12px', background: '#ffffff', marginBottom: '14px' }}>
+              <div style={{ fontSize: '0.78rem', fontWeight: 700, color: '#1e293b', marginBottom: '4px' }}>
+                {lang === 'en' ? 'Recommended Primary Care Action:' : 'Rekomendasi Tindak Lanjut Faskes 1 (FKTP):'}
+              </div>
+              <p style={{ margin: 0, fontSize: '0.78rem', color: '#475569' }}>
+                {lang === 'en'
+                  ? 'Based on validated psychometric indicators, comprehensive clinical evaluation and/or secondary referral (P-Care) to RSUD Psychiatric Outpatient Clinic (Poli Jiwa / Sp.KJ) is respectfully requested.'
+                  : 'Berdasarkan indikator psikometrik terstandar di atas, pasien memohon evaluasi klinis komprehensif dari dokter pemeriksa dan pertimbangan penerbitan Surat Rujukan BPJS Online ke Poli Jiwa / Dokter Spesialis Kedokteran Jiwa (Sp.KJ) RSUD rujukan.'}
+              </p>
+            </div>
+
+            {/* Footer */}
+            <div style={{ textAlign: 'center', fontSize: '0.72rem', color: '#94a3b8', borderTop: '1px solid #e2e8f0', paddingTop: '8px' }}>
+              {lang === 'en'
+                ? 'Generated by RIMA (Ruang Interaksi Mental Aman) — Confidential Patient Health Data — Processed 100% locally on device.'
+                : 'Diterbitkan secara mandiri melalui RIMA (Ruang Interaksi Mental Aman) — Data Rahasia Pasien — 100% diproses secara lokal pada perangkat.'}
+            </div>
+          </div>
+
+          {/* Modal Actions */}
+          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '8px', flexWrap: 'wrap' }}>
+            <Button variant="ghost" onClick={() => setIsPreviewOpen(false)}>
+              {t('referral.preview_close', 'Tutup Pratinjau')}
+            </Button>
+            <Button variant="secondary" onClick={handleDownload}>
+              ⬇️ {t('referral.handover_btn_download', 'Unduh Berkas HTML')}
+            </Button>
+            <Button variant="primary" onClick={handlePrint}>
+              🖨️ {t('referral.handover_btn_print', 'Cetak (Print / PDF)')}
+            </Button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 };

@@ -1033,7 +1033,17 @@
     "faq_q2": "Kumaha upami kaayaan darurat akut?",
     "faq_a2": "Dina kaayaan krisis akut, anjeun tiasa langsung ka IGD Rumah Sakit pangcaketna tanpa surat rujukan.",
     "faq_q3": "Sabaraha lami surat rujukan lumaku?",
-    "faq_a3": "Surat rujukan biasana lumaku 90 dinten (3 sasih)."
+    "faq_a3": "Surat rujukan biasana lumaku 90 dinten (3 sasih).",
+    "handover_btn_preview": "Pratinjau Lambaran Rujukan",
+    "preview_modal_title": "Pratinjau Lambaran Ringkesan Klinis",
+    "preview_hint": "Ieu mangrupikeun format dokumen A4 anu bakal dicitak atanapi dipasihkeun ka dokter pamariksa di Puskesmas / RSUD.",
+    "preview_close": "Tutup Pratinjau",
+    "metric_phq9": "Skrining PHQ-9",
+    "metric_gad7": "Skrining GAD-7",
+    "metric_who5": "Indéks WHO-5",
+    "metric_sleep": "CBT-I Éfisiénsi Sare",
+    "metric_mood": "Wanda Haté 30 Dinten",
+    "no_data": "Teu acan kaeusi"
   },
   "sleep": {
     "title": "Buku Catetan Kulem & CBT-I",

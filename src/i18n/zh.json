@@ -1033,7 +1033,17 @@
     "faq_q2": "若出现急性危机/紧急情况怎么办？",
     "faq_a2": "在急性精神危机（如严重自杀企图或极度谵妄）情况下，可直接前往就近公立医院急诊科(IGD)，无需事先开具基层转诊单。",
     "faq_q3": "转诊单的有效期是多久？",
-    "faq_a3": "在线系统(P-Care)出具的转诊单一般有效期为90天（3个月）。"
+    "faq_a3": "在线系统(P-Care)出具的转诊单一般有效期为90天（3个月）。",
+    "handover_btn_preview": "预览转诊简报",
+    "preview_modal_title": "临床交接简报预览",
+    "preview_hint": "以下为可打印并提交至诊所或医院主诊医生的标准化A4转诊文档格式。",
+    "preview_close": "关闭预览",
+    "metric_phq9": "PHQ-9 抑郁筛查",
+    "metric_gad7": "GAD-7 焦虑筛查",
+    "metric_who5": "WHO-5 幸福感指数",
+    "metric_sleep": "CBT-I 睡眠效率",
+    "metric_mood": "30天情绪基线",
+    "no_data": "未记录"
   },
   "sleep": {
     "title": "睡眠日记与CBT-I",

@@ -1033,7 +1033,17 @@
     "faq_q2": "¿Qué hacer en situaciones de crisis aguda?",
     "faq_a2": "En emergencias psiquiátricas agudas (ej. ideación suicida inminente o agitación severa), puede acudir directamente a Urgencias (IGD) de cualquier hospital sin requerir derivación previa.",
     "faq_q3": "¿Cuánto tiempo dura la orden de derivación?",
-    "faq_a3": "La derivación electrónica suele ser válida durante 90 días (3 meses)."
+    "faq_a3": "La derivación electrónica suele ser válida durante 90 días (3 meses).",
+    "handover_btn_preview": "Vista previa del informe de derivación",
+    "preview_modal_title": "Vista previa del resumen clínico de transferencia",
+    "preview_hint": "A continuación se muestra el formato estandarizado A4 para imprimir o presentar al médico examinador.",
+    "preview_close": "Cerrar vista previa",
+    "metric_phq9": "Cribado PHQ-9",
+    "metric_gad7": "Cribado GAD-7",
+    "metric_who5": "Índice WHO-5",
+    "metric_sleep": "Eficiencia de sueño CBT-I",
+    "metric_mood": "Línea base del estado de ánimo (30 días)",
+    "no_data": "Sin registrar"
   },
   "sleep": {
     "title": "Diario de Sueño y TCC-I",

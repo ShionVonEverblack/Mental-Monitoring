@@ -1033,7 +1033,17 @@
     "faq_q2": "Kados pundi menawi kahanan darurat akut?",
     "faq_a2": "Ing kahanan krisis akut, panjenengan saged langsung dhateng IGD Rumah Sakit paling caket tanpa layang rujukan.",
     "faq_q3": "Sepinten dangunipun layang rujukan punika?",
-    "faq_a3": "Layang rujukan lumrahipun lumampah 90 dinten (3 wulan)."
+    "faq_a3": "Layang rujukan lumrahipun lumampah 90 dinten (3 wulan).",
+    "handover_btn_preview": "Pratinjau Lembar Rujukan",
+    "preview_modal_title": "Pratinjau Lembar Ringkesan Klinis",
+    "preview_hint": "Ing ngisor iki format dokumen A4 sing bakal dicithak utawa diwenehake menyang dhokter ing Puskesmas / RSUD.",
+    "preview_close": "Tutup Pratinjau",
+    "metric_phq9": "Skrining PHQ-9",
+    "metric_gad7": "Skrining GAD-7",
+    "metric_who5": "Indeks WHO-5",
+    "metric_sleep": "CBT-I Efisiensi Turu",
+    "metric_mood": "Swasana Ati 30 Dina",
+    "no_data": "Durung kaisi"
   },
   "sleep": {
     "title": "Buku Cathetan Tilem & CBT-I",

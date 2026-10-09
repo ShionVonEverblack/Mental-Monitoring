@@ -96,8 +96,9 @@ export function deleteSleepEntry(id: string): void {
 /**
  * Computes aggregate summary statistics for recent sleep entries.
  */
-export function calculateSleepStats(history: SleepDiaryEntry[]): SleepStatistics {
-  if (history.length === 0) {
+export function calculateSleepStats(history: SleepDiaryEntry[] = []): SleepStatistics {
+  const safeHistory = Array.isArray(history) ? history : [];
+  if (safeHistory.length === 0) {
     return {
       totalEntries: 0,
       avgEfficiency: 0,
@@ -107,8 +108,8 @@ export function calculateSleepStats(history: SleepDiaryEntry[]): SleepStatistics
     };
   }
 
-  const recent = history.slice(0, 14);
-  const totalEntries = history.length;
+  const recent = safeHistory.slice(0, 14);
+  const totalEntries = safeHistory.length;
 
   const totalEff = recent.reduce((sum, e) => sum + e.sleepEfficiency, 0);
   const avgEfficiency = Math.round(totalEff / recent.length);
