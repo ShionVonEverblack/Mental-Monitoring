@@ -138,3 +138,34 @@ export interface TippSessionLog {
   postDistress: number; // 1-10
   completedAt: string;
 }
+
+export type CssrsRiskLevel = 'none' | 'low' | 'moderate' | 'high';
+
+export interface CssrsAnswers {
+  q1: boolean; // Wish to be dead
+  q2: boolean; // Suicidal thoughts
+  q3?: boolean; // Thoughts with methods
+  q4?: boolean; // Intent without plan
+  q5?: boolean; // Intent with specific plan
+  q6: boolean; // Suicidal behavior
+  q6Recent?: boolean; // Behavior in past 3 months
+}
+
+export interface CssrsEvaluation {
+  riskLevel: CssrsRiskLevel;
+  titleKey: string;
+  titleFallback: string;
+  descKey: string;
+  descFallback: string;
+  color: string;
+  actionRecommendation: 'coping_and_safety_plan' | 'urgent_hotline_support' | 'imminent_emergency_intervention' | 'stable';
+}
+
+export interface CssrsResult {
+  id: string;
+  answers: CssrsAnswers;
+  evaluation: CssrsEvaluation;
+  source: 'phq9_item9' | 'manual' | 'keyword_crisis';
+  createdAt: string;
+}
+

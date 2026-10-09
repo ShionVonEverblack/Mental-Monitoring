@@ -70,7 +70,8 @@ Evidence-based somatic distress tolerance protocol from Dialectical Behavior The
 ### 📋 Standardized Psychometric Screening (`/assessment`)
 - **Indonesian-Validated PHQ-9 (Depression)** & **GAD-7 (Anxiety)** instruments (*Arjadi et al., 2024, Asian J Psychiatry*).
 - Calibrated 4-tier clinical cutoffs: Minimal (0–4), Mild (5–9), Moderate (10–14), Severe (15+).
-- **Item 9 Safety Interceptor**: Automatic crisis trigger on PHQ-9 suicide/self-harm ideation regardless of total score.
+- **Structured Suicide-Risk Escalation via C-SSRS**: Positive endorsement of PHQ-9 Item 9 ($\ge 1$) automatically escalates to the standardized *Columbia-Suicide Severity Rating Scale (C-SSRS) Screener* (6 items with skip logic). Deterministically classifies risk level (Minimal, Low, Moderate, High) with tiered protective interventions.
+- **On-Demand Safety Screener**: C-SSRS screening accessible on demand at any time from the assessment tools.
 - Private local screening history with date tracking.
 
 ### 💬 Anonymous Community Forum
@@ -82,11 +83,11 @@ Evidence-based somatic distress tolerance protocol from Dialectical Behavior The
 ### 🆘 Comprehensive Safety & SOS
 - **Always-Accessible SOS Button**: Persistent emergency button linking to crisis hotlines in one click.
 - **Digital Safety Plan**: Personal crisis blueprint following clinical best practices (Warning Signs, Internal Coping, Social Distractions, Trusted Contacts, Professionals, Safe Environment, Reasons to Live).
-- **Indonesian Hotlines Integrated**:
-  - Into The Light Indonesia: `119 ext 8`
-  - LSM Jangan Bunuh Diri: `021-9696 9293`
+- **Verified Active Indonesian Hotlines (2026)**:
+  - Healing 119 / SEJIWA (Kemenkes): `119 ext 8` (24 Jam)
+  - Panggilan Darurat Bebas Pulsa: `112`
+  - Ambulans / Gawat Darurat Medis: `119`
   - Yayasan Pulih: `021-788-42580`
-  - Emergency Services: `112`
 
 ### 🛡️ Privacy, Security & Indonesian UU PDP Compliance
 - **100% Offline-First by Default**: Personal mood logs, CBT records, journal entries, and safety plans reside entirely in local device storage.
@@ -381,8 +382,14 @@ RIMA incorporates a trauma-informed design system tailored for mental wellness:
   - Web Audio synthesized Tibetan singing bowl frequencies (432Hz/528Hz/396Hz)
 - [x] **App PIN Security Lock**:
   - Offline 4-digit PIN authentication with PBKDF2-SHA256 salted hashing and brute-force rate limiting protection
+- [x] **Structured Suicide-Risk Escalation via C-SSRS Screener**:
+  - Validated 6-item Columbia-Suicide Severity Rating Scale (C-SSRS) Screener with skip logic
+  - Automatic escalation from PHQ-9 Item 9 ($\ge 1$) replacing blunt/alarmist popups
+  - Deterministic clinical stratification (Minimal, Low, Moderate, High) with tiered de-escalation actions
+  - Integrated 2026 verified Indonesian crisis helplines (Healing 119 ext 8, 112, 119, Yayasan Pulih)
+  - 100% translation parity across all 8 languages (47 new `cssrs.*` keys)
 - [x] **Expanded Test Suite**:
-  - 95 unit test cases across 15 test suites with 100% pass rate
+  - 115 unit test cases across 18 test suites with 100% pass rate
 
 ---
 

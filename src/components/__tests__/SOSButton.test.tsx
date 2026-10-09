@@ -21,7 +21,7 @@ describe('SOSButton Component', () => {
     fireEvent.click(sosBtn);
 
     // Crisis hotline text should now be in document
-    expect(screen.getByText(/Into The Light Indonesia/i)).toBeInTheDocument();
+    expect(screen.getByText(/Healing 119/i)).toBeInTheDocument();
     expect(screen.getAllByText(/119 ext 8/i).length).toBeGreaterThan(0);
   });
 });

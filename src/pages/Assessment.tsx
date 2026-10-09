@@ -22,6 +22,7 @@ import {
 } from '../services/assessmentService';
 import type { AssessmentType, AssessmentResult } from '../types';
 import { CrisisInterceptor } from '../components/safety/CrisisInterceptor';
+import { CssrsWizardModal } from '../components/safety/CssrsWizardModal';
 import { ClinicalDisclaimer } from '../components/common/ClinicalDisclaimer';
 import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
@@ -46,6 +47,7 @@ export const Assessment: React.FC = () => {
   } | null>(null);
   const [history, setHistory] = useState<AssessmentResult[]>([]);
   const [showCrisisModal, setShowCrisisModal] = useState(false);
+  const [showCssrsModal, setShowCssrsModal] = useState(false);
 
   useEffect(() => {
     setHistory(getAssessmentHistory());
@@ -107,9 +109,9 @@ export const Assessment: React.FC = () => {
       saveAssessmentResult(assessmentEntry);
       setHistory(getAssessmentHistory());
 
-      // Item 9 Critical Safety Interceptor
+      // Item 9 Critical Safety Interceptor -> Structured C-SSRS Escalation
       if (evaluation.eval.isCrisisTriggered) {
-        setShowCrisisModal(true);
+        setShowCssrsModal(true);
       }
     } else if (activeTab === 'gad7') {
       const evaluation = evaluateGAD7(answers);
@@ -157,27 +159,39 @@ export const Assessment: React.FC = () => {
         </p>
       </header>
 
-      {/* Tabs */}
-      <div className="category-chips" style={{ marginBottom: 'var(--spacing-lg)' }}>
-        <button
-          className={`category-chip ${activeTab === 'phq9' ? 'active' : ''}`}
-          onClick={() => switchTab('phq9')}
+      {/* Tabs & Quick Safety Screener */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 'var(--spacing-sm)', marginBottom: 'var(--spacing-lg)' }}>
+        <div className="category-chips">
+          <button
+            className={`category-chip ${activeTab === 'phq9' ? 'active' : ''}`}
+            onClick={() => switchTab('phq9')}
+          >
+            {t('assessment.phq9Tab', 'Depresi (PHQ-9)')}
+          </button>
+          <button
+            className={`category-chip ${activeTab === 'gad7' ? 'active' : ''}`}
+            onClick={() => switchTab('gad7')}
+          >
+            {t('assessment.gad7Tab', 'Kecemasan (GAD-7)')}
+          </button>
+          <button
+            className={`category-chip ${activeTab === 'history' ? 'active' : ''}`}
+            onClick={() => switchTab('history')}
+          >
+            <History size={14} style={{ display: 'inline', marginRight: '4px' }} />
+            {t('assessment.historyTab', 'Riwayat Skrining')} ({history.length})
+          </button>
+        </div>
+
+        <Button
+          variant="secondary"
+          size="sm"
+          onClick={() => setShowCssrsModal(true)}
+          icon={<ShieldCheck size={14} />}
+          style={{ fontSize: '0.813rem' }}
         >
-          {t('assessment.phq9Tab', 'Depresi (PHQ-9)')}
-        </button>
-        <button
-          className={`category-chip ${activeTab === 'gad7' ? 'active' : ''}`}
-          onClick={() => switchTab('gad7')}
-        >
-          {t('assessment.gad7Tab', 'Kecemasan (GAD-7)')}
-        </button>
-        <button
-          className={`category-chip ${activeTab === 'history' ? 'active' : ''}`}
-          onClick={() => switchTab('history')}
-        >
-          <History size={14} style={{ display: 'inline', marginRight: '4px' }} />
-          {t('assessment.historyTab', 'Riwayat Skrining')} ({history.length})
-        </button>
+          {t('cssrs.openCssrsButton', 'Skrining Keselamatan (C-SSRS)')}
+        </Button>
       </div>
 
       {activeTab === 'history' ? (
@@ -408,7 +422,14 @@ export const Assessment: React.FC = () => {
         </div>
       )}
 
-      {/* Safety Interceptor Modal for PHQ-9 Item 9 */}
+      {/* C-SSRS Structured Screener Modal for Item 9 Escalation & On-demand */}
+      <CssrsWizardModal
+        isOpen={showCssrsModal}
+        onClose={() => setShowCssrsModal(false)}
+        source="phq9_item9"
+      />
+
+      {/* Safety Interceptor Modal fallback */}
       <CrisisInterceptor
         isOpen={showCrisisModal}
         onClose={() => setShowCrisisModal(false)}
