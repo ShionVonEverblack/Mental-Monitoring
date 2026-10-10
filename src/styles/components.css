@@ -391,3 +391,161 @@ button.btn-icon.btn-icon-danger:not(.btn):hover:not(:disabled) {
     right: 8px;
   }
 }
+
+/* ==========================================================================
+   JITAI Contextual Nudge Card
+   ========================================================================== */
+.jitai-nudge-card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+  box-shadow: var(--shadow-card);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  position: relative;
+  transition: transform var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.jitai-nudge-card.jitai-urgency-high {
+  border-color: var(--color-danger);
+  box-shadow: var(--shadow-subtle), 0 0 12px hsla(0, 65%, 55%, 0.15);
+}
+
+.jitai-nudge-card.jitai-urgency-medium {
+  border-color: var(--color-primary);
+}
+
+.jitai-nudge-card.jitai-urgency-low {
+  border-color: var(--border-subtle);
+}
+
+.jitai-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
+}
+
+.jitai-evidence-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: 4px 10px;
+  background-color: var(--color-primary-transparent);
+  color: var(--color-primary);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.3px;
+}
+
+.jitai-urgency-high .jitai-evidence-badge {
+  background-color: hsla(0, 65%, 55%, 0.12);
+  color: var(--color-danger);
+}
+
+.jitai-dismiss-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 48px;
+  min-height: 48px;
+  border-radius: var(--radius-md);
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text-tertiary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.jitai-dismiss-btn:hover {
+  background-color: var(--bg-elevated);
+  color: var(--text-primary);
+}
+
+.jitai-body {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-md);
+}
+
+.jitai-icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  background-color: var(--color-primary-transparent);
+  color: var(--color-primary);
+  flex-shrink: 0;
+}
+
+.jitai-urgency-high .jitai-icon-wrapper {
+  background-color: hsla(0, 65%, 55%, 0.15);
+  color: var(--color-danger);
+}
+
+.jitai-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  flex: 1;
+}
+
+.jitai-title {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-primary);
+  margin: 0;
+  line-height: 1.3;
+}
+
+.jitai-message {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.45;
+}
+
+.jitai-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-xs);
+  flex-wrap: wrap;
+}
+
+.jitai-action-btn {
+  min-height: 48px;
+  padding: var(--spacing-sm) var(--spacing-md);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-xs);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-sm);
+}
+
+.jitai-secondary-dismiss-btn {
+  min-height: 48px;
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+}
+
+@media (max-width: 480px) {
+  .jitai-actions {
+    flex-direction: column-reverse;
+    width: 100%;
+  }
+  .jitai-action-btn,
+  .jitai-secondary-dismiss-btn {
+    width: 100%;
+  }
+}
+

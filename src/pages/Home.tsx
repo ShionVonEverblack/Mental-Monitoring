@@ -11,6 +11,7 @@ import { getGreeting, formatDate } from '../utils/helpers';
 import { DAILY_AFFIRMATIONS, AVAILABLE_LANGUAGES, MOOD_EMOJIS } from '../utils/constants';
 import { SPIRITUAL_CONTENT } from '../data/spiritualContent';
 import { EscalationBanner } from '../components/common/EscalationBanner';
+import { JitaiNudgeCard } from '../components/common/JitaiNudgeCard';
 import { generateInsights } from '../services/moodAnalysisService';
 import { SelfCompassionModal } from '../components/cft/SelfCompassionModal';
 import type { Language, MoodScore } from '../types';
@@ -160,6 +161,8 @@ export const Home: React.FC = () => {
       </section>
 
       <EscalationBanner moods={moods} latestJournalContent={latestJournalContent} />
+
+      <JitaiNudgeCard />
 
       <div className="affirmation-card" style={{ backgroundColor: 'var(--color-primary-soft)' }}>
         {showSpiritual && spiritualItem ? (

@@ -32,11 +32,29 @@ import { useTranslation } from 'react-i18next';
 
 const App: React.FC = () => {
   const { theme } = useTheme();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
   }, [theme]);
+
+  useEffect(() => {
+    const updateDirAndLang = (lng: string) => {
+      document.documentElement.dir = (lng && lng.startsWith('ar')) ? 'rtl' : 'ltr';
+      document.documentElement.lang = lng || 'id';
+    };
+
+    updateDirAndLang(i18n.language || 'id');
+
+    const handleLanguageChanged = (lng: string) => {
+      updateDirAndLang(lng);
+    };
+
+    i18n.on('languageChanged', handleLanguageChanged);
+    return () => {
+      i18n.off('languageChanged', handleLanguageChanged);
+    };
+  }, [i18n, i18n.language]);
 
   return (
     <ErrorBoundary>
