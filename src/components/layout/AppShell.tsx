@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Sidebar } from './Sidebar';
 import { BottomNav } from './BottomNav';
 import { SOSButton } from '../safety/SOSButton';
+import { ChatbotDrawer } from '../chatbot/ChatbotDrawer';
 import { SessionAwareness } from '../common/SessionAwareness';
 
 export const AppShell = ({ children }: { children: ReactNode }) => {
@@ -31,6 +32,7 @@ export const AppShell = ({ children }: { children: ReactNode }) => {
     </main>
     <BottomNav />
     <SOSButton />
+    <ChatbotDrawer />
     <SessionAwareness />
     </div>
   );

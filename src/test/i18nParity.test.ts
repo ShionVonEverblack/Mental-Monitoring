@@ -124,6 +124,74 @@ describe('8-Language Translation Parity & Completeness', () => {
     }
   });
 
+  it('verifies that Phase 4 "landing" namespace exists in all 8 locales with full parity', () => {
+    const idLanding = LOCALES['id'].landing as Record<string, unknown>;
+    expect(idLanding).toBeDefined();
+    const idLandingKeys = new Set(extractAllDottedKeys(idLanding));
+    expect(idLandingKeys.size).toBeGreaterThanOrEqual(30);
+
+    for (const lang of SUPPORTED_LANGUAGES) {
+      const langLanding = LOCALES[lang].landing as Record<string, unknown>;
+      expect(langLanding, `Locale ${lang} must have landing namespace`).toBeDefined();
+      const langLandingKeys = new Set(extractAllDottedKeys(langLanding));
+      const missing = [...idLandingKeys].filter((k) => !langLandingKeys.has(k));
+      const extra = [...langLandingKeys].filter((k) => !idLandingKeys.has(k));
+      expect(missing, `Locale ${lang} is missing landing keys: ${missing.join(', ')}`).toEqual([]);
+      expect(extra, `Locale ${lang} has extra landing keys: ${extra.join(', ')}`).toEqual([]);
+    }
+  });
+
+  it('verifies that Phase 4 "auth" namespace exists in all 8 locales with full parity', () => {
+    const idAuth = LOCALES['id'].auth as Record<string, unknown>;
+    expect(idAuth).toBeDefined();
+    const idAuthKeys = new Set(extractAllDottedKeys(idAuth));
+    expect(idAuthKeys.size).toBeGreaterThanOrEqual(17);
+
+    for (const lang of SUPPORTED_LANGUAGES) {
+      const langAuth = LOCALES[lang].auth as Record<string, unknown>;
+      expect(langAuth, `Locale ${lang} must have auth namespace`).toBeDefined();
+      const langAuthKeys = new Set(extractAllDottedKeys(langAuth));
+      const missing = [...idAuthKeys].filter((k) => !langAuthKeys.has(k));
+      const extra = [...langAuthKeys].filter((k) => !idAuthKeys.has(k));
+      expect(missing, `Locale ${lang} is missing auth keys: ${missing.join(', ')}`).toEqual([]);
+      expect(extra, `Locale ${lang} has extra auth keys: ${extra.join(', ')}`).toEqual([]);
+    }
+  });
+
+  it('verifies that Phase 4 "incognito" namespace exists in all 8 locales with full parity', () => {
+    const idIncognito = LOCALES['id'].incognito as Record<string, unknown>;
+    expect(idIncognito).toBeDefined();
+    const idIncognitoKeys = new Set(extractAllDottedKeys(idIncognito));
+    expect(idIncognitoKeys.size).toBeGreaterThanOrEqual(10);
+
+    for (const lang of SUPPORTED_LANGUAGES) {
+      const langIncognito = LOCALES[lang].incognito as Record<string, unknown>;
+      expect(langIncognito, `Locale ${lang} must have incognito namespace`).toBeDefined();
+      const langIncognitoKeys = new Set(extractAllDottedKeys(langIncognito));
+      const missing = [...idIncognitoKeys].filter((k) => !langIncognitoKeys.has(k));
+      const extra = [...langIncognitoKeys].filter((k) => !idIncognitoKeys.has(k));
+      expect(missing, `Locale ${lang} is missing incognito keys: ${missing.join(', ')}`).toEqual([]);
+      expect(extra, `Locale ${lang} has extra incognito keys: ${extra.join(', ')}`).toEqual([]);
+    }
+  });
+
+  it('verifies that Phase 4 landing navigation and profile landing page links exist across all 8 locales', () => {
+    for (const lang of SUPPORTED_LANGUAGES) {
+      const dict = LOCALES[lang] as Record<string, Record<string, unknown>>;
+      expect(dict.nav?.landing, `nav.landing must exist in ${lang}`).toBeDefined();
+      expect(typeof dict.nav?.landing).toBe('string');
+      expect((dict.nav.landing as string).trim().length).toBeGreaterThan(0);
+
+      expect(dict.profile?.landingLink, `profile.landingLink must exist in ${lang}`).toBeDefined();
+      expect(typeof dict.profile?.landingLink).toBe('string');
+      expect((dict.profile.landingLink as string).trim().length).toBeGreaterThan(0);
+
+      expect(dict.profile?.landingLinkDesc, `profile.landingLinkDesc must exist in ${lang}`).toBeDefined();
+      expect(typeof dict.profile?.landingLinkDesc).toBe('string');
+      expect((dict.profile.landingLinkDesc as string).trim().length).toBeGreaterThan(0);
+    }
+  });
+
   it('verifies that Arabic is correctly mapped to RTL and other languages to LTR', () => {
     const getDirection = (lang: string) => (lang && lang.startsWith('ar') ? 'rtl' : 'ltr');
     expect(getDirection('ar')).toBe('rtl');

@@ -18,10 +18,12 @@ import { detectCrisis } from '../services/crisisDetectionService';
 import { CrisisInterceptor } from '../components/safety/CrisisInterceptor';
 import { Modal } from '../components/ui/Modal';
 import { generateAnonymousName, formatDate } from '../utils/helpers';
+import { useAuth } from '../hooks/useAuth';
 import { ShieldAlert, MessageCircle, AlertTriangle, Send, Phone, CheckCircle, Flag, Bookmark, X } from 'lucide-react';
 
 export const Forum: React.FC = () => {
   const { t, i18n } = useTranslation();
+  const { isAnonymousMode, activeDisplayName } = useAuth();
   const [posts, setPosts] = useState<ForumPost[]>([]);
   const [activeCategory, setActiveCategory] = useState<string>('all');
   const [bookmarkedIds, setBookmarkedIds] = useState<string[]>(() => getBookmarkedPostIds());
@@ -41,6 +43,7 @@ export const Forum: React.FC = () => {
   const [newContent, setNewContent] = useState('');
   const [newCategory, setNewCategory] = useState<ForumCategory>('anxiety');
   const [anonymousAuthor, setAnonymousAuthor] = useState(() => generateAnonymousName());
+  const currentAuthor = isAnonymousMode ? anonymousAuthor : activeDisplayName;
 
   // Crisis detection state
   const [isCrisisDetected, setIsCrisisDetected] = useState(false);
@@ -117,11 +120,12 @@ export const Forum: React.FC = () => {
 
     setIsSubmitting(true);
     try {
+      const authorToUse = isAnonymousMode ? anonymousAuthor : activeDisplayName;
       const { isCrisis } = await createForumPost(
         newTitle.trim(),
         newContent.trim(),
         newCategory,
-        anonymousAuthor
+        authorToUse
       );
       if (isCrisis) {
         triggerToast(t('forum.crisisPostAlert', 'Postingan terdeteksi berisi kata sensitif. Bantuan krisis selalu tersedia untukmu.'));
@@ -168,7 +172,8 @@ export const Forum: React.FC = () => {
   const handleAddComment = async (postId: string) => {
     if (!newCommentText.trim()) return;
     try {
-      const comment = await addCommentToPost(postId, newCommentText.trim());
+      const commentAuthor = isAnonymousMode ? generateAnonymousName() : activeDisplayName;
+      const comment = await addCommentToPost(postId, newCommentText.trim(), commentAuthor);
       setCommentsMap(prev => ({
         ...prev,
         [postId]: [...(prev[postId] || []), comment]
@@ -311,12 +316,47 @@ export const Forum: React.FC = () => {
 
       {isComposing && (
         <div className="card" style={{ padding: '24px', marginBottom: '24px', animation: 'scaleIn 0.3s' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-            <h3 style={{ fontSize: '1.125rem', fontWeight: 600, color: 'var(--text-primary)' }}>
-              {t('forum.newPostTitle', 'Tulis Cerita Anonim')}
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', flexWrap: 'wrap', gap: '8px' }}>
+            <h3 style={{ fontSize: '1.125rem', fontWeight: 600, color: 'var(--text-primary)', margin: 0 }}>
+              {isAnonymousMode ? t('forum.newPostTitle', 'Tulis Cerita Anonim') : t('forum.newPostTitle', 'Tulis Cerita')}
             </h3>
-            <span style={{ fontSize: '0.813rem', color: 'var(--color-primary)', fontWeight: 600 }}>
-              {t('forum.postingAs', 'Sebagai:')} {anonymousAuthor}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span style={{ fontSize: '0.813rem', color: isAnonymousMode ? 'var(--color-secondary)' : 'var(--color-primary)', fontWeight: 600 }}>
+                {t('forum.postingAs', 'Sebagai:')} {currentAuthor}
+              </span>
+              {isAnonymousMode && (
+                <button
+                  type="button"
+                  className="btn btn-ghost btn-icon"
+                  style={{ minHeight: '32px', height: '32px', padding: '0 6px', fontSize: '0.75rem' }}
+                  onClick={() => setAnonymousAuthor(generateAnonymousName())}
+                  title={t('incognito.pseudonymLabel', 'Nama Samaran Anda')}
+                  aria-label={t('incognito.pseudonymLabel', 'Nama Samaran Anda')}
+                >
+                  🎲
+                </button>
+              )}
+            </div>
+          </div>
+
+          {/* Active Identity Protection Status Banner */}
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            padding: '8px 12px',
+            borderRadius: 'var(--radius-md)',
+            background: isAnonymousMode ? 'hsla(165, 45%, 50%, 0.1)' : 'var(--bg-glass-subtle)',
+            border: `1px solid ${isAnonymousMode ? 'hsla(165, 45%, 50%, 0.25)' : 'var(--border-subtle)'}`,
+            marginBottom: '16px',
+            fontSize: '0.75rem',
+            color: isAnonymousMode ? 'var(--color-secondary)' : 'var(--text-secondary)'
+          }}>
+            <span aria-hidden="true">{isAnonymousMode ? '🕶️' : '👤'}</span>
+            <span>
+              {isAnonymousMode
+                ? t('incognito.forumNotice', 'Mode Anonim aktif: Anda berdiskusi dengan nama samaran pelindung identitas.')
+                : t('incognito.statusInactiveDesc', 'Akun terhubung sedang digunakan. Klik untuk mengaktifkan penyamaran identitas instan.')}
             </span>
           </div>
 

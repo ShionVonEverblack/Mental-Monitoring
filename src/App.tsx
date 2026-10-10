@@ -1,5 +1,5 @@
 import React, { useEffect, lazy, Suspense } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Outlet, Navigate } from 'react-router-dom';
 import './i18n/config';
 import './styles/index.css';
 
@@ -10,6 +10,7 @@ import { useTheme } from './hooks/useTheme';
 
 // Lazy loading pages for code splitting & faster initial load
 const Home = lazy(() => import('./pages/Home').then(module => ({ default: module.Home })));
+const Landing = lazy(() => import('./pages/Landing').then(module => ({ default: module.Landing })));
 const MoodTracker = lazy(() => import('./pages/MoodTracker').then(module => ({ default: module.MoodTracker })));
 const Journal = lazy(() => import('./pages/Journal').then(module => ({ default: module.Journal })));
 const Forum = lazy(() => import('./pages/Forum').then(module => ({ default: module.Forum })));
@@ -29,6 +30,28 @@ import { ConsentModal } from './components/common/ConsentModal';
 import { AppLockScreen } from './components/security/AppLockScreen';
 
 import { useTranslation } from 'react-i18next';
+
+export const RootRedirector: React.FC = () => {
+  const hasEntered = typeof window !== 'undefined' && localStorage.getItem('rima-has-entered') === 'true';
+  if (!hasEntered) {
+    return <Navigate to="/landing" replace />;
+  }
+  return <Home />;
+};
+
+export const AppShellLayout: React.FC = () => {
+  return (
+    <>
+      <AppLockScreen />
+      <ConsentModal />
+      <AppShell>
+        <Suspense fallback={<PageFallbackLoader />}>
+          <Outlet />
+        </Suspense>
+      </AppShell>
+    </>
+  );
+};
 
 const App: React.FC = () => {
   const { theme } = useTheme();
@@ -59,30 +82,37 @@ const App: React.FC = () => {
   return (
     <ErrorBoundary>
       <BrowserRouter>
-        <AppLockScreen />
-        <ConsentModal />
-        <AppShell>
-          <Suspense fallback={<PageFallbackLoader />}>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/mood" element={<MoodTracker />} />
-              <Route path="/journal" element={<Journal />} />
-              <Route path="/forum" element={<Forum />} />
-              <Route path="/profile" element={<Profile />} />
-              <Route path="/safety-plan" element={<SafetyPlan />} />
-              <Route path="/breathe" element={<Breathe />} />
-              <Route path="/education" element={<Education />} />
-              <Route path="/professional-help" element={<ProfessionalHelp />} />
-              <Route path="/analytics" element={<Analytics />} />
-              <Route path="/privacy" element={<PrivacyPolicy />} />
-              <Route path="/grounding" element={<Grounding />} />
-              <Route path="/assessment" element={<Assessment />} />
-              <Route path="/tipp" element={<TippCrisisHub />} />
-              <Route path="/activation" element={<BehavioralActivation />} />
-              <Route path="/sleep" element={<SleepTracker />} />
-            </Routes>
-          </Suspense>
-        </AppShell>
+        <Routes>
+          {/* Standalone Public Landing Page Route (No AppShell, No Lock Screen, No Consent Modal) */}
+          <Route
+            path="/landing"
+            element={
+              <Suspense fallback={<PageFallbackLoader />}>
+                <Landing />
+              </Suspense>
+            }
+          />
+
+          {/* Internal Application Pathless Layout Route */}
+          <Route element={<AppShellLayout />}>
+            <Route path="/" element={<RootRedirector />} />
+            <Route path="/mood" element={<MoodTracker />} />
+            <Route path="/journal" element={<Journal />} />
+            <Route path="/forum" element={<Forum />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/safety-plan" element={<SafetyPlan />} />
+            <Route path="/breathe" element={<Breathe />} />
+            <Route path="/education" element={<Education />} />
+            <Route path="/professional-help" element={<ProfessionalHelp />} />
+            <Route path="/analytics" element={<Analytics />} />
+            <Route path="/privacy" element={<PrivacyPolicy />} />
+            <Route path="/grounding" element={<Grounding />} />
+            <Route path="/assessment" element={<Assessment />} />
+            <Route path="/tipp" element={<TippCrisisHub />} />
+            <Route path="/activation" element={<BehavioralActivation />} />
+            <Route path="/sleep" element={<SleepTracker />} />
+          </Route>
+        </Routes>
       </BrowserRouter>
     </ErrorBoundary>
   );

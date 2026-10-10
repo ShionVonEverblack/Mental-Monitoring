@@ -29,6 +29,8 @@ import { EscalationBanner } from '../components/common/EscalationBanner';
 import { JitaiNudgeCard } from '../components/common/JitaiNudgeCard';
 import { generateInsights } from '../services/moodAnalysisService';
 import { SelfCompassionModal } from '../components/cft/SelfCompassionModal';
+import { IncognitoPillToggle } from '../components/auth/IncognitoPillToggle';
+import { AuthModal } from '../components/auth/AuthModal';
 import { audioSomatics } from '../services/audioSomaticsService';
 import type { Language, MoodScore } from '../types';
 
@@ -38,6 +40,7 @@ export const Home: React.FC = () => {
   const { moods, getTodayMood, getWeeklyMoods, addMood, getMoodStats } = useMood();
   const [showLangModal, setShowLangModal] = useState(false);
   const [isCftOpen, setIsCftOpen] = useState(false);
+  const [isAuthOpen, setIsAuthOpen] = useState(false);
   const [isPlayingBrownNoise, setIsPlayingBrownNoise] = useState(false);
   
   const currentLang = (i18n.language?.split('-')[0] || 'id') as Language;
@@ -108,6 +111,7 @@ export const Home: React.FC = () => {
       <header className="home-header zen-home-header">
         <h1 className="home-greeting zen-greeting">{getGreeting(currentLang)}</h1>
         <div className="zen-header-actions">
+          <IncognitoPillToggle onRequireAuth={() => setIsAuthOpen(true)} />
           <button
             type="button"
             className="home-lang-btn zen-lang-btn"
@@ -470,6 +474,9 @@ export const Home: React.FC = () => {
 
       {/* Self-Compassion CFT Modal */}
       <SelfCompassionModal isOpen={isCftOpen} onClose={() => setIsCftOpen(false)} />
+
+      {/* Auth Modal for Supabase Magic Link OTP */}
+      <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} />
     </div>
   );
 };

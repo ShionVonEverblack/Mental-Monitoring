@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { Home, SmilePlus, BookOpen, Users, User, Menu, ChevronLeft } from 'lucide-react';
+import { Home, SmilePlus, BookOpen, Users, User, Menu, ChevronLeft, Sparkles } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useMood } from '../../hooks/useMood';
 
@@ -92,6 +92,31 @@ export const Sidebar: React.FC = () => {
             🟢 {t('sidebar.offlineReady', 'Offline-Ready')}
           </div>
         )}
+
+        {/* Link to public Landing Page */}
+        <NavLink
+          to="/landing"
+          className="sidebar-landing-link"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '10px',
+            textDecoration: 'none',
+            color: 'var(--text-secondary)',
+            fontSize: '0.813rem',
+            padding: '10px 14px',
+            borderRadius: 'var(--radius-lg)',
+            marginTop: 'var(--spacing-xs)',
+            transition: 'all var(--transition-fast)',
+            minHeight: '44px',
+            justifyContent: isCollapsed ? 'center' : 'flex-start',
+            border: '1px solid transparent'
+          }}
+          title={t('nav.landing', 'Tentang RIMA')}
+        >
+          <Sparkles size={18} style={{ color: 'var(--color-primary)', flexShrink: 0 }} aria-hidden="true" />
+          {!isCollapsed && <span>{t('nav.landing', 'Tentang RIMA')}</span>}
+        </NavLink>
       </div>
     </aside>
   );

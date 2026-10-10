@@ -114,3 +114,78 @@ Rombak src/pages/Home.tsx dan komponen terkait:
 - [ ] npx tsc -b lulus dengan 0 error.
 - [ ] Seluruh unit & integration test Vitest (41+ file) lulus 100% tanpa regresi.
 - [ ] Build produksi PWA (npm run build) sukses bersih.
+
+
+## 2026-10-10T19:19:55Z
+
+Implementasi akses web publik untuk RIMA: Landing Page Modern Minimalist dengan opsi "Mulai sebagai Tamu Anonim" dan "Masuk dengan Akun" (Supabase Magic Link OTP), alur navigasi adaptif untuk pengunjung baru vs pengguna kembali, serta fitur saklar "Mode Anonim" (Incognito Mode Toggle) in-app yang dapat diaktifkan kapan saja bahkan saat pengguna sudah masuk dengan akunnya.
+
+Working directory: C:\Users\Hype\Kuliah\Proyekan\mental monitoring
+Integrity mode: development
+
+## Requirements
+
+### R1. Modern Minimalist Public Landing Page (Landing.tsx)
+- Bangun Landing Page publik yang tenang, lapang, dan ramah sensorik sesuai pedoman Modern Minimalist RIMA (frosted glass, tipografi editorial elegan, palet warna sunyi, zero Tailwind).
+- Konten Landing Page:
+  - Hero Section: Pengenalan RIMA (Ruang Interaksi Mental Aman) sebagai ruang digital aman, anonim, dan berbasis bukti sains.
+  - Pilar Nilai Utama:
+    1. 100% Privasi & Tanpa Pelacakan (UU PDP No. 27/2022, data diproses lokal di perangkat).
+    2. Bebas Stigma: Masuk instan tanpa wajib registrasi atau nomor HP.
+    3. Intervensi Berbasis Bukti Klinis: JITAI adaptive nudges, Yale Mood Meter, DBT TIPP, Grounding 5-4-3-2-1, CFT Self-Compassion.
+  - Dua Tombol Aksi Utama (Dual CTA):
+    1. "Mulai sebagai Tamu Anonim": Tombol primer dengan 1-klik langsung masuk ke Beranda dasbor aplikasi tanpa registrasi, tanpa email.
+    2. "Masuk dengan Akun": Tombol sekunder yang membuka dialog autentikasi Magic Link OTP via Supabase.
+  - Fitur Showcase & FAQ Ringkas: Penjelasan singkat fitur utama serta jaminan keamanan data.
+  - Tata Letak Khusus: Landing Page memiliki layout mandiri (tanpa sidebar atau bottom-dock aplikasi).
+
+### R2. Navigasi Adaptif Pengunjung Baru vs Pengguna Kembali
+- Sediakan mekanisme deteksi status sesi di src/App.tsx:
+  - Jika pengunjung baru pertama kali membuka domain web (localStorage.getItem('rima-has-entered') belum ada), arahkan ke rute /landing.
+  - Ketika pengunjung menekan "Mulai sebagai Tamu Anonim" atau berhasil login, simpan status rima-has-entered = 'true' dan arahkan langsung ke Beranda (/).
+  - Untuk kunjungan berikutnya, peramban langsung menampilkan Beranda aplikasi secara instan.
+  - Sediakan tautan "Tentang RIMA (Landing Page)" di halaman Profil dan navigasi agar pengguna kapan saja dapat kembali membuka Landing Page.
+
+### R3. Saklar Mode Anonim In-App (Incognito Mode Toggle)
+- Sediakan mekanisme dual-identity pada useAuth.ts:
+  - State isAnonymousMode: boolean (tersimpan di localStorage).
+  - Fungsi toggleAnonymousMode().
+- Tambahkan saklar pill interaktif di Header aplikasi (AppShell / Home) dan di halaman Profil:
+  - Jika aktif: Indikator visual tenang 🕶️ Mode Anonim Aktif.
+  - Jika nonaktif (sedang menggunakan akun): Tampilan 👤 Akun Terhubung dengan opsi beralih ke Mode Anonim dalam 1 klik.
+- Saat Mode Anonim aktif:
+  - Forum Diskusi (Forum.tsx) otomatis menggunakan nama samaran acak (pseudonym, misal: "Calm River") dan menyembunyikan identitas akun pengguna.
+  - Jurnal dan riwayat suasana hati tidak diasosiasikan dengan akun publik.
+
+### R4. Dialog Autentikasi Modern Minimalist (AuthModal.tsx)
+- Komponen dialog modal untuk autentikasi Supabase Magic Link OTP:
+  - Input email dengan validasi bersih.
+  - Status pengiriman kode OTP / tautan login.
+  - Opsi batal yang mengembalikan pengguna ke mode anonim tanpa paksaan.
+
+### R5. Konfigurasi Web Hosting Publik (SPA Rewrites)
+- Tambahkan konfigurasi rewrite routing SPA untuk penyedia hosting web:
+  - vercel.json: Konfigurasi rewrites /* -> /index.html.
+  - netlify.toml: Konfigurasi redirects /* -> /index.html 200.
+  - Memastikan refresh peramban pada deep link (misal: /mood, /journal, /landing) tidak menimbulkan galat 404 di internet.
+
+### R6. Guardrails & Paritas Multibahasa
+- Pure Vanilla CSS design tokens (Zero Tailwind CSS pada codebase).
+- 100% paritas 8 bahasa (id, en, jv, su, ja, zh, es, ar) dan dukungan tata letak RTL Arab untuk semua teks baru.
+- Lulus seluruh 4 tahap Quality Gates (oxlint, tsc -b, vitest run, vite build).
+
+## Acceptance Criteria
+
+### Functional & Visual Criteria
+- [ ] Pengunjung baru yang membuka domain web langsung melihat Landing Page Modern Minimalist yang estetik dan menenangkan.
+- [ ] Tombol "Mulai sebagai Tamu Anonim" mengantarkan pengguna langsung ke Beranda dasbor tanpa harus mengisi form apa pun.
+- [ ] Tombol "Masuk dengan Akun" menampilkan dialog login email OTP yang mulus.
+- [ ] Setelah pengguna masuk dengan akun, saklar Mode Anonim dapat dinyalakan/dimatikan kapan saja dari Header/Profil.
+- [ ] Ketika Mode Anonim aktif, identitas di Forum terlindungi dengan pseudonym acak.
+- [ ] Konfigurasi hosting web (vercel.json dan netlify.toml) ada dan valid.
+
+### Quality & Verification Gates
+- [ ] npm run lint (oxlint) lulus dengan 0 error dan 0 warning.
+- [ ] npx tsc -b lulus dengan 0 error.
+- [ ] Seluruh suite unit & integration test Vitest (44+ berkas) lulus 100%.
+- [ ] Build produksi PWA (npm run build) sukses tanpa peringatan.

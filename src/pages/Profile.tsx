@@ -38,10 +38,14 @@ import {
   Lock,
   KeyRound,
   HardDrive,
-  Feather
+  Feather,
+  User,
+  Sparkles
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useLocalStorage } from '../hooks/useLocalStorage';
+import { IncognitoPillToggle } from '../components/auth/IncognitoPillToggle';
+import { AuthModal } from '../components/auth/AuthModal';
 import { SPIRITUAL_SOURCES } from '../data/spiritualContent';
 import { Modal } from '../components/ui/Modal';
 import { SetPinModal } from '../components/security/SetPinModal';
@@ -54,7 +58,16 @@ export const Profile: React.FC = () => {
   const { t, i18n } = useTranslation();
   const { theme, toggleTheme, lowStimulation, toggleLowStimulation } = useTheme();
   const { getMoodStats } = useMood();
-  const { user, updateDisplayName, regenerateAnonymousName, isSupabaseConfigured } = useAuth();
+  const {
+    accountUser,
+    isAuthenticated,
+    isAnonymousMode,
+    activeDisplayName,
+    updateDisplayName,
+    regenerateAnonymousName,
+    logout,
+    isSupabaseConfigured
+  } = useAuth();
   const {
     enabled: notifEnabled,
     reminderTime,
@@ -67,8 +80,9 @@ export const Profile: React.FC = () => {
   } = useNotifications();
   const navigate = useNavigate();
 
+  const [isAuthOpen, setIsAuthOpen] = useState(false);
   const [isEditingName, setIsEditingName] = useState(false);
-  const [tempName, setTempName] = useState(user.displayName);
+  const [tempName, setTempName] = useState(activeDisplayName);
   const [toastMsg, setToastMsg] = useState<string | null>(null);
   
   const [spiritualEnabled, setSpiritualEnabled] = useLocalStorage('rima-spiritual-enabled', false);
@@ -248,7 +262,7 @@ export const Profile: React.FC = () => {
 
       <div className="profile-header">
         <div className="profile-avatar">
-          {user.displayName.charAt(0).toUpperCase()}
+          {activeDisplayName.charAt(0).toUpperCase()}
         </div>
 
         {isEditingName ? (
@@ -264,10 +278,10 @@ export const Profile: React.FC = () => {
           </div>
         ) : (
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <h1 className="profile-name">{user.displayName}</h1>
+            <h1 className="profile-name">{activeDisplayName}</h1>
             <button
               className="btn btn-ghost btn-icon"
-              onClick={() => { setTempName(user.displayName); setIsEditingName(true); }}
+              onClick={() => { setTempName(activeDisplayName); setIsEditingName(true); }}
               title={t('profile.editName', 'Edit nama')}
             >
               ✏️
@@ -285,6 +299,10 @@ export const Profile: React.FC = () => {
         <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '0.75rem', color: 'var(--text-tertiary)', marginTop: '6px' }}>
           <Shield size={14} style={{ color: 'var(--color-secondary)' }} />
           <span>{t('profile.anonBadge', 'Profil Anonim Aman • Terjaga di Perangkat')}</span>
+        </div>
+
+        <div style={{ marginTop: '12px' }}>
+          <IncognitoPillToggle onRequireAuth={() => setIsAuthOpen(true)} />
         </div>
       </div>
 
@@ -307,6 +325,40 @@ export const Profile: React.FC = () => {
           </div>
           <div className="stat-label">{t('profile.trend', 'Tren 30 Hari')}</div>
         </Card>
+      </div>
+
+      <div className="settings-section">
+        <h2 className="settings-title">{t('profile.accountSection', 'STATUS AKUN & IDENTITAS')}</h2>
+        <div className="settings-list">
+          <div className="settings-item">
+            <div className="settings-item-left">
+              <User size={18} />
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+                <span style={{ fontWeight: 600 }}>
+                  {isAuthenticated && accountUser?.email
+                    ? t('profile.authenticatedStatus', { email: accountUser.email, defaultValue: `Akun Terhubung: ${accountUser.email}` })
+                    : t('profile.guestStatus', 'Tamu Anonim (Hanya Perangkat Ini)')}
+                </span>
+                <span style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)', marginTop: '2px' }}>
+                  {isAnonymousMode
+                    ? t('incognito.statusActiveDesc', 'Identitas akun disembunyikan. Anda tampil sebagai nama samaran di forum, dan data tersimpan privat.')
+                    : t('incognito.statusInactiveDesc', 'Akun terhubung sedang digunakan. Klik untuk mengaktifkan penyamaran identitas instan.')}
+                </span>
+              </div>
+            </div>
+            <div className="settings-item-right">
+              {isAuthenticated ? (
+                <Button variant="ghost" size="sm" onClick={() => logout()}>
+                  {t('profile.logoutAccount', 'Keluar dari Akun')}
+                </Button>
+              ) : (
+                <Button variant="secondary" size="sm" onClick={() => setIsAuthOpen(true)}>
+                  {t('profile.loginWithAccount', 'Hubungkan Akun (Magic Link)')}
+                </Button>
+              )}
+            </div>
+          </div>
+        </div>
       </div>
 
       <div className="settings-section">
@@ -755,6 +807,29 @@ export const Profile: React.FC = () => {
             className="settings-item" 
             role="button" 
             tabIndex={0} 
+            onClick={() => navigate('/landing')}
+            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') navigate('/landing'); }}
+          >
+            <div className="settings-item-left">
+              <Sparkles size={18} style={{ color: 'var(--color-primary)' }} />
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+                <span style={{ fontWeight: 600 }}>{t('profile.landingLink', 'Tentang RIMA (Landing Page)')}</span>
+                <span style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)', marginTop: '2px' }}>
+                  {t('profile.landingLinkDesc', 'Pelajari kembali nilai privasi, bukti klinis, dan visi RIMA.')}
+                </span>
+              </div>
+            </div>
+            <div className="settings-item-right">
+              <Button variant="ghost" size="sm" tabIndex={-1}>
+                {t('common.view', 'Lihat')}
+              </Button>
+            </div>
+          </div>
+
+          <div 
+            className="settings-item" 
+            role="button" 
+            tabIndex={0} 
             onClick={() => navigate('/privacy')}
             onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') navigate('/privacy'); }}
           >
@@ -842,6 +917,9 @@ export const Profile: React.FC = () => {
           {t('safety.disclaimer')}
         </div>
       </div>
+
+      {/* Auth Modal for Supabase Magic Link OTP */}
+      <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} />
     </div>
   );
 };
