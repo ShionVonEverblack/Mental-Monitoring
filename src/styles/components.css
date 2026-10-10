@@ -764,3 +764,604 @@ button.btn-icon.btn-icon-danger:not(.btn):hover:not(:disabled) {
   }
 }
 
+/* ==========================================================================
+   Zen Monastic & Apple Health: Home Screen Minimalist Architecture
+   ========================================================================== */
+
+/* Header Hening */
+.home-header.zen-home-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-xl);
+}
+
+.home-greeting.zen-greeting {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+  letter-spacing: -0.015em;
+  line-height: 1.25;
+  margin: 0;
+}
+
+.zen-header-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
+}
+
+.home-lang-btn.zen-lang-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: var(--bg-glass-card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  color: var(--text-primary);
+  min-height: 48px;
+  box-sizing: border-box;
+  box-shadow: var(--shadow-subtle), var(--border-glass-rim);
+  transition: all var(--transition-fast);
+}
+
+.home-lang-btn.zen-lang-btn:hover {
+  background: var(--bg-elevated);
+  border-color: var(--border-strong);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-card);
+}
+
+.home-lang-btn.zen-lang-btn:active {
+  transform: scale(0.98);
+}
+
+.zen-lang-icon {
+  color: var(--color-primary);
+  flex-shrink: 0;
+}
+
+.streak-badge.zen-streak-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: var(--bg-glass-card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-secondary);
+  min-height: 48px;
+  box-sizing: border-box;
+  box-shadow: var(--shadow-subtle), var(--border-glass-rim);
+  transition: all var(--transition-fast);
+}
+
+.zen-streak-icon {
+  color: var(--color-primary);
+  flex-shrink: 0;
+}
+
+.streak-badge.zen-streak-badge.zen-streak-grace {
+  border-color: var(--border-strong);
+  background: var(--bg-glass-subtle);
+}
+
+.zen-streak-recovery {
+  font-size: var(--font-size-xs);
+  color: var(--color-secondary);
+  font-weight: var(--font-weight-medium);
+  margin-inline-start: 4px;
+}
+
+.zen-lang-modal-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-sm);
+}
+
+.zen-lang-modal-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 12px;
+  font-size: var(--font-size-sm);
+  min-height: 48px;
+  border-radius: var(--radius-md);
+}
+
+/* Fluid Mood Check-In */
+.mood-section.zen-mood-section {
+  margin-bottom: var(--spacing-xl);
+}
+
+.mood-prompt-card.zen-mood-prompt-card {
+  background: var(--bg-glass-card);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-xl);
+  box-shadow: var(--shadow-card), var(--border-glass-rim);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-normal);
+}
+
+.mood-prompt-card.zen-mood-prompt-card:hover {
+  border-color: var(--border-strong);
+}
+
+.zen-mood-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+}
+
+.zen-mood-title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.zen-mood-subtitle {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  margin: 4px 0 0;
+}
+
+.zen-mood-meter-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: var(--bg-glass-subtle);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-full);
+  color: var(--color-primary);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  min-height: 48px;
+  box-sizing: border-box;
+  box-shadow: var(--shadow-subtle), var(--border-glass-rim);
+  transition: all var(--transition-fast);
+}
+
+.zen-mood-meter-link:hover {
+  background: var(--bg-elevated);
+  border-color: var(--border-strong);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-card);
+}
+
+.zen-mood-meter-link:active {
+  transform: scale(0.98);
+}
+
+.mood-logged-card.zen-mood-logged-card {
+  background: var(--bg-glass-card);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-lg) var(--spacing-xl);
+  box-shadow: var(--shadow-subtle), var(--border-glass-rim);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-normal);
+}
+
+.mood-logged-card.zen-mood-logged-card:hover {
+  border-color: var(--border-strong);
+}
+
+.zen-logged-info {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.logged-emoji.zen-logged-badge {
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border-radius: var(--radius-lg);
+  background: var(--bg-glass-subtle);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-subtle), var(--border-glass-rim);
+  flex-shrink: 0;
+  transition: transform var(--transition-fast);
+}
+
+.mood-logged-card.zen-mood-logged-card:hover .zen-logged-badge {
+  transform: scale(1.05);
+}
+
+.zen-logged-title {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.zen-logged-subtitle {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  margin: 2px 0 0;
+}
+
+.zen-mood-update-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: var(--bg-glass-subtle);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-full);
+  color: var(--text-secondary);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  min-height: 48px;
+  box-sizing: border-box;
+  box-shadow: var(--shadow-subtle), var(--border-glass-rim);
+  transition: all var(--transition-fast);
+}
+
+.zen-mood-update-btn:hover {
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+  border-color: var(--border-strong);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-card);
+}
+
+.zen-mood-update-btn:active {
+  transform: scale(0.98);
+}
+
+/* Zen Quote / Afirmasi */
+.affirmation-card.zen-affirmation-card {
+  background: var(--bg-glass-card);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-xl);
+  margin-bottom: var(--spacing-xl);
+  text-align: center;
+  box-shadow: var(--shadow-subtle), var(--border-glass-rim);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  position: relative;
+  overflow: hidden;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-normal);
+}
+
+.affirmation-card.zen-affirmation-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--color-primary-transparent), transparent);
+}
+
+.affirmation-card.zen-affirmation-card:hover {
+  border-color: var(--border-strong);
+}
+
+.zen-affirmation-label {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+}
+
+.affirmation-text.zen-affirmation-text {
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-lg);
+  font-style: italic;
+  line-height: 1.7;
+  color: var(--text-primary);
+  max-width: 620px;
+  margin: 0 auto;
+}
+
+.zen-affirmation-meta {
+  font-size: var(--font-size-xs);
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+/* Zen Feature Matrix: Pilihan Hening (4 Structured Minimalist Rows) */
+.zen-feature-matrix {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-xl);
+}
+
+.zen-matrix-header {
+  margin-bottom: var(--spacing-xs);
+}
+
+.zen-matrix-title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
+.zen-matrix-subtitle {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  margin: 4px 0 0;
+}
+
+.zen-feature-group {
+  background: var(--bg-glass-card);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-md) var(--spacing-lg);
+  box-shadow: var(--shadow-subtle), var(--border-glass-rim);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-normal);
+}
+
+.zen-feature-group:hover {
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-card);
+}
+
+.zen-group-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-sm);
+  flex-wrap: wrap;
+}
+
+.zen-group-title {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.zen-group-desc {
+  font-size: var(--font-size-xs);
+  color: var(--text-secondary);
+}
+
+.zen-group-items {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-sm);
+}
+
+.zen-item-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-md) var(--spacing-sm);
+  background: var(--bg-glass-subtle);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  color: var(--text-primary);
+  text-decoration: none;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  min-height: 52px; /* WCAG 2.2 SC 2.5.8 Touch Target >= 48px */
+  cursor: pointer;
+  box-shadow: var(--shadow-subtle), var(--border-glass-rim);
+  transition: background-color var(--transition-fast), border-color var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.zen-item-tile:hover {
+  background: var(--bg-elevated);
+  border-color: var(--border-strong);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-card);
+}
+
+.zen-item-tile:active {
+  transform: scale(0.98);
+}
+
+.zen-item-tile:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.zen-item-tile.active {
+  background: var(--bg-elevated);
+  border-color: var(--color-primary);
+  box-shadow: 0 0 16px var(--color-primary-transparent);
+}
+
+.zen-item-tile-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius-md);
+  background: var(--color-primary-transparent);
+  color: var(--color-primary);
+  flex-shrink: 0;
+  transition: transform var(--transition-fast), background-color var(--transition-fast);
+}
+
+.zen-item-tile:hover .zen-item-tile-icon {
+  transform: scale(1.08);
+}
+
+.zen-item-tile-label {
+  font-size: var(--font-size-sm);
+  line-height: 1.3;
+}
+
+.zen-audio-active-badge {
+  font-size: 0.688rem;
+  color: var(--color-primary);
+  font-weight: var(--font-weight-bold);
+  margin-inline-start: 4px;
+}
+
+.zen-hotline-tile .zen-item-tile-icon {
+  background: hsla(0, 65%, 55%, 0.12);
+  color: var(--color-danger);
+}
+
+.zen-hotline-tile:hover {
+  border-color: hsla(0, 65%, 55%, 0.3);
+}
+
+.zen-hotline-tile:hover .zen-item-tile-icon {
+  color: var(--color-danger);
+  transform: scale(1.08);
+}
+
+/* RTL Reversal Helper */
+[dir="rtl"] .zen-rtl-flip {
+  transform: scaleX(-1);
+}
+
+/* Chart and Section Zen Polish */
+.chart-section.zen-chart-section {
+  margin-bottom: var(--spacing-xl);
+}
+
+.zen-section-title {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+  margin: 0 0 var(--spacing-md) 0;
+}
+
+.chart-card.zen-chart-card {
+  background: var(--bg-glass-card);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-md);
+  box-shadow: var(--shadow-subtle), var(--border-glass-rim);
+}
+
+.chart-empty.zen-chart-empty {
+  padding: var(--spacing-xl);
+  text-align: center;
+  color: var(--text-tertiary);
+  background: var(--bg-glass-card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px dashed var(--border-subtle);
+  border-radius: var(--radius-xl);
+  font-size: var(--font-size-sm);
+}
+
+/* Sensory Calm and Reduced Motion Overrides */
+[data-sensory='calm'] .home-lang-btn.zen-lang-btn,
+[data-sensory='low-stimulation'] .home-lang-btn.zen-lang-btn,
+[data-sensory='calm'] .streak-badge.zen-streak-badge,
+[data-sensory='low-stimulation'] .streak-badge.zen-streak-badge,
+[data-sensory='calm'] .mood-prompt-card.zen-mood-prompt-card,
+[data-sensory='low-stimulation'] .mood-prompt-card.zen-mood-prompt-card,
+[data-sensory='calm'] .mood-logged-card.zen-mood-logged-card,
+[data-sensory='low-stimulation'] .mood-logged-card.zen-mood-logged-card,
+[data-sensory='calm'] .affirmation-card.zen-affirmation-card,
+[data-sensory='low-stimulation'] .affirmation-card.zen-affirmation-card,
+[data-sensory='calm'] .zen-feature-group,
+[data-sensory='low-stimulation'] .zen-feature-group,
+[data-sensory='calm'] .zen-item-tile,
+[data-sensory='low-stimulation'] .zen-item-tile,
+[data-sensory='calm'] .chart-card.zen-chart-card,
+[data-sensory='low-stimulation'] .chart-card.zen-chart-card,
+[data-sensory='calm'] .chart-empty.zen-chart-empty,
+[data-sensory='low-stimulation'] .chart-empty.zen-chart-empty {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+@media (max-width: 640px) {
+  .zen-feature-group {
+    padding: var(--spacing-md);
+  }
+
+  .zen-group-items {
+    grid-template-columns: 1fr;
+  }
+
+  .zen-item-tile {
+    flex-direction: row;
+    justify-content: flex-start;
+    padding: var(--spacing-sm) var(--spacing-md);
+    text-align: start;
+    min-height: 48px;
+    gap: var(--spacing-sm);
+  }
+
+  .zen-item-tile:hover {
+    transform: none;
+  }
+
+  .mood-prompt-card.zen-mood-prompt-card,
+  .mood-logged-card.zen-mood-logged-card,
+  .affirmation-card.zen-affirmation-card {
+    padding: var(--spacing-md);
+  }
+}
+
+
+
