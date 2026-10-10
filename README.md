@@ -4,7 +4,7 @@
 
 ### Safe Mental Interaction Space (*Ruang Interaksi Mental Aman*)
 
-A privacy-focused, anonymous, evidence-based digital mental health platform.
+A privacy-focused, anonymous, evidence-based digital mental health platform
 
 [![Built with React](https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react)](https://react.dev)
 [![TypeScript](https://img.shields.io/badge/TypeScript-6.0-3178C6?style=flat-square&logo=typescript)](https://typescriptlang.org)
