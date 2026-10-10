@@ -1,202 +1,716 @@
-# Handoff Report: I18n and Build Explorer (Survey 3)
+# Phase 3 Exploration & Architectural Blueprint: i18n Catalogs, PWA Performance, Calm Suspense Loader, and Reusable Skills
+
+**Author:** Explorer Survey 3 (i18n, Skills & Test Gates Specialist)  
+**Date:** 2026-10-10  
+**Status:** Complete  
+**Target Audience:** Orchestrator, Worker M1, Worker M2, Worker M3, Test Writer, Challenger, and Reviewers  
+
+---
 
 ## 1. Observation
 
-### 1.1 Internationalization (i18n) Architecture & Stack
-- **Dependencies (`package.json:16-21`)**:
-  - `i18next`: `^26.3.6`
-  - `react-i18next`: `^17.0.11`
-  - `i18next-browser-languagedetector`: `^8.2.1`
-- **Configuration (`src/i18n/config.ts:1-56`)**:
-  - Imports all 8 locale files: `id.json`, `en.json`, `jv.json`, `su.json`, `ja.json`, `zh.json`, `es.json`, `ar.json`.
-  - Configures `fallbackLng: 'id'`.
-  - Configures `detection`: `order: ['localStorage', 'navigator']`, `lookupLocalStorage: 'rima-language'`.
-  - Configures `interpolation: { escapeValue: false }` for React safety.
-- **Language Definitions & UI**:
-  - `src/types/index.ts:117`: `export type Language = 'id' | 'en' | 'jv' | 'su' | 'ja' | 'zh' | 'es' | 'ar';`
-  - `src/utils/constants.ts:264-273`: `AVAILABLE_LANGUAGES` defines:
-    - `id` (Bahasa Indonesia, 🇮🇩)
-    - `en` (English, 🇬🇧)
-    - `jv` (Basa Jawa, 🇮🇩)
-    - `su` (Basa Sunda, 🇮🇩)
-    - `ja` (日本語, 🇯🇵)
-    - `zh` (简体中文, 🇨🇳)
-    - `es` (Español, 🇪🇸)
-    - `ar` (العربية, 🇸🇦)
-  - Language switcher modals exist in `src/pages/Home.tsx:115-146` and `src/pages/Profile.tsx:360-390`, calling `i18n.changeLanguage(item.code)`.
+Direct empirical observations from inspecting the codebase, configuration, test suites, and build outputs:
 
-### 1.2 Multi-Language Key Parity & Completeness
-- Programmatic inspection across all 8 JSON files (`src/i18n/*.json`) revealed:
-  - `id.json`: 1,030 resolved leaf keys, 0 empty strings, 0 nulls.
-  - `en.json`: 1,030 resolved leaf keys, 0 empty strings, 0 nulls.
-  - `jv.json`: 1,030 resolved leaf keys, 0 empty strings, 0 nulls.
-  - `su.json`: 1,030 resolved leaf keys, 0 empty strings, 0 nulls.
-  - `ja.json`: 1,030 resolved leaf keys, 0 empty strings, 0 nulls.
-  - `zh.json`: 1,030 resolved leaf keys, 0 empty strings, 0 nulls.
-  - `es.json`: 1,030 resolved leaf keys, 0 empty strings, 0 nulls.
-  - `ar.json`: 1,030 resolved leaf keys, 0 empty strings, 0 nulls.
-  - **Total unique keys across all 8 locales**: 1,030 keys.
-  - **Missing keys count**: 0 across all 8 languages. The baseline codebase currently enjoys 100% key parity.
-  - Key structure: A hybrid pattern of 351 top-level namespaces consisting of nested category objects (e.g., `home`, `mood`, `journal`, `cbt`, `tipp`, `cssrs`, `ba`, `referral`, `sleep`, `cft`) and flat dotted keys (e.g., `accessibility.skipToContent`, `session.timeReminder`, `sidebar.offlineReady`).
-  - Search in `src/i18n/id.json` for Phase 2 terms (`jitai`, `nudge`, `fastAction`, `safetyCard`, `constriction`) showed 0 existing keys for these features, confirming that Phase 2 will require defining brand-new keys across all 8 languages.
+### 1.1 i18n Translation Catalogs & Key Parity
+- **Location:** `src/i18n/` contains 8 locale JSON files: `id.json`, `en.json`, `jv.json`, `su.json`, `ja.json`, `zh.json`, `es.json`, `ar.json`, plus `config.ts`.
+- **Key Count:** Exactly **1,161 leaf keys** per language file. Parity across all 8 languages is currently **100%** with **0 missing keys, 0 extra keys, and 0 empty strings**.
+- **Static Loading in `config.ts`:** Lines 5–12 statically import all 8 JSON files (`import idTranslations from './id.json'; ...`). Total uncompressed JSON file size across all 8 languages is **635,024 bytes (~620 KiB)**.
+- **RTL Support:** `src/App.tsx` (lines 42–57) dynamically sets `document.documentElement.dir = lng.startsWith('ar') ? 'rtl' : 'ltr'` and `document.documentElement.lang = lng` via `i18n.on('languageChanged')`.
+- **Existing Loading Keys:**
+  - `common.loadingSafeSpace`: present in all 8 languages (`id`: "Memuat Ruang Aman...", `en`: "Loading Safe Space...", `jv`: "Ngamot Papan Aman...", `su`: "Ngamuat Rohangan Aman...", `ja`: "安全なスペースを読み込み中...", `zh`: "正在加载安全空间...", `es`: "Cargando espacio seguro...", `ar`: "جاري تحميل المساحة الآمنة...").
+  - `common.loading`: present in all 8 languages (`id`: "Memuat...", `en`: "Loading...").
+  - No dedicated `calmLoader` namespace currently exists in any of the 8 files (`calmLoader: false`).
 
-### 1.3 Right-to-Left (RTL) Support Analysis (Arabic 'ar')
-- Search across the entire codebase (`src/` and `index.html`) for `dir`, `direction`, `[dir="rtl"]`, or `document.documentElement.dir`:
-  - `index.html:2`: Static declaration `<html lang="id">`. No `dir` attribute is present on `<html>`, `<body>`, or `<div id="root">`.
-  - `src/App.tsx:37-39`:
-    ```tsx
-    useEffect(() => {
-      document.documentElement.setAttribute('data-theme', theme);
-    }, [theme]);
+### 1.2 Current Suspense Fallback & Sensory Modes
+- **Location in App:** `src/App.tsx` (line 8 and line 65) imports `LoadingSpinner` and passes `<LoadingSpinner message={t('common.loadingSafeSpace', 'Memuat Ruang Aman...')} />` to `<Suspense fallback={...}>`.
+- **Visual Mechanics of `LoadingSpinner.tsx`:** Lines 18–36 define a circular spinner with `animation: 'rimaSpin 0.8s linear infinite'` rotating 360 degrees every 800ms. This high-speed rotation is visually jarring and contrary to trauma-informed psychiatric design principles for acute emotional distress.
+- **Sensory Calm Design Tokens:**
+  - `src/styles/design-tokens.css` (lines 114–160) defines `[data-sensory='calm']` with desaturated color palettes, zero glow effects (`--glow-*: none !important`), and muted card borders.
+  - `src/styles/index.css` (lines 31–48) specifies:
+    ```css
+    [data-sensory='calm'] *, [data-sensory='calm'] *::before, [data-sensory='calm'] *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
     ```
-    Only `data-theme` is synchronized. No synchronization of `dir` or `lang` attribute exists.
-  - No `i18n.on('languageChanged')` listener or `useEffect` hook triggers a `dir="rtl"` attribute when Arabic is selected.
-  - `src/styles/index.css`, `src/styles/components.css`, and `src/styles/design-tokens.css`: Exactly 0 instances of `[dir="rtl"]` selectors, 0 CSS logical properties (`margin-inline-start`, `padding-inline-start`, etc. are rarely used; styles rely primarily on physical `padding-left`, `border-left`, `right: 2rem`, etc.).
-  - **Result**: Selecting Arabic (`ar`) translates textual labels into Arabic characters, but the layout remains strictly Left-to-Right (LTR).
+  - `src/hooks/useTheme.ts` (lines 30–35) toggles `document.documentElement.setAttribute('data-sensory', 'calm')` based on `rima-low-stimulation`.
 
-### 1.4 Test Setup & Execution (Vitest)
-- **Configuration (`vite.config.ts:80-84`)**:
-  ```ts
-  test: {
-    globals: true,
-    environment: 'jsdom',
-    setupFiles: ['./src/test/setup.ts']
-  }
-  ```
-- **Setup file (`src/test/setup.ts:1-2`)**:
-  `import '@testing-library/jest-dom';`
-- **Execution command (`package.json:11`)**:
-  `npm test` runs `vitest run --root .`.
-- **Empirical test execution output**:
-  - Test files: 32 passed out of 32 (100%).
-  - Tests: 200 passed out of 200 (100%).
-  - Duration: ~20.35s on Windows.
-  - Coverage tool: Not installed (`@vitest/coverage-v8` is absent from `package.json` devDependencies and `vite.config.ts`).
-- **Observed test warnings (stderr)**:
-  - `SelfCompassionModal.test.tsx` and `SoundscapePlayer.test.tsx` emit:
-    `react-i18next:: useTranslation: You will need to pass in an i18next instance by using initReactI18next or by passing it via props or context. In monorepo setups, make sure there is only one instance of react-i18next. { code: 'NO_I18NEXT_INSTANCE' }`
-    RCA: Components in these two tests invoke `useTranslation()`, but their test files do not import `src/i18n/config.ts` prior to rendering.
-  - `exportImport.test.ts` emits: `Not implemented: navigation to another Document` (standard benign JSDOM mock behavior for link clicking).
+### 1.3 Production Build & Rollup Chunk Partitioning Baseline
+- **Vite Configuration:** `vite.config.ts` (lines 90–106) defines `manualChunks(id)`:
+  - `react-vendor` (`react`, `react-dom`, `react-router-dom`)
+  - `recharts-vendor` (`recharts`)
+  - `i18n-vendor` (`i18next`, `react-i18next`)
+  - `icons-vendor` (`lucide-react`)
+- **Bundle Bloat Observation:**
+  - Because `src/i18n/*.json` is statically imported in `src/i18n/config.ts` and NOT intercepted by `manualChunks(id)`, all 620 KiB of raw JSON catalogs are bundled into the main entry bundle: `dist/assets/index-DAiHOxz2.js` (**613.57 kB raw, 224.11 kB gzip**).
+  - Also, `i18next-browser-languagedetector` is not included in `i18n-vendor`, leaving it in the entry chunk.
+- **PWA Service Worker Baseline:**
+  - Workbox version: `v1.3.0` (`vite-plugin-pwa`).
+  - Configuration: `globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}']`.
+  - Current precache table: **54 entries (1,797.98 KiB)**.
+  - Generated files: `dist/sw.js`, `dist/workbox-835c8c05.js`, plus source maps.
 
-### 1.5 Linting & Typecheck Infrastructure
-- **Linting (`package.json:10`)**:
-  - Command: `npm run lint` -> `oxlint`.
-  - Execution result: `Found 0 warnings and 0 errors. Finished in 135ms on 110 files with 104 rules using 12 threads.`
-  - Configuration: Default oxlint ruleset; no custom `.oxlintrc.json` override file present.
-- **Typechecking (`package.json:9`, `tsconfig.json`, `tsconfig.app.json`, `tsconfig.node.json`)**:
-  - Command: `npx tsc -b`.
-  - Execution result: 0 errors, 0 warnings (clean exit code 0).
-  - Strictness: `strict: true`, `noUnusedLocals: true`, `noUnusedParameters: true`, `erasableSyntaxOnly: true`, `noFallthroughCasesInSwitch: true`, `target: es2023`.
+### 1.4 Existing Skills Architecture in `.agents/skills/`
+- **Location:** `C:\Users\Hype\Kuliah\Proyekan\mental monitoring\.agents\skills\` contains 20 skill folders:
+  - `rima-calm-tech`, `rima-client-crypto`, `rima-clinical-evidence`, `rima-component-creator`, `rima-crisis-nlp`, `rima-cross-feature-resilience`, `rima-deep-audit-security`, `rima-emotion-granularity`, `rima-i18n-management`, `rima-indexeddb-storage`, `rima-jitai-micro-interventions`, `rima-offline-security`, `rima-privacy-telemetry`, `rima-project-rules`, `rima-pwa-push-notifications`, `rima-qa-verification`, `rima-referral-protocols`, `rima-trauma-informed-design`, `rima-wcag-accessibility`, `rima-web-audio-somatics`.
+- **Standard Skill Schema:**
+  - Each skill is housed in a dedicated subfolder with a single `SKILL.md`.
+  - YAML frontmatter:
+    ```yaml
+    ---
+    name: <skill-name>
+    description: >-
+      <multi-line trigger description explaining when to invoke the skill>
+    ---
+    ```
+  - Body structure: Clear markdown headings (`#`, `##`), ASCII architecture diagrams, clinical/empirical citations, code snippets, runbooks, and verification protocols.
+- **Missing Phase 3 Skills:**
+  - `rima-pwa-perf-and-code-splitting` (does not exist yet).
+  - `rima-future-feature-architecture` (does not exist yet).
 
-### 1.6 Production Build & PWA Configuration
-- **Build command (`package.json:9`)**:
-  - `npm run build` runs `tsc -b && vite build`.
-- **Bundler setup (`vite.config.ts`)**:
-  - Target: `es2023`.
-  - Source maps: `sourcemap: true`.
-  - Manual chunks: Split cleanly into `react-vendor`, `recharts-vendor`, `i18n-vendor`, and `icons-vendor`.
-  - PWA: `vite-plugin-pwa` v1.3.0 in `generateSW` mode.
-- **Empirical build execution output**:
-  - Transform: 2,517 modules transformed.
-  - Chunks generated: 45 chunks (main index, vendors, and lazy-loaded page modules).
-  - PWA assets:
-    - `dist/sw.js` (service worker)
-    - `dist/workbox-835c8c05.js`
-    - `dist/manifest.webmanifest`
-    - `dist/registerSW.js`
-    - Precached: 52 entries (1,741.88 KiB).
-    - Runtime caching: Google Fonts caching configured with CacheFirst (1-year expiration).
-  - Build timing: Clean exit code 0 in 4.61 seconds.
+### 1.5 Quality Gates Baseline Execution
+- **Lint Check (`npm run lint` / `oxlint`):**
+  - Result: **0 warnings, 0 errors** across 125 files with 104 rules in **92ms**.
+- **Type Check (`npx tsc -b`):**
+  - Result: **0 errors** (clean exit code 0).
+- **Test Suite (`npx vitest run`):**
+  - Result: **40 test files passed (40/40), 396 tests passed (396/396)** in **23.93s**.
+- **Production Build (`npm run build`):**
+  - Result: **Built in 1.41s**, clean exit code 0, PWA service worker successfully generated.
 
 ---
 
 ## 2. Logic Chain
 
-1. **Premise 1 (Existing i18n parity)**:
-   - Observations in Section 1.2 verify that all 8 locale files currently have exactly 1,030 matching keys with 0 missing keys.
-   - Requirement R3 states: *"All new user-facing copy must have 100% translation parity across all 8 supported languages (id, en, jv, su, ja, zh, es, ar)."*
-   - Therefore, any new copy introduced by Phase 2 (such as JITAI nudge titles, body copy, actions, and Fast-Action Safety Card crisis copy) must add matching keys to all 8 JSON files simultaneously. Missing even a single key in one file would breach baseline parity.
-
-2. **Premise 2 (RTL Deficiency)**:
-   - Observation in Section 1.3 demonstrates that `document.documentElement` never has `dir` or `lang` synchronized with `i18n.language`, and `src/styles/` lacks `[dir="rtl"]` handling.
-   - Therefore, when users select Arabic (`ar`), the browser renders Arabic text in an LTR container.
-   - To provide proper RTL support for Arabic, an effect in `src/App.tsx` (or `AppShell.tsx`) must set `document.documentElement.dir = i18n.language === 'ar' ? 'rtl' : 'ltr'` and update `document.documentElement.lang = i18n.language`.
-
-3. **Premise 3 (Testing & Quality Gating)**:
-   - Observations in Sections 1.4, 1.5, and 1.6 confirm that the test suite (200 tests), linter (oxlint), TypeScript compiler (`tsc -b`), and production PWA build are 100% green and free of existing failures.
-   - Because the baseline has 0 errors and 0 warnings, any failure in `npm test`, `npm run lint`, `npx tsc -b`, or `npm run build` during Phase 2 development will be immediately attributable to new changes.
-   - The test stderr warning observed in `SelfCompassionModal.test.tsx` and `SoundscapePlayer.test.tsx` (`NO_I18NEXT_INSTANCE`) highlights that new unit tests for components using `useTranslation()` should either import `src/i18n/config.ts` or wrap tests with an initialized i18n provider to keep stderr completely clean.
-
-4. **Premise 4 (Crisis Dialing & Safety Plan integration)**:
-   - Observation in Section 1.1 (`CRISIS_HOTLINES`) and `SOSButton.tsx:90` shows the hotline dialing pattern for 119 Ext 8:
-     `href="tel:119,8"` (or sanitized from `"119 ext 8"`).
-   - Observation in `SafetyPlan.tsx:129` shows the storage key `'rima-safety-plan'` storing `copingStrategies` and `socialContacts`.
-   - Therefore, Requirement R2's Fast-Action Safety Card can read `'rima-safety-plan'` directly from `localStorage` using `useLocalStorage` to instantly access primary coping steps and trusted contacts, combined with a direct `tel:119,8` button.
+1. **Premise 1 (Main Bundle Bloat):** Observation 1.3 shows that `dist/assets/index-DAiHOxz2.js` is 613.57 kB because it contains all 8 translation JSON catalogs (620 KiB raw) imported in `src/i18n/config.ts`.
+2. **Inference 1 (Targeted Chunk Partitioning):**
+   - By matching JSON files in `src/i18n/` using `/[\\/]src[\\/]i18n[\\/][^\\/]+\.json$/.test(id)` in `vite.config.ts -> rollupOptions.output.manualChunks(id)`, Rollup will extract all 8 translation catalogs into a dedicated `i18n-locales` chunk.
+   - By adding `node_modules/i18next-browser-languagedetector` to `i18n-vendor`, the entry bundle will be purged of all translation overhead.
+   - The main entry bundle (`index-[hash].js`) will shrink from 613.57 kB to ~35–50 kB raw (~10–15 kB gzip), achieving a >90% reduction in entry bundle payload.
+3. **Premise 2 (Workbox Offline Precaching Safety):**
+   - In `vite.config.ts`, Workbox uses `globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}']`.
+   - Any new chunk generated in `dist/assets/` (e.g. `i18n-locales-[hash].js`) is automatically matched by `**/*.js`.
+   - Therefore, chunk partitioning does NOT break offline PWA functionality; the service worker precache table will simply register 55 entries instead of 54.
+4. **Premise 3 (Trauma-Informed Suspense Fallback):**
+   - Observation 1.2 shows that `LoadingSpinner.tsx` employs a high-velocity 0.8s circular CSS spinner.
+   - According to SAMHSA Trauma-Informed Care principles and APA psychiatric app guidelines, high-velocity circular animations trigger autonomic arousal and cognitive frustration in overwhelmed users.
+   - A dedicated `PageFallbackLoader` component using a soft, low-contrast skeleton card structure with a gentle 3.5s breathing pulse (or completely static rendering under `[data-sensory='calm']` and `prefers-reduced-motion`) satisfies WCAG AA and reduces cognitive load during route transitions.
+5. **Premise 4 (100% 8-Language Translation Parity):**
+   - Observation 1.1 and test file `src/test/i18nParity.test.ts` strictly enforce that any newly introduced i18n keys must be present in ALL 8 language catalogs (`id`, `en`, `jv`, `su`, `ja`, `zh`, `es`, `ar`) with non-empty string values.
+   - Introducing `calmLoader` with keys `accessibleLabel`, `message`, and `hint` requires simultaneous updates across all 8 JSON files to avoid breaking `src/test/i18nParity.test.ts`.
+6. **Premise 5 (Skill Packaging Standards):**
+   - Observation 1.4 confirms that skill packages must adhere to the standard `.agents/skills/<skill-name>/SKILL.md` format with valid YAML frontmatter and deep domain runbooks.
 
 ---
 
 ## 3. Caveats
 
-1. **Automated Coverage Reporting**: Vitest code coverage (`--coverage`) is not configured in `package.json` or `vite.config.ts`, as `@vitest/coverage-v8` is not installed. Test verification relies on full suite execution (`vitest run --root .`).
-2. **Third-party CSS & Design Tokens**: The project strictly enforces zero Tailwind CSS and uses custom CSS variables (`src/styles/design-tokens.css`). Any new RTL styling or JITAI/Safety Card components must use vanilla CSS and existing CSS custom properties (e.g. `--color-primary`, `--bg-card`, `--spacing-md`).
-3. **No Dynamic Remote Translation**: All translations are bundled synchronously into `i18n-vendor` or main bundle via direct JSON imports in `src/i18n/config.ts`. No remote HTTP backend is used, guaranteeing 100% offline availability for all 8 languages as required by privacy-first/offline architecture.
+1. **Cross-Platform Path Normalization in Rollup `manualChunks`:**
+   - On Windows, module IDs use backslashes (`\`), whereas on Linux/macOS they use forward slashes (`/`).
+   - Using naive string matching like `id.includes('src/i18n/')` will fail on Windows build environments!
+   - **Resolution:** Always use the regular expression `/[\\/]src[\\/]i18n[\\/][^\\/]+\.json$/.test(id)` or normalize paths using `id.replace(/\\/g, '/')`.
+2. **Sensory Mode Attribute Selectors:**
+   - In `useTheme.ts`, the attribute applied to `document.documentElement` is `data-sensory="calm"`.
+   - Requirement R2 mentions `data-sensory="low-stimulation"`.
+   - **Resolution:** In `PageFallbackLoader` and CSS, support BOTH `[data-sensory='calm']` and `[data-sensory='low-stimulation']`, as well as checking the prop or the root attribute directly.
+3. **Rollup Circular Chunk Dependencies:**
+   - Partitioning `i18n-locales` separately from `i18n-vendor` is safe because `src/i18n/*.json` are pure JSON data objects with zero imports, preventing any circular chunk dependency cycles.
 
 ---
 
-## 4. Conclusion
+## 4. Conclusion & Actionable Blueprints
 
-1. **i18n Baseline**: The i18n system is robust, offline-first, and completely synchronized across 8 languages (`id`, `en`, `jv`, `su`, `ja`, `zh`, `es`, `ar`) with exactly 1,030 keys each. All Phase 2 strings must maintain this 8-way parity.
-2. **RTL Status**: Arabic translations exist in `ar.json`, but HTML document direction (`dir="rtl"`) is not dynamically applied. Adding dynamic `dir` and `lang` synchronization on `document.documentElement` in `App.tsx` is required for true Arabic RTL support.
-3. **Test, Lint, and Build Readiness**:
-   - `npm test`: 32 files, 200 tests passing (100%).
-   - `npm run lint`: 0 errors, 0 warnings across 110 files.
-   - `npx tsc -b`: 0 errors.
-   - `npm run build`: Production build passes in ~4.6s, generating complete PWA service worker assets.
-4. **Implementation Recommendations for Teams**:
-   - **For I18n**: Group new keys under cohesive namespaces (e.g., `jitai.*` and `safetyCard.*`), and ensure every single key is populated across all 8 JSON files.
-   - **For RTL**: In `src/App.tsx`, add an effect synchronizing `document.documentElement.dir = (i18n.language === 'ar' ? 'rtl' : 'ltr')` and `document.documentElement.lang = i18n.language`.
-   - **For Tests**: In new component tests that use `useTranslation`, include `import '../../i18n/config';` at the top of the test file to avoid `NO_I18NEXT_INSTANCE` warnings.
-   - **For Crisis Link**: Use `tel:119,8` for single-tap 119 Ext 8 hotline dialing.
+### 4.1 Blueprint for `vite.config.ts` Manual Chunks (Requirement R1)
+
+In `vite.config.ts`, update `build.rollupOptions.output.manualChunks` as follows:
+
+```typescript
+        manualChunks(id) {
+          // Partition all 8 i18n translation catalogs into a dedicated chunk
+          // Cross-platform compatible for Windows (\) and POSIX (/) path separators
+          if (/[\\/]src[\\/]i18n[\\/][^\\/]+\.json$/.test(id)) {
+            return 'i18n-locales';
+          }
+          if (
+            id.includes('node_modules/react') ||
+            id.includes('node_modules/react-dom') ||
+            id.includes('node_modules/react-router-dom')
+          ) {
+            return 'react-vendor';
+          }
+          if (id.includes('node_modules/recharts')) {
+            return 'recharts-vendor';
+          }
+          if (
+            id.includes('node_modules/i18next') ||
+            id.includes('node_modules/react-i18next') ||
+            id.includes('node_modules/i18next-browser-languagedetector')
+          ) {
+            return 'i18n-vendor';
+          }
+          if (id.includes('node_modules/lucide-react')) {
+            return 'icons-vendor';
+          }
+        }
+```
+
+**Expected Build Output Impact:**
+- `dist/assets/i18n-locales-[hash].js`: ~600 kB (gzip ~150 kB).
+- `dist/assets/index-[hash].js`: drops from **613.57 kB** down to **< 50 kB**.
+- PWA precache entries: 55 entries precached offline. Zero offline regressions.
+
+---
+
+### 4.2 Verbatim 8-Language Translation Keys for Calm Loader (Requirement R2 & R4)
+
+The following `calmLoader` namespace must be added to all 8 translation files in `src/i18n/*.json`:
+
+#### 1. `src/i18n/id.json` (Indonesian)
+```json
+  "calmLoader": {
+    "accessibleLabel": "Menyiapkan ruang tenang Anda...",
+    "message": "Memuat Ruang Aman...",
+    "hint": "Tarik napas perlahan dan rileks sejenak."
+  }
+```
+
+#### 2. `src/i18n/en.json` (English)
+```json
+  "calmLoader": {
+    "accessibleLabel": "Preparing your calm space...",
+    "message": "Loading Safe Space...",
+    "hint": "Take a slow breath and relax for a moment."
+  }
+```
+
+#### 3. `src/i18n/jv.json` (Javanese)
+```json
+  "calmLoader": {
+    "accessibleLabel": "Nyawisake papan ayem panjenengan...",
+    "message": "Ngamot Papan Aman...",
+    "hint": "Tarik napas alon-alon lan sumeleh sedhela."
+  }
+```
+
+#### 4. `src/i18n/su.json` (Sundanese)
+```json
+  "calmLoader": {
+    "accessibleLabel": "Nyiapkeun rohangan tengtrem anjeun...",
+    "message": "Ngamuat Rohangan Aman...",
+    "hint": "Tarik napas lalaunan sareng santai sakedap."
+  }
+```
+
+#### 5. `src/i18n/ja.json` (Japanese)
+```json
+  "calmLoader": {
+    "accessibleLabel": "穏やかなスペースを準備しています...",
+    "message": "安全なスペースを読み込み中...",
+    "hint": "ゆっくりと深呼吸をして、一息つきましょう。"
+  }
+```
+
+#### 6. `src/i18n/zh.json` (Chinese Simplified)
+```json
+  "calmLoader": {
+    "accessibleLabel": "正在为您准备平静空间...",
+    "message": "正在加载安全空间...",
+    "hint": "缓慢深呼吸，稍作放松。"
+  }
+```
+
+#### 7. `src/i18n/es.json` (Spanish)
+```json
+  "calmLoader": {
+    "accessibleLabel": "Preparando tu espacio de calma...",
+    "message": "Cargando espacio seguro...",
+    "hint": "Respira hondo y relájate un momento."
+  }
+```
+
+#### 8. `src/i18n/ar.json` (Arabic — RTL)
+```json
+  "calmLoader": {
+    "accessibleLabel": "جاري إعداد مساحتك الهادئة...",
+    "message": "جاري تحميل المساحة الآمنة...",
+    "hint": "تنفس ببطء واسترخِ للحظة."
+  }
+```
+
+---
+
+### 4.3 Architecture & Component Specification for `PageFallbackLoader.tsx` (Requirement R2)
+
+- **Target File:** `src/components/common/PageFallbackLoader.tsx`
+- **Replaces:** `LoadingSpinner` in `src/App.tsx` `<Suspense fallback={...}>`
+- **Clinical & Accessibility Design Principles:**
+  - **WCAG 2.2 AA:** `role="status"`, `aria-live="polite"`, `aria-label={t('calmLoader.accessibleLabel')}`.
+  - **Sensory Inclusivity:** Reads `document.documentElement.getAttribute('data-sensory')` (both `'calm'` and `'low-stimulation'`) and honors `@media (prefers-reduced-motion: reduce)`.
+  - **Low-Stimulation Skeleton Structure:**
+    - Soft top pill skeleton (header placeholder).
+    - 2 card placeholder skeletons with subtle border radius (`12px`) and gentle translucent background (`var(--bg-card)`).
+    - Gentle breathing wave: 3.5s rhythmic opacity pulse (`@keyframes rimaCalmBreath { 0%, 100% { opacity: 0.45; } 50% { opacity: 0.85; } }`).
+    - Under low-stimulation mode or reduced motion: animation stops completely (`animation: none !important`), rendering in static 0.6 opacity.
+  - **Zero Tailwind:** Strictly vanilla CSS with design tokens (`var(--bg-primary)`, `var(--bg-card)`, `var(--text-secondary)`, `var(--border-subtle)`).
+
+**Recommended Implementation Code:**
+```tsx
+import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+
+interface PageFallbackLoaderProps {
+  message?: string;
+  hint?: string;
+  'data-sensory'?: 'low-stimulation' | 'calm';
+}
+
+export const PageFallbackLoader: React.FC<PageFallbackLoaderProps> = ({
+  message,
+  hint,
+  'data-sensory': propSensory,
+}) => {
+  const { t } = useTranslation();
+  const [isLowStimulation, setIsLowStimulation] = useState(false);
+
+  useEffect(() => {
+    const checkSensory = () => {
+      const docSensory = document.documentElement.getAttribute('data-sensory');
+      const prefersReduced =
+        typeof window !== 'undefined' &&
+        window.matchMedia &&
+        window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      setIsLowStimulation(
+        propSensory === 'low-stimulation' ||
+        propSensory === 'calm' ||
+        docSensory === 'calm' ||
+        docSensory === 'low-stimulation' ||
+        prefersReduced
+      );
+    };
+
+    checkSensory();
+
+    const observer = new MutationObserver(checkSensory);
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['data-sensory'],
+    });
+
+    return () => observer.disconnect();
+  }, [propSensory]);
+
+  const activeSensoryMode = propSensory || (isLowStimulation ? 'low-stimulation' : undefined);
+  const displayMessage = message || t('calmLoader.message', t('common.loadingSafeSpace', 'Memuat Ruang Aman...'));
+  const displayHint = hint || t('calmLoader.hint', 'Tarik napas perlahan dan rileks sejenak.');
+  const accessibleLabel = t('calmLoader.accessibleLabel', 'Menyiapkan ruang tenang Anda...');
+
+  return (
+    <div
+      role="status"
+      aria-live="polite"
+      aria-label={accessibleLabel}
+      data-sensory={activeSensoryMode}
+      data-testid="page-fallback-loader"
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        minHeight: '60vh',
+        width: '100%',
+        maxWidth: '720px',
+        margin: '0 auto',
+        padding: '32px 20px',
+        boxSizing: 'border-box',
+        gap: '24px',
+      }}
+    >
+      {/* Calm Skeleton Header */}
+      <div
+        className="rima-calm-skeleton"
+        style={{
+          width: '60%',
+          maxWidth: '300px',
+          height: '24px',
+          borderRadius: '12px',
+          backgroundColor: 'var(--border-subtle, hsla(215, 20%, 65%, 0.18))',
+          animation: isLowStimulation ? 'none' : 'rimaCalmBreath 3.5s ease-in-out infinite',
+        }}
+      />
+
+      {/* Primary Card Skeleton */}
+      <div
+        className="rima-calm-skeleton-card"
+        style={{
+          width: '100%',
+          minHeight: '140px',
+          borderRadius: '16px',
+          backgroundColor: 'var(--bg-card, hsla(215, 12%, 18%, 0.6))',
+          border: '1px solid var(--border-subtle, hsla(215, 20%, 65%, 0.15))',
+          padding: '24px',
+          boxSizing: 'border-box',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '12px',
+          animation: isLowStimulation ? 'none' : 'rimaCalmBreath 3.5s ease-in-out infinite 0.3s',
+        }}
+      >
+        <div
+          style={{
+            width: '40%',
+            height: '16px',
+            borderRadius: '8px',
+            backgroundColor: 'var(--border-subtle, hsla(215, 20%, 65%, 0.2))',
+          }}
+        />
+        <div
+          style={{
+            width: '90%',
+            height: '12px',
+            borderRadius: '6px',
+            backgroundColor: 'var(--border-subtle, hsla(215, 20%, 65%, 0.12))',
+          }}
+        />
+        <div
+          style={{
+            width: '75%',
+            height: '12px',
+            borderRadius: '6px',
+            backgroundColor: 'var(--border-subtle, hsla(215, 20%, 65%, 0.12))',
+          }}
+        />
+      </div>
+
+      {/* Gentle Calming Copy */}
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          textAlign: 'center',
+          gap: '6px',
+        }}
+      >
+        <span
+          style={{
+            fontSize: '0.95rem',
+            color: 'var(--text-primary, #e2e8f0)',
+            fontWeight: 600,
+            letterSpacing: '0.01em',
+          }}
+        >
+          {displayMessage}
+        </span>
+        <span
+          style={{
+            fontSize: '0.85rem',
+            color: 'var(--text-secondary, #94a3b8)',
+            fontWeight: 400,
+          }}
+        >
+          {displayHint}
+        </span>
+      </div>
+
+      <style>{`
+        @keyframes rimaCalmBreath {
+          0%, 100% {
+            opacity: 0.45;
+            transform: scale(0.995);
+          }
+          50% {
+            opacity: 0.85;
+            transform: scale(1);
+          }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .rima-calm-skeleton,
+          .rima-calm-skeleton-card {
+            animation: none !important;
+            opacity: 0.65 !important;
+          }
+        }
+        [data-sensory='calm'] .rima-calm-skeleton,
+        [data-sensory='calm'] .rima-calm-skeleton-card,
+        [data-sensory='low-stimulation'] .rima-calm-skeleton,
+        [data-sensory='low-stimulation'] .rima-calm-skeleton-card {
+          animation: none !important;
+          opacity: 0.65 !important;
+        }
+      `}</style>
+    </div>
+  );
+};
+```
+
+---
+
+### 4.4 Blueprint for Skill 1: `rima-pwa-perf-and-code-splitting/SKILL.md` (Requirement R3)
+
+- **Target Path:** `.agents/skills/rima-pwa-perf-and-code-splitting/SKILL.md`
+- **Frontmatter & Specification:**
+
+```markdown
+---
+name: rima-pwa-perf-and-code-splitting
+description: >-
+  Architectural runbook and engineering guidelines for PWA performance optimization, Rollup manual
+  chunk partitioning (i18n translation catalogs, charting, UI icons), Workbox cache tiers, and
+  low-end mobile web performance in RIMA. Use when configuring vite.config.ts, tuning bundle budgets,
+  diagnosing chunk bloat, or auditing offline precaching.
+---
+
+# RIMA PWA Performance Optimization & Rollup Code Splitting Runbook
+
+## 1. Clinical Context & The Cognitive Patience Paradox
+In digital mental health therapeutics, application latency and visual instability directly impair therapeutic outcomes. Users accessing RIMA during panic attacks, severe depression, or acute sensory overload have diminished working memory and heightened frustration thresholds (*Baumel et al., 2019*).
+
+### Performance Budgets
+- **Main App Entry Bundle (`index-[hash].js`):** Target < 50 kB uncompressed (< 15 kB gzip).
+- **Vendor Chunks:** Isolated per dependency domain (`react-vendor`, `recharts-vendor`, `icons-vendor`, `i18n-vendor`).
+- **Translation Catalogs (`i18n-locales`):** Partitioned into an independent cacheable chunk (~600 kB raw, ~150 kB gzip).
+- **First Contentful Paint (FCP):** < 1.2s on mid-tier mobile (4x CPU throttling, 3G connection).
+- **Cumulative Layout Shift (CLS):** 0.000 during route transitions.
+
+---
+
+## 2. Intelligent Rollup Chunk Partitioning Architecture
+
+### Root Cause of Chunk Bloat
+Static imports of JSON translation catalogs (`src/i18n/*.json`) inside `config.ts` cause bundlers to concatenate 8 complete dictionaries into the application entry chunk.
+
+### Partitioning Strategy in `vite.config.ts`
+```typescript
+rollupOptions: {
+  output: {
+    manualChunks(id) {
+      // 1. All 8 translation catalogs (cross-platform path check)
+      if (/[\\/]src[\\/]i18n[\\/][^\\/]+\.json$/.test(id)) {
+        return 'i18n-locales';
+      }
+      // 2. React Core
+      if (
+        id.includes('node_modules/react') ||
+        id.includes('node_modules/react-dom') ||
+        id.includes('node_modules/react-router-dom')
+      ) {
+        return 'react-vendor';
+      }
+      // 3. Heavy Charting (Only loaded on analytics/mood trends)
+      if (id.includes('node_modules/recharts')) {
+        return 'recharts-vendor';
+      }
+      // 4. i18n Libraries
+      if (
+        id.includes('node_modules/i18next') ||
+        id.includes('node_modules/react-i18next') ||
+        id.includes('node_modules/i18next-browser-languagedetector')
+      ) {
+        return 'i18n-vendor';
+      }
+      // 5. Feather / Lucide Icons
+      if (id.includes('node_modules/lucide-react')) {
+        return 'icons-vendor';
+      }
+    }
+  }
+}
+```
+
+---
+
+## 3. Workbox Cache Tiers & Offline-First Integrity
+
+RIMA operates on a 3-tier caching model:
+
+```
+┌────────────────────────────────────────────────────────┐
+│  Tier 1: Precache Manifest (Zero Network Latency)       │
+│  - All manual chunks (react-vendor, i18n-locales, app) │
+│  - CSS tokens, icons, web manifest                     │
+│  - Strategy: Workbox Precache (Cache-First Offline)    │
+├────────────────────────────────────────────────────────┤
+│  Tier 2: Runtime Caching (External Static Assets)      │
+│  - Google Fonts & GStatic CDN (1-year TTL, max 10 ent) │
+│  - Strategy: CacheFirst with cacheableResponse [0, 200]│
+├────────────────────────────────────────────────────────┤
+│  Tier 3: Network-Isolated Data (Zero Telemetry)        │
+│  - Personal data NEVER leaves device                   │
+│  - Zero background sync for mood/journal logs          │
+└────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 4. Low-End Mobile Optimization Runbook
+
+1. **CPU Main-Thread Budget:** Never run CSS animations with unbounded repaints. Use `transform` and `opacity` exclusively.
+2. **Memory Leak Mitigation:**
+   - Tear down `AudioContext` and oscillators on unmount.
+   - Clean up `MutationObserver` instances in lifecycle hooks.
+3. **DOM Virtualization:** Avoid rendering >50 unpaged DOM elements in mood and journal history lists.
+
+---
+
+## 5. Verification Commands
+- `npm run build`: Verify `dist/assets/i18n-locales-*.js` exists and `index-*.js` is < 60 kB.
+- `npx vitest run`: Verify all unit and integration tests pass with 0 regressions.
+```
+
+---
+
+### 4.5 Blueprint for Skill 2: `rima-future-feature-architecture/SKILL.md` (Requirement R3)
+
+- **Target Path:** `.agents/skills/rima-future-feature-architecture/SKILL.md`
+- **Frontmatter & Specification:**
+
+```markdown
+---
+name: rima-future-feature-architecture
+description: >-
+  Comprehensive engineering blueprint and architectural framework enforcing RIMA's 6 core pillars
+  (offline-first, zero-network telemetry, pure CSS tokens, 100% 8-language parity, defensive storage
+  resilience, and 4-tier quality gates). Use when designing, building, testing, or auditing any feature.
+---
+
+# RIMA Future Feature Architecture Blueprint
+
+## 1. The 6 Non-Negotiable Architectural Pillars
+
+### Pillar 1: Offline-First Reliability
+- Every core therapeutic feature (Mood Tracker, CBT-I Sleep Diary, Safety Plan, TIPP Crisis Hub, Breathing Somatics, JITAI Nudges) MUST function with 100% feature completeness without an internet connection.
+- Network is treated as an optional enhancement (anonymous peer forum only).
+
+### Pillar 2: Zero-Network Telemetry & Strict Privacy
+- **Zero Third-Party SDKs:** Strictly no Google Analytics, Firebase Analytics, Sentry, Mixpanel, or telemetry beacons.
+- **Client-Side Hashing & Encryption:** Journals and sensitive notes are secured on-device using Web Crypto API (`AES-GCM-256` and `PBKDF2`).
+- **Emergency Telephony:** Emergency crisis dials use explicit user-initiated standard telephony protocols (`tel:119,8`), avoiding any server intermediary.
+
+### Pillar 3: Pure Vanilla CSS Design Tokens (Zero Tailwind)
+- **STRICTLY ZERO TAILWIND CSS.** Never import or write utility classes (`flex`, `p-4`, `text-center`).
+- All styles must use CSS custom properties (`var(--color-primary)`, `var(--bg-card)`, etc.) from `src/styles/design-tokens.css`.
+- Interactive elements must satisfy WCAG 2.2 AA touch targets (`min-height: 44px`, `min-width: 44px`).
+
+### Pillar 4: 100% 8-Language Translation Parity
+- Supported languages: `id` (Indonesian - base), `en` (English), `jv` (Javanese), `su` (Sundanese), `ja` (Japanese), `zh` (Chinese), `es` (Spanish), `ar` (Arabic - RTL).
+- Every visible string must use `t('namespace.key', 'fallback')`.
+- All 8 files in `src/i18n/*.json` must have identical leaf keys. 0 missing keys, 0 empty strings.
+- Arabic (`ar`) must automatically render in RTL via `document.documentElement.dir = 'rtl'`.
+
+### Pillar 5: Defensive Storage Resilience
+- All local storage operations must handle corrupted payloads, quota exhaustion, and schema migrations gracefully.
+- State accessors must use `try / catch` with default fallback states:
+  ```typescript
+  try {
+    const raw = localStorage.getItem(KEY);
+    return raw ? JSON.parse(raw) : DEFAULT_STATE;
+  } catch (err) {
+    console.warn(`[Storage] Corrupted state at ${KEY}, resetting to default:`, err);
+    return DEFAULT_STATE;
+  }
+  ```
+
+### Pillar 6: 4-Tier Automated Quality Gates
+Every code change must satisfy all 4 gates before merging:
+1. `npm run lint` (`oxlint`): 0 warnings, 0 errors.
+2. `npx tsc -b`: 0 TypeScript compiler errors.
+3. `npx vitest run`: 100% test pass rate across all suites.
+4. `npm run build`: Production bundle builds cleanly, generating PWA service worker.
+
+---
+
+## 2. Feature Implementation Runbook
+
+### Step 1: Privacy & Threat Assessment
+- Define localStorage key with `rima-` namespace prefix.
+- Verify zero external network calls.
+
+### Step 2: Trauma-Informed UI Design
+- Map colors to semantic tokens (`--color-primary`, `--color-secondary`, `--bg-card`).
+- Support `[data-sensory='calm']` and `[data-sensory='low-stimulation']`.
+
+### Step 3: Internationalization Matrix
+- Draft translations across all 8 languages simultaneously.
+- Run `npx vitest run src/test/i18nParity.test.ts` to verify parity.
+
+### Step 4: Component & Service Implementation
+- Keep business logic in `src/services/` and UI in `src/components/`.
+- Use TypeScript strict mode.
+
+### Step 5: Test Coverage
+- Unit test services in `src/services/__tests__/`.
+- Component test with React Testing Library and accessible ARIA queries in `src/components/__tests__/`.
+
+### Step 6: 4-Tier Gate Check
+- Run all 4 validation commands.
+```
+
+---
+
+### 4.6 Recommended Implementation Steps for Milestones 3 & 4
+
+| Step | Milestone | Target File(s) | Action |
+|:---|:---|:---|:---|
+| **1** | M3 | `src/i18n/*.json` (all 8 files) | Add `calmLoader` namespace (`accessibleLabel`, `message`, `hint`) verbatim. |
+| **2** | M3 | `src/components/common/PageFallbackLoader.tsx` | Create component with WCAG AA live region, calm skeleton, and sensory mode support. |
+| **3** | M3 | `src/App.tsx` | Replace `LoadingSpinner` with `PageFallbackLoader` in `<Suspense fallback={...}>`. |
+| **4** | M3 | `vite.config.ts` | Update `manualChunks` to partition `i18n-locales` and full `i18n-vendor`. |
+| **5** | M3 | `src/components/__tests__/PageFallbackLoader.test.tsx` | Add unit & accessibility tests for `PageFallbackLoader`. |
+| **6** | M4 | `.agents/skills/rima-pwa-perf-and-code-splitting/SKILL.md` | Create skill runbook using Blueprint 4.4. |
+| **7** | M4 | `.agents/skills/rima-future-feature-architecture/SKILL.md` | Create skill blueprint using Blueprint 4.5. |
+| **8** | M4 | Quality Gates | Run `npm run lint`, `npx tsc -b`, `npx vitest run`, `npm run build`. |
 
 ---
 
 ## 5. Verification Method
 
-To independently verify these findings, run the following commands from the project root (`C:\Users\Hype\Kuliah\Proyekan\mental monitoring`):
+To independently verify the baseline and subsequent implementations, run the following exact commands in project root:
 
-1. **Verify i18n 8-Language Parity (1,030 keys each, 0 missing)**:
-   ```powershell
-   node -e "const fs=require('fs'),path=require('path');const l=['id','en','jv','su','ja','zh','es','ar'],d='src/i18n',f=(o,p='')=>{let r=[];for(let k in o){let q=p?p+'.'+k:k;if(o[k]&&typeof o[k]==='object'&&!Array.isArray(o[k]))r=r.concat(f(o[k],q));else r.push(q);}return r;};let ks=l.map(x=>new Set(f(JSON.parse(fs.readFileSync(path.join(d,x+'.json'))))));let all=new Set(ks.flatMap(x=>[...x]));console.log('Total keys:',all.size);l.forEach((x,i)=>console.log(x,'keys:',ks[i].size,'missing:',[...all].filter(k=>!ks[i].has(k)).length));"
+1. **Verify i18n Translation Parity across 8 Languages:**
+   ```bash
+   npx vitest run src/test/i18nParity.test.ts
    ```
-   *Expected output*: Total keys: 1030, each language has 1030 keys and 0 missing.
+   *Expected:* All 6 tests pass, 0 missing keys, 0 extra keys, 0 empty strings.
 
-2. **Verify Full Vitest Suite (200 tests passing)**:
-   ```powershell
-   npm test
-   ```
-   *Expected output*: `32 passed (32)`, `200 passed (200)`, Exit Code 0.
-
-3. **Verify Oxlint (0 errors, 0 warnings)**:
-   ```powershell
+2. **Verify Static Code Quality (Oxlint):**
+   ```bash
    npm run lint
    ```
-   *Expected output*: `Found 0 warnings and 0 errors.` Exit Code 0.
+   *Expected:* 0 warnings, 0 errors.
 
-4. **Verify TypeScript Compilation**:
-   ```powershell
+3. **Verify TypeScript Strict Compilation:**
+   ```bash
    npx tsc -b
    ```
-   *Expected output*: Clean exit with 0 errors and Exit Code 0.
+   *Expected:* Exits with code 0.
 
-5. **Verify Production Build & PWA Generation**:
-   ```powershell
+4. **Verify Full Vitest Suite (Unit, Component, Adversarial, E2E):**
+   ```bash
+   npx vitest run
+   ```
+   *Expected:* 40/40 test files pass, 396/396 tests pass.
+
+5. **Verify PWA Build and Chunk Partitioning:**
+   ```bash
    npm run build
    ```
-   *Expected output*: Transforms modules, outputs chunks, generates `dist/sw.js` and `dist/workbox-*.js`, Exit Code 0.
+   *Expected:*
+   - `dist/assets/i18n-locales-*.js` generated (~600 kB).
+   - `dist/assets/index-*.js` drops to < 60 kB.
+   - PWA service worker precaches 55 assets cleanly (`dist/sw.js` generated).
 
-6. **Verify RTL Absence in CSS / App.tsx**:
-   ```powershell
-   git grep -i 'dir="rtl"'
-   git grep 'document.documentElement.dir'
-   ```
-   *Expected output*: 0 results found.
+**Invalidation Conditions:**
+- Any newly added key is missing from any of the 8 language JSON files.
+- `PageFallbackLoader` uses Tailwind CSS classes.
+- Rollup `manualChunks` uses unescaped backslash or fails to match on Windows.
+- Service worker precaching fails to include partitioned chunks.

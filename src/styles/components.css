@@ -549,3 +549,218 @@ button.btn-icon.btn-icon-danger:not(.btn):hover:not(:disabled) {
   }
 }
 
+/* ==========================================================================
+   PageFallbackLoader — Trauma-Informed Calm Suspense Fallback (WCAG 2.2 AA)
+   Designed with zero high-speed spinning, coherent breathing pulse (0.25 Hz),
+   and zero motion under [data-sensory='calm'] / [data-sensory='low-stimulation'].
+   ========================================================================== */
+
+/* Coherent Breathing Keyframes (4s cycle: parasympathetic rhythm) */
+@keyframes rimaCalmRespiration {
+  0%, 100% {
+    opacity: 0.45;
+  }
+  50% {
+    opacity: 0.85;
+  }
+}
+
+@keyframes rimaDotBreathe {
+  0%, 100% {
+    transform: scale(0.9);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 1;
+  }
+}
+
+/* Root Loader Container */
+.page-fallback-loader {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: var(--spacing-lg) var(--spacing-md);
+  box-sizing: border-box;
+}
+
+/* Calm Status Area & Pill */
+.page-fallback-status-area {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--spacing-xs);
+}
+
+.page-fallback-status-pill {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-xs) var(--spacing-md);
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-subtle);
+}
+
+.page-fallback-status-icon {
+  color: var(--color-primary);
+  flex-shrink: 0;
+}
+
+.page-fallback-status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-primary);
+  animation: rimaDotBreathe 4s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+.page-fallback-status-text {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-secondary);
+}
+
+.page-fallback-status-hint {
+  font-size: var(--font-size-xs);
+  color: var(--text-secondary);
+  margin: 0;
+  padding-left: var(--spacing-xs);
+  line-height: 1.4;
+}
+
+/* Header Skeleton */
+.page-fallback-header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  width: 100%;
+}
+
+.page-fallback-skeleton-title {
+  height: 32px;
+  width: 48%;
+  max-width: 280px;
+  min-width: 180px;
+  border-radius: var(--radius-md);
+}
+
+.page-fallback-skeleton-subtitle {
+  height: 16px;
+  width: 72%;
+  max-width: 420px;
+  border-radius: var(--radius-sm);
+}
+
+/* Base Skeleton Pulse */
+.page-fallback-skeleton {
+  background-color: var(--bg-secondary);
+  animation: rimaCalmRespiration 4s ease-in-out infinite;
+}
+
+/* Card Skeleton Containers */
+.page-fallback-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  padding: var(--spacing-lg);
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-subtle);
+}
+
+.page-fallback-hero-card {
+  min-height: 140px;
+}
+
+.page-fallback-card-header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.page-fallback-skeleton-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+}
+
+.page-fallback-card-header-lines {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  flex: 1;
+}
+
+.page-fallback-skeleton-line-lg {
+  height: 20px;
+  width: 60%;
+  border-radius: var(--radius-sm);
+}
+
+.page-fallback-skeleton-line-md {
+  height: 18px;
+  width: 40%;
+  border-radius: var(--radius-sm);
+}
+
+.page-fallback-skeleton-line-sm {
+  height: 14px;
+  width: 30%;
+  border-radius: var(--radius-sm);
+}
+
+.page-fallback-skeleton-line-full {
+  height: 14px;
+  width: 100%;
+  border-radius: var(--radius-sm);
+}
+
+.page-fallback-skeleton-block {
+  height: 56px;
+  width: 100%;
+  border-radius: var(--radius-md);
+}
+
+/* Grid Layout for Multiple Cards */
+.page-fallback-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: var(--spacing-md);
+  width: 100%;
+}
+
+/* ==========================================================================
+   Zero-Motion & Low-Stimulation Sensory Overrides (WCAG 2.2 / Sensory Calm)
+   ========================================================================== */
+[data-sensory='calm'] .page-fallback-skeleton,
+[data-sensory='low-stimulation'] .page-fallback-skeleton,
+[data-sensory='calm'] .page-fallback-status-dot,
+[data-sensory='low-stimulation'] .page-fallback-status-dot,
+.page-fallback-loader[data-sensory='calm'] .page-fallback-skeleton,
+.page-fallback-loader[data-sensory='low-stimulation'] .page-fallback-skeleton,
+.page-fallback-loader[data-sensory='calm'] .page-fallback-status-dot,
+.page-fallback-loader[data-sensory='low-stimulation'] .page-fallback-status-dot {
+  animation: none !important;
+  opacity: 0.65 !important;
+  transform: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-fallback-skeleton,
+  .page-fallback-status-dot {
+    animation: none !important;
+    opacity: 0.65 !important;
+    transform: none !important;
+  }
+}
+

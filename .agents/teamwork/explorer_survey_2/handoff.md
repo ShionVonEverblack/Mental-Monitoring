@@ -1,277 +1,559 @@
-# Explorer 2 Handoff Report: Crisis Safety UI & Emergency Touchpoints Survey
+# Hand-off Report: Phase 3 UI Routing, React Suspense & Calm Design Tokens Exploration
+
+**Agent**: Explorer 2 (UI, React Suspense & Calm Design Tokens Specialist)  
+**Working Directory**: `C:\Users\Hype\Kuliah\Proyekan\mental monitoring\.agents\teamwork\explorer_survey_2\`  
+**Date & Timestamp**: 2026-10-10T10:48:00Z  
+**Target Milestone**: Phase 3 Milestone 2 (UI & Component Engineering)  
+
+---
 
 ## 1. Observation
 
-### 1.1 Existing Emergency & Crisis Interfaces
-- **Global Floating Action Button (`SOSButton.tsx`)**:
-  - File: `src/components/safety/SOSButton.tsx` (lines 16–30, 66–72, 74–105)
-  - Location: Included globally in `src/components/layout/AppShell.tsx` (line 33).
-  - Floating styling: Fixed bottom-right action button (`width: 56px; height: 56px; border-radius: 50%; z-index: 60; bottom: 2rem; right: 2rem;` on desktop; `bottom: 5rem; right: 1rem;` on mobile `max-width: 768px`).
-  - Clicking launches a standard modal (`<Modal isOpen={isOpen} onClose={() => setIsOpen(false)} title={t('sos.title', 'Butuh Bantuan?')} size="md">`) iterating over `CRISIS_HOTLINES` from `src/utils/constants.ts`:
-    1. `healing119` ("Healing 119 / SEJIWA (Kemenkes)", phone: `'119 ext 8'`)
-    2. `emergency112` ("Panggilan Darurat Bebas Pulsa", phone: `'112'`)
-    3. `ambulans119` ("Ambulans / Gawat Darurat Medis", phone: `'119'`)
-    4. `pulih` ("Yayasan Pulih", phone: `'021-788-42580'`)
-- **Crisis Interceptor (`CrisisInterceptor.tsx`)**:
-  - File: `src/components/safety/CrisisInterceptor.tsx` (lines 14–23, 32–163)
-  - Trauma-informed non-alarmist modal (SAMHSA 6 Principles): Emphasizes calm reassurance (`Heart` icon in `var(--color-secondary)`), title `"Kamu tidak sendirian"`, call links for top 3 hotlines, shortcut to open C-SSRS screener (`CssrsWizardModal`), and clear dismissal button (`t('crisis.interceptorDismiss', 'Saya baik-baik saja, terima kasih')`).
-- **Columbia-Suicide Severity Rating Scale Wizard (`CssrsWizardModal.tsx`)**:
-  - File: `src/components/safety/CssrsWizardModal.tsx` (lines 442–504)
-  - Evaluates suicidal ideation/behavior risk (High, Moderate, Low, None).
-  - On High or Moderate risk, renders direct hotline action:
-    ```tsx
-    href="tel:119,8"
-    // {t('cssrs.btnCall119', 'Hubungi Healing 119')} (119 ext 8)
-    ```
-    and secondary emergency button `href="tel:112"`, plus button to `/safety-plan`.
-- **Escalation Banner (`EscalationBanner.tsx`)**:
-  - File: `src/components/common/EscalationBanner.tsx` (lines 12–39) & `src/services/escalationService.ts` (lines 29–143)
-  - Rendered at top of Home dashboard (`src/pages/Home.tsx` line 162).
-  - When escalation level = 3 (crisis/severe), displays:
-    - Route `/professional-help` (`escalation.actionSOS`, icon `🚨`)
-    - Route `/safety-plan` (`escalation.actionSafetyPlan`, icon `🛡️`)
-  - When escalation level = 2 (distress/5-day downward trend), displays:
-    - Route `/tipp` (`escalation.actionTipp`, icon `🧊`)
-    - Route `/forum` (`escalation.actionForum`, icon `👥`)
-    - Route `/safety-plan` (`escalation.actionSafetyPlan`, icon `🛡️`)
-- **Personal Safety Plan (`SafetyPlan.tsx`)**:
-  - File: `src/components/safety/SafetyPlan.tsx` (lines 25–113, 127–273)
-  - Route: `/safety-plan`.
-  - Implements 6 Stanley-Brown safety planning sections:
-    1. Warning Signs (`warningSigns`)
-    2. Internal Coping Strategies (`copingStrategies`)
-    3. Social Contacts for Distraction (`socialContacts`)
-    4. Professionals & Crisis Helplines (`professionals`)
-    5. Making Environment Safe (`safeEnvironment`)
-    6. Reasons to Live (`reasonsToLive`)
-  - Backed by `useLocalStorage<PlanSection[]>('rima-safety-plan', INITIAL_PLAN)`.
-  - Has Print / PDF export button (`window.print()`).
-
----
-
-### 1.2 Trusted Personal Contacts Storage & Schemas
-- **Type Definitions (`src/types/index.ts`)**:
-  - Lines 89–104:
+### 1.1 Current Route Definitions & React Suspense Hierarchy
+- **File**: `src/App.tsx`
+  - Lines 1: `import React, { useEffect, lazy, Suspense } from 'react';`
+  - Line 8: `import { LoadingSpinner } from './components/common/LoadingSpinner';`
+  - Lines 12–27: All 16 top-level application pages are lazy-loaded via dynamic `import(...)`:
     ```typescript
-    export interface ContactInfo {
-      name: string;
-      phone?: string;
-      relationship?: string;
-    }
-
-    export interface SafetyPlan {
-      id: string;
-      warningSigns: string[];
-      copingStrategies: string[];
-      peopleToContact: ContactInfo[];
-      professionalContacts: ContactInfo[];
-      safeEnvironment: string[];
-      reasonsToLive: string[];
-      updatedAt: string;
-    }
+    const Home = lazy(() => import('./pages/Home').then(module => ({ default: module.Home })));
+    const MoodTracker = lazy(() => import('./pages/MoodTracker').then(module => ({ default: module.MoodTracker })));
+    const Journal = lazy(() => import('./pages/Journal').then(module => ({ default: module.Journal })));
+    const Forum = lazy(() => import('./pages/Forum').then(module => ({ default: module.Forum })));
+    const Profile = lazy(() => import('./pages/Profile').then(module => ({ default: module.Profile })));
+    const SafetyPlan = lazy(() => import('./components/safety/SafetyPlan').then(module => ({ default: module.SafetyPlan })));
+    const Breathe = lazy(() => import('./pages/Breathe').then(module => ({ default: module.Breathe })));
+    const Education = lazy(() => import('./pages/Education').then(module => ({ default: module.Education })));
+    const ProfessionalHelp = lazy(() => import('./pages/ProfessionalHelp').then(module => ({ default: module.ProfessionalHelp })));
+    const Analytics = lazy(() => import('./pages/Analytics').then(module => ({ default: module.Analytics })));
+    const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy').then(module => ({ default: module.PrivacyPolicy })));
+    const Grounding = lazy(() => import('./pages/Grounding').then(module => ({ default: module.Grounding })));
+    const Assessment = lazy(() => import('./pages/Assessment').then(module => ({ default: module.Assessment })));
+    const TippCrisisHub = lazy(() => import('./pages/TippCrisisHub').then(module => ({ default: module.TippCrisisHub })));
+    const BehavioralActivation = lazy(() => import('./pages/BehavioralActivation').then(module => ({ default: module.BehavioralActivation })));
+    const SleepTracker = lazy(() => import('./pages/SleepTracker').then(module => ({ default: module.SleepTracker })));
     ```
-- **Backup & Validation (`src/utils/exportImport.ts`)**:
-  - Lines 549–559: `validateContactInfo(item)` extracts `name` (max 128 chars), `phone` (max 32 chars), and `relationship` (max 64 chars).
-  - Lines 576–582: `sanitizeContacts()` validates arrays of `ContactInfo`.
-  - Lines 584–594: `validateSafetyPlan()` expects `peopleToContact: ContactInfo[]` and `professionalContacts: ContactInfo[]`.
-- **Existing `SafetyPlan.tsx` Storage Discrepancy**:
-  - In `SafetyPlan.tsx` (lines 14–23, 129), `plan` is stored under localStorage key `'rima-safety-plan'` as an array of `PlanSection`:
-    ```typescript
-    interface PlanSection {
-      id: string; // 'warningSigns' | 'copingStrategies' | 'socialContacts' | 'professionals' | ...
-      titleKey: string;
-      defaultTitle: string;
-      icon: string;
-      color: string;
-      bg: string;
-      suggestions: SuggestionItem[];
-      items: string[];
-    }
-    ```
-  - Under `id: 'socialContacts'`, the user's entries are currently stored as plain text strings (`items: string[]`), e.g., `"Ibu (08123456789)"` or `"Telepon/chat teman dekat"`.
-  - There is currently **no dedicated standalone key** such as `'rima-trusted-contacts'` or `'rima-emergency-contact'`, nor is there a structured phone input field in `SafetyPlan.tsx` or `Profile.tsx`.
-- **IndexedDB / Persistent Storage Adapter (`src/utils/indexedDb.ts`)**:
-  - Key `'rima-safety-plan'` is registered in `KNOWN_RIMA_STORAGE_KEYS` (line 266).
-  - `rimaAsyncStorage` transparently bridges Zustand to IndexedDB with localStorage fallback.
-  - `useLocalStorage` reads and writes synchronously from `window.localStorage`.
-
----
-
-### 1.3 Indonesian Crisis Hotline 119 Ext 8 Formatting
-- **Standardized `tel:` Link Syntax**:
-  - In cellular telephony and mobile OS dialers (iOS and Android), an automated delay/pause for entering an extension is represented by a comma (`,`).
-  - In `SOSButton.tsx` (line 90) and `CrisisInterceptor.tsx` (line 72):
+  - Lines 64–85: Single root Suspense boundary directly nested inside `AppShell`:
     ```tsx
-    href={`tel:${hotline.phone.includes('ext') 
-      ? hotline.phone.replace(/\s*ext\s*/i, ',').replace(/[^0-9+,]/g, '') 
-      : hotline.phone.replace(/[^0-9+]/g, '')}`}
+    <AppShell>
+      <Suspense fallback={<LoadingSpinner message={t('common.loadingSafeSpace', 'Memuat Ruang Aman...')} />}>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/mood" element={<MoodTracker />} />
+          <Route path="/journal" element={<Journal />} />
+          <Route path="/forum" element={<Forum />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/safety-plan" element={<SafetyPlan />} />
+          <Route path="/breathe" element={<Breathe />} />
+          <Route path="/education" element={<Education />} />
+          <Route path="/professional-help" element={<ProfessionalHelp />} />
+          <Route path="/analytics" element={<Analytics />} />
+          <Route path="/privacy" element={<PrivacyPolicy />} />
+          <Route path="/grounding" element={<Grounding />} />
+          <Route path="/assessment" element={<Assessment />} />
+          <Route path="/tipp" element={<TippCrisisHub />} />
+          <Route path="/activation" element={<BehavioralActivation />} />
+          <Route path="/sleep" element={<SleepTracker />} />
+        </Routes>
+      </Suspense>
+    </AppShell>
     ```
-    When `hotline.phone = '119 ext 8'`, this evaluates to `tel:119,8`.
-  - In `CssrsWizardModal.tsx` (line 445) and `Forum.tsx` (line 341):
-    Directly formatted as:
-    ```tsx
-    href="tel:119,8"
-    ```
-  - In test suite (`src/components/__tests__/CssrsWizardModal.test.tsx`, lines 117–120):
-    ```typescript
-    expect(screen.getByRole('link', { name: /Hubungi Healing 119/i })).toHaveAttribute(
-      'href',
-      'tel:119,8'
+
+### 1.2 Layout Shell Mounting & Container Geometry
+- **File**: `src/components/layout/AppShell.tsx` (Lines 12–35):
+  - `AppShell` encapsulates the persistent navigation and safety chrome:
+    - `<a href="#main-content" className="skip-link">` (WCAG 2.4.1 bypass block)
+    - `<a href="https://www.google.com" className="quick-exit-btn">` (SAMHSA crisis quick exit)
+    - `<Sidebar />` (Desktop navigation)
+    - `<main className="app-main" id="main-content"><div className="app-content">{children}</div></main>`
+    - `<BottomNav />` (Mobile bottom navigation)
+    - `<SOSButton />` (Floating emergency safety trigger)
+    - `<SessionAwareness />` (Humane technology time-in-app monitor)
+- **File**: `src/styles/index.css` (Lines 198–201):
+  - `.app-content`: `width: 100%; max-width: 800px; margin: 0 auto; padding: var(--spacing-lg) var(--spacing-md);`
+  - Responsive desktop padding: `padding: var(--spacing-xl) var(--spacing-lg);`
+  - **Observation**: Because the `<Suspense>` boundary is wrapped within `.app-content`, any fallback loader will inherit the max width of 800px, centering naturally within the page viewport without disrupting the fixed Sidebar, BottomNav, or SOS Button.
+
+### 1.3 Analysis of Current `LoadingSpinner.tsx`
+- **File**: `src/components/common/LoadingSpinner.tsx` (Complete file lines 1–40):
+  ```tsx
+  import React from 'react';
+
+  interface LoadingSpinnerProps {
+    message?: string;
+  }
+
+  export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({ message }) => {
+    return (
+      <div role="status" aria-live="polite" style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        minHeight: '300px',
+        padding: '40px 20px',
+        gap: '16px'
+      }}>
+        <div style={{
+          width: '40px',
+          height: '40px',
+          border: '3px solid hsla(215, 65%, 55%, 0.2)',
+          borderTopColor: 'var(--color-primary, #4a7cf7)',
+          borderRadius: '50%',
+          animation: 'rimaSpin 0.8s linear infinite'
+        }} />
+        {message && (
+          <span style={{ fontSize: '0.875rem', color: 'var(--text-secondary, #94a3b8)', fontWeight: 500 }}>
+            {message}
+          </span>
+        )}
+        <style>{`
+          @keyframes rimaSpin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+          }
+        `}</style>
+      </div>
     );
+  };
+  ```
+- **Deficiencies Observed**:
+  1. **High-Velocity Rotational Motion (`0.8s linear infinite`)**: Rotational spinning at 1.25 Hz triggers visual vertigo, vestibular distress, and heightens autonomic arousal in users experiencing acute panic, sensory overwhelm, ADHD, or PTSD.
+  2. **Violates Project Styling Architecture**: Employs hardcoded inline styles and an inline `<style>` block rather than classes in `src/styles/components.css`.
+  3. **Bypasses Design Tokens**: Hardcodes `hsla(215, 65%, 55%, 0.2)`, `#4a7cf7`, and `#94a3b8` rather than utilizing `--border-subtle`, `--color-primary`, and `--text-secondary`.
+  4. **No Structural Preview / High Layout Shift (CLS)**: Empties the viewport and places a tiny 40px circle, giving no visual cue of the incoming page layout (header, hero card, cards).
+  5. **No Sensory Mode Awareness**: Does not react gracefully to `data-sensory="low-stimulation"` or `prefers-reduced-motion`. Although `index.css` sets `animation-duration: 0.001ms !important`, this leaves the spinner abruptly frozen at a random rotational angle.
+
+### 1.4 Sensory Token System & Data-Sensory Attribute Conventions
+- **File**: `src/hooks/useTheme.ts` (Lines 7, 29–35):
+  - LocalStorage key: `'rima-low-stimulation'`
+  - Application logic:
+    ```typescript
+    useEffect(() => {
+      if (lowStimulation) {
+        document.documentElement.setAttribute('data-sensory', 'calm');
+      } else {
+        document.documentElement.removeAttribute('data-sensory');
+      }
+    }, [lowStimulation]);
     ```
-  - Exact verified formatting standard: **`href="tel:119,8"`**.
-  - Localized copy:
-    - ID: `Telepon 119 ext 8` or `Hubungi Healing 119 (119 ext 8)`
-    - EN: `Call 119 ext 8` or `Call Healing 119`
-
----
-
-### 1.4 Existing Somatic Grounding Tools, Routes, and Triggers
-- **5-4-3-2-1 Sensory Grounding (`src/pages/Grounding.tsx`, Route `/grounding`)**:
-  - Steps:
-    - Step 5: 5 Hal yang Dapat Kamu Lihat (Eye, `var(--color-primary)`)
-    - Step 4: 4 Hal yang Dapat Kamu Sentuh / Rasakan (Hand, `var(--color-secondary)`)
-    - Step 3: 3 Suara yang Dapat Kamu Dengar (Ear, `var(--color-accent)`)
-    - Step 2: 2 Aroma yang Dapat Kamu Cium (Sparkles, `var(--color-warm)`)
-    - Step 1: 1 Hal Positif / Rasa Syukur tentang Dirimu (Heart, `var(--color-secondary)`)
-  - Haptic feedback: `navigator.vibrate(70)` on each step change.
-  - Soundscape player embedded: `SoundscapePlayer` with Brownian noise.
-  - Post-exercise reflection rating (`calmer` | `same` | `anxious`).
-- **Breathing Exercises (`src/pages/Breathe.tsx`, Route `/breathe`)**:
-  - Clinically grounded techniques:
-    1. `sighing`: Cyclic Sighing (Physiological Sigh, Stanford RCT 2023, Balban et al.) — Inhale 3s, Inhale2 2s, Exhale 6s, HoldOut 1s.
-    2. `4-7-8`: 4s In, 7s Hold, 8s Out.
-    3. `box`: Box Breathing 4-4-4-4 pattern.
-    4. `calm`: Simple Calm 4s In, 4s Out.
-    5. `coherent`: Coherent Breathing 6s In, 6s Out (~5.5 breaths/min for HRV resonance).
-  - Audio somatics chimes and session storage in `'rima-breathing-sessions'`.
-- **DBT TIPP Crisis Protocol (`src/pages/TippCrisisHub.tsx`, Route `/tipp`)**:
-  - Modules:
-    1. Temperature (`temperature`): 30s Cold water / Mammalian Dive Reflex.
-    2. Intense Exercise (`exercise`): 60s aerobic surge (jumping jacks, high knees).
-    3. Paced Breathing (`paced_breathing`): Mini 4-7-8 timer.
-    4. Paired Muscle Relaxation (`pmr`): 5 body zones (5s tension, 10s release).
-  - Pre- & post-SUDS distress score slider (0–10) with delta calculation.
-- **Offline Procedural Audio Somatics (`src/services/audioSomaticsService.ts` & `SoundscapePlayer.tsx`)**:
-  - Zero audio asset downloads (100% Web Audio API synthesis).
-  - Presets: `brown_noise` (Brownian noise), `pink_noise`, `theta_binaural` (6 Hz), `alpha_binaural` (10 Hz).
-
----
-
-### 1.5 CSS Styling, Design Tokens & Cognitive Constriction Accessibility
-- **Zero-Tailwind Policy**:
-  - Verified: No Tailwind CSS installed in `package.json`, no `@tailwind` directives in `src/styles`.
-  - All styles use CSS custom properties in `src/styles/design-tokens.css` and utility/component classes in `src/styles/components.css`.
-- **WCAG 2.2 AA & Accessible Target Dimensions**:
-  - All interactive buttons have minimum touch target height:
-    - `.btn`: `min-height: 48px;`
-    - `.btn-sm`: `min-height: 44px;`
-    - `.btn-icon`: `min-width: 44px; min-height: 44px;`
-  - High-contrast focus indicators:
+- **File**: `src/hooks/__tests__/useTheme.test.ts` (Lines 50, 57) & `src/components/__tests__/Profile.test.tsx` (Lines 70, 75):
+  - Assertions explicitly test: `expect(document.documentElement.getAttribute('data-sensory')).toBe('calm');`.
+- **File**: `src/styles/design-tokens.css` (Lines 118–170):
+  - Selectors: `[data-sensory='calm']` and `[data-sensory='calm'][data-theme='light']`.
+  - Tokens defined: Desaturated `--color-primary: hsl(212, 22%, 48%)`, glare-softened `--bg-primary: hsl(215, 14%, 12%)`, `--glow-primary: none !important`.
+- **File**: `src/styles/index.css` (Lines 31–48):
+  - Global motion suppression:
     ```css
-    :focus-visible {
-      outline: 3px solid var(--color-primary);
-      outline-offset: 3px;
-    }
-    ```
-- **Sensory Calm Mode Overrides (`[data-sensory='calm']`)**:
-  - Tokens in `design-tokens.css` (lines 118–170) soften glare and suppress animations:
-    ```css
-    [data-sensory='calm'] * {
+    [data-sensory='calm'] *,
+    [data-sensory='calm'] *::before,
+    [data-sensory='calm'] *::after {
       animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
       transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
     }
-    --glow-primary: none !important;
-    --glow-secondary: none !important;
-    --glow-danger: none !important;
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
     ```
-- **Modal Component Accessibility (`src/components/ui/Modal.tsx`)**:
-  - Features: Portal rendering into `document.body`, focus trapping (`Tab` / `Shift+Tab`), body scroll locking (`document.body.style.overflow = 'hidden'`), restoration of previous focus upon close, `Escape` key dismissal, modal stacking with dynamic z-index calculation `calc(var(--z-modal, 1000) + ${stackIndex * 20})`.
+- **Crucial Requirement Gap Identified**:
+  - The Phase 3 requirement explicitly states: *"PageFallbackLoader renders smoothly during route transitions, respects data-sensory='low-stimulation', and provides accessible ARIA live-region labels."*
+  - In Phase 2, `useTheme.ts` and tests utilized `data-sensory="calm"`.
+  - **Resolution**: To guarantee complete compatibility with both existing unit tests and the Phase 3 requirement specification, CSS rules must select both:
+    `[data-sensory='calm'], [data-sensory='low-stimulation']`.
+    This guarantees 100% backward test stability while fulfilling the Phase 3 contract.
 
----
+### 1.5 8-Language Translation Verification for Loading Strings
+- Verification performed on `src/i18n/*.json`:
+  | Locale Code | Language | Key: `common.loadingSafeSpace` (lines 258 & 570) | Status |
+  |---|---|---|---|
+  | `id` | Indonesian | `"Memuat Ruang Aman..."` | Verified (Exact Parity) |
+  | `en` | English | `"Loading Safe Space..."` | Verified (Exact Parity) |
+  | `jv` | Javanese | `"Ngamot Papan Aman..."` | Verified (Exact Parity) |
+  | `su` | Sundanese | `"Ngamuat Rohangan Aman..."` | Verified (Exact Parity) |
+  | `ja` | Japanese | `"安全なスペースを読み込み中..."` | Verified (Exact Parity) |
+  | `zh` | Chinese | `"正在加载安全空间..."` | Verified (Exact Parity) |
+  | `es` | Spanish | `"Cargando espacio seguro..."` | Verified (Exact Parity) |
+  | `ar` | Arabic | `"جاري تحميل المساحة الآمنة..."` | Verified (Exact Parity) |
+- **Observation**: `common.loadingSafeSpace` is already populated with 100% parity across all 8 locales, requiring zero additional keys unless optional extensions are added.
 
-### 1.6 Exact Touchpoints on Home Screen and Navigation
-- **Home Dashboard (`src/pages/Home.tsx`)**:
-  1. Header / Escalation Banner (line 162): `<EscalationBanner moods={moods} latestJournalContent={latestJournalContent} />` — opens crisis routes when escalation level is active.
-  2. Quick Actions Section (lines 197–242):
-     - `quick-action-btn safety` (`/safety-plan`)
-     - `quick-action-btn meditate` (`/breathe`)
-     - `quick-action-btn grounding` (`/grounding`)
-     - `quick-action-btn tipp` (`/tipp`)
-- **Global Layout (`src/components/layout/AppShell.tsx`)**:
-  1. `<SOSButton />` (line 33): Floating action button rendered on every view.
-  2. Quick Exit button (line 19): `✕` button to `https://www.google.com`.
-- **Sidebar (`src/components/layout/Sidebar.tsx`)** & **BottomNav (`src/components/layout/BottomNav.tsx`)**:
-  - Fixed persistent routes: `/`, `/mood`, `/journal`, `/forum`, `/profile`.
+### 1.6 Verification Gate Baseline
+- Execution of verification suite yielded:
+  - `npx vitest run`: **40 test files passed (40/40), 396 tests passed (396/396), 0 failures**.
+  - `npm run lint` (oxlint): **0 errors, 0 warnings across 125 files**.
+  - `npx tsc -b`: **Clean exit with code 0 (0 compilation errors)**.
+  - `npm run build`: **Success in 1.67s; Workbox Service Worker generated 54 precached assets (1797.98 KiB)**.
 
 ---
 
 ## 2. Logic Chain
 
-1. **Cognitive Constriction in Acute Crisis**:
-   - *Observation*: Under acute distress, users experience narrowed attention, working memory deficits, fine motor tremors, and decision paralysis.
-   - *Reasoning*: A crisis interface cannot rely on scrolling through long explanatory text, multi-step navigation forms, or ambiguous icons. It requires a high-contrast card that presents immediate single-tap actions:
-     a) Primary coping strategy (retrieved from user's safety plan or evidence-based default).
-     b) Primary trusted personal contact dialing (single tap to call).
-     c) 119 Ext 8 national crisis line (single tap to call).
-     d) 1-tap somatic grounding shortcut (jumping straight into 5-4-3-2-1 grounding or Stanford cyclic sighing).
-2. **Contact Dialing Integration Architecture**:
-   - *Observation*: `types/index.ts` defines `ContactInfo { name: string; phone?: string; relationship?: string }`, but `SafetyPlan.tsx` stores strings in `PlanSection['socialContacts'].items`, and neither `Profile.tsx` nor `SafetyPlan.tsx` currently provides structured phone entry.
-   - *Reasoning*: The Fast-Action Safety Card needs a reliable source for the trusted contact:
-     - Check structured storage `'rima-trusted-contacts'` (or `'rima-safety-plan'`).
-     - If user entered a contact with a phone number (e.g. parsed phone digits or structured contact), display single-tap dial button (`tel:{phone}`).
-     - If no phone number is configured, provide an actionable prompt to set up trusted contact or fallback to dialing 112/119.
-3. **Hotline Link Harmonization**:
-   - *Observation*: In `CssrsWizardModal.tsx`, `Forum.tsx`, and `CssrsWizardModal.test.tsx`, 119 Ext 8 is formatted specifically as `tel:119,8`.
-   - *Reasoning*: Using `tel:119,8` directly aligns with automated PBX pause dialing standards across Android and iOS and satisfies existing unit test assertions.
-4. **Touchpoint Placement**:
-   - *Observation*: `SOSButton` is universally present across all screens via `AppShell.tsx`, while `Home.tsx` contains `EscalationBanner` and `quick-actions`.
-   - *Reasoning*: Upgrading or connecting `SOSButton` and adding a direct trigger on `Home.tsx` (e.g., in `quick-actions` or as a top-level action card) provides zero-latency access under panic without requiring menu navigation.
+1. **Premise 1 (Trauma-Informed & Psychiatric Design Standards)**:
+   - Users accessing RIMA (especially during crisis transitions to `/grounding`, `/tipp`, `/safety-plan`, or `/breathe`) are frequently experiencing sensory overload, panic, or cognitive constriction.
+   - Clinical literature (SAMHSA TIC Principle 1 Safety; *Porges, Polyvagal Theory*) demonstrates that high-frequency optical oscillations (>1 Hz) trigger sympathetic nervous system activation and disorientation.
+   - Conversely, slow, rhythmic visual cadence oscillating at 0.16–0.25 Hz (~10–15 cycles/minute) mirrors human autonomic coherent breathing, reinforcing parasympathetic down-regulation.
+
+2. **Premise 2 (WCAG 2.2 AA Compliance & Assistive Tech Semantics)**:
+   - WCAG SC 4.1.2 (Name, Role, Value) & SC 4.1.3 (Status Messages) mandate that asynchronous state changes must be announced to screen readers politely without interrupting current speech.
+   - Adding `role="status"`, `aria-live="polite"`, `aria-busy="true"`, and an explicit `aria-label` satisfies these criteria.
+   - Screen readers must not announce every decorative skeleton rectangle; therefore, placeholder skeleton elements must carry `aria-hidden="true"`, and a hidden `.sr-only` span or `aria-label` provides the concise, non-distracting notification.
+
+3. **Premise 3 (Cognitive Predictability & CLS Elimination)**:
+   - When lazy chunks load over mobile networks, rendering a layout skeleton that replicates a page header (title bar + subtitle bar), a primary hero card, and secondary card containers visually stabilizes the viewport.
+   - This eliminates Cumulative Layout Shift (CLS) and provides mental containment: the user sees that a structured, safe room is actively being prepared.
+
+4. **Premise 4 (Dual Sensory Attribute Architecture)**:
+   - Existing unit tests in `src/hooks/__tests__/useTheme.test.ts` and `src/components/__tests__/Profile.test.tsx` assert that `document.documentElement.getAttribute('data-sensory') === 'calm'`.
+   - The Phase 3 prompt specifies `data-sensory="low-stimulation"`.
+   - By creating unified CSS selector rules supporting both `[data-sensory='calm']` and `[data-sensory='low-stimulation']`, all existing tests remain 100% green while any component or test applying `data-sensory="low-stimulation"` receives the complete motion suppression and calm token overrides.
+
+5. **Premise 5 (Pure Vanilla Design Tokens)**:
+   - The project guardrails strictly prohibit Tailwind CSS.
+   - All styling must be authored in `src/styles/components.css` and use variables from `src/styles/design-tokens.css` (`--bg-primary`, `--bg-secondary`, `--bg-card`, `--border-subtle`, `--radius-lg`, `--radius-md`, `--radius-full`, `--spacing-md`, `--spacing-lg`, `--color-primary`, `--text-secondary`).
 
 ---
 
 ## 3. Caveats
 
-- **Web Browser vs. Native Dialing**: When running on desktop browsers, `tel:` links prompt the OS telephony handler (FaceTime, Skype, or Phone Link). On mobile devices (Android/iOS via PWA or Capacitor), `tel:119,8` immediately opens the system phone dialer with `119,8` pre-filled.
-- **Audio Autoplay Restrictions**: Web Audio synthesis in `audioSomaticsService.ts` and `TippCrisisHub.tsx` requires a user gesture to resume suspended `AudioContext`. Single-tap button interactions count as a user gesture, so launching audio on tap is compliant.
-- **No Source Code Modified**: As an explorer survey, this investigation was strictly read-only. No source files were edited.
+1. **Existing Unit Test Invariants**:
+   - Do NOT alter `useTheme.ts` to only write `low-stimulation` without `calm`. The existing test suite asserts `toBe('calm')`. Supporting both selectors in CSS and component logic avoids test regression.
+2. **Backward Compatibility for `LoadingSpinner.tsx`**:
+   - Although `LoadingSpinner.tsx` is only used in `App.tsx`, it is exported in `src/components/common/LoadingSpinner.tsx`. Milestone 2 should retain `LoadingSpinner.tsx` (optionally delegating to `PageFallbackLoader` or leaving it intact) while switching `App.tsx`'s Suspense boundary to `PageFallbackLoader`.
+3. **Chunk Splitting Interoperability**:
+   - `vite.config.ts` chunk partitioning (being addressed in Phase 3 Milestone 2 by the builder agent) will split i18n locales and heavy libraries into dedicated chunks. `PageFallbackLoader` must not import any heavy third-party libraries (e.g., Recharts) to ensure it can render instantaneously with zero chunk delay.
 
 ---
 
-## 4. Conclusion
+## 4. Conclusion & Complete Technical Specification
 
-The codebase is well-prepared for the implementation of the Fast-Action Emergency Safety Card:
-1. **Design Tokens**: Fully equipped with high-contrast, zero-Tailwind vanilla CSS variables (`--color-danger`, `--bg-elevated`, `--radius-lg`, `--shadow-elevated`, `--text-primary`), and WCAG 2.2 touch targets (>= 48px).
-2. **Hotline**: Standardized and unit-tested to `tel:119,8`.
-3. **Grounding Modules**: Robust, validated grounding tools already exist at `/grounding` (5-4-3-2-1) and `/breathe` (Stanford Cyclic Sighing), ready for direct shortcut linkage.
-4. **Touchpoint**: The global floating `SOSButton` in `AppShell` and the Home quick actions grid represent the ideal trigger points for launching the card modal rapidly.
-5. **Quality Gates**: The project is currently 100% healthy: 200/200 tests passing in Vitest, 0 oxlint warnings/errors, clean TypeScript compilation (`tsc -b`), and successful PWA production build.
+### 4.1 Component Specification: `src/components/common/PageFallbackLoader.tsx`
+
+```tsx
+import React from 'react';
+import { useTranslation } from 'react-i18next';
+import { Shield } from 'lucide-react';
+
+export interface PageFallbackLoaderProps {
+  /** Optional custom message; defaults to t('common.loadingSafeSpace', 'Memuat Ruang Aman...') */
+  message?: string;
+  /** Optional explicit aria-label for screen readers; defaults to message */
+  ariaLabel?: string;
+  /** Whether to render the primary hero skeleton card (default: true) */
+  showHero?: boolean;
+  /** Number of content card skeletons to render in the grid (default: 2) */
+  cardsCount?: number;
+  /** Additional CSS class name */
+  className?: string;
+}
+
+export const PageFallbackLoader: React.FC<PageFallbackLoaderProps> = ({
+  message,
+  ariaLabel,
+  showHero = true,
+  cardsCount = 2,
+  className = '',
+}) => {
+  const { t } = useTranslation();
+  const displayMessage = message ?? t('common.loadingSafeSpace', 'Memuat Ruang Aman...');
+  const computedAriaLabel = ariaLabel ?? displayMessage;
+
+  return (
+    <div
+      role="status"
+      aria-live="polite"
+      aria-busy="true"
+      aria-label={computedAriaLabel}
+      className={`page-fallback-loader ${className}`.trim()}
+    >
+      {/* Screen-reader-only accessible notification */}
+      <span className="sr-only">{computedAriaLabel}</span>
+
+      {/* Calming status pill with coherent breathing dot */}
+      <div className="page-fallback-status-pill">
+        <Shield className="page-fallback-status-icon" size={16} aria-hidden="true" />
+        <span className="page-fallback-status-dot" aria-hidden="true" />
+        <span className="page-fallback-status-text">{displayMessage}</span>
+      </div>
+
+      {/* Page Header Skeleton */}
+      <div className="page-fallback-header" aria-hidden="true">
+        <div className="page-fallback-skeleton page-fallback-skeleton-title" />
+        <div className="page-fallback-skeleton page-fallback-skeleton-subtitle" />
+      </div>
+
+      {/* Primary Hero Skeleton Card */}
+      {showHero && (
+        <div className="page-fallback-card page-fallback-hero-card" aria-hidden="true">
+          <div className="page-fallback-card-header">
+            <div className="page-fallback-skeleton page-fallback-skeleton-avatar" />
+            <div className="page-fallback-card-header-lines">
+              <div className="page-fallback-skeleton page-fallback-skeleton-line-lg" />
+              <div className="page-fallback-skeleton page-fallback-skeleton-line-sm" />
+            </div>
+          </div>
+          <div className="page-fallback-skeleton page-fallback-skeleton-block" />
+        </div>
+      )}
+
+      {/* Content Cards Grid Skeleton */}
+      {cardsCount > 0 && (
+        <div className="page-fallback-grid" aria-hidden="true">
+          {Array.from({ length: cardsCount }).map((_, index) => (
+            <div key={index} className="page-fallback-card" aria-hidden="true">
+              <div className="page-fallback-skeleton page-fallback-skeleton-line-md" />
+              <div className="page-fallback-skeleton page-fallback-skeleton-line-full" />
+              <div className="page-fallback-skeleton page-fallback-skeleton-line-sm" />
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+```
+
+### 4.2 CSS Rules for `src/styles/components.css`
+
+```css
+/* ==========================================================================
+   PageFallbackLoader — Trauma-Informed Calm Suspense Fallback (WCAG 2.2 AA)
+   Designed with zero high-speed spinning, coherent breathing pulse (0.22 Hz),
+   and zero motion under [data-sensory='calm'] / [data-sensory='low-stimulation'].
+   ========================================================================== */
+
+/* Coherent Breathing Keyframes (4.5s cycle: ~13 breaths/min, parasympathetic rhythm) */
+@keyframes rimaCalmRespiration {
+  0%, 100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+@keyframes rimaDotBreathe {
+  0%, 100% {
+    transform: scale(0.9);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 1;
+  }
+}
+
+/* Root Loader Container */
+.page-fallback-loader {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  width: 100%;
+  padding: var(--spacing-md) 0;
+  box-sizing: border-box;
+}
+
+/* Calm Status Pill */
+.page-fallback-status-pill {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-xs) var(--spacing-md);
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-subtle);
+}
+
+.page-fallback-status-icon {
+  color: var(--color-primary);
+  flex-shrink: 0;
+}
+
+.page-fallback-status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-primary);
+  animation: rimaDotBreathe 4.5s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+.page-fallback-status-text {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-secondary);
+}
+
+/* Header Skeleton */
+.page-fallback-header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  width: 100%;
+}
+
+.page-fallback-skeleton-title {
+  height: 32px;
+  width: 48%;
+  max-width: 280px;
+  min-width: 180px;
+  border-radius: var(--radius-md);
+}
+
+.page-fallback-skeleton-subtitle {
+  height: 16px;
+  width: 72%;
+  max-width: 420px;
+  border-radius: var(--radius-sm);
+}
+
+/* Base Skeleton Pulse */
+.page-fallback-skeleton {
+  background-color: var(--bg-secondary);
+  animation: rimaCalmRespiration 4.5s ease-in-out infinite;
+}
+
+/* Card Skeleton Containers */
+.page-fallback-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  padding: var(--spacing-lg);
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-subtle);
+}
+
+.page-fallback-hero-card {
+  min-height: 140px;
+}
+
+.page-fallback-card-header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.page-fallback-skeleton-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+}
+
+.page-fallback-card-header-lines {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  flex: 1;
+}
+
+.page-fallback-skeleton-line-lg {
+  height: 20px;
+  width: 60%;
+  border-radius: var(--radius-sm);
+}
+
+.page-fallback-skeleton-line-md {
+  height: 18px;
+  width: 40%;
+  border-radius: var(--radius-sm);
+}
+
+.page-fallback-skeleton-line-sm {
+  height: 14px;
+  width: 30%;
+  border-radius: var(--radius-sm);
+}
+
+.page-fallback-skeleton-line-full {
+  height: 14px;
+  width: 100%;
+  border-radius: var(--radius-sm);
+}
+
+.page-fallback-skeleton-block {
+  height: 56px;
+  width: 100%;
+  border-radius: var(--radius-md);
+}
+
+/* Grid Layout for Multiple Cards */
+.page-fallback-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: var(--spacing-md);
+  width: 100%;
+}
+
+/* ==========================================================================
+   Zero-Motion & Low-Stimulation Sensory Overrides (WCAG 2.2 / Sensory Calm)
+   ========================================================================== */
+[data-sensory='calm'] .page-fallback-skeleton,
+[data-sensory='low-stimulation'] .page-fallback-skeleton,
+[data-sensory='calm'] .page-fallback-status-dot,
+[data-sensory='low-stimulation'] .page-fallback-status-dot {
+  animation: none !important;
+  opacity: 0.6 !important;
+  transform: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-fallback-skeleton,
+  .page-fallback-status-dot {
+    animation: none !important;
+    opacity: 0.6 !important;
+    transform: none !important;
+  }
+}
+```
+
+### 4.3 Proposed Integration in `src/App.tsx`
+Replace `LoadingSpinner` with `PageFallbackLoader`:
+```tsx
+// Before:
+import { LoadingSpinner } from './components/common/LoadingSpinner';
+...
+<Suspense fallback={<LoadingSpinner message={t('common.loadingSafeSpace', 'Memuat Ruang Aman...')} />}>
+
+// After:
+import { PageFallbackLoader } from './components/common/PageFallbackLoader';
+...
+<Suspense fallback={<PageFallbackLoader />}>
+```
+
+### 4.4 Unit Test Specification: `src/components/__tests__/PageFallbackLoader.test.tsx`
+Comprehensive test suite asserting:
+1. Outer container has `role="status"`, `aria-live="polite"`, `aria-busy="true"`, and accessible label.
+2. Contains screen-reader `.sr-only` announcement node with matching text.
+3. Renders the calm status pill with `Shield` icon and reassurance message.
+4. Renders header skeleton with title and subtitle marked with `aria-hidden="true"`.
+5. Toggles hero card based on `showHero` prop (`true` by default, omitted when `false`).
+6. Renders configured number of cards according to `cardsCount`.
+7. Custom `message` and `ariaLabel` props override default values.
+8. Sensory mode compatibility: renders static skeleton classes and verifies absence of hardcoded inline spinner animations.
 
 ---
 
 ## 5. Verification Method
 
-To independently verify the facts and findings in this report, execute the following commands in `C:\Users\Hype\Kuliah\Proyekan\mental monitoring`:
+### 5.1 Independent Verification Commands
+Run the 4-tier quality gates:
+1. `npm run lint` — Must report 0 errors and 0 warnings.
+2. `npx tsc -b` — Must exit with 0 errors.
+3. `npx vitest run` — All test files (including new `PageFallbackLoader.test.tsx`) must pass 100%.
+4. `npm run build` — Must produce clean production bundles and Workbox service worker.
 
-```bash
-# 1. Verify test suite and crisis test assertions
-npx vitest run
-
-# 2. Verify zero-warning linter
-npm run lint
-
-# 3. Verify TypeScript compilation
-npx tsc -b
-
-# 4. Verify PWA production build
-npm run build
-```
-
-### Files to Inspect:
-- `src/components/safety/SOSButton.tsx` (Lines 66–105 for current SOS modal & `tel:` format)
-- `src/components/safety/CssrsWizardModal.tsx` (Lines 442–465 for `tel:119,8` and emergency styling)
-- `src/components/safety/SafetyPlan.tsx` (Lines 57–69, 127–145 for storage structure)
-- `src/types/index.ts` (Lines 89–104 for `ContactInfo` & `SafetyPlan` interfaces)
-- `src/pages/Grounding.tsx` & `src/pages/Breathe.tsx` (For somatic grounding steps & physiological sigh)
-- `src/styles/design-tokens.css` (For CSS variables, sensory calm mode, and zero Tailwind policy)
-- `src/components/layout/AppShell.tsx` (Line 33 for global floating SOSButton touchpoint)
+### 5.2 Visual & Sensory Invalidation Conditions
+- If `PageFallbackLoader` contains any high-velocity spinning elements (`rotate(360deg)` faster than 2 seconds), it fails trauma-informed criteria.
+- If `PageFallbackLoader` fails to silence animations when `document.documentElement.setAttribute('data-sensory', 'low-stimulation')` or `data-sensory="calm"` is active, it fails sensory calm criteria.
+- If any text contrast falls below 4.5:1 on dark, light, or calm themes, it violates WCAG SC 1.4.3.
+- If any non-English/non-Indonesian locale throws a missing translation warning or renders undefined for `common.loadingSafeSpace`, it violates 8-language parity.

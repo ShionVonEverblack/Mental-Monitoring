@@ -1,16 +1,20 @@
-# Progress Heartbeat — Explorer Survey 2
+# Progress — Explorer Survey 2 (UI, Suspense & Calm Design Tokens)
 
-Last visited: 2026-10-10T06:55:30Z
+Last visited: 2026-10-10T10:48:30Z
 Status: Completed
-Current Task: Survey finished, handoff.md published
 
-## Steps:
-- [x] Step 0: Initialize dispatch, briefing, and progress
-- [x] Step 1: Examine codebase directory structure & files
-- [x] Step 2: Search for emergency/crisis interfaces (SOS, crisis lines, emergency contacts, safety plans)
-- [x] Step 3: Investigate trusted personal contacts storage and schema (IndexedDB / localStorage)
-- [x] Step 4: Examine 119 Ext 8 hotline handling and `tel:` formatting
-- [x] Step 5: Check somatic grounding tools (5-4-3-2-1, box breathing) and triggers/routes
-- [x] Step 6: Inspect CSS styling, design tokens, high contrast / accessibility
-- [x] Step 7: Identify Home touchpoints for Fast-Action Emergency Safety Card
-- [x] Step 8: Compile and write comprehensive handoff report
+## Current Objective
+Investigate routing, Suspense boundaries, existing loading UI, design tokens, sensory modes, and architect the trauma-informed PageFallbackLoader component.
+
+## Completed Steps
+- [x] Received Phase 3 dispatch instructions and appended to DISPATCH.md
+- [x] Initialized Phase 3 BRIEFING.md with append-only preservation
+- [x] Inspect App.tsx and React router/Suspense tree (all 16 routes lazy-loaded, single root Suspense in AppShell)
+- [x] Inspect existing loading spinners and fallback UI (LoadingSpinner.tsx uses fast 0.8s spin and inline styles)
+- [x] Inspect CSS design tokens, data-sensory="low-stimulation", prefers-reduced-motion, and useTheme.ts
+- [x] Verified 100% 8-language parity for loading strings (`common.loadingSafeSpace` in all 8 locales)
+- [x] Verified baseline quality gates (vitest 40/40 files, 396 tests pass; oxlint 0/0; tsc -b clean; build generates PWA)
+- [x] Designed trauma-informed PageFallbackLoader specification (WCAG 2.2 AA, coherent breathing 0.22Hz, pure CSS tokens, i18n, zero motion in calm/low-stimulation mode)
+- [x] Authored comprehensive 5-component handoff report to `handoff.md`
+- [x] Updated BRIEFING.md and progress.md
+- [ ] Send handoff message to orchestrator

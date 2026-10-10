@@ -1253,5 +1253,10 @@
     "call112Sub": "Línea Nacional Gratuita de Emergencias",
     "dismiss": "Me Siento Más Tranquilo (Cerrar)",
     "disclaimer": "Servicios de emergencia gratuitos. Si estás en peligro físico inmediato, llama al 112 o acude a urgencias del hospital más cercano."
+  },
+  "calmLoader": {
+    "accessibleLabel": "Preparando tu espacio de calma...",
+    "message": "Cargando espacio seguro...",
+    "hint": "Respira hondo y relájate un momento."
   }
 }

@@ -1253,5 +1253,10 @@
     "call112Sub": "National Toll-Free Emergency Line",
     "dismiss": "I Feel Calmer Now (Close)",
     "disclaimer": "Toll-free emergency services. If in immediate physical danger, call 112 or visit the nearest emergency room."
+  },
+  "calmLoader": {
+    "accessibleLabel": "Preparing your calm space...",
+    "message": "Loading Safe Space...",
+    "hint": "Take a slow breath and relax for a moment."
   }
 }

@@ -38,6 +38,7 @@ export default defineConfig({
         ]
       },
       workbox: {
+        maximumFileSizeToCacheInBytes: 3000000,
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
         runtimeCaching: [
           {
@@ -89,14 +90,25 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks(id) {
-          if (id.includes('node_modules/react') || id.includes('node_modules/react-dom') || id.includes('node_modules/react-router-dom')) {
+          if (/[\\/]src[\\/]i18n[\\/][^\\/]+\.json$/.test(id)) {
+            return 'i18n-locales';
+          }
+          if (
+            id.includes('node_modules/i18next') ||
+            id.includes('node_modules/react-i18next') ||
+            id.includes('node_modules/i18next-browser-languagedetector')
+          ) {
+            return 'i18n-vendor';
+          }
+          if (
+            id.includes('node_modules/react') ||
+            id.includes('node_modules/react-dom') ||
+            id.includes('node_modules/react-router-dom')
+          ) {
             return 'react-vendor';
           }
           if (id.includes('node_modules/recharts')) {
             return 'recharts-vendor';
-          }
-          if (id.includes('node_modules/i18next') || id.includes('node_modules/react-i18next')) {
-            return 'i18n-vendor';
           }
           if (id.includes('node_modules/lucide-react')) {
             return 'icons-vendor';

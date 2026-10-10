@@ -1,14 +1,14 @@
-# BRIEFING — 2026-10-10T06:55:00Z
+# BRIEFING — 2026-10-10T10:48:00Z
 
 ## Mission
-Investigate i18n setup (8 languages, missing keys, RTL), build configuration, testing setup, and lint/typecheck health.
+Investigate i18n translation catalogs across all 8 languages, .agents/skills/ directory structure and format, and quality gate commands for Phase 3 improvements of RIMA.
 
 ## 🔒 My Identity
 - Archetype: explorer
-- Roles: I18n and Build Explorer
-- Working directory: C:\Users\Hype\Kuliah\Proyekan\mental monitoring\.agents\teamwork\explorer_survey_3
+- Roles: I18n, Skills, and Build/Quality Gate Explorer
+- Working directory: C:\Users\Hype\Kuliah\Proyekan\mental monitoring\.agents\teamwork\explorer_survey_3\
 - Original parent: 4438b745-bf9d-4846-a9bb-3ab1b88a6140
-- Milestone: Explorer Survey
+- Milestone: Phase 3 Explorer Survey
 
 ## 🔒 Key Constraints
 - Read-only investigation — do NOT implement or modify source code
@@ -17,31 +17,33 @@ Investigate i18n setup (8 languages, missing keys, RTL), build configuration, te
 - Send completion message to parent upon finishing
 
 ## Current Parent
-- Conversation ID: 4438b745-bf9d-4846-a9bb-3ab1b88a6140
-- Updated: not yet
+- Conversation ID: 1fc4eab6-678b-43c3-b349-35e9ecfccc3a
+- Updated: 2026-10-10T10:40:27Z
 
 ## Investigation State
 - **Explored paths**:
-  - `src/i18n/config.ts`, `src/i18n/{id,en,jv,su,ja,zh,es,ar}.json`
-  - `src/App.tsx`, `src/components/layout/AppShell.tsx`, `src/styles/index.css`
-  - `src/utils/constants.ts`, `src/types/index.ts`
-  - `vite.config.ts`, `tsconfig.json`, `tsconfig.app.json`, `tsconfig.node.json`
-  - `package.json`, `src/test/setup.ts`, test files in `src/**/__tests__/*`
+  - `src/i18n/config.ts`, `src/i18n/*.json` (all 8 languages: 1,161 leaf keys, 100% parity, 0 missing)
+  - `src/App.tsx`, `src/components/common/LoadingSpinner.tsx`
+  - `src/styles/design-tokens.css`, `src/styles/index.css`, `src/hooks/useTheme.ts`
+  - `vite.config.ts`, `package.json`, `dist/` build chunks & Workbox precaching
+  - `.agents/skills/` (20 skills examined; blueprint provided for 2 new skills)
+  - 4 quality gates: oxlint (0 errors/warnings), tsc -b (0 errors), vitest (40/40 files, 396/396 tests passing), build (clean PWA service worker)
 - **Key findings**:
-  - i18n stack uses `i18next`, `react-i18next`, `i18next-browser-languagedetector`. All 8 languages have exactly 1,030 leaf keys with 0 missing keys and 0 empty strings (100% parity).
-  - RTL is currently unhandled: `document.documentElement.dir` is never set or toggled when switching to Arabic (`ar`), and no RTL CSS rules exist.
-  - Vitest test suite has 32 test files and 200 tests; 100% pass (200/200) in 20.35s. Minor stderr warning in 2 tests regarding missing i18n init in those test files.
-  - Oxlint runs 104 rules on 110 files with 0 warnings and 0 errors in 135ms.
-  - TypeScript compilation `npx tsc -b` passes with 0 errors.
-  - Production build `npm run build` succeeds in 4.61s with full PWA Service Worker generation and 52 precached assets.
-- **Unexplored areas**: None, all items investigated and verified.
+  - `index.js` currently bloats to 613 kB because all 8 translation catalogs (620 KiB raw) are bundled in.
+  - Cross-platform Rollup manualChunk regex `/[\\/]src[\\/]i18n[\\/][^\\/]+\.json$/` separates `i18n-locales`, reducing `index.js` to < 50 kB.
+  - Workbox automatically precaches partitioned chunks via `**/*.{js,css,html,ico,png,svg,woff2}` without offline degradation.
+  - Complete verbatim 8-language translations provided for `calmLoader` namespace (`accessibleLabel`, `message`, `hint`).
+  - Full component architecture and test plan created for `PageFallbackLoader`.
+  - Comprehensive runbook blueprints authored for `rima-pwa-perf-and-code-splitting` and `rima-future-feature-architecture`.
+- **Unexplored areas**: None. All survey goals complete.
 
 ## Key Decisions Made
-- Executed empirical tests, linting, typechecks, and build commands to verify baseline stability.
-- Ran programmatic key-parity analysis across all 8 translation files.
+- Provided complete, verbatim copy in all 8 languages for `calmLoader`.
+- Validated cross-platform regex behavior for Rollup chunk partitioning on Windows and Linux.
+- Authored 5-component `handoff.md` with complete specifications.
 
 ## Artifact Index
 - DISPATCH.md — Stored dispatch instructions
 - BRIEFING.md — Persistent working memory and state
 - progress.md — Liveness heartbeat and milestone tracking
-- handoff.md — Final 5-component report
+- handoff.md — Comprehensive 5-component survey and blueprint report

@@ -1253,5 +1253,10 @@
     "call112Sub": "Panyuwunan Darurat Bebas Pulsa Nasional",
     "dismiss": "Kula Rumaos Langkung Lerem (Tutup)",
     "disclaimer": "Layanan darurat bebas pulsa. Menawi wonten bebaya fisik sanalika, hubungi 112 utawi tindak dhateng IGD caket piyambak."
+  },
+  "calmLoader": {
+    "accessibleLabel": "Nyawisake papan ayem panjenengan...",
+    "message": "Ngamot Papan Aman...",
+    "hint": "Tarik napas alon-alon lan sumeleh sedhela."
   }
 }

@@ -5,7 +5,7 @@ import './styles/index.css';
 
 import { AppShell } from './components/layout/AppShell';
 import { ErrorBoundary } from './components/common/ErrorBoundary';
-import { LoadingSpinner } from './components/common/LoadingSpinner';
+import { PageFallbackLoader } from './components/common/PageFallbackLoader';
 import { useTheme } from './hooks/useTheme';
 
 // Lazy loading pages for code splitting & faster initial load
@@ -32,7 +32,7 @@ import { useTranslation } from 'react-i18next';
 
 const App: React.FC = () => {
   const { theme } = useTheme();
-  const { t, i18n } = useTranslation();
+  const { i18n } = useTranslation();
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
@@ -62,7 +62,7 @@ const App: React.FC = () => {
         <AppLockScreen />
         <ConsentModal />
         <AppShell>
-          <Suspense fallback={<LoadingSpinner message={t('common.loadingSafeSpace', 'Memuat Ruang Aman...')} />}>
+          <Suspense fallback={<PageFallbackLoader />}>
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/mood" element={<MoodTracker />} />

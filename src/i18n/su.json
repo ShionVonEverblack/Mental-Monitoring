@@ -1253,5 +1253,10 @@
     "call112Sub": "Panggilan Darurat Bebas Pulsa Nasional",
     "dismiss": "Sim Kuring Karaos Langkung Tenang (Tutup)",
     "disclaimer": "Layanan darurat bébas pulsa. Upami aya bahaya fisik gancang, hubungi 112 atanapi sumping ka IGD rumah sakit pangcaketna."
+  },
+  "calmLoader": {
+    "accessibleLabel": "Nyiapkeun rohangan tengtrem anjeun...",
+    "message": "Ngamuat Rohangan Aman...",
+    "hint": "Tarik napas lalaunan sareng santai sakedap."
   }
 }

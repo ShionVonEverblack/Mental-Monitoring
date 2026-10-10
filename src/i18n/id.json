@@ -1253,5 +1253,10 @@
     "call112Sub": "Panggilan Darurat Bebas Pulsa Nasional",
     "dismiss": "Saya Merasa Lebih Tenang (Tutup)",
     "disclaimer": "Layanan darurat bebas pulsa. Jika dalam bahaya fisik segera, hubungi 112 atau datangi IGD rumah sakit terdekat."
+  },
+  "calmLoader": {
+    "accessibleLabel": "Menyiapkan ruang tenang Anda...",
+    "message": "Memuat Ruang Aman...",
+    "hint": "Tarik napas perlahan dan rileks sejenak."
   }
 }
