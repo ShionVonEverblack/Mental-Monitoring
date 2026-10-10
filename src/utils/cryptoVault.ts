@@ -18,6 +18,26 @@ const dec = new TextDecoder();
 // Standard OWASP recommended iteration count
 export const PBKDF2_KEY_ITERATIONS = 100000;
 
+function uint8ArrayToBase64(bytes: Uint8Array): string {
+  let binary = '';
+  const len = bytes.byteLength;
+  const chunkSize = 8192;
+  for (let i = 0; i < len; i += chunkSize) {
+    const chunk = bytes.subarray(i, Math.min(i + chunkSize, len));
+    binary += String.fromCharCode.apply(null, chunk as unknown as number[]);
+  }
+  return btoa(binary);
+}
+
+function base64ToUint8Array(base64: string): Uint8Array {
+  const binary = atob(base64);
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) {
+    bytes[i] = binary.charCodeAt(i);
+  }
+  return bytes;
+}
+
 /**
  * Derives an AES-GCM-256 CryptoKey from a passphrase and random salt.
  */
@@ -42,7 +62,7 @@ export async function deriveEncryptionKey(
     {
       name: 'PBKDF2',
       hash: 'SHA-256',
-      salt: salt as BufferSource,
+      salt: salt as unknown as BufferSource,
       iterations: PBKDF2_KEY_ITERATIONS,
     },
     baseKey,
@@ -69,16 +89,16 @@ export async function encryptText(
   const key = await deriveEncryptionKey(passphrase, salt);
 
   const cipherBuffer = await subtle.encrypt(
-    { name: 'AES-GCM', iv },
+    { name: 'AES-GCM', iv: iv as unknown as BufferSource },
     key,
     enc.encode(plaintext)
   );
 
   return {
     version: 1,
-    salt: btoa(String.fromCharCode(...salt)),
-    iv: btoa(String.fromCharCode(...iv)),
-    ciphertext: btoa(String.fromCharCode(...new Uint8Array(cipherBuffer))),
+    salt: uint8ArrayToBase64(salt),
+    iv: uint8ArrayToBase64(iv),
+    ciphertext: uint8ArrayToBase64(new Uint8Array(cipherBuffer)),
   };
 }
 
@@ -94,15 +114,15 @@ export async function decryptText(
     throw new Error('Web Crypto API is not supported');
   }
 
-  const salt = Uint8Array.from(atob(payload.salt), c => c.charCodeAt(0));
-  const iv = Uint8Array.from(atob(payload.iv), c => c.charCodeAt(0));
-  const cipherBytes = Uint8Array.from(atob(payload.ciphertext), c => c.charCodeAt(0));
+  const salt = base64ToUint8Array(payload.salt);
+  const iv = base64ToUint8Array(payload.iv);
+  const cipherBytes = base64ToUint8Array(payload.ciphertext);
 
   const key = await deriveEncryptionKey(passphrase, salt);
   const plainBuffer = await subtle.decrypt(
-    { name: 'AES-GCM', iv },
+    { name: 'AES-GCM', iv: iv as unknown as BufferSource },
     key,
-    cipherBytes
+    cipherBytes as unknown as BufferSource
   );
 
   return dec.decode(plainBuffer);

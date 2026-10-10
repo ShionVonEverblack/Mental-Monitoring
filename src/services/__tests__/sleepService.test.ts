@@ -105,6 +105,14 @@ describe('sleepService (CBT-I)', () => {
       expect(updated).toHaveLength(1);
       expect(updated[0].id).toBe('sleep-2');
     });
+
+    it('recovers safely when localStorage contains corrupted non-array data', () => {
+      localStorage.setItem('rima-sleep-diary', JSON.stringify({ corrupted: 'non-array' }));
+      expect(getSleepHistory()).toEqual([]);
+
+      expect(() => deleteSleepEntry('any-id')).not.toThrow();
+      expect(getSleepHistory()).toEqual([]);
+    });
   });
 
   describe('Aggregate Sleep Statistics', () => {

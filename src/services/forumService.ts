@@ -113,7 +113,8 @@ export async function fetchForumPosts(page = 0, limit = 20): Promise<PaginatedPo
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(DEFAULT_POSTS));
   } else {
     try {
-      allPosts = JSON.parse(raw);
+      const parsed = JSON.parse(raw);
+      allPosts = Array.isArray(parsed) ? parsed : DEFAULT_POSTS;
     } catch {
       allPosts = DEFAULT_POSTS;
     }
@@ -249,7 +250,8 @@ export async function fetchPostComments(postId: string): Promise<ForumComment[]>
   const raw = localStorage.getItem(LOCAL_COMMENTS_KEY);
   let allComments: ForumComment[] = [];
   try {
-    allComments = raw ? JSON.parse(raw) : [];
+    const parsed = raw ? JSON.parse(raw) : [];
+    allComments = Array.isArray(parsed) ? parsed : [];
   } catch {
     console.warn('Failed to parse comments from localStorage');
   }
@@ -269,7 +271,8 @@ export async function addCommentToPost(postId: string, content: string, authorNa
   const raw = localStorage.getItem(LOCAL_COMMENTS_KEY);
   let allComments: ForumComment[] = [];
   try {
-    allComments = raw ? JSON.parse(raw) : [];
+    const parsed = raw ? JSON.parse(raw) : [];
+    allComments = Array.isArray(parsed) ? parsed : [];
   } catch {
     console.warn('Failed to parse comments from localStorage');
   }
@@ -280,7 +283,8 @@ export async function addCommentToPost(postId: string, content: string, authorNa
   const rawPosts = localStorage.getItem(LOCAL_STORAGE_KEY);
   let posts: ForumPost[] = [];
   try {
-    posts = rawPosts ? JSON.parse(rawPosts) : DEFAULT_POSTS;
+    const parsed = rawPosts ? JSON.parse(rawPosts) : DEFAULT_POSTS;
+    posts = Array.isArray(parsed) ? parsed : DEFAULT_POSTS;
   } catch {
     posts = DEFAULT_POSTS;
   }
@@ -308,7 +312,7 @@ export async function addCommentToPost(postId: string, content: string, authorNa
       supabase.from('forum_posts')
         .update({ comment_count: updatedPosts.find(p => p.id === postId)?.commentCount || 1 })
         .eq('id', postId)
-    ).catch((err: unknown) => console.warn('Supabase comment count update failed:', err));
+      ).catch((err: unknown) => console.warn('Supabase comment count update failed:', err));
   }
 
   return newComment;
@@ -317,7 +321,9 @@ export async function addCommentToPost(postId: string, content: string, authorNa
 export function getBookmarkedPostIds(): string[] {
   try {
     const raw = localStorage.getItem(LOCAL_BOOKMARKS_KEY);
-    return raw ? JSON.parse(raw) : [];
+    if (!raw) return [];
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : [];
   } catch {
     return [];
   }

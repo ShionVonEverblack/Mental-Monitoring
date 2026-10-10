@@ -268,8 +268,10 @@ export const KNOWN_RIMA_STORAGE_KEYS = [
   'rima-assessments',
   'rima-cssrs-results',
   'rima-ba-activities',
+  'rima-sleep-diary',
   'rima-tipp-sessions',
   'rima-thought-records',
+  'rima_bookmarked_posts',
 ];
 
 /**

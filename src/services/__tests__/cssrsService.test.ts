@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import {
   evaluateCssrs,
   saveCssrsResult,
@@ -160,10 +160,26 @@ describe('cssrsService', () => {
       expect(latest?.id).toBe(saved.id);
     });
 
-    it('handles localStorage errors gracefully', () => {
+    it('handles localStorage errors gracefully and recovers from non-array corrupted storage', () => {
       localStorage.setItem(CSSRS_STORAGE_KEY, 'invalid-json');
       expect(getCssrsHistory()).toEqual([]);
       expect(getLatestCssrsResult()).toBeNull();
+
+      localStorage.setItem(CSSRS_STORAGE_KEY, JSON.stringify({ notAnArray: true }));
+      expect(getCssrsHistory()).toEqual([]);
+
+      const listener = vi.fn();
+      window.addEventListener('local-storage', listener);
+
+      const saved = saveCssrsResult({
+        answers: { q1: false, q2: false, q6: false },
+        evaluation: evaluateCssrs({ q1: false, q2: false, q6: false }),
+        source: 'manual',
+      });
+
+      expect(saved.id).toBeDefined();
+      expect(listener).toHaveBeenCalled();
+      window.removeEventListener('local-storage', listener);
     });
   });
 });

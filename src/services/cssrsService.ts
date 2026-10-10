@@ -157,7 +157,8 @@ export function getCssrsHistory(): CssrsResult[] {
   try {
     const raw = localStorage.getItem(CSSRS_STORAGE_KEY);
     if (!raw) return [];
-    return JSON.parse(raw);
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : [];
   } catch {
     return [];
   }
@@ -176,6 +177,9 @@ export function saveCssrsResult(
     const current = getCssrsHistory();
     const updated = [newEntry, ...current].slice(0, 50);
     localStorage.setItem(CSSRS_STORAGE_KEY, JSON.stringify(updated));
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('local-storage', { detail: { key: CSSRS_STORAGE_KEY } }));
+    }
   } catch {
     // Silent fail for storage error / quota
   }

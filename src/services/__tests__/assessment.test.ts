@@ -149,5 +149,23 @@ describe('Assessment Service (PHQ-9, GAD-7 & WHO-5)', () => {
       expect(history[0].id).toBe('test-1');
       expect(history[0].score).toBe(12);
     });
+
+    it('recovers safely when localStorage contains malformed non-array data', () => {
+      localStorage.setItem('rima-assessments', JSON.stringify({ corrupted: 'not-array' }));
+      expect(getAssessmentHistory()).toEqual([]);
+
+      const dummy: AssessmentResult = {
+        id: 'test-2',
+        type: 'gad7',
+        score: 8,
+        maxScore: 21,
+        severity: 'mild',
+        answers: { 1: 1 },
+        createdAt: new Date().toISOString(),
+      };
+
+      expect(() => saveAssessmentResult(dummy)).not.toThrow();
+      expect(getAssessmentHistory().length).toBe(1);
+    });
   });
 });

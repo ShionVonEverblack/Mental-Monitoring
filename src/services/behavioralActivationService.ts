@@ -154,6 +154,9 @@ export function getBaActivities(): BaActivity[] {
 export function saveBaActivities(activities: BaActivity[]): void {
   try {
     localStorage.setItem(BA_STORAGE_KEY, JSON.stringify(activities));
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('local-storage', { detail: { key: BA_STORAGE_KEY } }));
+    }
   } catch {
     // Quota or storage error
   }

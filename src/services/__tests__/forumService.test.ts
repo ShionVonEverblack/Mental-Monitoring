@@ -105,4 +105,19 @@ describe('forumService', () => {
     await reportForumPost('post-456', 'harassment');
     expect(getReportedPostIds()).toEqual(expect.arrayContaining([postId, 'post-456']));
   });
+
+  it('recovers gracefully when forum storage keys contain malformed non-array objects', async () => {
+    localStorage.setItem('rima_forum_posts', JSON.stringify({ corrupted: true }));
+    localStorage.setItem('rima_forum_comments', JSON.stringify({ corrupted: true }));
+    localStorage.setItem('rima_bookmarked_posts', JSON.stringify({ corrupted: true }));
+
+    const { posts } = await fetchForumPosts(0, 10);
+    expect(Array.isArray(posts)).toBe(true);
+
+    const comments = await fetchPostComments('any-post-id');
+    expect(Array.isArray(comments)).toBe(true);
+    expect(comments).toEqual([]);
+
+    expect(isPostBookmarked('any-post-id')).toBe(false);
+  });
 });

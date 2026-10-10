@@ -161,4 +161,13 @@ describe('referralService', () => {
     expect(writeMock).toHaveBeenCalled();
     expect(closeMock).toHaveBeenCalled();
   });
+
+  it('strictly escapes HTML entities and prevents XSS in custom notes and factors', () => {
+    const maliciousNote = '<script>alert("xss")</script><b>Bold</b> & "quoted" \'single\'';
+    const html = generateDoctorHandoverBriefHTML('id', maliciousNote);
+    expect(html).not.toContain('<script>');
+    expect(html).toContain('&lt;script&gt;alert(&quot;xss&quot;)&lt;/script&gt;');
+    expect(html).toContain('&amp;');
+    expect(html).toContain('&#039;single&#039;');
+  });
 });

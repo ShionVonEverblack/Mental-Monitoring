@@ -257,22 +257,27 @@ export function evaluateWHO5(answers: Record<number, number>): {
 
 const STORAGE_KEY = 'rima-assessments';
 
-export function saveAssessmentResult(result: AssessmentResult): void {
+export function getAssessmentHistory(): AssessmentResult[] {
   try {
-    const existing: AssessmentResult[] = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-    existing.unshift(result);
-    // Keep last 30 assessments locally
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(existing.slice(0, 30)));
-    window.dispatchEvent(new CustomEvent('local-storage', { detail: { key: STORAGE_KEY } }));
-  } catch (err) {
-    console.error('Failed to save assessment result locally:', err);
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
   }
 }
 
-export function getAssessmentHistory(): AssessmentResult[] {
+export function saveAssessmentResult(result: AssessmentResult): void {
   try {
-    return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-  } catch {
-    return [];
+    const existing = getAssessmentHistory();
+    existing.unshift(result);
+    // Keep last 30 assessments locally
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(existing.slice(0, 30)));
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('local-storage', { detail: { key: STORAGE_KEY } }));
+    }
+  } catch (err) {
+    console.error('Failed to save assessment result locally:', err);
   }
 }

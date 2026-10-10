@@ -1,4 +1,4 @@
-import { getStoredMoods } from '../utils/exportImport';
+import { getStoredMoods, escapeHTML } from '../utils/exportImport';
 import { getAssessmentHistory } from './assessmentService';
 import { getCssrsHistory } from './cssrsService';
 import { calculateSleepStats, getSleepHistory } from './sleepService';
@@ -185,39 +185,55 @@ export function generateDoctorHandoverBriefHTML(lang = 'id', customPatientNote =
 
   const isEn = activeLang === 'en';
 
-  const phq9Text = data.latestPhq9
-    ? `${data.latestPhq9.score}/27 (${formatSeverityLabel(data.latestPhq9.severity, isEn)}) — ${new Date(data.latestPhq9.createdAt).toLocaleDateString(localeTag)}`
-    : isEn ? 'No PHQ-9 screening recorded' : 'Belum ada data skrining PHQ-9';
+  const phq9Text = escapeHTML(
+    data.latestPhq9
+      ? `${data.latestPhq9.score}/27 (${formatSeverityLabel(data.latestPhq9.severity, isEn)}) — ${new Date(data.latestPhq9.createdAt).toLocaleDateString(localeTag)}`
+      : isEn ? 'No PHQ-9 screening recorded' : 'Belum ada data skrining PHQ-9'
+  );
 
-  const gad7Text = data.latestGad7
-    ? `${data.latestGad7.score}/21 (${formatSeverityLabel(data.latestGad7.severity, isEn)}) — ${new Date(data.latestGad7.createdAt).toLocaleDateString(localeTag)}`
-    : isEn ? 'No GAD-7 screening recorded' : 'Belum ada data skrining GAD-7';
+  const gad7Text = escapeHTML(
+    data.latestGad7
+      ? `${data.latestGad7.score}/21 (${formatSeverityLabel(data.latestGad7.severity, isEn)}) — ${new Date(data.latestGad7.createdAt).toLocaleDateString(localeTag)}`
+      : isEn ? 'No GAD-7 screening recorded' : 'Belum ada data skrining GAD-7'
+  );
 
-  const who5Text = data.latestWho5
-    ? `${data.latestWho5.percentageScore ?? data.latestWho5.score * 4}% (${data.latestWho5.score}/25) — ${new Date(data.latestWho5.createdAt).toLocaleDateString(localeTag)}`
-    : isEn ? 'No WHO-5 index recorded' : 'Belum ada data indeks WHO-5';
+  const who5Text = escapeHTML(
+    data.latestWho5
+      ? `${data.latestWho5.percentageScore ?? data.latestWho5.score * 4}% (${data.latestWho5.score}/25) — ${new Date(data.latestWho5.createdAt).toLocaleDateString(localeTag)}`
+      : isEn ? 'No WHO-5 index recorded' : 'Belum ada data indeks WHO-5'
+  );
 
-  const cssrsText = data.latestCssrs
-    ? `Tingkat Risiko: ${data.latestCssrs.evaluation.riskLevel.toUpperCase()} — ${new Date(data.latestCssrs.createdAt).toLocaleDateString(localeTag)}`
-    : isEn ? 'Not assessed / None' : 'Tidak ada evaluasi risiko aktif';
+  const cssrsText = escapeHTML(
+    data.latestCssrs
+      ? `Tingkat Risiko: ${data.latestCssrs.evaluation.riskLevel.toUpperCase()} — ${new Date(data.latestCssrs.createdAt).toLocaleDateString(localeTag)}`
+      : isEn ? 'Not assessed / None' : 'Tidak ada evaluasi risiko aktif'
+  );
 
-  const sleepText = data.sleepStats && data.sleepStats.totalEntries > 0
-    ? `${data.sleepStats.avgEfficiency}% ${isEn ? 'efficiency' : 'efisiensi'} (${(data.sleepStats.avgSleepDurationMinutes / 60).toFixed(1)} ${isEn ? 'hrs/night' : 'jam/malam'}, ⭐ ${data.sleepStats.avgQuality}/5)`
-    : isEn ? 'No sleep diary recorded' : 'Belum ada catatan tidur';
+  const sleepText = escapeHTML(
+    data.sleepStats && data.sleepStats.totalEntries > 0
+      ? `${data.sleepStats.avgEfficiency}% ${isEn ? 'efficiency' : 'efisiensi'} (${(data.sleepStats.avgSleepDurationMinutes / 60).toFixed(1)} ${isEn ? 'hrs/night' : 'jam/malam'}, ⭐ ${data.sleepStats.avgQuality}/5)`
+      : isEn ? 'No sleep diary recorded' : 'Belum ada catatan tidur'
+  );
 
-  const avgMoodText = data.avgMoodScore !== null
-    ? `${data.avgMoodScore} / 5 (${data.totalMoodLogs} catatan)`
-    : isEn ? 'No mood data' : 'Belum ada data suasana hati';
+  const avgMoodText = escapeHTML(
+    data.avgMoodScore !== null
+      ? `${data.avgMoodScore} / 5 (${data.totalMoodLogs} catatan)`
+      : isEn ? 'No mood data' : 'Belum ada data suasana hati'
+  );
 
-  const factorsText = data.topFactors.length > 0
-    ? data.topFactors.join(', ')
-    : isEn ? 'None recorded' : 'Tidak terdata';
+  const factorsText = escapeHTML(
+    data.topFactors.length > 0
+      ? data.topFactors.join(', ')
+      : isEn ? 'None recorded' : 'Tidak terdata'
+  );
+
+  const safePatientNote = escapeHTML(customPatientNote.trim()).replace(/\n/g, '<br/>');
 
   const noteBlock = customPatientNote.trim()
     ? `
       <div class="section">
         <h3>${isEn ? 'Patient Subjective Statement / Chief Complaint' : 'Keluhan Utama & Catatan Subjektif Pasien'}</h3>
-        <p class="patient-note">${customPatientNote.replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br/>')}</p>
+        <p class="patient-note">${safePatientNote}</p>
       </div>
     `
     : '';

@@ -70,7 +70,12 @@ export function generateBackupData(): RimaBackupData {
   const getItem = <T>(key: string, fallback: T): T => {
     try {
       const item = localStorage.getItem(key);
-      return item ? JSON.parse(item) : fallback;
+      if (!item) return fallback;
+      const parsed = JSON.parse(item);
+      if (Array.isArray(fallback)) {
+        return (Array.isArray(parsed) ? parsed : fallback) as T;
+      }
+      return (parsed ?? fallback) as T;
     } catch {
       return fallback;
     }

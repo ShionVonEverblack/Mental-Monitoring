@@ -73,7 +73,9 @@ export function saveSleepEntry(entry: SleepDiaryEntry): void {
 export function getSleepHistory(): SleepDiaryEntry[] {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    return raw ? JSON.parse(raw) : [];
+    if (!raw) return [];
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : [];
   } catch {
     return [];
   }
