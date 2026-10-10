@@ -3,6 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { Eye, Hand, Ear, Sparkles, Heart, CheckCircle, RotateCcw, ArrowRight, ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { ClinicalDisclaimer } from '../components/common/ClinicalDisclaimer';
+import { SoundscapePlayer } from '../components/somatics/SoundscapePlayer';
+import { SelfCompassionModal } from '../components/cft/SelfCompassionModal';
 
 interface GroundingStep {
   step: number;
@@ -92,6 +94,7 @@ export const Grounding: React.FC = () => {
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [isCompleted, setIsCompleted] = useState(false);
   const [reflection, setReflection] = useState<'calmer' | 'same' | 'anxious' | null>(null);
+  const [isCftOpen, setIsCftOpen] = useState(false);
 
   const triggerHaptic = () => {
     if (typeof navigator !== 'undefined' && 'vibrate' in navigator) {
@@ -131,6 +134,11 @@ export const Grounding: React.FC = () => {
           {t('grounding.subtitle', 'Metode somatik berbasis bukti untuk meredakan panik, kecemasan akut, dan mengembalikan kesadaran ke saat ini.')}
         </p>
       </header>
+
+      {/* Procedural Web Audio Soundscape Companion */}
+      <div style={{ marginBottom: 'var(--spacing-lg)' }}>
+        <SoundscapePlayer compact />
+      </div>
 
       {!isCompleted ? (
         <div className="grounding-card card" style={{ padding: 'var(--spacing-xl)', animation: 'fadeInUp 0.4s ease-out' }}>
@@ -281,6 +289,42 @@ export const Grounding: React.FC = () => {
           </div>
         </div>
       )}
+
+      {/* Self-Compassion Break (CFT) Alternative Pathway */}
+      <div
+        style={{
+          marginTop: 'var(--spacing-xl)',
+          padding: '16px 20px',
+          borderRadius: '12px',
+          border: '1px solid var(--border-subtle)',
+          backgroundColor: 'var(--bg-elevated)',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          gap: '16px',
+          flexWrap: 'wrap',
+        }}
+      >
+        <div style={{ flex: 1, minWidth: '220px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 600, fontSize: '0.925rem', color: 'var(--text-primary)' }}>
+            <span>💝</span>
+            <span>{t('cft.grounding_cta_title', 'Merasa Terluka atau Mengkritik Diri Sendiri?')}</span>
+          </div>
+          <p style={{ margin: '4px 0 0 0', fontSize: '0.8rem', color: 'var(--text-secondary)', lineHeight: 1.4 }}>
+            {t('cft.grounding_cta_sub', 'Coba Jeda Belas Kasih Diri 3-Langkah (Self-Compassion Break) untuk melembutkan rasa bersalah dan memberi ruang aman bagi hatimu.')}
+          </p>
+        </div>
+        <button
+          type="button"
+          className="btn btn-secondary btn-sm"
+          onClick={() => setIsCftOpen(true)}
+          style={{ whiteSpace: 'nowrap' }}
+        >
+          {t('cft.start_btn', 'Mulai Jeda')} →
+        </button>
+      </div>
+
+      <SelfCompassionModal isOpen={isCftOpen} onClose={() => setIsCftOpen(false)} />
 
       <ClinicalDisclaimer context={t('disclaimer.grounding', 'Teknik grounding 5-4-3-2-1 adalah intervensi swa-bantu (self-help) untuk regulasi sistem saraf dan bukan pengganti penanganan psikoterapi profesional.')} />
     </div>

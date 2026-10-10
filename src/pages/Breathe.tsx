@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocalStorage } from '../hooks/useLocalStorage';
+import { SoundscapePlayer } from '../components/somatics/SoundscapePlayer';
 import type { FC } from 'react';
 
 type TechniqueId = 'sighing' | '4-7-8' | 'box' | 'calm' | 'coherent';
@@ -358,6 +359,11 @@ export const Breathe: FC = () => {
           💡 <strong>{t('breathe.evidence.sighing', 'Riset Stanford 2023')}:</strong> {t('breathe.evidence.sighingDesc', 'Dua kali tarikan napas membuka kembali kantung udara paru-paru (alveoli) dan embusan panjang merangsang saraf vagus untuk menurunkan detak jantung secara instan.')}
         </div>
       )}
+
+      {/* Procedural Web Audio Somatics Ambient Companion */}
+      <div style={{ maxWidth: '480px', margin: '0 auto var(--spacing-md)', width: '100%' }}>
+        <SoundscapePlayer compact />
+      </div>
       
       <div className="breathe-circle-container">
         {/* aria-live for screen readers — Polyvagal pacing for visually impaired users */}

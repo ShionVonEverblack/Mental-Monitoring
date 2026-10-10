@@ -12,6 +12,7 @@ import { DAILY_AFFIRMATIONS, AVAILABLE_LANGUAGES, MOOD_EMOJIS } from '../utils/c
 import { SPIRITUAL_CONTENT } from '../data/spiritualContent';
 import { EscalationBanner } from '../components/common/EscalationBanner';
 import { generateInsights } from '../services/moodAnalysisService';
+import { SelfCompassionModal } from '../components/cft/SelfCompassionModal';
 import type { Language, MoodScore } from '../types';
 
 export const Home: React.FC = () => {
@@ -19,6 +20,7 @@ export const Home: React.FC = () => {
   const navigate = useNavigate();
   const { moods, getTodayMood, getWeeklyMoods, addMood, getMoodStats } = useMood();
   const [showLangModal, setShowLangModal] = useState(false);
+  const [isCftOpen, setIsCftOpen] = useState(false);
   
   const currentLang = (i18n.language?.split('-')[0] || 'id') as Language;
   const todayMood = getTodayMood();
@@ -233,6 +235,10 @@ export const Home: React.FC = () => {
           <BookOpen className="action-icon" />
           <span>{t('home.education', 'Edukasi')}</span>
         </button>
+        <button className="quick-action-btn cft" onClick={() => setIsCftOpen(true)}>
+          <Heart className="action-icon" style={{ color: 'var(--color-primary)' }} />
+          <span>{t('home.cftSelfCompassion', 'Belas Kasih Diri')}</span>
+        </button>
       </section>
 
       <section className="chart-section">
@@ -286,6 +292,8 @@ export const Home: React.FC = () => {
           </div>
         )}
       </section>
+
+      <SelfCompassionModal isOpen={isCftOpen} onClose={() => setIsCftOpen(false)} />
     </div>
   );
 };
