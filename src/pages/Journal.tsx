@@ -340,10 +340,10 @@ export const Journal: React.FC = () => {
             {t('crisis.gentleMessage', 'Tulisanmu menunjukkan bahwa kamu mungkin sedang mengalami masa sulit. Kamu tidak sendirian, dan ada bantuan yang tersedia.')}
           </p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-sm)' }}>
-            <button className="btn btn-danger" onClick={() => { navigate('/safety-plan'); setCrisisResult(null); }}>
+            <button className="btn btn-danger" onClick={() => { setCrisisResult(null); navigate('/safety-plan'); }}>
               {t('crisis.contactHelp', '🆘 Hubungi Bantuan Krisis')}
             </button>
-            <button className="btn btn-secondary" onClick={() => navigate('/safety-plan')}>
+            <button className="btn btn-secondary" onClick={() => { setCrisisResult(null); navigate('/safety-plan'); }}>
               {t('crisis.safetyPlan', '📋 Lihat Rencana Keselamatan')}
             </button>
             <button className="btn btn-ghost" onClick={() => setCrisisResult(null)}>

@@ -9,6 +9,7 @@ export interface ModalProps {
   title?: string;
   children: React.ReactNode;
   size?: 'sm' | 'md' | 'lg';
+  showCloseButton?: boolean;
 }
 
 const FOCUSABLE_SELECTOR = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
@@ -21,7 +22,14 @@ interface ModalStackItem {
 let activeModalStack: ModalStackItem[] = [];
 let initialBodyOverflow: string | null = null;
 
-export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children, size = 'md' }) => {
+export const Modal: React.FC<ModalProps> = ({
+  isOpen,
+  onClose,
+  title,
+  children,
+  size = 'md',
+  showCloseButton = true,
+}) => {
   const modalRef = useRef<HTMLDivElement>(null);
   const previousFocusRef = useRef<HTMLElement | null>(null);
   const onCloseRef = useRef(onClose);
@@ -48,6 +56,7 @@ export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children, 
       const top = activeModalStack[activeModalStack.length - 1];
 
       if (e.key === 'Escape') {
+        if (!showCloseButton) return;
         if (top && top.id === instanceId) {
           e.stopPropagation();
           onCloseRef.current();
@@ -62,6 +71,17 @@ export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children, 
 
         const first = focusableElements[0];
         const last = focusableElements[focusableElements.length - 1];
+
+        const isOutsideOrContainer = !modalRef.current.contains(document.activeElement) || document.activeElement === modalRef.current;
+        if (isOutsideOrContainer) {
+          e.preventDefault();
+          if (e.shiftKey) {
+            last.focus();
+          } else {
+            first.focus();
+          }
+          return;
+        }
 
         if (e.shiftKey) {
           if (document.activeElement === first) {
@@ -94,7 +114,7 @@ export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children, 
         previousFocusRef.current.focus();
       }
     };
-  }, [isOpen, instanceId]);
+  }, [isOpen, instanceId, showCloseButton]);
 
   if (!isOpen) return null;
 
@@ -104,7 +124,7 @@ export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children, 
     : {};
 
   return createPortal(
-    <div className="modal-overlay" style={overlayStyle} onClick={onClose}>
+    <div className="modal-overlay" style={overlayStyle} onClick={showCloseButton ? onClose : undefined}>
       <div
         ref={modalRef}
         tabIndex={-1}
@@ -119,7 +139,9 @@ export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children, 
       >
         <div className="modal-header">
           {title && <h2 id={titleId} style={{ fontSize: '1.125rem', fontWeight: 600, margin: 0 }}>{title}</h2>}
-          <Button variant="ghost" size="sm" onClick={onClose} icon={<X size={20} />} aria-label="Close modal" />
+          {showCloseButton && (
+            <Button variant="ghost" size="sm" onClick={onClose} icon={<X size={20} />} aria-label="Close modal" />
+          )}
         </div>
         <div className="modal-body">{children}</div>
       </div>

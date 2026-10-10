@@ -38,4 +38,16 @@ describe('useLocalStorage Hook', () => {
     expect(result.current[0]).toBe('initial');
     expect(window.localStorage.getItem('test-key')).toBeNull();
   });
+
+  it('falls back to initialValue if localStorage parses to null when initialValue is non-null', () => {
+    window.localStorage.setItem('test-null-key', 'null');
+    const { result } = renderHook(() => useLocalStorage('test-null-key', { defaultProp: true }));
+    expect(result.current[0]).toEqual({ defaultProp: true });
+  });
+
+  it('falls back to initialValue if localStorage is not an array when initialValue is an array', () => {
+    window.localStorage.setItem('test-array-key', '{"notAnArray": 123}');
+    const { result } = renderHook(() => useLocalStorage<string[]>('test-array-key', ['item1']));
+    expect(result.current[0]).toEqual(['item1']);
+  });
 });

@@ -103,4 +103,51 @@ describe('Modal Component & Stacking Architecture', () => {
     fireEvent.click(insideBtn);
     expect(onClose).toHaveBeenCalledTimes(1);
   });
+
+  it('hides close button and suppresses Escape dismiss when showCloseButton is false', () => {
+    const onClose = vi.fn();
+    render(
+      <Modal isOpen={true} onClose={onClose} title="Mandatory Consent" showCloseButton={false}>
+        <p>You must agree to continue</p>
+      </Modal>
+    );
+
+    // Close button should not be rendered
+    expect(screen.queryByRole('button', { name: /close modal/i })).toBeNull();
+
+    // Escape key press should be suppressed
+    fireEvent.keyDown(document, { key: 'Escape' });
+    expect(onClose).not.toHaveBeenCalled();
+  });
+
+  it('traps focus cycling with Tab and Shift+Tab across interactive modal elements', () => {
+    render(
+      <Modal isOpen={true} onClose={() => {}} title="Trap Test" showCloseButton={true}>
+        <button>First Interactive</button>
+        <button>Second Interactive</button>
+      </Modal>
+    );
+
+    const dialog = screen.getByRole('dialog');
+    const closeBtn = screen.getByRole('button', { name: /close modal/i });
+    const secondBtn = screen.getByRole('button', { name: /second interactive/i });
+
+    // Focus last element (secondBtn), press Tab -> should cycle to closeBtn (first focusable)
+    secondBtn.focus();
+    expect(document.activeElement).toBe(secondBtn);
+    fireEvent.keyDown(document, { key: 'Tab', shiftKey: false });
+    expect(document.activeElement).toBe(closeBtn);
+
+    // Focus first element (closeBtn), press Shift+Tab -> should cycle to secondBtn
+    closeBtn.focus();
+    expect(document.activeElement).toBe(closeBtn);
+    fireEvent.keyDown(document, { key: 'Tab', shiftKey: true });
+    expect(document.activeElement).toBe(secondBtn);
+
+    // Initial container focus: Shift+Tab must focus secondBtn without escaping
+    dialog.focus();
+    expect(document.activeElement).toBe(dialog);
+    fireEvent.keyDown(document, { key: 'Tab', shiftKey: true });
+    expect(document.activeElement).toBe(secondBtn);
+  });
 });

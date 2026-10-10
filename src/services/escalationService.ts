@@ -18,7 +18,9 @@ function logEscalationEvent(level: EscalationLevel, messageKey: string): void {
   if (level < 2) return; // Only log significant escalations
   try {
     const logEntry = { timestamp: new Date().toISOString(), level, messageKey };
-    const logs = JSON.parse(localStorage.getItem('rima-escalation-log') || '[]');
+    const raw = localStorage.getItem('rima-escalation-log') || '[]';
+    const parsed = JSON.parse(raw);
+    const logs = Array.isArray(parsed) ? parsed : [];
     logs.push(logEntry);
     localStorage.setItem('rima-escalation-log', JSON.stringify(logs.slice(-50)));
   } catch {

@@ -254,4 +254,41 @@ describe('FastActionSafetyCard Component', () => {
     const dismissBtn = screen.getByRole('button', { name: /Saya Merasa Lebih Tenang/i });
     expect(dismissBtn).toHaveClass('fast-safety-dismiss-btn');
   });
+
+  it('traps focus cycling with Tab and Shift+Tab when embedded is false', () => {
+    render(<FastActionSafetyCard isOpen={true} onClose={vi.fn()} embedded={false} />);
+
+    const dialog = screen.getByRole('dialog');
+    const focusableElements = dialog.querySelectorAll<HTMLElement>(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    );
+    expect(focusableElements.length).toBeGreaterThan(1);
+
+    const first = focusableElements[0];
+    const last = focusableElements[focusableElements.length - 1];
+
+    // Focus last element, press Tab -> should cycle to first
+    last.focus();
+    expect(document.activeElement).toBe(last);
+    fireEvent.keyDown(document, { key: 'Tab', shiftKey: false });
+    expect(document.activeElement).toBe(first);
+
+    // Focus first element, press Shift+Tab -> should cycle to last
+    first.focus();
+    expect(document.activeElement).toBe(first);
+    fireEvent.keyDown(document, { key: 'Tab', shiftKey: true });
+    expect(document.activeElement).toBe(last);
+
+    // Initial container focus: Shift+Tab must focus last child without escaping
+    dialog.focus();
+    expect(document.activeElement).toBe(dialog);
+    fireEvent.keyDown(document, { key: 'Tab', shiftKey: true });
+    expect(document.activeElement).toBe(last);
+
+    // Initial container focus: Tab must focus first child
+    dialog.focus();
+    expect(document.activeElement).toBe(dialog);
+    fireEvent.keyDown(document, { key: 'Tab', shiftKey: false });
+    expect(document.activeElement).toBe(first);
+  });
 });

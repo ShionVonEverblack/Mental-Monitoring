@@ -63,9 +63,9 @@ describe('exportImport Utilities (Localization & Data Portability)', () => {
 
   it('sanitizes CSV cells starting with formula triggers (=, +, -, @) to prevent CSV injection', () => {
     const mockMoods = [
-      { id: '1', score: 4, emoji: '🙂', factors: ['work'], note: '=CMD("calc")', createdAt: '2026-09-01T10:00:00.000Z' },
-      { id: '2', score: 3, emoji: '😐', factors: ['work'], note: '+12345', createdAt: '2026-09-01T11:00:00.000Z' },
-      { id: '3', score: 2, emoji: '😟', factors: ['work'], note: '-danger', createdAt: '2026-09-01T12:00:00.000Z' },
+      { id: '1', score: 4, emoji: '🙂', factors: ['work', '=HYPERLINK("evil.com")'], note: '=CMD("calc")', createdAt: '2026-09-01T10:00:00.000Z' },
+      { id: '2', score: 3, emoji: '=😐', factors: ['work'], note: '+12345', createdAt: '2026-09-01T11:00:00.000Z' },
+      { id: '3', score: 2, emoji: '😟', factors: ['-dangerFactor'], note: '-danger', createdAt: '2026-09-01T12:00:00.000Z' },
       { id: '4', score: 1, emoji: '😢', factors: ['work'], note: '@SUM(A1:A10)', createdAt: '2026-09-01T13:00:00.000Z' },
     ];
     localStorage.setItem('rima-moods', JSON.stringify(mockMoods));
@@ -83,6 +83,69 @@ describe('exportImport Utilities (Localization & Data Portability)', () => {
     expect(exportedBlobContent).toContain("\"'+12345\"");
     expect(exportedBlobContent).toContain("\"'-danger\"");
     expect(exportedBlobContent).toContain("\"'@SUM(A1:A10)\"");
+    expect(exportedBlobContent).toContain("\"'-dangerFactor\"");
+    expect(exportedBlobContent).toContain("\"'=😐\"");
+  });
+
+  it('sanitizes mood notes with leading whitespace and newlines before formula triggers', () => {
+    const mockMoods = [
+      { id: '1', score: 4, emoji: '🙂', factors: ['work'], note: '  =1+1', createdAt: '2026-09-01T10:00:00.000Z' },
+      { id: '2', score: 3, emoji: '😐', factors: ['work'], note: 'Line 1\n=EVIL()', createdAt: '2026-09-01T11:00:00.000Z' },
+    ];
+    localStorage.setItem('rima-moods', JSON.stringify(mockMoods));
+
+    let exportedBlobContent = '';
+    const originalBlob = globalThis.Blob;
+    vi.spyOn(globalThis, 'Blob').mockImplementation(function (blobParts: any, options: any) {
+      exportedBlobContent = blobParts.join('');
+      return new originalBlob(blobParts, options);
+    });
+
+    const success = exportMoodsAsCSV('en');
+    expect(success).toBe(true);
+    expect(exportedBlobContent).toContain("\"'=1+1\"");
+    expect(exportedBlobContent).not.toContain('\n=EVIL()');
+  });
+
+  it('sanitizes journal template, title, and strips newlines before sanitizing cells', () => {
+    const mockJournals = [
+      {
+        id: 'j-inject',
+        title: '\n=CMD("calc")',
+        template: '+custom\ntemplate',
+        content: 'Line 1\nLine 2\r\n=PAYLOAD',
+        isPrivate: false,
+        createdAt: '2026-09-01T10:00:00.000Z',
+        updatedAt: '2026-09-01T10:00:00.000Z'
+      }
+    ];
+    localStorage.setItem('rima-journals', JSON.stringify(mockJournals));
+
+    let exportedBlobContent = '';
+    const originalBlob = globalThis.Blob;
+    vi.spyOn(globalThis, 'Blob').mockImplementation(function (blobParts: any, options: any) {
+      exportedBlobContent = blobParts.join('');
+      return new originalBlob(blobParts, options);
+    });
+
+    const success = exportJournalsAsCSV('en');
+    expect(success).toBe(true);
+    expect(exportedBlobContent).toContain("\"'+custom template\"");
+    expect(exportedBlobContent).toContain("\"'=CMD(\"\"calc\"\")\"");
+    expect(exportedBlobContent).not.toContain('\nLine 2');
+  });
+
+  it('resiliently handles malformed non-array localStorage in exportJournalsAsCSV and generateClinicalSummaryHTML', () => {
+    // Malformed object in rima-journals and rima-escalation-log
+    localStorage.setItem('rima-journals', JSON.stringify({ notAnArray: true }));
+    localStorage.setItem('rima-escalation-log', JSON.stringify({ notAnArray: true }));
+    localStorage.setItem('rima-moods', JSON.stringify([{ id: '1', score: 4, createdAt: '2026-09-01T10:00:00.000Z' }]));
+
+    expect(() => exportJournalsAsCSV('en')).not.toThrow();
+    expect(exportJournalsAsCSV('en')).toBe(false);
+
+    expect(() => generateClinicalSummaryHTML('en')).not.toThrow();
+    expect(generateClinicalSummaryHTML('en')).toBe(true);
   });
 
   it('correctly backs up and restores data via JSON', () => {

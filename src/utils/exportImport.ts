@@ -121,8 +121,9 @@ const getActiveLang = (lang?: string): string => {
 
 export function sanitizeCSVCell(val: string): string {
   const escaped = (val || '').replace(/"/g, '""');
-  // OWASP CSV Injection defense: prepend single quote if cell begins with =, +, -, @, tab, or carriage return
-  if (/^[=+\-@\t\r]/.test(escaped)) {
+  // OWASP CSV Injection defense: prepend single quote if cell begins with =, +, -, @, tab, newline, carriage return,
+  // or whitespace preceding a formula trigger (=, +, -, @).
+  if (/^[=+\-@\t\r\n]/.test(escaped) || /^\s+[=+\-@]/.test(escaped)) {
     return `'${escaped}`;
   }
   return escaped;
@@ -162,9 +163,9 @@ export function exportMoodsAsCSV(lang?: string): boolean {
   const rows = moods.map(m => [
     `"${new Date(m.createdAt).toLocaleString(localeTag)}"`,
     m.score,
-    `"${m.emoji}"`,
-    `"${(m.factors || []).join(', ')}"`,
-    `"${sanitizeCSVCell(m.note || '')}"`
+    `"${sanitizeCSVCell((m.emoji || '').replace(/[\r\n]+/g, ' ').trim())}"`,
+    `"${sanitizeCSVCell((m.factors || []).join(', '))}"`,
+    `"${sanitizeCSVCell((m.note || '').replace(/[\r\n]+/g, ' ').trim())}"`
   ]);
 
   const csvContent = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
@@ -194,7 +195,9 @@ export function exportJournalsAsCSV(lang?: string): boolean {
   const journals: JournalEntry[] = (() => {
     try {
       const item = localStorage.getItem('rima-journals');
-      return item ? JSON.parse(item) : [];
+      if (!item) return [];
+      const parsed = JSON.parse(item);
+      return Array.isArray(parsed) ? parsed : [];
     } catch {
       return [];
     }
@@ -210,9 +213,9 @@ export function exportJournalsAsCSV(lang?: string): boolean {
 
   const rows = journals.map(j => [
     `"${new Date(j.createdAt).toLocaleString(localeTag)}"`,
-    `"${j.template || 'free'}"`,
-    `"${sanitizeCSVCell(j.title || '')}"`,
-    `"${sanitizeCSVCell(j.content || '').replace(/\n/g, ' ')}"`,
+    `"${sanitizeCSVCell((j.template || 'free').replace(/[\r\n]+/g, ' ').trim())}"`,
+    `"${sanitizeCSVCell((j.title || '').replace(/[\r\n]+/g, ' ').trim())}"`,
+    `"${sanitizeCSVCell((j.content || '').replace(/[\r\n]+/g, ' ').trim())}"`,
   ]);
 
   const csvContent = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
@@ -257,7 +260,8 @@ export function generateClinicalSummaryHTML(lang?: string): boolean {
   // Escalation history
   const escalationLog = (() => {
     try {
-      return JSON.parse(localStorage.getItem('rima-escalation-log') || '[]');
+      const parsed = JSON.parse(localStorage.getItem('rima-escalation-log') || '[]');
+      return Array.isArray(parsed) ? parsed : [];
     } catch { return []; }
   })();
 
@@ -336,11 +340,11 @@ export function generateClinicalSummaryHTML(lang?: string): boolean {
   };
 
   const html = `<!DOCTYPE html>
-<html lang="${activeLang}">
+<html lang="${escapeHTML(activeLang)}">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>${tDict.title}</title>
+  <title>${escapeHTML(tDict.title)}</title>
   <style>
     body { font-family: 'Segoe UI', sans-serif; max-width: 800px; margin: 0 auto; padding: 24px; color: #333; }
     h1 { color: #4a7cf7; border-bottom: 2px solid #4a7cf7; padding-bottom: 8px; }
@@ -355,19 +359,19 @@ export function generateClinicalSummaryHTML(lang?: string): boolean {
   </style>
 </head>
 <body>
-  <h1>${tDict.header}</h1>
-  <p><strong>${tDict.reportDate}</strong> ${new Date().toLocaleDateString(localeTag, { dateStyle: 'full' })}</p>
-  <p><strong>${tDict.dataPeriod}</strong> ${sortedMoods.length > 0 ? new Date(sortedMoods[sortedMoods.length - 1].createdAt).toLocaleDateString(localeTag) : '-'} ${tDict.to} ${sortedMoods.length > 0 ? new Date(sortedMoods[0].createdAt).toLocaleDateString(localeTag) : '-'}</p>
+  <h1>${escapeHTML(tDict.header)}</h1>
+  <p><strong>${escapeHTML(tDict.reportDate)}</strong> ${escapeHTML(new Date().toLocaleDateString(localeTag, { dateStyle: 'full' }))}</p>
+  <p><strong>${escapeHTML(tDict.dataPeriod)}</strong> ${sortedMoods.length > 0 ? escapeHTML(new Date(sortedMoods[sortedMoods.length - 1].createdAt).toLocaleDateString(localeTag)) : '-'} ${escapeHTML(tDict.to)} ${sortedMoods.length > 0 ? escapeHTML(new Date(sortedMoods[0].createdAt).toLocaleDateString(localeTag)) : '-'}</p>
   
   <div class="disclaimer">
-    ⚕️ <strong>${tDict.disclaimerTitle}</strong> ${tDict.disclaimerText}
+    ⚕️ <strong>${escapeHTML(tDict.disclaimerTitle)}</strong> ${escapeHTML(tDict.disclaimerText)}
   </div>
 
-  <h2>${tDict.statsTitle}</h2>
+  <h2>${escapeHTML(tDict.statsTitle)}</h2>
   <div>
-    <span class="metric">📊 ${tDict.totalMoods} <strong>${sortedMoods.length}</strong></span>
-    <span class="metric">📝 ${tDict.totalJournals} <strong>${backup.journals.length}</strong></span>
-    <span class="metric">⭐ ${tDict.avgMood} <strong>${avgMood}/5</strong></span>
+    <span class="metric">📊 ${escapeHTML(tDict.totalMoods)} <strong>${escapeHTML(sortedMoods.length)}</strong></span>
+    <span class="metric">📝 ${escapeHTML(tDict.totalJournals)} <strong>${escapeHTML(backup.journals.length)}</strong></span>
+    <span class="metric">⭐ ${escapeHTML(tDict.avgMood)} <strong>${escapeHTML(avgMood)}/5</strong></span>
   </div>
 
   ${topFactors.length > 0 ? `
@@ -416,8 +420,8 @@ export function generateClinicalSummaryHTML(lang?: string): boolean {
   ` : ''}
 
   <footer style="margin-top: 48px; padding-top: 16px; border-top: 1px solid #ddd; font-size: 0.75rem; color: #888;">
-    <p>${tDict.footerCreated}</p>
-    <p>${tDict.footerPrivacy}</p>
+    <p>${escapeHTML(tDict.footerCreated)}</p>
+    <p>${escapeHTML(tDict.footerPrivacy)}</p>
   </footer>
 </body>
 </html>`;

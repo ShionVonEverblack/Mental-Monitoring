@@ -29,6 +29,7 @@ export const ConsentModal: React.FC = () => {
       isOpen={isOpen}
       onClose={() => {}} // User must agree to continue
       title={t('consent.title', 'Komitmen Privasi & Keamanan RIMA')}
+      showCloseButton={false}
     >
       <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
         <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', lineHeight: 1.6, margin: 0 }}>

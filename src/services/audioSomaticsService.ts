@@ -73,6 +73,7 @@ class AudioSomaticsService {
   private currentPreset: SoundscapePresetId | null = null;
   private isPlaying = false;
   private volume = 0.5;
+  private stopTimeoutId: ReturnType<typeof setTimeout> | null = null;
 
   private initContext(): AudioContext | null {
     if (typeof window === 'undefined') return null;
@@ -156,6 +157,11 @@ class AudioSomaticsService {
    * Plays selected preset with smooth fade-in.
    */
   public async play(presetId: SoundscapePresetId): Promise<boolean> {
+    if (this.stopTimeoutId !== null) {
+      clearTimeout(this.stopTimeoutId);
+      this.stopTimeoutId = null;
+    }
+
     const ctx = this.initContext();
     if (!ctx || !this.masterGain) {
       this.isPlaying = true;
@@ -232,6 +238,13 @@ class AudioSomaticsService {
    * Stops playback with a smooth 1-second fade-out.
    */
   public stop(): void {
+    if (this.stopTimeoutId !== null) {
+      clearTimeout(this.stopTimeoutId);
+      this.stopTimeoutId = null;
+      this.stopImmediate();
+      return;
+    }
+
     if (!this.isPlaying) return;
 
     if (this.currentSourceNode && this.ctx) {
@@ -239,7 +252,7 @@ class AudioSomaticsService {
       try {
         fadeGain.gain.setValueAtTime(fadeGain.gain.value, this.ctx.currentTime);
         fadeGain.gain.linearRampToValueAtTime(0, this.ctx.currentTime + 0.8);
-        setTimeout(() => {
+        this.stopTimeoutId = setTimeout(() => {
           this.stopImmediate();
         }, 850);
       } catch {
@@ -253,6 +266,11 @@ class AudioSomaticsService {
   }
 
   private stopImmediate(): void {
+    if (this.stopTimeoutId !== null) {
+      clearTimeout(this.stopTimeoutId);
+      this.stopTimeoutId = null;
+    }
+
     if (this.activeBufferSource) {
       try {
         this.activeBufferSource.stop();

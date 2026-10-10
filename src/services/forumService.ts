@@ -172,7 +172,8 @@ export async function createForumPost(
   const raw = localStorage.getItem(LOCAL_STORAGE_KEY);
   let existing: ForumPost[] = [];
   try {
-    existing = raw ? JSON.parse(raw) : DEFAULT_POSTS;
+    const parsed = raw ? JSON.parse(raw) : DEFAULT_POSTS;
+    existing = Array.isArray(parsed) ? parsed : DEFAULT_POSTS;
   } catch {
     existing = DEFAULT_POSTS;
   }
@@ -187,7 +188,8 @@ export async function addReactionToPost(postId: string, reactionType: 'heart' | 
   const raw = localStorage.getItem(LOCAL_STORAGE_KEY);
   let posts: ForumPost[] = [];
   try {
-    posts = raw ? JSON.parse(raw) : DEFAULT_POSTS;
+    const parsed = raw ? JSON.parse(raw) : DEFAULT_POSTS;
+    posts = Array.isArray(parsed) ? parsed : DEFAULT_POSTS;
   } catch {
     posts = DEFAULT_POSTS;
   }
@@ -356,7 +358,9 @@ export interface ForumReport {
 export function getReportedPostIds(): string[] {
   try {
     const raw = localStorage.getItem(LOCAL_REPORTS_KEY);
-    const reports: ForumReport[] = raw ? JSON.parse(raw) : [];
+    if (!raw) return [];
+    const parsed = JSON.parse(raw);
+    const reports: ForumReport[] = Array.isArray(parsed) ? parsed : [];
     return reports.map(r => r.postId);
   } catch {
     return [];
@@ -374,7 +378,8 @@ export async function reportForumPost(postId: string, reason: string, details?: 
 
   try {
     const raw = localStorage.getItem(LOCAL_REPORTS_KEY);
-    const current: ForumReport[] = raw ? JSON.parse(raw) : [];
+    const parsed = raw ? JSON.parse(raw) : [];
+    const current: ForumReport[] = Array.isArray(parsed) ? parsed : [];
     const updated = [...current, newReport];
     localStorage.setItem(LOCAL_REPORTS_KEY, JSON.stringify(updated));
     window.dispatchEvent(new Event('local-storage'));

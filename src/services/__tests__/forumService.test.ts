@@ -120,4 +120,27 @@ describe('forumService', () => {
 
     expect(isPostBookmarked('any-post-id')).toBe(false);
   });
+
+  it('handles malformed objects in localStorage gracefully across create, react, and report', async () => {
+    localStorage.setItem('rima-forum-posts', JSON.stringify({ malformed: true }));
+    localStorage.setItem('rima-forum-reports', JSON.stringify({ malformed: true }));
+
+    // createForumPost should not throw on malformed storage
+    const created = await createForumPost('Judul', 'Konten', 'other');
+    expect(created.post).toBeDefined();
+
+    // addReactionToPost should not throw on malformed storage
+    const reacted = await addReactionToPost(created.post.id, 'heart');
+    expect(Array.isArray(reacted)).toBe(true);
+
+    // getReportedPostIds should not throw on malformed storage
+    const reports = getReportedPostIds();
+    expect(Array.isArray(reports)).toBe(true);
+    expect(reports).toEqual([]);
+
+    // reportForumPost should not throw on malformed storage
+    await reportForumPost('post-abc', 'spam');
+    const updatedReports = getReportedPostIds();
+    expect(updatedReports).toContain('post-abc');
+  });
 });

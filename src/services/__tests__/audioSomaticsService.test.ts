@@ -40,4 +40,39 @@ describe('audioSomaticsService', () => {
     audioSomatics.stop();
     expect(audioSomatics.getIsPlaying()).toBe(false);
   });
+
+  it('handles rapid toggle without cutting off newly initiated audio playback', async () => {
+    await audioSomatics.play('pink_noise');
+    expect(audioSomatics.getIsPlaying()).toBe(true);
+
+    audioSomatics.stop();
+    expect(audioSomatics.getIsPlaying()).toBe(false);
+
+    // Immediately play again before any stop timer fires
+    await audioSomatics.play('pink_noise');
+    expect(audioSomatics.getIsPlaying()).toBe(true);
+
+    // Wait past the fade-out timer threshold (850ms)
+    await new Promise((resolve) => setTimeout(resolve, 900));
+
+    // Must still be playing because the stop timeout was cleared!
+    expect(audioSomatics.getIsPlaying()).toBe(true);
+  });
+
+  it('cleans up and tears down audio nodes immediately when stopped multiple times in rapid succession', async () => {
+    await audioSomatics.play('brown_noise');
+    expect(audioSomatics.getIsPlaying()).toBe(true);
+
+    // First stop schedules fade out timer
+    audioSomatics.stop();
+    expect(audioSomatics.getIsPlaying()).toBe(false);
+
+    // Second stop while fade-out in progress must immediately finalize without error or dangling timer
+    audioSomatics.stop();
+    expect(audioSomatics.getIsPlaying()).toBe(false);
+
+    // Third stop when completely stopped is safe no-op
+    audioSomatics.stop();
+    expect(audioSomatics.getIsPlaying()).toBe(false);
+  });
 });

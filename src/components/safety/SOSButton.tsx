@@ -9,23 +9,6 @@ export const SOSButton: React.FC = () => {
 
   return (
     <>
-      <style>{`
-        .sos-float {
-          position: fixed;
-          bottom: 2rem;
-          right: 2rem;
-          width: 56px;
-          height: 56px;
-          border-radius: 50%;
-          z-index: 60;
-        }
-        @media (max-width: 768px) {
-          .sos-float {
-            bottom: 5rem;
-            right: 1rem;
-          }
-        }
-      `}</style>
       <button
         type="button"
         onClick={() => setIsOpen(true)}

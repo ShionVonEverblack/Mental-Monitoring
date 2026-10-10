@@ -58,7 +58,7 @@
 | 2 | M2: 8-Language Translation Parity & Localization | `src/i18n/{id,en,jv,su,ja,zh,es,ar}.json` | none | DONE |
 | 3 | M3: Minimalist Screen Re-architecture (Home.tsx) & RTL | `src/pages/Home.tsx`, `src/styles/components.css` | M1, M2 | DONE |
 | 4 | M4: Dedicated Home Test Suite & 4-Tier Quality Gates | `src/pages/__tests__/Home.test.tsx`, full test suite execution | M3 | DONE |
-| 5 | M5: Review, Challenger Verification & Forensic Integrity Audit | Reviewers, Challengers, and Forensic Auditor verification | M4 | IN_PROGRESS |
+| 5 | M5: Review, Challenger Verification & Forensic Integrity Audit | Reviewers, Challengers, and Forensic Auditor verification | M4 | DONE |
 
 ## Interface Contracts
 ### Minimalist Design Tokens Contract (`design-tokens.css`)

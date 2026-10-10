@@ -8,6 +8,8 @@ import {
   type EmergencySafetyAction,
 } from '../../services/safetyCardService';
 
+const FOCUSABLE_SELECTOR = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+
 export interface FastActionSafetyCardProps {
   isOpen?: boolean;
   onClose?: () => void;
@@ -30,7 +32,7 @@ export const FastActionSafetyCard: React.FC<FastActionSafetyCardProps> = ({
 
   const actions = customActions ?? getEmergencySafetyActions();
 
-  // Escape key handler & body scroll lock for modal mode
+  // Escape key handler, focus trap & body scroll lock for modal mode
   useEffect(() => {
     if (!isOpen || embedded) return;
 
@@ -41,6 +43,39 @@ export const FastActionSafetyCard: React.FC<FastActionSafetyCardProps> = ({
       if (e.key === 'Escape' && onClose) {
         e.stopPropagation();
         onClose();
+        return;
+      }
+
+      if (e.key === 'Tab') {
+        if (!dialogRef.current) return;
+        const focusableElements = dialogRef.current.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR);
+        if (focusableElements.length === 0) return;
+
+        const first = focusableElements[0];
+        const last = focusableElements[focusableElements.length - 1];
+
+        const isOutsideOrContainer = !dialogRef.current.contains(document.activeElement) || document.activeElement === dialogRef.current;
+        if (isOutsideOrContainer) {
+          e.preventDefault();
+          if (e.shiftKey) {
+            last.focus();
+          } else {
+            first.focus();
+          }
+          return;
+        }
+
+        if (e.shiftKey) {
+          if (document.activeElement === first) {
+            e.preventDefault();
+            last.focus();
+          }
+        } else {
+          if (document.activeElement === last) {
+            e.preventDefault();
+            first.focus();
+          }
+        }
       }
     };
 
