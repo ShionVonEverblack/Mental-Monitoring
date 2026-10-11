@@ -8,7 +8,8 @@ export type JitaiNudgeType =
   | 'sleep_latency_winddown'
   | 'sleep_waso_relaxation'
   | 'activity_inactivity_spark'
-  | 'activity_scheduled_reminder';
+  | 'activity_scheduled_reminder'
+  | 'multimodal_sleep_mood_correlator';
 
 export type JitaiCategory = 'mood' | 'sleep' | 'activity';
 export type JitaiUrgency = 'low' | 'medium' | 'high';

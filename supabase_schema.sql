@@ -34,6 +34,8 @@ CREATE TABLE IF NOT EXISTS public.forum_posts (
   reactions JSONB DEFAULT '{"support": 0, "strength": 0, "hug": 0}'::jsonb,
   comment_count INT DEFAULT 0,
   is_flagged BOOLEAN DEFAULT FALSE,
+  encrypted_payload JSONB,
+  is_encrypted BOOLEAN DEFAULT FALSE,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
@@ -44,6 +46,8 @@ CREATE TABLE IF NOT EXISTS public.forum_comments (
   author_name TEXT NOT NULL,
   content TEXT NOT NULL,
   is_supportive BOOLEAN DEFAULT TRUE,
+  encrypted_payload JSONB,
+  is_encrypted BOOLEAN DEFAULT FALSE,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
@@ -71,7 +75,7 @@ CREATE TABLE IF NOT EXISTS public.forum_reports (
 
 -- Forum Public View (Hides is_flagged and strictly filters out flagged posts for user safety)
 CREATE OR REPLACE VIEW public.forum_posts_public AS
-  SELECT id, author_name, category, title, content, reactions, comment_count, created_at
+  SELECT id, author_name, category, title, content, reactions, comment_count, encrypted_payload, is_encrypted, created_at
   FROM public.forum_posts
   WHERE is_flagged = FALSE;
 

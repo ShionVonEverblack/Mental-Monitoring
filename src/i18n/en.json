@@ -62,7 +62,9 @@
     "groupSafetyDesc": "Personalized safety plan, rapid crisis hotlines, and healthcare referrals",
     "actionSafetyPlan": "Safety Plan",
     "actionHotline": "Hotline 119 Ext 8",
-    "actionReferral": "BPJS / Clinic Referral"
+    "actionReferral": "BPJS / Clinic Referral",
+    "actionAct": "ACT Therapy",
+    "actionRelapse": "Relapse Plan"
   },
   "mood": {
     "title": "Mood Tracker",
@@ -306,7 +308,8 @@
     "print": "Print / Save PDF",
     "on": "ON",
     "off": "OFF",
-    "loadingSafeSpace": "Loading Safe Space..."
+    "loadingSafeSpace": "Loading Safe Space...",
+    "saved": "Auto-saved"
   },
   "insights": {
     "weeklyTitle": "Weekly Insights",
@@ -1282,7 +1285,11 @@
     "activity_reminder_desc": "You have a scheduled activity planned. Ready to do it now?",
     "dismiss": "Not Now",
     "dismissAria": "Dismiss this suggestion",
-    "badge_adaptive": "Adaptive Nudge"
+    "badge_adaptive": "Adaptive Nudge",
+    "multimodal_title": "Sleep Debt & Mental Strain Correlation",
+    "multimodal_desc": "Sleep efficiency below 70% is coinciding with heightened emotional arousal. When tired, thoughts entangle easily. Try ACT cognitive defusion to untangle mind burdens.",
+    "action_act": "Open ACT Therapy",
+    "badge_multimodal": "ACT & Circadian JITAI"
   },
   "safetyCard": {
     "badge": "Emergency Quick Help",
@@ -1433,5 +1440,140 @@
     "headerAria": "Application Operating Mode",
     "forumAirgappedPostToast": "Saved in local Air-Gapped Vault. Switch to Connected Mode to share with community.",
     "networkBlockedAuth": "Air-Gapped Vault Mode active. Switch to Connected Mode to sign in with cloud account."
+  },
+  "act": {
+    "title": "Acceptance & Commitment Therapy (ACT)",
+    "subtitle": "Discover meaningful core values and unhook from sticky thoughts (Hayes et al.)",
+    "clinicalBadge": "Steven C. Hayes • Clinical Hexaflex Model",
+    "defusionBadge": "Cognitive Defusion & Committed Action",
+    "tabsAria": "ACT Therapy Module Selection",
+    "tabs": {
+      "compass": "🧭 Life Values Compass",
+      "leaves": "🍃 Leaves on a Stream",
+      "noticing": "💬 I Am Noticing Thoughts"
+    },
+    "domains": {
+      "relationships": {
+        "title": "Relationships & Connection",
+        "subtitle": "Family, friendships, partners, and social empathy"
+      },
+      "growth": {
+        "title": "Personal Growth",
+        "subtitle": "Lifelong learning, wisdom, and inner courage"
+      },
+      "health": {
+        "title": "Health & Vitality",
+        "subtitle": "Physical fitness, sleep rhythm, and soul peace"
+      },
+      "work": {
+        "title": "Work & Contribution",
+        "subtitle": "Craft, vocation, service, and meaningful contribution"
+      }
+    },
+    "compass": {
+      "sectionLabel": "Values Clarification & Committed Actions",
+      "introTitle": "A Compass Direction, Not a Finish Line",
+      "introDesc": "Values are not goals to check off and finish, but directional compass headings: how you choose to stand and live every waking moment.",
+      "importanceSuffix": "Important",
+      "importanceSliderLabel": "Inner Importance Level:",
+      "statementLabel": "Meaningful Value Statement:"
+    },
+    "actions": {
+      "sectionTitle": "Committed Action",
+      "sectionDesc": "Small tangible steps you take today aligned with your chosen values.",
+      "selectDomain": "Select Domain",
+      "inputPlaceholder": "Write one small committed action today...",
+      "btnAdd": "Add Action",
+      "emptyList": "No committed actions yet. Start with one small step.",
+      "markDone": "Mark as completed",
+      "markUndone": "Mark as incomplete"
+    },
+    "leaves": {
+      "sectionLabel": "Defusion Exercise: Leaves on a Stream",
+      "title": "Leaves on a Stream",
+      "guideText": "Picture sitting beside a gentle stream with leaves floating past. When a heavy or distressing thought arises, place it gently on a leaf and let it drift downstream without holding or chasing it.",
+      "inputPlaceholder": "Type the thought that is weighing on you... (e.g., \"I am afraid of failing\")",
+      "btnRelease": "Place on Leaf & Let Float",
+      "step1": "Your thought is placed on the leaf... Breathe gently.",
+      "step2": "The leaf drifts along the flowing water... You are the river, not the leaf.",
+      "step3": "The leaf drifts out of sight... Thoughts are transient mental events.",
+      "reframedLabel": "Allowed to float gently on a leaf"
+    },
+    "noticing": {
+      "sectionLabel": "Thought Labeling & Self-as-Context Exercise",
+      "title": "I Am Noticing That... (Tiered Defusion)",
+      "desc": "Uncouple cognitive fusion in 3 progressive steps to dissolve the emotional grip of sticky thoughts.",
+      "inputLabel": "Type the Automatic Sticky Thought:",
+      "inputPlaceholder": "e.g., \"I am a failure\" or \"Everything will collapse\"",
+      "tier1Title": "Stage 1: Cognitive Fusion (Thought = Absolute Fact)",
+      "tier2Title": "Stage 2: Noticing the Thought Process",
+      "tier2Prefix": "I am having the thought that",
+      "tier3Title": "Stage 3: Self-as-Context Observer",
+      "tier3Prefix": "I notice that my mind is telling me that",
+      "btnSave": "Save Observer Perspective",
+      "savedToast": "Saved to Defusion History"
+    },
+    "history": {
+      "title": "Recent Defusion Sessions"
+    }
+  },
+  "relapse": {
+    "title": "Relapse Prevention Plan",
+    "subtitle": "Marlatt & Gordon cognitive-behavioral roadmap: detect early signs, de-escalate early, and embrace setbacks with self-compassion.",
+    "badgeMarlatt": "Marlatt & Gordon Cognitive-Behavioral Model",
+    "badgeAve": "Abstinence Violation Effect (AVE) Antidote",
+    "tabsAria": "Relapse Prevention Plan Sections",
+    "tabs": {
+      "warning": "⚠️ Early Warning Signs",
+      "deescalation": "🛡️ De-Escalation Plan",
+      "compassion": "🌿 Self-Compassion & AVE"
+    },
+    "warning": {
+      "sectionLabel": "Early Warning Signs Mapping",
+      "introTitle": "Spot the Ripples Before the Wave",
+      "introDesc": "Emotional setbacks rarely occur out of nowhere. They begin as subtle ripples in behavior, thoughts, emotions, or bodily sensations. Catching them early gives you space to pause.",
+      "categoryLabel": "Sign Category",
+      "cat_behavioral": "Behavioral (Habits)",
+      "cat_emotional": "Emotions & Mood",
+      "cat_cognitive": "Cognitive Patterns",
+      "cat_physical": "Physical Sensations",
+      "inputPlaceholder": "Write a new early warning sign...",
+      "btnAdd": "Add Sign",
+      "emptyCat": "No warning signs in this category yet."
+    },
+    "deescalation": {
+      "introTitle": "3-Tier De-Escalation Protocol",
+      "introDesc": "Start with fastest self-regulation (Level 1), sensory & space reset (Level 2), and reach out to anchor contacts or hotlines (Level 3).",
+      "addTitle": "Add Custom De-Escalation Strategy",
+      "levelSelect": "Choose Level",
+      "lvl1_title": "Level 1: Fast Self-Action (Somatic Reset)",
+      "lvl1_desc": "Instant solo somatic resets such as Cyclic Sighing, ice/cold water splash, or 5-4-3-2-1 grounding.",
+      "lvl2_title": "Level 2: Space & Sensory Pause",
+      "lvl2_desc": "Stepping away from triggers, dimming lights, phone quiet mode, and silent mindful walking.",
+      "lvl3_title": "Level 3: Social & Crisis Anchors",
+      "lvl3_desc": "Reaching out to trusted friends or certified crisis mental health hotlines.",
+      "titlePlaceholder": "Strategy name (e.g., Cold water splash)",
+      "descPlaceholder": "Brief guidance on how to perform it (optional)...",
+      "btnAdd": "Save Strategy",
+      "actionsCount": "actions"
+    },
+    "contacts": {
+      "title": "Trusted Anchor Contacts",
+      "namePlaceholder": "Person or hotline name",
+      "relPlaceholder": "Role or relationship",
+      "phonePlaceholder": "Phone number",
+      "btnAdd": "Add Contact"
+    },
+    "ave": {
+      "sectionLabel": "Self-Compassion & AVE Antidote",
+      "title": "Overcoming the Abstinence Violation Effect (AVE)",
+      "body1": "In Dr. Alan Marlatt's clinical research, the biggest threat to recovery is not the slip itself, but the Abstinence Violation Effect (AVE): toxic guilt and all-or-nothing thinking assuming that one bad day undoes all past progress.",
+      "formulaTitle": "Clinical Recovery Formula:",
+      "formulaBody": "A momentary lapse is simply a minor detour on the road. It does not become a full relapse unless you judge yourself harshly and give up.",
+      "affirmationsTitle": "Compassionate Anchor Affirmations During Setbacks:",
+      "notesLabel": "Personal Compassion Message to Myself for Tough Days:"
+    },
+    "confirmReset": "Reset relapse prevention plan back to evidence-based defaults?",
+    "btnReset": "Reset Plan to Default"
   }
 }

@@ -62,7 +62,9 @@
     "groupSafetyDesc": "Rencana keselamatan, saluran darurat cepat, dan rujukan faskes resmi",
     "actionSafetyPlan": "Rencana Keselamatan",
     "actionHotline": "Hotline 119 Ext 8",
-    "actionReferral": "Rujukan Puskesmas & BPJS"
+    "actionReferral": "Rujukan Puskesmas & BPJS",
+    "actionAct": "Terapi ACT",
+    "actionRelapse": "Antisipasi Kambuh"
   },
   "mood": {
     "title": "Mood Tracker",
@@ -306,7 +308,8 @@
     "print": "Cetak / Simpan PDF",
     "on": "ON",
     "off": "OFF",
-    "loadingSafeSpace": "Memuat Ruang Aman..."
+    "loadingSafeSpace": "Memuat Ruang Aman...",
+    "saved": "Tersimpan otomatis"
   },
   "insights": {
     "weeklyTitle": "Insight Mingguan",
@@ -1282,7 +1285,11 @@
     "activity_reminder_desc": "Kamu memiliki jadwal aktivitas. Siap melakukannya sekarang?",
     "dismiss": "Nanti Saja",
     "dismissAria": "Tutup saran ini",
-    "badge_adaptive": "Rekomendasi Adaptif"
+    "badge_adaptive": "Rekomendasi Adaptif",
+    "multimodal_title": "Korelasi Kurang Tidur & Ketegangan Pikiran",
+    "multimodal_desc": "Efisiensi tidurmu di bawah 70% berpadu dengan ketegangan emosi tinggi. Saat tubuh lelah, pikiran cenderung berputar cepat. Coba latihan defusi kognitif ACT untuk melepaskan jeratan pikiran.",
+    "action_act": "Buka Terapi ACT",
+    "badge_multimodal": "ACT & Sirkadian JITAI"
   },
   "safetyCard": {
     "badge": "Bantuan Cepat Darurat",
@@ -1433,5 +1440,140 @@
     "headerAria": "Mode Operasional Aplikasi",
     "forumAirgappedPostToast": "Disimpan di Vault Luring lokal. Aktifkan Mode Tersambung untuk berbagi dengan komunitas.",
     "networkBlockedAuth": "Mode Luring Penuh aktif. Beralih ke Mode Tersambung untuk masuk dengan akun cloud."
+  },
+  "act": {
+    "title": "Terapi Keberterimaan & Komitmen (ACT)",
+    "subtitle": "Menemukan kompas nilai hidup bermakna dan membebaskan diri dari jeratan pikiran (Hayes et al.)",
+    "clinicalBadge": "Steven C. Hayes • Model Heksafleks Klinis",
+    "defusionBadge": "Defusi Kognitif & Aksi Berkomitmen",
+    "tabsAria": "Pilihan Modul Terapi ACT",
+    "tabs": {
+      "compass": "🧭 Kompas Nilai Hidup",
+      "leaves": "🍃 Daun di Aliran Sungai",
+      "noticing": "💬 Aku Menyadari Pikiran"
+    },
+    "domains": {
+      "relationships": {
+        "title": "Hubungan & Koneksi",
+        "subtitle": "Keluarga, sahabat, pasangan, dan empati sosial"
+      },
+      "growth": {
+        "title": "Pertumbuhan Diri",
+        "subtitle": "Pembelajaran, kebijaksanaan, dan keberanian batin"
+      },
+      "health": {
+        "title": "Kesehatan & Vitalitas",
+        "subtitle": "Kebugaran fisik, ritme tidur, dan ketenangan jiwa"
+      },
+      "work": {
+        "title": "Karya & Kontribusi",
+        "subtitle": "Pekerjaan, pelayanan, dan dampak bermakna bagi sesama"
+      }
+    },
+    "compass": {
+      "sectionLabel": "Eksplorasi Nilai Hidup & Tindakan Berkomitmen",
+      "introTitle": "Arah Kompas, Bukan Garis Akhir",
+      "introDesc": "Nilai hidup bukanlah tujuan (goals) yang bisa dicoret setelah selesai, melainkan arah mata angin kompas: cara Anda memilih bersikap dan menjalani hidup di setiap detik.",
+      "importanceSuffix": "Penting",
+      "importanceSliderLabel": "Tingkat Kepentingan Batin:",
+      "statementLabel": "Pernyataan Sikap Bermakna:"
+    },
+    "actions": {
+      "sectionTitle": "Tindakan Berkomitmen (Committed Action)",
+      "sectionDesc": "Langkah nyata berukuran kecil yang Anda ambil hari ini selaras dengan nilai hidup yang Anda pilih.",
+      "selectDomain": "Pilih Domain",
+      "inputPlaceholder": "Tuliskan satu tindakan kecil hari ini...",
+      "btnAdd": "Tambah Aksi",
+      "emptyList": "Belum ada tindakan berkomitmen. Mulai dari satu hal kecil.",
+      "markDone": "Tandai selesai",
+      "markUndone": "Tandai belum selesai"
+    },
+    "leaves": {
+      "sectionLabel": "Latihan Defusi: Daun di Aliran Sungai",
+      "title": "Daun di Aliran Sungai (Leaves on a Stream)",
+      "guideText": "Bayangkan Anda duduk di tepi sungai yang tenang dengan dedaunan yang hanyut mengalir. Ketika ada pikiran yang melelahkan atau mencemaskan, letakkan pikiran itu di atas daun, dan biarkan ia hanyut mengalir tanpa perlu Anda tahan atau usir.",
+      "inputPlaceholder": "Ketik pikiran yang sedang membebanimu... (misal: \"Aku takut gagal\")",
+      "btnRelease": "Letakkan di Daun & Hanyutkan",
+      "step1": "Pikiranmu telah diletakkan di atas daun... Bernapaslah perlahan.",
+      "step2": "Daun hanyut terbawa aliran arus air... Anda adalah sungainya, bukan daun itu.",
+      "step3": "Daun perlahan menjauh... Pikiran hanyalah peristiwa mental yang lewat.",
+      "reframedLabel": "Dibiarkan mengalir lewat di atas daun"
+    },
+    "noticing": {
+      "sectionLabel": "Latihan Pelabelan Pikiran & Pengamat Berkesadaran",
+      "title": "Aku Menyadari Bahwa... (Defusi Bertingkat)",
+      "desc": "Mengurai fusi kognitif dengan 3 langkah pengamat berkesadaran (Self-as-Context) untuk meredakan cengkeraman emosional pikiran.",
+      "inputLabel": "Tuliskan Pikiran Otomatis yang Terasa Melekat:",
+      "inputPlaceholder": "Misal: \"Aku orang yang gagal\" atau \"Semuanya akan hancur\"",
+      "tier1Title": "Tahap 1: Fusi Kognitif (Pikiran = Fakta Nyata)",
+      "tier2Title": "Tahap 2: Menyadari Proses Berpikir",
+      "tier2Prefix": "Aku sedang memiliki pikiran bahwa",
+      "tier3Title": "Tahap 3: Pengamat Diri (Self-as-Context)",
+      "tier3Prefix": "Aku menyadari bahwa pikiranku sedang berkata bahwa",
+      "btnSave": "Simpan Perspektif Pengamat",
+      "savedToast": "Tersimpan ke Riwayat Defusi"
+    },
+    "history": {
+      "title": "Riwayat Latihan Defusi Terakhir"
+    }
+  },
+  "relapse": {
+    "title": "Rencana Antisipasi Kambuh (Relapse Prevention)",
+    "subtitle": "Peta perlindungan diri dini berbasis Marlatt & Gordon: kenali tanda awal, de-eskalasi sebelum krisis, dan rangkul kemunduran dengan welas asih.",
+    "badgeMarlatt": "Model Kognitif-Perilaku Marlatt & Gordon",
+    "badgeAve": "Penawar Abstinence Violation Effect (AVE)",
+    "tabsAria": "Pilihan Bagian Rencana Antisipasi Kambuh",
+    "tabs": {
+      "warning": "⚠️ Tanda Peringatan Dini",
+      "deescalation": "🛡️ Strategi De-Eskalasi",
+      "compassion": "🌿 Welas Asih & Penawar AVE"
+    },
+    "warning": {
+      "sectionLabel": "Pemetaan Tanda Peringatan Dini",
+      "introTitle": "Kenali Riak Sebelum Menjadi Gelombang",
+      "introDesc": "Kemunduran emosi jarang terjadi secara tiba-tiba. Biasanya diawali oleh riak-riak kecil pada perilaku, pikiran, emosi, atau sensasi fisik. Mengenalinya sejak awal memberi Anda waktu untuk jeda.",
+      "categoryLabel": "Kategori Tanda",
+      "cat_behavioral": "Perilaku (Kebiasaan)",
+      "cat_emotional": "Emosi & Suasana Hati",
+      "cat_cognitive": "Pola Pikir",
+      "cat_physical": "Sensasi Fisik & Tubuh",
+      "inputPlaceholder": "Tuliskan tanda peringatan dini baru...",
+      "btnAdd": "Tambah Tanda",
+      "emptyCat": "Belum ada catatan tanda di kategori ini."
+    },
+    "deescalation": {
+      "introTitle": "Protokol De-Eskalasi 3 Lapis",
+      "introDesc": "Mulai dari tindakan mandiri paling cepat dan mudah (Level 1), jeda ruang dan sensorik (Level 2), hingga menghubungi jangkar kontak sosial dan layanan resmi (Level 3).",
+      "addTitle": "Tambah Strategi De-Eskalasi Pribadi",
+      "levelSelect": "Pilih Level",
+      "lvl1_title": "Level 1: Aksi Mandiri Cepat (Regulasi Somatik)",
+      "lvl1_desc": "Teknik regulasi mandiri instan seperti Cyclic Sighing, kompres air dingin/es, atau grounding 5-4-3-2-1.",
+      "lvl2_title": "Level 2: Jeda Ruang & Sensorik",
+      "lvl2_desc": "Menjauhkan diri dari pemicu eksternal, meredupkan lampu, mode senyap ponsel, dan berjalan hening.",
+      "lvl3_title": "Level 3: Dukungan Sosial & Darurat",
+      "lvl3_desc": "Menghubungi sahabat jangkar terpercaya atau layanan bantuan krisis kesehatan mental.",
+      "titlePlaceholder": "Nama aksi de-eskalasi (misal: Kompres air dingin)",
+      "descPlaceholder": "Detail panduan singkat cara melakukannya (opsional)...",
+      "btnAdd": "Simpan Strategi",
+      "actionsCount": "aksi"
+    },
+    "contacts": {
+      "title": "Daftar Kontak Jangkar Terpercaya",
+      "namePlaceholder": "Nama orang/layanan",
+      "relPlaceholder": "Peran/Hubungan",
+      "phonePlaceholder": "Nomor telepon",
+      "btnAdd": "Tambah Kontak"
+    },
+    "ave": {
+      "sectionLabel": "Welas Asih & Penawar Abstinence Violation Effect",
+      "title": "Mengatasi Abstinence Violation Effect (AVE)",
+      "body1": "Dalam riset Dr. Alan Marlatt, musuh terbesar pemulihan bukanlah kemunduran itu sendiri, melainkan \"Abstinence Violation Effect\" (AVE): rasa bersalah berlebih dan keyakinan hitam-putih bahwa satu hari buruk berarti semua usaha selama ini hancur.",
+      "formulaTitle": "Rumus Klinis Pemulihan:",
+      "formulaBody": "Kemunduran sesaat (Lapse) hanyalah sebuah slip kecil di jalan. Ia tidak otomatis menjadi kejatuhan total (Relapse), kecuali jika Anda menghakimi diri sendiri dan menyerah.",
+      "affirmationsTitle": "Jangkar Afirmasi Welas Asih Saat Terjadi Kemunduran:",
+      "notesLabel": "Pesan Welas Asih Pribadi untuk Diriku Saat Hari Terasa Berat:"
+    },
+    "confirmReset": "Kembalikan rencana ke setelan awal bukti ilmiah?",
+    "btnReset": "Reset Rencana ke Default"
   }
 }

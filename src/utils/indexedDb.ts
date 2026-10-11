@@ -272,6 +272,8 @@ export const KNOWN_RIMA_STORAGE_KEYS = [
   'rima-tipp-sessions',
   'rima-thought-records',
   'rima_bookmarked_posts',
+  'rima-act-data',
+  'rima-relapse-plan',
 ];
 
 /**

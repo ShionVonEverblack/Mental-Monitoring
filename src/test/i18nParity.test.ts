@@ -263,4 +263,38 @@ describe('8-Language Translation Parity & Completeness', () => {
       expect(forumObj.quietSupportTitle, `Locale ${lang} missing forum.quietSupportTitle`).toBeDefined();
     }
   });
+
+  it('verifies that Phase 2 "act" namespace exists in all 8 locales with full parity', () => {
+    const idAct = LOCALES['id'].act as Record<string, unknown>;
+    expect(idAct).toBeDefined();
+    const idActKeys = new Set(extractAllDottedKeys(idAct));
+    expect(idActKeys.size).toBeGreaterThanOrEqual(30);
+
+    for (const lang of SUPPORTED_LANGUAGES) {
+      const langAct = LOCALES[lang].act as Record<string, unknown>;
+      expect(langAct, `Locale ${lang} must have act namespace`).toBeDefined();
+      const langActKeys = new Set(extractAllDottedKeys(langAct));
+      const missing = [...idActKeys].filter((k) => !langActKeys.has(k));
+      const extra = [...langActKeys].filter((k) => !idActKeys.has(k));
+      expect(missing, `Locale ${lang} is missing act keys: ${missing.join(', ')}`).toEqual([]);
+      expect(extra, `Locale ${lang} has extra act keys: ${extra.join(', ')}`).toEqual([]);
+    }
+  });
+
+  it('verifies that Phase 2 "relapse" namespace exists in all 8 locales with full parity', () => {
+    const idRelapse = LOCALES['id'].relapse as Record<string, unknown>;
+    expect(idRelapse).toBeDefined();
+    const idRelapseKeys = new Set(extractAllDottedKeys(idRelapse));
+    expect(idRelapseKeys.size).toBeGreaterThanOrEqual(25);
+
+    for (const lang of SUPPORTED_LANGUAGES) {
+      const langRelapse = LOCALES[lang].relapse as Record<string, unknown>;
+      expect(langRelapse, `Locale ${lang} must have relapse namespace`).toBeDefined();
+      const langRelapseKeys = new Set(extractAllDottedKeys(langRelapse));
+      const missing = [...idRelapseKeys].filter((k) => !langRelapseKeys.has(k));
+      const extra = [...langRelapseKeys].filter((k) => !idRelapseKeys.has(k));
+      expect(missing, `Locale ${lang} is missing relapse keys: ${missing.join(', ')}`).toEqual([]);
+      expect(extra, `Locale ${lang} has extra relapse keys: ${extra.join(', ')}`).toEqual([]);
+    }
+  });
 });

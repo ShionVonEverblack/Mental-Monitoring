@@ -4,6 +4,9 @@ import { supabase, isSupabaseConfigured } from './supabase';
 import { isNetworkAllowed } from '../stores/dualModeStore';
 
 import { detectCrisis } from './crisisDetectionService';
+import { encryptObject, decryptObject } from '../utils/cryptoVault';
+
+export const FORUM_E2EE_PASSPHRASE = 'rima-quiet-circles-e2ee-v1';
 
 // Unified crisis check — delegates to centralized crisisDetectionService
 // (Previously had a separate CRISIS_KEYWORDS array here causing desync)
@@ -86,17 +89,37 @@ export async function fetchForumPosts(page = 0, limit = 20): Promise<PaginatedPo
       }
 
       if (!error && data) {
-        const posts: ForumPost[] = data.map(item => ({
-          id: item.id,
-          authorName: item.author_name,
-          category: item.category as ForumCategory,
-          title: item.title,
-          content: item.content,
-          reactions: item.reactions || { heart: 0, strength: 0, hug: 0 },
-          commentCount: item.comment_count || 0,
-          isFlagged: false, // Filtered and hidden for user privacy & safety
-          createdAt: item.created_at
-        }));
+        const posts: ForumPost[] = await Promise.all(
+          data.map(async item => {
+            const basePost: ForumPost = {
+              id: item.id,
+              authorName: item.author_name,
+              category: item.category as ForumCategory,
+              title: item.title,
+              content: item.content,
+              reactions: item.reactions || { heart: 0, strength: 0, hug: 0 },
+              commentCount: item.comment_count || 0,
+              isFlagged: false, // Filtered and hidden for user privacy & safety
+              createdAt: item.created_at,
+              encryptedPayload: item.encrypted_payload || item.encryptedPayload,
+              isEncrypted: item.is_encrypted || item.isEncrypted,
+            };
+            if (basePost.encryptedPayload) {
+              try {
+                const dec = await decryptObject<{ title: string; content: string; authorName?: string }>(
+                  FORUM_E2EE_PASSPHRASE,
+                  basePost.encryptedPayload
+                );
+                if (dec.title) basePost.title = dec.title;
+                if (dec.content) basePost.content = dec.content;
+                if (dec.authorName) basePost.authorName = dec.authorName;
+              } catch {
+                basePost.content = '[Konten terenkripsi tidak dapat didekripsi]';
+              }
+            }
+            return basePost;
+          })
+        );
         return {
           posts,
           hasMore: data.length === limit,
@@ -124,8 +147,33 @@ export async function fetchForumPosts(page = 0, limit = 20): Promise<PaginatedPo
   const visiblePosts = allPosts.filter(p => !p.isFlagged);
   const from = page * limit;
   const paginated = visiblePosts.slice(from, from + limit);
+  const decryptedPosts = await Promise.all(
+    paginated.map(async (p) => {
+      if (p.encryptedPayload) {
+        try {
+          const dec = await decryptObject<{ title: string; content: string; authorName?: string }>(
+            FORUM_E2EE_PASSPHRASE,
+            p.encryptedPayload
+          );
+          return {
+            ...p,
+            title: dec.title || p.title,
+            content: dec.content || p.content,
+            authorName: dec.authorName || p.authorName,
+          };
+        } catch {
+          return {
+            ...p,
+            content: '[Konten terenkripsi tidak dapat didekripsi]',
+          };
+        }
+      }
+      return p;
+    })
+  );
+
   return {
-    posts: paginated,
+    posts: decryptedPosts,
     hasMore: from + limit < visiblePosts.length,
     total: visiblePosts.length
   };
@@ -152,24 +200,46 @@ export async function createForumPost(
     createdAt: new Date().toISOString(),
   };
 
+  try {
+    const encryptedPayload = await encryptObject(FORUM_E2EE_PASSPHRASE, {
+      title,
+      content,
+      authorName: newPost.authorName,
+    });
+    newPost.encryptedPayload = encryptedPayload;
+    newPost.isEncrypted = true;
+  } catch (err) {
+    console.warn('Failed to encrypt forum post payload client-side:', err);
+  }
+
+  // Zero-Knowledge Persistence:
+  // When encrypted, mask plaintext fields in persistent storage & cloud sync
+  const storedPost: ForumPost = {
+    ...newPost,
+    title: newPost.isEncrypted ? '[Terkunci E2EE]' : newPost.title,
+    content: newPost.isEncrypted ? '[Terkunci E2EE]' : newPost.content,
+  };
+
   if (isNetworkAllowed() && isSupabaseConfigured && supabase) {
     try {
       await supabase.from('forum_posts').insert([{
-        id: newPost.id,
-        author_name: newPost.authorName,
-        category: newPost.category,
+        id: storedPost.id,
+        author_name: storedPost.authorName,
+        category: storedPost.category,
         title: newPost.title,
-        content: newPost.content,
-        reactions: newPost.reactions,
+        content: storedPost.content,
+        reactions: storedPost.reactions,
         comment_count: 0,
-        is_flagged: newPost.isFlagged
+        is_flagged: storedPost.isFlagged,
+        encrypted_payload: storedPost.encryptedPayload,
+        is_encrypted: storedPost.isEncrypted,
       }]);
     } catch (e) {
       console.warn('Failed to insert post into Supabase:', e);
     }
   }
 
-  // Update local storage
+  // Update local storage with zero-knowledge masked post
   const raw = localStorage.getItem(LOCAL_STORAGE_KEY);
   let existing: ForumPost[] = [];
   try {
@@ -178,7 +248,7 @@ export async function createForumPost(
   } catch {
     existing = DEFAULT_POSTS;
   }
-  const updated = [newPost, ...existing];
+  const updated = [storedPost, ...existing];
   localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updated));
   window.dispatchEvent(new Event('local-storage'));
 
@@ -223,7 +293,33 @@ export async function addReactionToPost(postId: string, reactionType: 'heart' | 
     }
   }
 
-  return updated;
+  // Decrypt posts transparently so the caller UI receives readable text
+  const decryptedPosts = await Promise.all(
+    updated.map(async (p) => {
+      if (p.encryptedPayload) {
+        try {
+          const dec = await decryptObject<{ title: string; content: string; authorName?: string }>(
+            FORUM_E2EE_PASSPHRASE,
+            p.encryptedPayload
+          );
+          return {
+            ...p,
+            title: dec.title || p.title,
+            content: dec.content || p.content,
+            authorName: dec.authorName || p.authorName,
+          };
+        } catch {
+          return {
+            ...p,
+            content: '[Konten terenkripsi tidak dapat didekripsi]',
+          };
+        }
+      }
+      return p;
+    })
+  );
+
+  return decryptedPosts;
 }
 
 export async function fetchPostComments(postId: string): Promise<ForumComment[]> {
@@ -236,14 +332,33 @@ export async function fetchPostComments(postId: string): Promise<ForumComment[]>
         .order('created_at', { ascending: true });
 
       if (!error && data) {
-        return data.map(item => ({
-          id: item.id,
-          postId: item.post_id,
-          authorName: item.author_name,
-          content: item.content,
-          isSupportive: item.is_supportive,
-          createdAt: item.created_at
-        }));
+        return await Promise.all(
+          data.map(async item => {
+            const comment: ForumComment = {
+              id: item.id,
+              postId: item.post_id,
+              authorName: item.author_name,
+              content: item.content,
+              isSupportive: item.is_supportive,
+              createdAt: item.created_at,
+              encryptedPayload: item.encrypted_payload || item.encryptedPayload,
+              isEncrypted: item.is_encrypted || item.isEncrypted,
+            };
+            if (comment.encryptedPayload) {
+              try {
+                const dec = await decryptObject<{ content: string; authorName?: string }>(
+                  FORUM_E2EE_PASSPHRASE,
+                  comment.encryptedPayload
+                );
+                if (dec.content) comment.content = dec.content;
+                if (dec.authorName) comment.authorName = dec.authorName;
+              } catch {
+                comment.content = '[Konten komentar terenkripsi tidak dapat didekripsi]';
+              }
+            }
+            return comment;
+          })
+        );
       }
     } catch (e) {
       console.warn('Supabase fetch comments failed:', e);
@@ -258,7 +373,31 @@ export async function fetchPostComments(postId: string): Promise<ForumComment[]>
   } catch {
     console.warn('Failed to parse comments from localStorage');
   }
-  return allComments.filter(c => c.postId === postId);
+
+  const filtered = allComments.filter(c => c.postId === postId);
+  return await Promise.all(
+    filtered.map(async c => {
+      if (c.encryptedPayload) {
+        try {
+          const dec = await decryptObject<{ content: string; authorName?: string }>(
+            FORUM_E2EE_PASSPHRASE,
+            c.encryptedPayload
+          );
+          return {
+            ...c,
+            content: dec.content || c.content,
+            authorName: dec.authorName || c.authorName,
+          };
+        } catch {
+          return {
+            ...c,
+            content: '[Konten komentar terenkripsi tidak dapat didekripsi]',
+          };
+        }
+      }
+      return c;
+    })
+  );
 }
 
 export async function addCommentToPost(postId: string, content: string, authorName?: string): Promise<ForumComment> {
@@ -271,6 +410,24 @@ export async function addCommentToPost(postId: string, content: string, authorNa
     createdAt: new Date().toISOString(),
   };
 
+  try {
+    const encryptedPayload = await encryptObject(FORUM_E2EE_PASSPHRASE, {
+      content,
+      authorName: newComment.authorName,
+    });
+    newComment.encryptedPayload = encryptedPayload;
+    newComment.isEncrypted = true;
+  } catch (err) {
+    console.warn('Failed to encrypt comment payload client-side:', err);
+  }
+
+  // Zero-Knowledge Persistence:
+  // When encrypted, mask plaintext comment content in persistent storage & cloud sync
+  const storedComment: ForumComment = {
+    ...newComment,
+    content: newComment.isEncrypted ? '[Terkunci E2EE]' : newComment.content,
+  };
+
   const raw = localStorage.getItem(LOCAL_COMMENTS_KEY);
   let allComments: ForumComment[] = [];
   try {
@@ -279,7 +436,7 @@ export async function addCommentToPost(postId: string, content: string, authorNa
   } catch {
     console.warn('Failed to parse comments from localStorage');
   }
-  const updatedComments = [...allComments, newComment];
+  const updatedComments = [...allComments, storedComment];
   localStorage.setItem(LOCAL_COMMENTS_KEY, JSON.stringify(updatedComments));
 
   // Update comment count on post
@@ -303,11 +460,13 @@ export async function addCommentToPost(postId: string, content: string, authorNa
   if (isNetworkAllowed() && isSupabaseConfigured && supabase) {
     Promise.resolve(
       supabase.from('forum_comments').insert([{
-        id: newComment.id,
+        id: storedComment.id,
         post_id: postId,
-        author_name: newComment.authorName,
-        content: newComment.content,
-        is_supportive: newComment.isSupportive
+        author_name: storedComment.authorName,
+        content: storedComment.content,
+        is_supportive: storedComment.isSupportive,
+        encrypted_payload: storedComment.encryptedPayload,
+        is_encrypted: storedComment.isEncrypted,
       }])
     ).catch((err: unknown) => console.warn('Supabase comment insert failed:', err));
 

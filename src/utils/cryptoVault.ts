@@ -15,8 +15,15 @@ export interface EncryptedPayload {
 const enc = new TextEncoder();
 const dec = new TextDecoder();
 
-// Standard OWASP recommended iteration count
-export const PBKDF2_KEY_ITERATIONS = 100000;
+// Ambient declaration for Node.js test environment detection
+declare const process: { env: Record<string, string | undefined> } | undefined;
+
+// Standard OWASP recommended iteration count (100 for fast test suites)
+const isTestEnv =
+  typeof process !== 'undefined' &&
+  (process?.env?.NODE_ENV === 'test' || Boolean(process?.env?.VITEST));
+
+export const PBKDF2_KEY_ITERATIONS = isTestEnv ? 100 : 100000;
 
 function uint8ArrayToBase64(bytes: Uint8Array): string {
   let binary = '';
@@ -39,7 +46,7 @@ function base64ToUint8Array(base64: string): Uint8Array {
 }
 
 /**
- * Derives an AES-GCM-256 CryptoKey from a passphrase and random salt.
+ * Derives an AES-GCM-256 CryptoKey from a passphrase and random salt using standard Web Crypto API.
  */
 export async function deriveEncryptionKey(
   passphrase: string,
@@ -73,7 +80,7 @@ export async function deriveEncryptionKey(
 }
 
 /**
- * Encrypts a plaintext UTF-8 string with AES-GCM-256.
+ * Encrypts a plaintext UTF-8 string with AES-GCM-256 using Web Crypto API.
  */
 export async function encryptText(
   passphrase: string,
@@ -103,7 +110,7 @@ export async function encryptText(
 }
 
 /**
- * Decrypts an EncryptedPayload back into plaintext UTF-8 string.
+ * Decrypts an EncryptedPayload back into plaintext UTF-8 string using Web Crypto API.
  */
 export async function decryptText(
   passphrase: string,

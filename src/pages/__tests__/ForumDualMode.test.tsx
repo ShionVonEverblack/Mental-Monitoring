@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { render, screen, fireEvent, act } from '@testing-library/react';
+import { render, screen, fireEvent, act, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { Forum } from '../Forum';
 import { useDualModeStore } from '../../stores/dualModeStore';
@@ -123,9 +123,13 @@ describe('Forum Dual-Mode Gating & Quiet Support Reactions', () => {
     });
 
     // Verify air-gapped toast appears
-    expect(screen.getByText(/Disimpan di Vault Luring lokal/i)).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText(/Disimpan di Vault Luring lokal/i)).toBeInTheDocument();
+    });
 
     // Verify post is in feed
-    expect(screen.getByText('Cerita di Ruang Luring')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText('Cerita di Ruang Luring')).toBeInTheDocument();
+    });
   });
 });

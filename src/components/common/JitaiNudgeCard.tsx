@@ -8,6 +8,7 @@ import {
   Sparkles,
   HeartHandshake,
   Clock,
+  Compass,
   X,
   ChevronRight,
 } from 'lucide-react';
@@ -21,6 +22,7 @@ const ICON_MAP: Record<string, React.ComponentType<{ size?: number; className?: 
   Sparkles,
   HeartHandshake,
   Clock,
+  Compass,
 };
 
 export interface JitaiNudgeCardProps {

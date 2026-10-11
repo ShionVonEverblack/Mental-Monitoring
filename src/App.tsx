@@ -26,6 +26,8 @@ const Assessment = lazy(() => import('./pages/Assessment').then(module => ({ def
 const TippCrisisHub = lazy(() => import('./pages/TippCrisisHub').then(module => ({ default: module.TippCrisisHub })));
 const BehavioralActivation = lazy(() => import('./pages/BehavioralActivation').then(module => ({ default: module.BehavioralActivation })));
 const SleepTracker = lazy(() => import('./pages/SleepTracker').then(module => ({ default: module.SleepTracker })));
+const ActTherapy = lazy(() => import('./pages/ActTherapy').then(module => ({ default: module.ActTherapy })));
+const RelapsePrevention = lazy(() => import('./pages/RelapsePrevention').then(module => ({ default: module.RelapsePrevention })));
 import { ConsentModal } from './components/common/ConsentModal';
 import { AppLockScreen } from './components/security/AppLockScreen';
 
@@ -111,6 +113,8 @@ const App: React.FC = () => {
             <Route path="/tipp" element={<TippCrisisHub />} />
             <Route path="/activation" element={<BehavioralActivation />} />
             <Route path="/sleep" element={<SleepTracker />} />
+            <Route path="/act" element={<ActTherapy />} />
+            <Route path="/relapse-prevention" element={<RelapsePrevention />} />
           </Route>
         </Routes>
       </BrowserRouter>

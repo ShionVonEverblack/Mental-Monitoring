@@ -62,7 +62,9 @@
     "groupSafetyDesc": "Rancangan kaslametan, nomer darurat gancang, lan rujukan faskes resmi",
     "actionSafetyPlan": "Rancangan Kaslametan",
     "actionHotline": "Hotline 119 Ext 8",
-    "actionReferral": "Rujukan Puskesmas & BPJS"
+    "actionReferral": "Rujukan Puskesmas & BPJS",
+    "actionAct": "Terapi ACT",
+    "actionRelapse": "Nulak Kambuh"
   },
   "mood": {
     "title": "Mood Tracker",
@@ -306,7 +308,8 @@
     "print": "Cetak / Simpen PDF",
     "on": "ON",
     "off": "OFF",
-    "loadingSafeSpace": "Ngamot Papan Aman..."
+    "loadingSafeSpace": "Ngamot Papan Aman...",
+    "saved": "Kasinpen otomatis"
   },
   "insights": {
     "weeklyTitle": "Insight Minggon",
@@ -1282,7 +1285,11 @@
     "activity_reminder_desc": "Sampeyan gadhah jadwal kagiyatan. Sampun siyaga nglampahi samenika?",
     "dismiss": "Mangke Rumiyin",
     "dismissAria": "Tutup pitedhan niki",
-    "badge_adaptive": "Pitedhan Adaptif"
+    "badge_adaptive": "Pitedhan Adaptif",
+    "multimodal_title": "Gandhengan Kurang Turu & Beban Pikiran",
+    "multimodal_desc": "Efisiensi turu ing sangisore 70% bebarengan karo ketegangan emosi dhuwur. Nalika awak sayah, pikiran gampang mbulet. Coba latihan defusi kognitif ACT kanggo ngudhari beban batin.",
+    "action_act": "Bukak Terapi ACT",
+    "badge_multimodal": "ACT & Sirkadian JITAI"
   },
   "safetyCard": {
     "badge": "Pitulungan Gancangan Darurat",
@@ -1433,5 +1440,140 @@
     "headerAria": "Mode Operasional Piranti",
     "forumAirgappedPostToast": "Kasimpen ing Vault Luring lokal. Aktifake Mode Sambung kanggo nuduhake menyang komunitas.",
     "networkBlockedAuth": "Mode Luring Total aktif. Pindah menyang Mode Sambung kanggo mlebu nganggo akun."
+  },
+  "act": {
+    "title": "Terapi Keberterimaan & Komitmen (ACT)",
+    "subtitle": "Nemokake kompas nilai urip bermakna lan ngudhari talining pikiran (Hayes et al.)",
+    "clinicalBadge": "Steven C. Hayes • Model Heksafleks Klinis",
+    "defusionBadge": "Defusi Kognitif & Tumindak Nyata",
+    "tabsAria": "Pilihan Modul Terapi ACT",
+    "tabs": {
+      "compass": "🧭 Kompas Nilai Urip",
+      "leaves": "🍃 Godhong ing Ilining Kali",
+      "noticing": "💬 Aku Niteni Pikiran"
+    },
+    "domains": {
+      "relationships": {
+        "title": "Paseduluran & Sesambungan",
+        "subtitle": "Kulawarga, kanca, pasangan, lan tepa slira"
+      },
+      "growth": {
+        "title": "Ngrembakane Dhiri",
+        "subtitle": "Sinau, kawicaksanan, lan kekendelan batin"
+      },
+      "health": {
+        "title": "Kasarasan & Daya Urip",
+        "subtitle": "Kasarasan raga, tata turu, lan katentreman jiwa"
+      },
+      "work": {
+        "title": "Karya & Labuh Labet",
+        "subtitle": "Pakaryan, leladi, lan mupangat tumrap liyan"
+      }
+    },
+    "compass": {
+      "sectionLabel": "Nliti Nilai Urip & Tumindak Berkomitmen",
+      "introTitle": "Kiblat Kompas, Dudu Garis Pungkasan",
+      "introDesc": "Nilai urip dudu gegayuhan sing dicoret yen wis rampung, nanging kiblat pituduh dalan: kepriye anggonmu milih tumindak lan ngugemi urip ing saben wektu.",
+      "importanceSuffix": "Wigati",
+      "importanceSliderLabel": "Tataran Wigatine Batin:",
+      "statementLabel": "Pratelan Nilai Bermakna:"
+    },
+    "actions": {
+      "sectionTitle": "Tumindak Berkomitmen (Committed Action)",
+      "sectionDesc": "Langkah nyata cilik sing kok tindakake dina iki jumbuh karo nilai urip pilihanmu.",
+      "selectDomain": "Pilih Domain",
+      "inputPlaceholder": "Tulisna sak tindakan cilik dina iki...",
+      "btnAdd": "Tambah Tindakan",
+      "emptyList": "Durung ana tindakan berkomitmen. Wiwiti saka bab cilik.",
+      "markDone": "Tandhani rampung",
+      "markUndone": "Tandhani durung rampung"
+    },
+    "leaves": {
+      "sectionLabel": "Gladhen Defusi: Godhong ing Ilining Kali",
+      "title": "Godhong ing Ilining Kali (Leaves on a Stream)",
+      "guideText": "Bayangna sliramu lungguh ing pinggir kali sing ayem karo godhong-godhong sing keli. Nalika ana pikiran abot utawa sumelang, tumpangna ing godhong mau, lan jarne keli mili tanpa kok gandholi utawa kok tundhung.",
+      "inputPlaceholder": "Tulis pikiran sing lagi ngeboti sliramu... (tuladha: \"Aku wedi gagal\")",
+      "btnRelease": "Tumpangna ing Godhong & Jarne Mili",
+      "step1": "Pikiranmu wis ditumpangake ing godhong... Ambegan alon-alon.",
+      "step2": "Godhong keli katut banyu mili... Sliramu kuwi kaline, dudu godhonge.",
+      "step3": "Godhong sansaya adoh... Pikiran mung lelakon batin sawatara.",
+      "reframedLabel": "Dilarung mili ing sadhuwure godhong"
+    },
+    "noticing": {
+      "sectionLabel": "Gladhen Niteni Pikiran & Pandeleng Batin",
+      "title": "Aku Niteni Yen... (Defusi Bertingkat)",
+      "desc": "Ngudhari belitan pikiran nganggo 3 tataran pengamat berkesadaran kanggo ngendhokke cekelan emosi.",
+      "inputLabel": "Tulis Pikiran Otomatis sing Nemplek:",
+      "inputPlaceholder": "Tuladha: \"Aku iki wong gagal\" utawa \"Kabeh bakal bubrah\"",
+      "tier1Title": "Tataran 1: Belitan Pikiran (Pikiran = Kasunyatan)",
+      "tier2Title": "Tataran 2: Niteni Lakuning Pikiran",
+      "tier2Prefix": "Aku lagi duwe pikiran yen",
+      "tier3Title": "Tataran 3: Pandeleng Batin (Self-as-Context)",
+      "tier3Prefix": "Aku niteni yen pikiranku lagi kandha yen",
+      "btnSave": "Simpen Pamawas Pengamat",
+      "savedToast": "Kasinpen ing Riwayat Defusi"
+    },
+    "history": {
+      "title": "Riwayat Gladhen Defusi Pungkasan"
+    }
+  },
+  "relapse": {
+    "title": "Rencana Nulak Kambuh (Relapse Prevention)",
+    "subtitle": "Pituduh pangayoman dhiri adhedhasar Marlatt & Gordon: titenana tandha wiwitan, leremna sadurunge krisis, lan rangkul kemunduran kanthi asih.",
+    "badgeMarlatt": "Model Kognitif-Prilaku Marlatt & Gordon",
+    "badgeAve": "Tombo Abstinence Violation Effect (AVE)",
+    "tabsAria": "Pilihan Bagian Rencana Nulak Kambuh",
+    "tabs": {
+      "warning": "⚠️ Tandha Pèngetan Dini",
+      "deescalation": "🛡️ Rencana Nglerepake",
+      "compassion": "🌿 Welas Asih & Tombo AVE"
+    },
+    "warning": {
+      "sectionLabel": "Peta Tandha Pèngetan Dini",
+      "introTitle": "Titenana Ombak Cilik Sadurunge dadi Prahara",
+      "introDesc": "Kemunduran emosi arang kedadeyan ujug-ujug. Biasane diwiwiti saka riak cilik ing solah bawa, pikiran, emosi, utawa raga. Niteni luwih dhisik menehi wektu kanggo lerem.",
+      "categoryLabel": "Kategori Tandha",
+      "cat_behavioral": "Solah Bawa (Pakulinan)",
+      "cat_emotional": "Rasa & Emosi",
+      "cat_cognitive": "Pola Pikir",
+      "cat_physical": "Kahanan Raga",
+      "inputPlaceholder": "Tulis tandha pèngetan anyar...",
+      "btnAdd": "Tambah Tandha",
+      "emptyCat": "Durung ana cathetan tandha ing kategori iki."
+    },
+    "deescalation": {
+      "introTitle": "Tata Cara Nglerepake 3 Tataran",
+      "introDesc": "Wiwiti saka tumindak mandiri sing cepet (Tataran 1), leren sensorik & papan (Tataran 2), nganti kontak paseduluran lan layanan resmi (Tataran 3).",
+      "addTitle": "Tambah Strategi Nglerepake Dhiri",
+      "levelSelect": "Pilih Tataran",
+      "lvl1_title": "Tataran 1: Tindakan Cepet Mandiri (Somatik)",
+      "lvl1_desc": "Cara ngleremake dhiri cepet kayata Cyclic Sighing, kompres banyu anyep, utawa grounding 5-4-3-2-1.",
+      "lvl2_title": "Tataran 2: Leren Sensorik & Ruang Ayem",
+      "lvl2_desc": "Nyingkrih saka pamicu, ngedhunake lampu, mode meneng ponsel, lan mlaku hening.",
+      "lvl3_title": "Tataran 3: Panjurung Paseduluran & Darurat",
+      "lvl3_desc": "Hubungi kanca cedhak utawa layanan darurat kasarasan mental resmi.",
+      "titlePlaceholder": "Jeneng tindakan (tuladha: Kompres banyu anyep)",
+      "descPlaceholder": "Katrangan cekak carane nindakake (ora wajib)...",
+      "btnAdd": "Simpen Tindakan",
+      "actionsCount": "tindakan"
+    },
+    "contacts": {
+      "title": "Daftar Kontak Sambungan Batin",
+      "namePlaceholder": "Jeneng wong utawa layanan",
+      "relPlaceholder": "Sesambungan / Peran",
+      "phonePlaceholder": "Nomer telpon",
+      "btnAdd": "Tambah Kontak"
+    },
+    "ave": {
+      "sectionLabel": "Welas Asih & Tombo AVE",
+      "title": "Ngadhepi Abstinence Violation Effect (AVE)",
+      "body1": "Miturut riset Dr. Alan Marlatt, mungsuh paling gedhe ing pamulihan dudu mlesete emosi, nanging rasa salah keluwih-luwih (AVE) sing nganggep sedina ala ngrusak kabeh perjuangan sing wis lumaku.",
+      "formulaTitle": "Paugeran Pamulihan:",
+      "formulaBody": "Klesete emosi sawatara (Lapse) mung belokan cilik ing dalan. Ora ateges ambruk babar pisan (Relapse), kajaba yen sliramu ngadili awakmu dhewe lan nyerah.",
+      "affirmationsTitle": "Piweling Welas Asih Nalika Nglakoni Kemunduran:",
+      "notesLabel": "Pesen Welas Asih Kanggo Awakku Nalika Dina Krasa Abot:"
+    },
+    "confirmReset": "Balekake rencana marang setelan baku ilmiah?",
+    "btnReset": "Reset Rencana marang Baku"
   }
 }

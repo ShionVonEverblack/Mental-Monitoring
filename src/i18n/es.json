@@ -62,7 +62,9 @@
     "groupSafetyDesc": "Plan de seguridad, líneas de auxilio y derivación profesional",
     "actionSafetyPlan": "Plan de Seguridad",
     "actionHotline": "Línea de Crisis 119 Ext 8",
-    "actionReferral": "Derivación Puskesmas / BPJS"
+    "actionReferral": "Derivación Puskesmas / BPJS",
+    "actionAct": "Terapia ACT",
+    "actionRelapse": "Prevenir Recaídas"
   },
   "mood": {
     "title": "Registro de Ánimo",
@@ -306,7 +308,8 @@
     "print": "Imprimir / Guardar PDF",
     "on": "ON",
     "off": "OFF",
-    "loadingSafeSpace": "Cargando espacio seguro..."
+    "loadingSafeSpace": "Cargando espacio seguro...",
+    "saved": "Guardado automáticamente"
   },
   "insights": {
     "weeklyTitle": "Perspectivas Semanales",
@@ -1282,7 +1285,11 @@
     "activity_reminder_desc": "Tienes una actividad programada. ¿Listo para realizarla ahora?",
     "dismiss": "Ahora No",
     "dismissAria": "Cerrar esta sugerencia",
-    "badge_adaptive": "Recomendación Adaptativa"
+    "badge_adaptive": "Recomendación Adaptativa",
+    "multimodal_title": "Correlación entre Sueño Escaso y Tensión Mental",
+    "multimodal_desc": "Tu eficiencia de sueño está por debajo del 70% combinada con alta activación emocional. Con cansancio, los pensamientos se enredan más. Prueba la defusión cognitiva ACT.",
+    "action_act": "Abrir Terapia ACT",
+    "badge_multimodal": "ACT y Circadiano JITAI"
   },
   "safetyCard": {
     "badge": "Ayuda Rápida de Emergencia",
@@ -1433,5 +1440,140 @@
     "headerAria": "Modo Operativo de la Aplicación",
     "forumAirgappedPostToast": "Guardado en la Bóveda Desconectada local. Cambia a Modo Conectado para compartir con la comunidad.",
     "networkBlockedAuth": "Modo Bóveda Desconectada activo. Cambia a Modo Conectado para iniciar sesión con tu cuenta."
+  },
+  "act": {
+    "title": "Terapia de Aceptación y Compromiso (ACT)",
+    "subtitle": "Descubre la brújula de tus valores y libérate de pensamientos enredados (Hayes et al.)",
+    "clinicalBadge": "Steven C. Hayes • Modelo Clínico Hexaflex",
+    "defusionBadge": "Defusión Cognitiva y Acción Comprometida",
+    "tabsAria": "Selección de Módulos de Terapia ACT",
+    "tabs": {
+      "compass": "🧭 Brújula de Valores",
+      "leaves": "🍃 Hojas en el Arroyo",
+      "noticing": "💬 Notando Mis Pensamientos"
+    },
+    "domains": {
+      "relationships": {
+        "title": "Relaciones y Conexión",
+        "subtitle": "Familia, amistades, pareja y empatía social"
+      },
+      "growth": {
+        "title": "Crecimiento Personal",
+        "subtitle": "Aprendizaje, sabiduría y valentía interior"
+      },
+      "health": {
+        "title": "Salud y Vitalidad",
+        "subtitle": "Bienestar físico, ritmo del sueño y serenidad"
+      },
+      "work": {
+        "title": "Trabajo y Contribución",
+        "subtitle": "Oficio, vocación, servicio e impacto positivo"
+      }
+    },
+    "compass": {
+      "sectionLabel": "Clarificación de Valores y Acción Comprometida",
+      "introTitle": "Un Rumbo de Brújula, No una Meta Final",
+      "introDesc": "Los valores no son metas que tachas al terminar, sino rumbos en la brújula: cómo decides vivir y actuar en cada instante.",
+      "importanceSuffix": "Importante",
+      "importanceSliderLabel": "Nivel de Importancia Interior:",
+      "statementLabel": "Declaración de Valor Significativo:"
+    },
+    "actions": {
+      "sectionTitle": "Acción Comprometida (Committed Action)",
+      "sectionDesc": "Pasos tangibles y pequeños que das hoy en armonía con tus valores.",
+      "selectDomain": "Seleccionar Dominio",
+      "inputPlaceholder": "Escribe una pequeña acción comprometida hoy...",
+      "btnAdd": "Añadir Acción",
+      "emptyList": "Aún no hay acciones comprometidas. Comienza por algo pequeño.",
+      "markDone": "Marcar como completado",
+      "markUndone": "Marcar como incompleto"
+    },
+    "leaves": {
+      "sectionLabel": "Ejercicio de Defusión: Hojas en el Arroyo",
+      "title": "Hojas en el Arroyo (Leaves on a Stream)",
+      "guideText": "Imagínate sentado junto a un arroyo tranquilo donde flotan hojas. Cuando surja un pensamiento difícil o ansioso, colócalo sobre una hoja y déjalo correr sin retenerlo ni alejarlo.",
+      "inputPlaceholder": "Escribe el pensamiento que te pesa... (ej., \"Tengo miedo de fallar\")",
+      "btnRelease": "Colocar en la Hoja y Dejar Flotar",
+      "step1": "Tu pensamiento reposa en la hoja... Respira despacio.",
+      "step2": "La hoja avanza con la corriente... Tú eres el arroyo, no la hoja.",
+      "step3": "La hoja se aleja gradualmente... Los pensamientos son solo eventos mentales pasajeros.",
+      "reframedLabel": "Dejado fluir con calma sobre la hoja"
+    },
+    "noticing": {
+      "sectionLabel": "Ejercicio de Etiquetado y Yo-como-Contexto",
+      "title": "Me Doy Cuenta de Que... (Defusión Escalonada)",
+      "desc": "Desactiva la fusión cognitiva en 3 pasos de observación para calmar la presión emocional.",
+      "inputLabel": "Escribe el Pensamiento Automático Difícil:",
+      "inputPlaceholder": "Ejemplo: \"Soy un fracaso\" o \"Todo va a salir mal\"",
+      "tier1Title": "Etapa 1: Fusión Cognitiva (Pensamiento = Verdad Absoluta)",
+      "tier2Title": "Etapa 2: Notar el Proceso de Pensar",
+      "tier2Prefix": "Estoy teniendo el pensamiento de que",
+      "tier3Title": "Etapa 3: Yo Observador (Self-as-Context)",
+      "tier3Prefix": "Me doy cuenta de que mi mente me está diciendo que",
+      "btnSave": "Guardar Perspectiva de Observador",
+      "savedToast": "Guardado en el historial de defusión"
+    },
+    "history": {
+      "title": "Historial Reciente de Defusión"
+    }
+  },
+  "relapse": {
+    "title": "Plan de Prevención de Recaídas",
+    "subtitle": "Modelo cognitivo-conductual de Marlatt & Gordon: detecta señales tempranas, desescala a tiempo y abraza los retrocesos con compasión.",
+    "badgeMarlatt": "Modelo Cognitivo-Conductual de Marlatt & Gordon",
+    "badgeAve": "Antídoto contra el Efecto de Violación de la Abstinencia (AVE)",
+    "tabsAria": "Secciones del Plan de Prevención de Recaídas",
+    "tabs": {
+      "warning": "⚠️ Señales de Alerta Temprana",
+      "deescalation": "🛡️ Plan de Desescalada",
+      "compassion": "🌿 Autocompasión y AVE"
+    },
+    "warning": {
+      "sectionLabel": "Mapeo de Señales de Alerta Temprana",
+      "introTitle": "Detecta las Olas Pequeñas Antes de la Tormenta",
+      "introDesc": "Las recaídas emocionales casi nunca surgen de la nada. Comienzan con pequeños cambios en conductas, pensamientos, emociones o el cuerpo. Notarlos pronto te brinda espacio para pausar.",
+      "categoryLabel": "Categoría de Señal",
+      "cat_behavioral": "Conductual (Hábitos)",
+      "cat_emotional": "Emociones y Estado de Ánimo",
+      "cat_cognitive": "Patrones de Pensamiento",
+      "cat_physical": "Sensaciones Físicas",
+      "inputPlaceholder": "Escribe una nueva señal de alerta...",
+      "btnAdd": "Añadir Señal",
+      "emptyCat": "No hay señales en esta categoría todavía."
+    },
+    "deescalation": {
+      "introTitle": "Protocolo de Desescalada en 3 Niveles",
+      "introDesc": "Comienza con autorregulación rápida (Nivel 1), pausa ambiental y sensorial (Nivel 2) y apoyo social o líneas de crisis (Nivel 3).",
+      "addTitle": "Añadir Estrategia de Desescalada Personal",
+      "levelSelect": "Elegir Nivel",
+      "lvl1_title": "Nivel 1: Acción Rápida Individual (Somática)",
+      "lvl1_desc": "Reseteos somáticos rápidos como suspiro cíclico, agua fría en el rostro o anclaje 5-4-3-2-1.",
+      "lvl2_title": "Nivel 2: Pausa Espacial y Sensorial",
+      "lvl2_desc": "Alejarse de detonantes, atenuar luces, modo silencio en el móvil y caminar con atención plena.",
+      "lvl3_title": "Nivel 3: Anclas Sociales y de Emergencia",
+      "lvl3_desc": "Contactar a un amigo de confianza o a líneas oficiales de ayuda psicológica.",
+      "titlePlaceholder": "Nombre de la estrategia (ej., Agua fría en la cara)",
+      "descPlaceholder": "Breve orientación sobre cómo realizarla (opcional)...",
+      "btnAdd": "Guardar Estrategia",
+      "actionsCount": "estrategias"
+    },
+    "contacts": {
+      "title": "Contactos de Apoyo y Seguridad",
+      "namePlaceholder": "Nombre de persona o servicio",
+      "relPlaceholder": "Rol o relación",
+      "phonePlaceholder": "Teléfono",
+      "btnAdd": "Añadir Contacto"
+    },
+    "ave": {
+      "sectionLabel": "Autocompasión y Antídoto contra AVE",
+      "title": "Superar el Efecto de Violación de la Abstinencia (AVE)",
+      "body1": "En la investigación clínica del Dr. Alan Marlatt, la mayor amenaza en la recuperación no es el desliz en sí, sino el AVE: la culpa tóxica y el pensamiento de todo o nada que asume que un mal día arruina todo el progreso previo.",
+      "formulaTitle": "Fórmula Clínica de Recuperación:",
+      "formulaBody": "Un tropiezo momentáneo (Lapse) es solo un desvío menor en el camino. No se convierte en recaída total (Relapse) a menos que te juzgues con dureza y te rindas.",
+      "affirmationsTitle": "Afirmaciones de Autocompasión Ante un Tropiezo:",
+      "notesLabel": "Mensaje de Autocompasión para Mí Mismo en Días Difíciles:"
+    },
+    "confirmReset": "¿Restablecer el plan a la configuración estándar basada en evidencia?",
+    "btnReset": "Restablecer Plan a Valores Iniciales"
   }
 }

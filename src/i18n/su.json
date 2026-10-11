@@ -62,7 +62,9 @@
     "groupSafetyDesc": "Rancangan kasalametan, nomer darurat gancang, sareng rujukan faskes resmi",
     "actionSafetyPlan": "Rancangan Kasalametan",
     "actionHotline": "Hotline 119 Ext 8",
-    "actionReferral": "Pituduh Faskes BPJS"
+    "actionReferral": "Pituduh Faskes BPJS",
+    "actionAct": "Terapi ACT",
+    "actionRelapse": "Nolak Kambuh"
   },
   "mood": {
     "title": "Catetan Raraosan",
@@ -306,7 +308,8 @@
     "print": "Citak / Simpen PDF",
     "on": "ON",
     "off": "OFF",
-    "loadingSafeSpace": "Ngamuat Rohangan Aman..."
+    "loadingSafeSpace": "Ngamuat Rohangan Aman...",
+    "saved": "Kasimpen otomatis"
   },
   "insights": {
     "weeklyTitle": "Insight Mingguan",
@@ -1282,7 +1285,11 @@
     "activity_reminder_desc": "Anjeun gaduh jadwal kagiatan. Parantos siap ngalaksanakeun ayeuna?",
     "dismiss": "Engké Wé",
     "dismissAria": "Tutup pituduh ieu",
-    "badge_adaptive": "Pituduh Adaptif"
+    "badge_adaptive": "Pituduh Adaptif",
+    "multimodal_title": "Korelasina Kurang Sare & Beungbeurat Pikiran",
+    "multimodal_desc": "Efisiensi sare di handapeun 70% marengan tegangan emosi anu luhur. Sabot awak cape, pikiran gampang meulit. Cobi latihan defusi kognitif ACT pikeun ngaleupaskeun beungbeurat pikiran.",
+    "action_act": "Buka Terapi ACT",
+    "badge_multimodal": "ACT & Sirkadian JITAI"
   },
   "safetyCard": {
     "badge": "Pitulung Gancang Darurat",
@@ -1433,5 +1440,140 @@
     "headerAria": "Mode Operasional Aplikasi",
     "forumAirgappedPostToast": "Disimpen dina Vault Luring lokal. Aktipkeun Mode Sambung pikeun ngabagikeun ka komunitas.",
     "networkBlockedAuth": "Mode Luring Pinuh aktip. Pindah kana Mode Sambung kanggo asup nganggo akun."
+  },
+  "act": {
+    "title": "Terapi Katampi & Komitmen (ACT)",
+    "subtitle": "Mendakan kompas ajén hirup anu ngandung harti sarta ngudar beungkeutan pikiran (Hayes et al.)",
+    "clinicalBadge": "Steven C. Hayes • Modél Heksafleks Klinis",
+    "defusionBadge": "Defusi Kognitif & Lampah Berkomitmen",
+    "tabsAria": "Pilihan Modul Terapi ACT",
+    "tabs": {
+      "compass": "🧭 Kompas Ajén Hirup",
+      "leaves": "🍃 Daun dina Palidna Walungan",
+      "noticing": "💬 Kuring Sadar kana Pikiran"
+    },
+    "domains": {
+      "relationships": {
+        "title": "Silaturahmi & Hubungan",
+        "subtitle": "Kulawarga, réréncangan, pasangan, sareng empati sosial"
+      },
+      "growth": {
+        "title": "Kamekaran Diri",
+        "subtitle": "Diajar, kawicaksanan, sareng katikahan batin"
+      },
+      "health": {
+        "title": "Kaséhatan & Vitalitas",
+        "subtitle": "Kasegaran raga, pola sare, sareng katengtreman jiwa"
+      },
+      "work": {
+        "title": "Karya & Kontribusi",
+        "subtitle": "Padamelan, pangabdian, sareng mangpaat pikeun sasama"
+      }
+    },
+    "compass": {
+      "sectionLabel": "Mendakan Ajén Hirup & Lampah Berkomitmen",
+      "introTitle": "Kiblat Kompas, Sanés Garis Pungkasan",
+      "introDesc": "Ajén hirup sanés tujuan anu tiasa dicorét saatos réngsé, nanging kiblat pituduh: kumaha anjeun milih lampah sareng ngajalankeun hirup dina unggal detik.",
+      "importanceSuffix": "Penting",
+      "importanceSliderLabel": "Tingkat Kapentingan Batin:",
+      "statementLabel": "Pernyataan Ajén anu Ngandung Harti:"
+    },
+    "actions": {
+      "sectionTitle": "Lampah Berkomitmen (Committed Action)",
+      "sectionDesc": "Léngkah nyata leutik anu anjeun laksanakeun dinten ieu saluyu sareng ajén hirup anjeun.",
+      "selectDomain": "Pilih Widang",
+      "inputPlaceholder": "Tulis hiji lampah leutik dinten ieu...",
+      "btnAdd": "Tambah Lampah",
+      "emptyList": "Teu acan aya lampah berkomitmen. Mimitian tina hal leutik.",
+      "markDone": "Tandaan réngsé",
+      "markUndone": "Tandaan teu acan réngsé"
+    },
+    "leaves": {
+      "sectionLabel": "Latihan Defusi: Daun dina Palidna Walungan",
+      "title": "Daun dina Palidna Walungan (Leaves on a Stream)",
+      "guideText": "Bayangkeun anjeun calik di sisi walungan anu tenang kalayan dangdaunan anu palid ngalir. Nalika aya pikiran anu beurat atanapi salempang, témpélkeun kana daun, sareng antepkeun palid tanpa dicekel atanapi diusir.",
+      "inputPlaceholder": "Ketik pikiran anu nuju ngabeungbeuratan... (contona: \"Kuring sieun gagal\")",
+      "btnRelease": "Témpélkeun kana Daun & Palidkeun",
+      "step1": "Pikiran anjeun parantos ditindihkeun dina daun... Tarik napas lalaunan.",
+      "step2": "Daun palid kabawa ku cai... Anjeun walunganna, sanés daunna.",
+      "step3": "Daun beuki tebih... Pikiran mung saukur kajadian batin samentawis.",
+      "reframedLabel": "Dipalidkeun lalaunan dina daun"
+    },
+    "noticing": {
+      "sectionLabel": "Latihan Nyirian Pikiran & Panitén Batin",
+      "title": "Kuring Sadar Yén... (Defusi Bertingkat)",
+      "desc": "Ngudar beungkeutan pikiran ku 3 léngkah panitén berkesadaran pikeun ngaleupaskeun cekelan émosi.",
+      "inputLabel": "Tulis Pikiran Otomatis anu Nempel:",
+      "inputPlaceholder": "Contona: \"Kuring jalma gagal\" atanapi \"Sadayana bakal ancur\"",
+      "tier1Title": "Tahap 1: Fusi Kognitif (Pikiran = Bukti Nyata)",
+      "tier2Title": "Tahap 2: Nyadar kana Prosés Mikir",
+      "tier2Prefix": "Kuring nuju gaduh pikiran yén",
+      "tier3Title": "Tahap 3: Panitén Diri (Self-as-Context)",
+      "tier3Prefix": "Kuring sadar yén pikiran kuring nuju nyarios yén",
+      "btnSave": "Simpen Pamadegan Panitén",
+      "savedToast": "Kasimpen kana Sajarah Defusi"
+    },
+    "history": {
+      "title": "Sajarah Latihan Defusi Pamungkas"
+    }
+  },
+  "relapse": {
+    "title": "Rencana Nolak Kambuh (Relapse Prevention)",
+    "subtitle": "Pituduh pangraksa diri dumasar Marlatt & Gordon: kenal tanda mimiti, de-eskalasi sateuacan krisis, sareng rangkul kalepasan ku welas asih.",
+    "badgeMarlatt": "Modél Kognitif-Paripolah Marlatt & Gordon",
+    "badgeAve": "Ubar Abstinence Violation Effect (AVE)",
+    "tabsAria": "Pilihan Bagian Rencana Nolak Kambuh",
+    "tabs": {
+      "warning": "⚠️ Tanda Pépéling Awal",
+      "deescalation": "🛡️ Rencana De-Eskalasi",
+      "compassion": "🌿 Welas Asih & Ubar AVE"
+    },
+    "warning": {
+      "sectionLabel": "Pametaan Tanda Pépéling Awal",
+      "introTitle": "Kenal Riak Sateuacan Janten Ombak",
+      "introDesc": "Kemunduran émosi jarang kajantenan ngadadak. Biasana dikawitan ku riak alit dina paripolah, pikiran, émosi, atanapi rasa raga. Mikawanoh langkung awal masihan waktos pikeun ngareureuh.",
+      "categoryLabel": "Kategori Tanda",
+      "cat_behavioral": "Paripolah (Kabiasaan)",
+      "cat_emotional": "Rasa & Émosi",
+      "cat_cognitive": "Pola Pikir",
+      "cat_physical": "Kayaan Raga",
+      "inputPlaceholder": "Tulis tanda pépéling anyar...",
+      "btnAdd": "Tambah Tanda",
+      "emptyCat": "Teu acan aya catetan tanda dina kategori ieu."
+    },
+    "deescalation": {
+      "introTitle": "Protokol De-Eskalasi 3 Lapis",
+      "introDesc": "Kawitan tina lampah mandiri anu gancang (Lapis 1), istirahat rohangan & sénsorik (Lapis 2), dugi ka kontak sobat sareng bantosan resmi (Lapis 3).",
+      "addTitle": "Tambah Stratégi De-Eskalasi Pribadi",
+      "levelSelect": "Pilih Lapis",
+      "lvl1_title": "Lapis 1: Lampah Gancang Mandiri (Somatik)",
+      "lvl1_desc": "Téhnik rélaxasi mandiri instan sapertos Cyclic Sighing, kompres cai tiis, atanapi grounding 5-4-3-2-1.",
+      "lvl2_title": "Lapis 2: Istirahat Rohangan & Sénsorik",
+      "lvl2_desc": "Ngajauhan pemicu, ngaredupkeun lampu, mode jempé ponsel, sareng leumpang hening.",
+      "lvl3_title": "Lapis 3: Pangrojong Sobat & Darurat",
+      "lvl3_desc": "Ngahubungan réréncangan caket atanapi saluran darurat kaséhatan méntal resmi.",
+      "titlePlaceholder": "Nami lampah (contona: Kompres cai tiis)",
+      "descPlaceholder": "Pituduh singget cara ngalaksanakeunana (opsional)...",
+      "btnAdd": "Simpen Stratégi",
+      "actionsCount": "lampah"
+    },
+    "contacts": {
+      "title": "Daptar Kontak Sobat Satia",
+      "namePlaceholder": "Nami jalmi atanapi layanan",
+      "relPlaceholder": "Peran / Hubungan",
+      "phonePlaceholder": "Nomer telepon",
+      "btnAdd": "Tambah Kontak"
+    },
+    "ave": {
+      "sectionLabel": "Welas Asih & Ubar AVE",
+      "title": "Nyanghareupan Abstinence Violation Effect (AVE)",
+      "body1": "Dina panalungtikan Dr. Alan Marlatt, musuh pangbadagna sanés mlesétna émosi, tapi rasa lepat anu kaleuleuwihan (AVE) anu nganggap sadinten awon ngancurkeun sadaya usaha anu parantos lumangsung.",
+      "formulaTitle": "Rumus Pulih:",
+      "formulaBody": "Kemunduran samentawis (Lapse) mung méngkol sakedik dina jalan. Henteu otomatis janten ragrag total (Relapse), iwal lamun anjeun ngahukum diri sorangan sarta serah bongkokan.",
+      "affirmationsTitle": "Pépéling Welas Asih Sabot Ngalaman Kemunduran:",
+      "notesLabel": "Pesen Welas Asih Pribadi Pikeun Diri Sabot Poé Karasa Beurat:"
+    },
+    "confirmReset": "Mulangkeun rencana kana setélan dasar ilmiah?",
+    "btnReset": "Reset Rencana kana Standar"
   }
 }

@@ -99,8 +99,54 @@ export function evaluateJitai(context: JitaiContext): JitaiNudge | null {
 
   const sortedMoods = getSortedMoods(moods);
   const latestMood = sortedMoods[0] as MoodEntry | undefined;
+  const sortedSleep = getSortedSleep(sleepHistory);
+  const latestSleep = sortedSleep[0] as SleepDiaryEntry | undefined;
 
-  // Priority 1: Acute Affective Dysregulation (Yale Mood Meter 2D - Red Quadrant)
+  // Priority 1: Multimodal Sleep & High-Arousal Mood Correlator
+  // Low sleep efficiency (<70%) coupled with high arousal negative mood -> Contextual ACT Cognitive Defusion or Rest Nudge
+  // Note: Acute panic crises (factors including 'panic'/'panik') strictly retain emergency vagal reset priority
+  if (
+    latestMood &&
+    latestSleep &&
+    latestSleep.sleepEfficiency < 70 &&
+    !isTypeDismissed('multimodal_sleep_mood_correlator', persistedState)
+  ) {
+    const isAcutePanic = latestMood.factors?.some((f) => /panic|panik|krisis|trauma/i.test(f));
+    const isHighArousalNegative =
+      latestMood.quadrant === 'red' ||
+      (typeof latestMood.valence === 'number' &&
+        typeof latestMood.arousal === 'number' &&
+        latestMood.valence <= -0.4 &&
+        latestMood.arousal >= 0.4);
+
+    const sleepTimestamp = new Date(latestSleep.createdAt || latestSleep.date).getTime();
+    const isRecentSleep =
+      !isNaN(sleepTimestamp) &&
+      currentTime.getTime() - sleepTimestamp <= MS_IN_48_HOURS &&
+      currentTime.getTime() >= sleepTimestamp;
+
+    if (isRecentSleep && isHighArousalNegative && !isAcutePanic) {
+      return {
+        id: `jitai-multimodal-${latestSleep.id || 'sleep'}-${latestMood.id || 'mood'}`,
+        type: 'multimodal_sleep_mood_correlator',
+        category: 'mood',
+        urgency: 'high',
+        titleKey: 'jitai.multimodal_title',
+        titleFallback: 'Korelasi Kurang Tidur & Ketegangan Pikiran',
+        messageKey: 'jitai.multimodal_desc',
+        messageFallback:
+          'Efisiensi tidurmu di bawah 70% berpadu dengan ketegangan emosi tinggi. Saat tubuh lelah, pikiran cenderung berputar cepat. Coba latihan defusi kognitif ACT untuk melepaskan jeratan pikiran.',
+        actionLabelKey: 'jitai.action_act',
+        actionLabelFallback: 'Buka Terapi ACT',
+        targetRoute: '/act',
+        iconName: 'Compass',
+        evidenceBadgeKey: 'jitai.badge_multimodal',
+        evidenceBadgeFallback: 'ACT & Sirkadian JITAI',
+      };
+    }
+  }
+
+  // Priority 2: Acute Affective Dysregulation (Yale Mood Meter 2D - Red Quadrant)
   // High sympathetic arousal + negative valence -> Parasympathetic Vagal Reset
   if (latestMood && !isTypeDismissed('mood_red_vagal_reset', persistedState)) {
     const isRedQuadrant =
@@ -206,9 +252,6 @@ export function evaluateJitai(context: JitaiContext): JitaiNudge | null {
   }
 
   // Priority 4: CBT-I Sleep Efficiency & Fragmentation Rules
-  const sortedSleep = getSortedSleep(sleepHistory);
-  const latestSleep = sortedSleep[0] as SleepDiaryEntry | undefined;
-
   if (latestSleep) {
     // 4a. Sleep Efficiency < 85% -> Stimulus Control
     if (

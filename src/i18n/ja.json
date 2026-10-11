@@ -62,7 +62,9 @@
     "groupSafetyDesc": "危機防止プラン、緊急ダイヤル、公的医療機関への紹介ガイド",
     "actionSafetyPlan": "安全行動計画",
     "actionHotline": "相談ホットライン 119-8",
-    "actionReferral": "地域診療所・保険適用紹介"
+    "actionReferral": "地域診療所・保険適用紹介",
+    "actionAct": "ACT療法",
+    "actionRelapse": "再発予防"
   },
   "mood": {
     "title": "気分トラッカー",
@@ -306,7 +308,8 @@
     "print": "印刷 / PDF保存",
     "on": "ON",
     "off": "OFF",
-    "loadingSafeSpace": "安全なスペースを読み込み中..."
+    "loadingSafeSpace": "安全なスペースを読み込み中...",
+    "saved": "自動保存済み"
   },
   "insights": {
     "weeklyTitle": "週間インサイト",
@@ -1282,7 +1285,11 @@
     "activity_reminder_desc": "予定された活動があります。今から始めてみませんか？",
     "dismiss": "後で",
     "dismissAria": "この提案を閉じる",
-    "badge_adaptive": "適応型サポート"
+    "badge_adaptive": "適応型サポート",
+    "multimodal_title": "睡眠不足と精神的負担の相関",
+    "multimodal_desc": "睡眠効率が70％を下回り、感情的な高まりと重なっています。疲弊していると、思考にとらわれやすくなります。ACT脱フュージョンを試して心の重荷をほどきましょう。",
+    "action_act": "ACT療法を開く",
+    "badge_multimodal": "ACT & 概日JITAI"
   },
   "safetyCard": {
     "badge": "緊急迅速サポート",
@@ -1433,5 +1440,140 @@
     "headerAria": "アプリケーション動作モード",
     "forumAirgappedPostToast": "端末のオフライン保管庫に保存されました。コミュニティに共有するには接続モードに切り替えてください。",
     "networkBlockedAuth": "完全オフライン保管庫モードが有効です。クラウドログインを行うには接続モードに切り替えてください。"
+  },
+  "act": {
+    "title": "アクセプタンス＆コミットメント・セラピー (ACT)",
+    "subtitle": "意味ある人生の価値という羅針盤を見出し、絡みつく思考から自由になる (Hayes et al.)",
+    "clinicalBadge": "スティーブン・C・ヘイズ博士 • ヘキサフレックス臨床モデル",
+    "defusionBadge": "認知的脱フュージョン＆コミットされた行動",
+    "tabsAria": "ACT療法モジュール選択",
+    "tabs": {
+      "compass": "🧭 人生の価値の羅針盤",
+      "leaves": "🍃 小川のせせらぎと木の葉",
+      "noticing": "💬 思考に気づく自己"
+    },
+    "domains": {
+      "relationships": {
+        "title": "人間関係とつながり",
+        "subtitle": "家族、友人、パートナー、他者への共感"
+      },
+      "growth": {
+        "title": "自己成長と探求",
+        "subtitle": "生涯学習、心の知恵、内なる勇気"
+      },
+      "health": {
+        "title": "健康と活力",
+        "subtitle": "身体の健康、睡眠リズム、心の平穏"
+      },
+      "work": {
+        "title": "仕事と社会貢献",
+        "subtitle": "職業、奉仕、他者への意義ある貢献"
+      }
+    },
+    "compass": {
+      "sectionLabel": "価値の明確化とコミットされた行動",
+      "introTitle": "終着点ではなく、羅針盤が指す方角",
+      "introDesc": "価値とは達成して消し去る目標ではなく、どの瞬間も自分がどうあり、どう生きるかを選ぶ羅針盤の方角です。",
+      "importanceSuffix": "重要",
+      "importanceSliderLabel": "内なる重要度レベル:",
+      "statementLabel": "心に響く価値の言明:"
+    },
+    "actions": {
+      "sectionTitle": "コミットされた行動 (Committed Action)",
+      "sectionDesc": "選択した価値観に沿って、今日踏み出す小さな具体的な一歩。",
+      "selectDomain": "領域を選択",
+      "inputPlaceholder": "今日取り組む小さな行動を1つ書く...",
+      "btnAdd": "行動を追加",
+      "emptyList": "まだ行動がありません。小さな一歩から始めましょう。",
+      "markDone": "完了とする",
+      "markUndone": "未完了に戻す"
+    },
+    "leaves": {
+      "sectionLabel": "脱フュージョン演習: 小川のせせらぎの木の葉",
+      "title": "小川のせせらぎの木の葉 (Leaves on a Stream)",
+      "guideText": "穏やかな小川の岸辺に座り、葉が流れていく光景を思い浮かべてください。重苦しい思考や不安が浮かんだら、葉の上に静かに乗せ、握りしめたり追い払ったりせずそのまま流しましょう。",
+      "inputPlaceholder": "心に重くのしかかっている思考を入力... (例：「失敗するのが怖い」)",
+      "btnRelease": "木の葉に乗せて流す",
+      "step1": "思考が木の葉に乗せられました... ゆっくり呼吸してください。",
+      "step2": "木の葉は川の流れに乗って進みます... あなたは川であり、木の葉そのものではありません。",
+      "step3": "木の葉が遠ざかっていきます... 思考はただ通り過ぎる心のできごとです。",
+      "reframedLabel": "木の葉に乗せて静かに流した思考"
+    },
+    "noticing": {
+      "sectionLabel": "思考のラベリングと文脈としての自己演習",
+      "title": "私は〜という思考に気づいている (段階的脱フュージョン)",
+      "desc": "3段階の気づきのステップで認知的フュージョンを解き、感情的な囚われを和らげます。",
+      "inputLabel": "頭にこびりつく自動思考を入力:",
+      "inputPlaceholder": "例：「私は無力だ」「すべてが台無しになる」",
+      "tier1Title": "第1段階: 認知的フュージョン (思考＝絶対的事実)",
+      "tier2Title": "第2段階: 思考のプロセスに気づく",
+      "tier2Prefix": "私は〜という思考を抱いている",
+      "tier3Title": "第3段階: 観察する自己 (Self-as-Context)",
+      "tier3Prefix": "私は、自分の心が〜と言っていることに気づいている",
+      "btnSave": "観察者の視点を保存",
+      "savedToast": "脱フュージョン履歴に保存されました"
+    },
+    "history": {
+      "title": "最近の脱フュージョン演習履歴"
+    }
+  },
+  "relapse": {
+    "title": "再発予防計画 (Relapse Prevention)",
+    "subtitle": "マーラット＆ゴードンの認知行動モデル: 初期の兆候を察知し、危機を事前に鎮め、自己への慈悲で後退を受け止める。",
+    "badgeMarlatt": "マーラット＆ゴードン認知行動再発予防モデル",
+    "badgeAve": "禁断違反効果 (AVE) 特効薬",
+    "tabsAria": "再発予防計画セクションの選択",
+    "tabs": {
+      "warning": "⚠️ 早期警戒サイン",
+      "deescalation": "🛡️ 段階的沈静化戦略",
+      "compassion": "🌿 セルフ・コンパッション & AVE"
+    },
+    "warning": {
+      "sectionLabel": "早期警戒サインのマッピング",
+      "introTitle": "大波になる前のさざ波に気づく",
+      "introDesc": "感情的な後退が突然起こることは稀です。行動、思考、感情、身体感覚の小さなさざ波から始まります。早期に気づくことで、立ち止まる余裕が生まれます。",
+      "categoryLabel": "サインの区分",
+      "cat_behavioral": "行動 (日々の習慣)",
+      "cat_emotional": "感情・気分",
+      "cat_cognitive": "思考パターン",
+      "cat_physical": "身体感覚",
+      "inputPlaceholder": "新しい早期サインを入力...",
+      "btnAdd": "サインを追加",
+      "emptyCat": "この区分のサインはまだありません。"
+    },
+    "deescalation": {
+      "introTitle": "3層の沈静化プロトコル",
+      "introDesc": "迅速なセルフケア (レベル1) から感覚と環境のリセット (レベル2)、支えとなる相談先への連絡 (レベル3) へと進めます。",
+      "addTitle": "独自の沈静化戦略を追加",
+      "levelSelect": "レベルを選択",
+      "lvl1_title": "レベル1: 迅速な単独行動 (身体的リセット)",
+      "lvl1_desc": "サイクリック・サイイング、冷水洗顔、5-4-3-2-1グラウンディングなどの即座のリセット法。",
+      "lvl2_title": "レベル2: 空間と感覚の休息",
+      "lvl2_desc": "刺激から距離を置き、照明を落とし、通知を消し、静かに歩いて感覚を取り戻す。",
+      "lvl3_title": "レベル3: 人とのつながりと相談",
+      "lvl3_desc": "信頼できる友人に話しかけるか、公式のメンタルヘルス支援窓口へ相談する。",
+      "titlePlaceholder": "対策名 (例: 冷水で顔を洗う)",
+      "descPlaceholder": "実施方法の簡単なメモ (任意)...",
+      "btnAdd": "戦略を保存",
+      "actionsCount": "個の対策"
+    },
+    "contacts": {
+      "title": "信頼できる心の支え・相談先",
+      "namePlaceholder": "氏名または機関名",
+      "relPlaceholder": "役割・関係",
+      "phonePlaceholder": "電話番号",
+      "btnAdd": "連絡先を追加"
+    },
+    "ave": {
+      "sectionLabel": "セルフ・コンパッションとAVE特効薬",
+      "title": "禁断違反効果 (AVE) を乗り越える",
+      "body1": "アラン・マーラット博士の臨床研究によると、回復への最大の脅威は後退そのものではなく、「禁断違反効果 (AVE)」です。つまり、1回のつまずきで過去の努力が全否定されたと思い込む極端な自責の念です。",
+      "formulaTitle": "回復の臨床公式:",
+      "formulaBody": "一時的なスリップ (Lapse) は道中の小さな曲がり角にすぎません。自己批判に囚われて諦めない限り、完全な崩壊 (Relapse) には至りません。",
+      "affirmationsTitle": "後退したときに自分を支える慈悲のアファメーション:",
+      "notesLabel": "辛い日に自分へ贈る温かい慈悲のメッセージ:"
+    },
+    "confirmReset": "再発予防計画をエビデンスに基づく初期設定に戻しますか？",
+    "btnReset": "計画を初期状態にリセット"
   }
 }

@@ -75,6 +75,13 @@ export interface ForumPost {
   commentCount: number;
   isFlagged: boolean;
   createdAt: string;
+  encryptedPayload?: {
+    version: 1;
+    salt: string;
+    iv: string;
+    ciphertext: string;
+  };
+  isEncrypted?: boolean;
 }
 
 export interface ForumComment {
@@ -84,7 +91,17 @@ export interface ForumComment {
   content: string;
   isSupportive: boolean;
   createdAt: string;
+  encryptedPayload?: {
+    version: 1;
+    salt: string;
+    iv: string;
+    ciphertext: string;
+  };
+  isEncrypted?: boolean;
 }
+
+export * from './act';
+export * from './relapse';
 
 export interface ContactInfo {
   name: string;

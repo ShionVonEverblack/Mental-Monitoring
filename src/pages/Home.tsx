@@ -16,6 +16,8 @@ import {
   PhoneCall,
   Building2,
   ChevronRight,
+  Compass,
+  ShieldAlert,
 } from 'lucide-react';
 import { BarChart, Bar, Cell, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { MoodSelector } from '../components/ui/MoodSelector';
@@ -423,6 +425,87 @@ export const Home: React.FC = () => {
               <span className="zen-item-tile-label">{t('home.actionReferral', { defaultValue: 'Rujukan Puskesmas & BPJS' })}</span>
             </button>
           </div>
+        </div>
+      </section>
+
+      {/* Terapi Klinis & Pencegahan Relaps (Phase 2 Evidence-Based Clinical Interventions) */}
+      <section className="zen-clinical-pathways" aria-label={t('home.clinicalPathways', { defaultValue: 'Terapi Berbasis Bukti' })} style={{ marginBottom: 'var(--spacing-xl)' }}>
+        <div className="zen-pathways-header" style={{ marginBottom: 'var(--spacing-xs)' }}>
+          <h2 className="zen-matrix-title">{t('home.clinicalPathways', { defaultValue: 'Terapi Berbasis Bukti' })}</h2>
+          <p className="zen-matrix-subtitle">{t('home.clinicalPathwaysSubtitle', { defaultValue: 'Kompas nilai hidup, defusi kognitif, dan antisipasi kambuh klinis' })}</p>
+        </div>
+        <div className="zen-pathway-cards" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 'var(--spacing-sm)', marginTop: 'var(--spacing-sm)' }}>
+          <button
+            type="button"
+            className="zen-pathway-card"
+            onClick={() => navigate('/act')}
+            aria-label={t('home.actionAct', { defaultValue: 'Terapi ACT (Nilai & Defusi)' })}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 'var(--spacing-md)',
+              padding: 'var(--spacing-md) var(--spacing-lg)',
+              background: 'var(--bg-glass-card)',
+              backdropFilter: 'blur(20px)',
+              WebkitBackdropFilter: 'blur(20px)',
+              border: '1px solid var(--border-subtle)',
+              borderRadius: 'var(--radius-xl)',
+              color: 'var(--text-primary)',
+              textAlign: 'left',
+              cursor: 'pointer',
+              minHeight: '56px',
+              transition: 'border-color var(--transition-fast), box-shadow var(--transition-normal), transform var(--transition-fast)',
+            }}
+          >
+            <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '38px', height: '38px', borderRadius: 'var(--radius-lg)', background: 'hsla(165, 45%, 50%, 0.15)', color: 'var(--color-secondary)' }}>
+              <Compass size={22} aria-hidden="true" />
+            </span>
+            <div style={{ flex: 1 }}>
+              <div style={{ fontWeight: 'var(--font-weight-semibold)', fontSize: 'var(--font-size-sm)' }}>
+                {t('home.actionAct', { defaultValue: 'Terapi ACT' })}
+              </div>
+              <div style={{ fontSize: 'var(--font-size-xs)', color: 'var(--text-secondary)' }}>
+                {t('act.compassTitle', { defaultValue: 'Kompas Nilai & Defusi Pikiran' })}
+              </div>
+            </div>
+            <ChevronRight size={16} className="zen-rtl-flip" style={{ color: 'var(--text-tertiary)' }} aria-hidden="true" />
+          </button>
+
+          <button
+            type="button"
+            className="zen-pathway-card"
+            onClick={() => navigate('/relapse-prevention')}
+            aria-label={t('home.actionRelapse', { defaultValue: 'Antisipasi Kambuh' })}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 'var(--spacing-md)',
+              padding: 'var(--spacing-md) var(--spacing-lg)',
+              background: 'var(--bg-glass-card)',
+              backdropFilter: 'blur(20px)',
+              WebkitBackdropFilter: 'blur(20px)',
+              border: '1px solid var(--border-subtle)',
+              borderRadius: 'var(--radius-xl)',
+              color: 'var(--text-primary)',
+              textAlign: 'left',
+              cursor: 'pointer',
+              minHeight: '56px',
+              transition: 'border-color var(--transition-fast), box-shadow var(--transition-normal), transform var(--transition-fast)',
+            }}
+          >
+            <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '38px', height: '38px', borderRadius: 'var(--radius-lg)', background: 'hsla(215, 65%, 55%, 0.15)', color: 'var(--color-primary)' }}>
+              <ShieldAlert size={22} aria-hidden="true" />
+            </span>
+            <div style={{ flex: 1 }}>
+              <div style={{ fontWeight: 'var(--font-weight-semibold)', fontSize: 'var(--font-size-sm)' }}>
+                {t('home.actionRelapse', { defaultValue: 'Antisipasi Kambuh' })}
+              </div>
+              <div style={{ fontSize: 'var(--font-size-xs)', color: 'var(--text-secondary)' }}>
+                {t('relapse.bannerSubtitle', { defaultValue: 'Rencana Pencegahan Relaps & AVE' })}
+              </div>
+            </div>
+            <ChevronRight size={16} className="zen-rtl-flip" style={{ color: 'var(--text-tertiary)' }} aria-hidden="true" />
+          </button>
         </div>
       </section>
 

@@ -62,7 +62,9 @@
     "groupSafetyDesc": "危机安全计划、快捷紧急求助与正规公立就诊转诊指南",
     "actionSafetyPlan": "安全计划",
     "actionHotline": "求助热线 119-8",
-    "actionReferral": "社区诊所与医保转诊"
+    "actionReferral": "社区诊所与医保转诊",
+    "actionAct": "接纳承诺疗法",
+    "actionRelapse": "预防复发"
   },
   "mood": {
     "title": "心情追踪",
@@ -306,7 +308,8 @@
     "print": "打印 / 存为PDF",
     "on": "开启",
     "off": "关闭",
-    "loadingSafeSpace": "正在加载安全空间..."
+    "loadingSafeSpace": "正在加载安全空间...",
+    "saved": "已自动保存"
   },
   "insights": {
     "weeklyTitle": "每周洞察",
@@ -1282,7 +1285,11 @@
     "activity_reminder_desc": "您有预定的活动安排。现在准备好开始了吗？",
     "dismiss": "稍后再说",
     "dismissAria": "关闭此建议",
-    "badge_adaptive": "自适应推荐"
+    "badge_adaptive": "自适应推荐",
+    "multimodal_title": "睡眠不足与精神负荷关联",
+    "multimodal_desc": "睡眠效率低于70%并伴有较高的情绪唤醒。当身体疲惫时，思绪容易缠绕。尝试ACT认知解离练习来松开思维的枷锁。",
+    "action_act": "打开ACT疗法",
+    "badge_multimodal": "ACT与昼夜节律JITAI"
   },
   "safetyCard": {
     "badge": "紧急快速求助",
@@ -1433,5 +1440,140 @@
     "headerAria": "应用运行模式",
     "forumAirgappedPostToast": "已保存至本地离线隔离保险库。切换至在线模式即可同步至互助社区。",
     "networkBlockedAuth": "完全离线模式已启用。请切换至在线模式以使用云端账户登录。"
+  },
+  "act": {
+    "title": "接纳承诺疗法 (ACT)",
+    "subtitle": "寻找有意义的人生价值罗盘，从纠缠的思绪中解脱 (Hayes et al.)",
+    "clinicalBadge": "Steven C. Hayes博士 • 临床六边形模型",
+    "defusionBadge": "认知解离与承诺行动",
+    "tabsAria": "ACT疗法模块选择",
+    "tabs": {
+      "compass": "🧭 人生价值罗盘",
+      "leaves": "🍃 溪流上的落叶",
+      "noticing": "💬 觉察内在念头"
+    },
+    "domains": {
+      "relationships": {
+        "title": "人际与连接",
+        "subtitle": "家庭、朋友、伴侣与社会共情"
+      },
+      "growth": {
+        "title": "个人成长",
+        "subtitle": "终身学习、智慧与内在勇气"
+      },
+      "health": {
+        "title": "健康与活力",
+        "subtitle": "身体机能、睡眠节律与内心宁静"
+      },
+      "work": {
+        "title": "工作与奉献",
+        "subtitle": "事业、服务与对社会的有益贡献"
+      }
+    },
+    "compass": {
+      "sectionLabel": "价值澄清与承诺行动",
+      "introTitle": "罗盘的方向，而非终点线",
+      "introDesc": "人生价值不是完成后勾选掉的目标，而是罗盘的指向：你在每一个当下选择以何种姿态立足与生活。",
+      "importanceSuffix": "重要",
+      "importanceSliderLabel": "内在重要性等级:",
+      "statementLabel": "有意义的价值观表述:"
+    },
+    "actions": {
+      "sectionTitle": "承诺行动 (Committed Action)",
+      "sectionDesc": "今天依据你所选的价值取向，迈出切实微小的具体一步。",
+      "selectDomain": "选择领域",
+      "inputPlaceholder": "写下一项今天践行的小行动...",
+      "btnAdd": "添加行动",
+      "emptyList": "尚无承诺行动。从一件微小的事开始。",
+      "markDone": "标记为已完成",
+      "markUndone": "标记为未完成"
+    },
+    "leaves": {
+      "sectionLabel": "认知解离练习: 溪流上的落叶",
+      "title": "溪流上的落叶 (Leaves on a Stream)",
+      "guideText": "想象你正坐在静谧的溪流旁，树叶顺流而下。当沉重或焦虑的念头浮现时，轻轻将它放在一片落叶上，任其随水流远去，无需紧抓，也无需驱赶。",
+      "inputPlaceholder": "输入此刻困扰着你的思绪... (例如: \"我害怕失败\")",
+      "btnRelease": "放上落叶任其飘流",
+      "step1": "你的念头已安放于落叶之上... 请缓慢呼吸。",
+      "step2": "落叶随着清澈的流水缓缓前行... 你是溪流，而非那片落叶。",
+      "step3": "落叶渐行渐远... 念头只是暂时掠过的心理事件。",
+      "reframedLabel": "已置于落叶上随溪水飘走"
+    },
+    "noticing": {
+      "sectionLabel": "念头标注与情境自我觉察练习",
+      "title": "我觉察到... (分级认知解离)",
+      "desc": "通过3个觉察步骤瓦解认知融合，缓解沉重思绪的情感紧缚。",
+      "inputLabel": "写下缠绕在脑海的自动念头:",
+      "inputPlaceholder": "例如: \"我是个失败者\" 或 \"一切都完蛋了\"",
+      "tier1Title": "阶段1: 认知融合 (念头 = 绝对事实)",
+      "tier2Title": "阶段2: 觉察思考的过程",
+      "tier2Prefix": "我正产生一个念头，认为",
+      "tier3Title": "阶段3: 观察者自我 (Self-as-Context)",
+      "tier3Prefix": "我觉察到我的大脑正在告诉我",
+      "btnSave": "保存观察者视角",
+      "savedToast": "已保存至解离记录"
+    },
+    "history": {
+      "title": "近期认知解离记录"
+    }
+  },
+  "relapse": {
+    "title": "预防复发计划 (Relapse Prevention)",
+    "subtitle": "基于Marlatt & Gordon认知行为模型: 早期识别征兆，危机前降温降级，并以自我关怀接纳挫折。",
+    "badgeMarlatt": "Marlatt & Gordon认知行为复发预防模型",
+    "badgeAve": "破戒效应 (AVE) 解药",
+    "tabsAria": "预防复发计划板块选择",
+    "tabs": {
+      "warning": "⚠️ 早期预警征兆",
+      "deescalation": "🛡️ 分级降级策略",
+      "compassion": "🌿 自我关怀与破戒解药"
+    },
+    "warning": {
+      "sectionLabel": "早期预警征兆梳理",
+      "introTitle": "在浪涛成型前觉察涟漪",
+      "introDesc": "情绪低谷极少突然降临，往往始于行为、思维、情绪或身体感觉上的细微涟漪。尽早觉察能为你赢得驻足喘息的空间。",
+      "categoryLabel": "征兆类别",
+      "cat_behavioral": "行为习惯",
+      "cat_emotional": "情绪与心境",
+      "cat_cognitive": "思维模式",
+      "cat_physical": "身体感受",
+      "inputPlaceholder": "写下一项新的早期预警征兆...",
+      "btnAdd": "添加征兆",
+      "emptyCat": "该类别下暂无征兆记录。"
+    },
+    "deescalation": {
+      "introTitle": "3级分层降温降级方案",
+      "introDesc": "从快捷的自主调节 (第1级)，到空间与感官休整 (第2级)，再到联络安全支持者与专业热线 (第3级)。",
+      "addTitle": "添加个性化降温策略",
+      "levelSelect": "选择层级",
+      "lvl1_title": "第1级: 快速自主行动 (躯体调节)",
+      "lvl1_desc": "循环叹息呼吸法、冷水洗脸或5-4-3-2-1感官着陆等即时调节法。",
+      "lvl2_title": "第2级: 空间与感官休息",
+      "lvl2_desc": "远离诱因环境、调暗灯光、手机静音及静心散步。",
+      "lvl3_title": "第3级: 社交支持与紧急联络",
+      "lvl3_desc": "联系值得信赖的亲友或拨打官方心理危机援助专线。",
+      "titlePlaceholder": "策略名称 (如: 冷水轻敷面部)",
+      "descPlaceholder": "简短的操作指引 (选填)...",
+      "btnAdd": "保存策略",
+      "actionsCount": "项策略"
+    },
+    "contacts": {
+      "title": "值得信赖的安全支持联络人",
+      "namePlaceholder": "姓名或求助机构名称",
+      "relPlaceholder": "身份与关系",
+      "phonePlaceholder": "电话号码",
+      "btnAdd": "添加联络人"
+    },
+    "ave": {
+      "sectionLabel": "自我关怀与破戒效应解药",
+      "title": "破除破戒效应 (Abstinence Violation Effect)",
+      "body1": "在Alan Marlatt博士的研究中，康复的最大阻碍并非滑步本身，而是\"破戒效应\"(AVE): 极度的自责与非黑即白的思维，认定一天的糟糕状态抹杀了过去所有的努力。",
+      "formulaTitle": "临床康复法则:",
+      "formulaBody": "暂时的失足滑步 (Lapse) 只是道路上的小小拐角，绝非彻底崩溃 (Relapse)，除非你苛刻批判自己并彻底放弃。",
+      "affirmationsTitle": "遭遇挫折时的自我关怀锚定肯定语:",
+      "notesLabel": "写给艰难时刻中自己的温暖关怀寄语:"
+    },
+    "confirmReset": "是否将预防复发计划重置为实证标准设置？",
+    "btnReset": "重置计划至初始默认"
   }
 }
