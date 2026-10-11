@@ -96,6 +96,12 @@
       "family": "Keluarga",
       "hobby": "Hobi",
       "meditation": "Meditasi"
+    },
+    "domains": {
+      "self": "Diri Sendiri",
+      "social": "Hubungan Sosial",
+      "activity": "Beban Aktivitas",
+      "physical": "Kondisi Fisik"
     }
   },
   "journal": {
@@ -177,7 +183,14 @@
     "empty": "Belum ada cerita di kategori ini. Jadilah yang pertama berbagi.",
     "comments": "Komentar",
     "replyPlaceholder": "Tulis pesan dukungan hangat...",
-    "loadMore": "Muat Lebih Banyak"
+    "loadMore": "Muat Lebih Banyak",
+    "reactions": {
+      "hug": "Kirim Pelukan Hangat",
+      "heart": "Hadir Mendengarkan",
+      "strength": "Kirim Kekuatan Lembut",
+      "supportSent": "Dukungan empati terkirim"
+    },
+    "quietSupportTitle": "Resonansi Empati Hening"
   },
   "profile": {
     "title": "Profil",
@@ -457,7 +470,11 @@
   },
   "streak": {
     "recovery": "Pemulihan",
-    "recoveryDay": "Hari Pemulihan"
+    "recoveryDay": "Hari Pemulihan",
+    "mindfulMomentum": "Momentum Penuh Kesadaran",
+    "compassionPresence": "Hadir penuh welas asih minggu ini",
+    "restIsRecovery": "Istirahat juga bagian dari pemulihan",
+    "gentleEncouragement": "Setiap hembusan napas dan jeda berharga bagi jiwamu."
   },
   "session.timeReminder": "Kamu sudah di sini cukup lama 🍃 Ingat untuk kembali ke dunia nyata juga ya.",
   "disclaimer.clinical": "RIMA adalah alat pendampingan mandiri berbasis bukti ilmiah, bukan pengganti konsultasi dengan psikolog atau psikiater profesional.",
@@ -1396,5 +1413,25 @@
     "chipCft": "Latihan welas asih saat merasa gagal",
     "chipBa": "Mengatasi mager & rasa hampa",
     "chipBpjs": "Alur rujukan BPJS ke psikolog/psikiater"
+  },
+  "dualMode": {
+    "airgappedBadge": "🛡️ Mode Luring Penuh",
+    "airgappedBadgeText": "Mode Luring Penuh",
+    "airgappedTitle": "Mode Luring Penuh (Air-Gapped Vault)",
+    "airgappedDesc": "Isolasi jaringan total. Seluruh data tersimpan terenkripsi di perangkat tanpa permintaan jaringan keluar.",
+    "connectedBadge": "🌐 Mode Tersambung",
+    "connectedBadgeText": "Mode Tersambung",
+    "connectedTitle": "Mode Tersambung (Connected Hybrid)",
+    "connectedDesc": "Terhubung ke jaringan untuk berbagi cerita di forum anonim dan sinkronisasi awan terenkripsi.",
+    "switchToConnected": "Beralih ke Mode Tersambung",
+    "switchToAirgapped": "Beralih ke Mode Luring Penuh",
+    "sectionTitle": "MODE OPERASIONAL (DUAL-MODE)",
+    "forumAirgappedBannerTitle": "Forum Memerlukan Mode Tersambung",
+    "forumAirgappedBannerDesc": "Anda sedang dalam Mode Luring Penuh (Air-Gapped Vault) yang melindungi privasi Anda dengan memblokir semua transmisi jaringan. Untuk membaca dan membagikan cerita di forum anonim, aktifkan Mode Tersambung.",
+    "hintSwitchToOnline": "1-Klik Online",
+    "hintSwitchToOffline": "1-Klik Luring",
+    "headerAria": "Mode Operasional Aplikasi",
+    "forumAirgappedPostToast": "Disimpan di Vault Luring lokal. Aktifkan Mode Tersambung untuk berbagi dengan komunitas.",
+    "networkBlockedAuth": "Mode Luring Penuh aktif. Beralih ke Mode Tersambung untuk masuk dengan akun cloud."
   }
 }

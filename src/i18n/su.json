@@ -96,6 +96,12 @@
       "family": "Kulawarga",
       "hobby": "Hobi",
       "meditation": "Ambegan"
+    },
+    "domains": {
+      "self": "Diri Pribadi",
+      "social": "Hubungan Sosial",
+      "activity": "Beban Kagiatan",
+      "physical": "Kaayaan Fisik"
     }
   },
   "journal": {
@@ -177,7 +183,14 @@
     "empty": "Teu acan aya carita dina kategori ieu. Mangga janten anu mimiti ngabagi carita.",
     "comments": "Koméntar",
     "replyPlaceholder": "Tulis pesen dukungan anu haneut...",
-    "loadMore": "Tingali Langkung Seueur"
+    "loadMore": "Tingali Langkung Seueur",
+    "reactions": {
+      "hug": "Kirim Tangkeupan Haneut",
+      "heart": "Hadir Ngaregepkeun",
+      "strength": "Kirim Kakuatan Lemes",
+      "supportSent": "Dukungan parantos kakirim"
+    },
+    "quietSupportTitle": "Resonansi Émpati Hening"
   },
   "profile": {
     "title": "Profil",
@@ -457,7 +470,11 @@
   },
   "streak": {
     "recovery": "Pamulihan",
-    "recoveryDay": "Dinten Pamulihan"
+    "recoveryDay": "Dinten Pamulihan",
+    "mindfulMomentum": "Momentum Pinuh Kasadaran",
+    "compassionPresence": "Hadir kalayan welas asih minggu ieu",
+    "restIsRecovery": "Istirahat oge bagian tina pamulihan",
+    "gentleEncouragement": "Unggal rénghap napas jeung reureuh mangpaat pikeun batin anjeun."
   },
   "session.timeReminder": "Anjeun parantos lami di dieu 🍃 Émut kanggo mulih ka dunya nyata.",
   "disclaimer.clinical": "RIMA nyaéta alat pendampingan mandiri dumasar bukti ilmiah, sanés pangganti konsultasi sareng psikolog atanapi psikiater profesional.",
@@ -1396,5 +1413,25 @@
     "chipCft": "Latihan welas asih nalika ngaraos gagal",
     "chipBa": "Nungkulan rasa horéam & hapa",
     "chipBpjs": "Alur rujukan BPJS ka psikolog/psikiater"
+  },
+  "dualMode": {
+    "airgappedBadge": "🛡️ Mode Luring Pinuh",
+    "airgappedBadgeText": "Mode Luring Pinuh",
+    "airgappedTitle": "Mode Luring Pinuh (Air-Gapped Vault)",
+    "airgappedDesc": "Isolasi jaringan lengkep. Sadaya data disimpen kaenkripsi dina alat tanpa transmisi data kaluar.",
+    "connectedBadge": "🌐 Mode Sambung",
+    "connectedBadgeText": "Mode Sambung",
+    "connectedTitle": "Mode Sambung (Connected Hybrid)",
+    "connectedDesc": "Sambung kana jaringan pikeun ngabagikeun carita dina forum anonim jeung sinkronisasi awan.",
+    "switchToConnected": "Pindah kana Mode Sambung",
+    "switchToAirgapped": "Pindah kana Mode Luring Pinuh",
+    "sectionTitle": "MODE OPERASIONAL (DUAL-MODE)",
+    "forumAirgappedBannerTitle": "Forum Merlukeun Mode Sambung",
+    "forumAirgappedBannerDesc": "Anjeun nuju dina Mode Luring Pinuh anu ngajaga privasi ku cara meungpeuk transmisi jaringan. Pikeun maca jeung ngabagikeun carita dina forum, aktipkeun Mode Sambung.",
+    "hintSwitchToOnline": "1-Klik Online",
+    "hintSwitchToOffline": "1-Klik Luring",
+    "headerAria": "Mode Operasional Aplikasi",
+    "forumAirgappedPostToast": "Disimpen dina Vault Luring lokal. Aktipkeun Mode Sambung pikeun ngabagikeun ka komunitas.",
+    "networkBlockedAuth": "Mode Luring Pinuh aktip. Pindah kana Mode Sambung kanggo asup nganggo akun."
   }
 }

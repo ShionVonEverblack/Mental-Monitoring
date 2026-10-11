@@ -96,6 +96,12 @@
       "family": "Kulawarga",
       "hobby": "Kesenengan",
       "meditation": "Semadi"
+    },
+    "domains": {
+      "self": "Diri Pribadi",
+      "social": "Paseduluran Sosial",
+      "activity": "Beban Pakaryan",
+      "physical": "Kahanan Fisik"
     }
   },
   "journal": {
@@ -177,7 +183,14 @@
     "empty": "Dereng wonten cariyos ing kategori puniki. Dados ingkang sepisanan berbagi.",
     "comments": "Komentar",
     "replyPlaceholder": "Tulis pesen dukungan anget...",
-    "loadMore": "Muat Langkung Kathah"
+    "loadMore": "Muat Langkung Kathah",
+    "reactions": {
+      "hug": "Kirim Rangkulan Anget",
+      "heart": "Hadir Mirengake",
+      "strength": "Kirim Kekiyatan Lembut",
+      "supportSent": "Panyengkuyung sampun kakirim"
+    },
+    "quietSupportTitle": "Resonansi Empati Hening"
   },
   "profile": {
     "title": "Profil",
@@ -457,7 +470,11 @@
   },
   "streak": {
     "recovery": "Pamulihan",
-    "recoveryDay": "Dinten Pamulihan"
+    "recoveryDay": "Dinten Pamulihan",
+    "mindfulMomentum": "Momentum Penuh Kesadaran",
+    "compassionPresence": "Hadir kanthi welas asih minggu iki",
+    "restIsRecovery": "Ngaso uga kalebu bagean saka pemulihan",
+    "gentleEncouragement": "Saben ambegan lan lerem migunani tumrap batin panjenengan."
   },
   "session.timeReminder": "Sampeyan sampun dangu wonten mriki 🍃 Emut kangge wangsul tumuju donya nyata.",
   "disclaimer.clinical": "RIMA minangka piranti pendampingan mandiri berbasis bukti ilmiah, sanes pengganti konsultasi kaliyan psikolog utawi psikiater profesional.",
@@ -1396,5 +1413,25 @@
     "chipCft": "Latihan welas asih nalika ngraos gagal",
     "chipBa": "Ngatasi rasa lumuh & kosong",
     "chipBpjs": "Alur rujukan BPJS dhateng psikolog/psikiater"
+  },
+  "dualMode": {
+    "airgappedBadge": "🛡️ Mode Luring Total",
+    "airgappedBadgeText": "Mode Luring Total",
+    "airgappedTitle": "Mode Luring Total (Air-Gapped Vault)",
+    "airgappedDesc": "Isolasi jaringan total. Sedaya data kasimpen terenkripsi ing piranti tanpa transmisi data metu.",
+    "connectedBadge": "🌐 Mode Sambung",
+    "connectedBadgeText": "Mode Sambung",
+    "connectedTitle": "Mode Sambung (Connected Hybrid)",
+    "connectedDesc": "Sambung menyang jaringan kanggo nuduhake crita ing forum anonim lan sinkronisasi awan.",
+    "switchToConnected": "Pindah menyang Mode Sambung",
+    "switchToAirgapped": "Pindah menyang Mode Luring Total",
+    "sectionTitle": "MODE OPERASIONAL (DUAL-MODE)",
+    "forumAirgappedBannerTitle": "Forum Mbutuhake Mode Sambung",
+    "forumAirgappedBannerDesc": "Panjenengan wonten ing Mode Luring Total ingkang njagi privasi kanthi mblokir transmisi jaringan. Kanggo maca lan nuduhake crita ing forum, aktifake Mode Sambung.",
+    "hintSwitchToOnline": "1-Klik Online",
+    "hintSwitchToOffline": "1-Klik Luring",
+    "headerAria": "Mode Operasional Piranti",
+    "forumAirgappedPostToast": "Kasimpen ing Vault Luring lokal. Aktifake Mode Sambung kanggo nuduhake menyang komunitas.",
+    "networkBlockedAuth": "Mode Luring Total aktif. Pindah menyang Mode Sambung kanggo mlebu nganggo akun."
   }
 }

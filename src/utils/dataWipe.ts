@@ -1,4 +1,5 @@
 import { supabase, isSupabaseConfigured } from '../services/supabase';
+import { isNetworkAllowed } from '../stores/dualModeStore';
 
 export interface WipeResult {
   success: boolean;
@@ -12,8 +13,8 @@ export async function wipeAllData(): Promise<WipeResult> {
   let supabaseCleaned = false;
 
   try {
-    // 1. Clean Supabase user data if logged in
-    if (isSupabaseConfigured && supabase) {
+    // 1. Clean Supabase user data if logged in and network allowed
+    if (isNetworkAllowed() && isSupabaseConfigured && supabase) {
       try {
         const { data: { user } } = await supabase.auth.getUser();
         if (user) {

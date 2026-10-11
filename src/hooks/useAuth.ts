@@ -3,6 +3,7 @@ import type { UserProfile } from '../types';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { generateAnonymousName, generateId } from '../utils/helpers';
 import { supabase, isSupabaseConfigured } from '../services/supabase';
+import { isNetworkAllowed } from '../stores/dualModeStore';
 
 const INITIAL_ANON_USER: UserProfile = {
   id: generateId(),
@@ -44,7 +45,7 @@ export function useAuth(): UseAuthReturn {
   const [isAuthenticating, setIsAuthenticating] = useState(false);
 
   useEffect(() => {
-    if (!isSupabaseConfigured || !supabase) return;
+    if (!isNetworkAllowed() || !isSupabaseConfigured || !supabase) return;
 
     // Check active Supabase session
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -111,6 +112,9 @@ export function useAuth(): UseAuthReturn {
   }, [isAnonymousMode, setAnonymousProfile, setUser]);
 
   const loginWithEmail = async (email: string) => {
+    if (!isNetworkAllowed()) {
+      throw new Error('Mode Luring Penuh (Air-Gapped Vault) aktif. Beralih ke Mode Tersambung untuk masuk dengan akun.');
+    }
     if (!isSupabaseConfigured || !supabase) {
       throw new Error('Supabase belum dikonfigurasi. Mode lokal tetap aktif.');
     }
@@ -127,6 +131,9 @@ export function useAuth(): UseAuthReturn {
   };
 
   const verifyOtp = async (email: string, token: string) => {
+    if (!isNetworkAllowed()) {
+      throw new Error('Mode Luring Penuh (Air-Gapped Vault) aktif. Beralih ke Mode Tersambung untuk masuk dengan akun.');
+    }
     if (!isSupabaseConfigured || !supabase) {
       throw new Error('Supabase belum dikonfigurasi. Mode lokal tetap aktif.');
     }
@@ -152,7 +159,7 @@ export function useAuth(): UseAuthReturn {
   };
 
   const logout = async () => {
-    if (isSupabaseConfigured && supabase) {
+    if (isNetworkAllowed() && isSupabaseConfigured && supabase) {
       await supabase.auth.signOut();
     }
     setAccountUser(null);

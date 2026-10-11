@@ -43,17 +43,66 @@ export const MOOD_EMOJIS: Record<MoodScore, { emoji: MoodEmoji; labelId: string;
   5: { emoji: '😊', labelId: 'Sangat Baik', labelEn: 'Great', color: 'var(--color-accent)' },
 };
 
-export const MOOD_FACTORS = [
-  { id: 'sleep', labelId: 'Tidur', labelEn: 'Sleep', icon: 'Bed' },
-  { id: 'exercise', labelId: 'Olahraga', labelEn: 'Exercise', icon: 'Activity' },
-  { id: 'work', labelId: 'Pekerjaan', labelEn: 'Work', icon: 'Briefcase' },
-  { id: 'social', labelId: 'Sosial', labelEn: 'Social', icon: 'Users' },
-  { id: 'food', labelId: 'Makanan', labelEn: 'Food', icon: 'Coffee' },
-  { id: 'weather', labelId: 'Cuaca', labelEn: 'Weather', icon: 'Sun' },
-  { id: 'health', labelId: 'Kesehatan', labelEn: 'Health', icon: 'Heart' },
-  { id: 'family', labelId: 'Keluarga', labelEn: 'Family', icon: 'Home' },
-  { id: 'hobby', labelId: 'Hobi', labelEn: 'Hobby', icon: 'Palette' },
-  { id: 'meditation', labelId: 'Meditasi', labelEn: 'Meditation', icon: 'Wind' },
+export type MoodFactorDomainId = 'self' | 'social' | 'activity' | 'physical';
+
+export interface MoodFactorItem {
+  id: string;
+  labelId: string;
+  labelEn: string;
+  icon: string;
+  domain: MoodFactorDomainId;
+}
+
+export const MOOD_FACTORS: MoodFactorItem[] = [
+  { id: 'sleep', labelId: 'Tidur', labelEn: 'Sleep', icon: 'Bed', domain: 'physical' },
+  { id: 'exercise', labelId: 'Olahraga', labelEn: 'Exercise', icon: 'Activity', domain: 'physical' },
+  { id: 'work', labelId: 'Pekerjaan', labelEn: 'Work', icon: 'Briefcase', domain: 'activity' },
+  { id: 'social', labelId: 'Sosial', labelEn: 'Social', icon: 'Users', domain: 'social' },
+  { id: 'food', labelId: 'Makanan', labelEn: 'Food', icon: 'Coffee', domain: 'physical' },
+  { id: 'weather', labelId: 'Cuaca', labelEn: 'Weather', icon: 'Sun', domain: 'activity' },
+  { id: 'health', labelId: 'Kesehatan', labelEn: 'Health', icon: 'Heart', domain: 'physical' },
+  { id: 'family', labelId: 'Keluarga', labelEn: 'Family', icon: 'Home', domain: 'social' },
+  { id: 'hobby', labelId: 'Hobi', labelEn: 'Hobby', icon: 'Palette', domain: 'self' },
+  { id: 'meditation', labelId: 'Meditasi', labelEn: 'Meditation', icon: 'Wind', domain: 'self' },
+];
+
+export interface MoodFactorDomainGroup {
+  id: MoodFactorDomainId;
+  labelId: string;
+  labelEn: string;
+  icon: string;
+  factors: MoodFactorItem[];
+}
+
+export const MOOD_FACTOR_DOMAINS: MoodFactorDomainGroup[] = [
+  {
+    id: 'self',
+    labelId: 'Diri Sendiri',
+    labelEn: 'Self & Inner Life',
+    icon: '🧘',
+    factors: MOOD_FACTORS.filter((f) => f.domain === 'self'),
+  },
+  {
+    id: 'social',
+    labelId: 'Hubungan Sosial',
+    labelEn: 'Social Relationships',
+    icon: '🤝',
+    factors: MOOD_FACTORS.filter((f) => f.domain === 'social'),
+  },
+  {
+    id: 'activity',
+    labelId: 'Beban Aktivitas',
+    labelEn: 'Activity & Workload',
+    icon: '💼',
+    factors: MOOD_FACTORS.filter((f) => f.domain === 'activity'),
+  },
+  {
+    id: 'physical',
+    labelId: 'Kondisi Fisik',
+    labelEn: 'Physical Health',
+    icon: '🌱',
+    factors: MOOD_FACTORS.filter((f) => f.domain === 'physical'),
+  },
 ];
 
 export const FORUM_CATEGORIES: { id: ForumCategory; labelId: string; labelEn: string; icon: string; color: string }[] = [

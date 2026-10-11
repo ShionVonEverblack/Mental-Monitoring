@@ -32,6 +32,7 @@ import { SelfCompassionModal } from '../components/cft/SelfCompassionModal';
 import { IncognitoPillToggle } from '../components/auth/IncognitoPillToggle';
 import { AuthModal } from '../components/auth/AuthModal';
 import { audioSomatics } from '../services/audioSomaticsService';
+import { calculateMindfulMomentum } from '../services/streakService';
 import type { Language, MoodScore } from '../types';
 
 export const Home: React.FC = () => {
@@ -84,6 +85,7 @@ export const Home: React.FC = () => {
   const stats = getMoodStats();
   const currentStreak = stats.streak;
   const isGrace = stats.isGrace;
+  const mindfulMomentum = useMemo(() => calculateMindfulMomentum(moods), [moods]);
   
   const affirmationIndex = new Date().getDay() % DAILY_AFFIRMATIONS.length;
   const affirmation = DAILY_AFFIRMATIONS[affirmationIndex];
@@ -109,7 +111,12 @@ export const Home: React.FC = () => {
     <div className="home-page">
       {/* Header Hening */}
       <header className="home-header zen-home-header">
-        <h1 className="home-greeting zen-greeting">{getGreeting(currentLang)}</h1>
+        <div className="zen-greeting-wrap">
+          <h1 className="home-greeting zen-greeting">{getGreeting(currentLang)}</h1>
+          <div className="zen-momentum-tagline" style={{ fontSize: '0.813rem', color: 'var(--text-tertiary)', marginTop: '2px' }}>
+            🌿 {t(mindfulMomentum.compassionMessageKey, mindfulMomentum.compassionDefaultText)}
+          </div>
+        </div>
         <div className="zen-header-actions">
           <IncognitoPillToggle onRequireAuth={() => setIsAuthOpen(true)} />
           <button

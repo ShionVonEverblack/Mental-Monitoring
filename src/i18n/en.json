@@ -96,6 +96,12 @@
       "family": "Family",
       "hobby": "Hobby",
       "meditation": "Meditation"
+    },
+    "domains": {
+      "self": "Self & Inner Life",
+      "social": "Social Relationships",
+      "activity": "Activity & Workload",
+      "physical": "Physical Health"
     }
   },
   "journal": {
@@ -177,7 +183,14 @@
     "empty": "No stories in this category yet. Be the first to share.",
     "comments": "Comments",
     "replyPlaceholder": "Write a warm support message...",
-    "loadMore": "Load More"
+    "loadMore": "Load More",
+    "reactions": {
+      "hug": "Send Warm Hug",
+      "heart": "Quiet Presence",
+      "strength": "Gentle Strength",
+      "supportSent": "Support sent with compassion"
+    },
+    "quietSupportTitle": "Quiet Empathetic Resonance"
   },
   "profile": {
     "title": "Profile",
@@ -457,7 +470,11 @@
   },
   "streak": {
     "recovery": "Recovery",
-    "recoveryDay": "Recovery Day"
+    "recoveryDay": "Recovery Day",
+    "mindfulMomentum": "Mindful Momentum",
+    "compassionPresence": "Present with self-compassion this week",
+    "restIsRecovery": "Rest is also part of healing",
+    "gentleEncouragement": "Every mindful pause is valuable for your well-being."
   },
   "session.timeReminder": "You've been here for a while 🍃 Remember to return to the real world too.",
   "disclaimer.clinical": "RIMA is an evidence-based self-care companion tool, not a substitute for consultation with a professional psychologist or psychiatrist.",
@@ -1396,5 +1413,25 @@
     "chipCft": "Self-compassion exercises when failing",
     "chipBa": "Overcoming lethargy & numbness",
     "chipBpjs": "BPJS referral pathway to psychologist/psychiatrist"
+  },
+  "dualMode": {
+    "airgappedBadge": "🛡️ Air-Gapped Vault",
+    "airgappedBadgeText": "Air-Gapped Vault",
+    "airgappedTitle": "Air-Gapped Vault Mode",
+    "airgappedDesc": "Total network isolation. All data encrypted locally on-device with zero outgoing network requests.",
+    "connectedBadge": "🌐 Connected Hybrid",
+    "connectedBadgeText": "Connected Hybrid",
+    "connectedTitle": "Connected Hybrid Mode",
+    "connectedDesc": "Connected to network for anonymous forum sharing and encrypted cloud backup sync.",
+    "switchToConnected": "Switch to Connected Mode",
+    "switchToAirgapped": "Switch to Air-Gapped Mode",
+    "sectionTitle": "OPERATING MODE (DUAL-MODE)",
+    "forumAirgappedBannerTitle": "Forum Requires Connected Mode",
+    "forumAirgappedBannerDesc": "You are currently in Air-Gapped Vault Mode protecting your privacy by blocking all network transmissions. To read and share in the anonymous forum, switch to Connected Mode.",
+    "hintSwitchToOnline": "1-Click Online",
+    "hintSwitchToOffline": "1-Click Offline",
+    "headerAria": "Application Operating Mode",
+    "forumAirgappedPostToast": "Saved in local Air-Gapped Vault. Switch to Connected Mode to share with community.",
+    "networkBlockedAuth": "Air-Gapped Vault Mode active. Switch to Connected Mode to sign in with cloud account."
   }
 }

@@ -5,6 +5,7 @@ import { BottomNav } from './BottomNav';
 import { SOSButton } from '../safety/SOSButton';
 import { ChatbotDrawer } from '../chatbot/ChatbotDrawer';
 import { SessionAwareness } from '../common/SessionAwareness';
+import { DualModePillToggle } from './DualModePillToggle';
 
 export const AppShell = ({ children }: { children: ReactNode }) => {
   const { t } = useTranslation();
@@ -26,10 +27,13 @@ export const AppShell = ({ children }: { children: ReactNode }) => {
         ✕
       </a>
 
-    <Sidebar />
-    <main className="app-main" id="main-content">
-      <div className="app-content">{children}</div>
-    </main>
+      <Sidebar />
+      <main className="app-main" id="main-content">
+        <header className="app-shell-header" aria-label={t('dualMode.headerAria', 'Mode Operasional Aplikasi')}>
+          <DualModePillToggle />
+        </header>
+        <div className="app-content">{children}</div>
+      </main>
     <BottomNav />
     <SOSButton />
     <ChatbotDrawer />

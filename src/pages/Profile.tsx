@@ -45,6 +45,8 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { IncognitoPillToggle } from '../components/auth/IncognitoPillToggle';
+import { DualModePillToggle } from '../components/layout/DualModePillToggle';
+import { useDualMode } from '../hooks/useDualMode';
 import { AuthModal } from '../components/auth/AuthModal';
 import { SPIRITUAL_SOURCES } from '../data/spiritualContent';
 import { Modal } from '../components/ui/Modal';
@@ -78,6 +80,7 @@ export const Profile: React.FC = () => {
     setQuietHours,
     sendTestNotification
   } = useNotifications();
+  const { isAirgappedMode } = useDualMode();
   const navigate = useNavigate();
 
   const [isAuthOpen, setIsAuthOpen] = useState(false);
@@ -312,7 +315,7 @@ export const Profile: React.FC = () => {
           <div className="stat-label">{t('profile.totalMoods', 'Total Log Mood')}</div>
         </Card>
         <Card className="stat-card">
-          <div className="stat-value" style={{ color: 'var(--color-warm)' }}>{stats.streak}🔥</div>
+          <div className="stat-value" style={{ color: 'var(--color-warm)' }}>{stats.streak}🌱</div>
           <div className="stat-label">{t('profile.streakDays', 'Hari Berturut')}</div>
         </Card>
         <Card className="stat-card">
@@ -325,6 +328,35 @@ export const Profile: React.FC = () => {
           </div>
           <div className="stat-label">{t('profile.trend', 'Tren 30 Hari')}</div>
         </Card>
+      </div>
+
+      {/* Dual-Mode Operating System (Air-Gapped vs Connected Hybrid) */}
+      <div className="settings-section">
+        <h2 className="settings-title">{t('dualMode.sectionTitle', 'MODE OPERASIONAL (DUAL-MODE)')}</h2>
+        <div className="settings-list">
+          <div className="settings-item" style={{ flexDirection: 'column', alignItems: 'stretch', gap: '12px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+              <div className="settings-item-left" style={{ alignItems: 'flex-start' }}>
+                <ShieldCheck size={18} style={{ color: isAirgappedMode ? 'var(--color-secondary)' : 'var(--color-primary)', marginTop: '2px', flexShrink: 0 }} />
+                <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'left' }}>
+                  <span style={{ fontWeight: 600 }}>
+                    {isAirgappedMode
+                      ? t('dualMode.airgappedTitle', 'Mode Luring Penuh (Air-Gapped Vault)')
+                      : t('dualMode.connectedTitle', 'Mode Tersambung (Connected Hybrid)')}
+                  </span>
+                  <span style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)', marginTop: '2px', lineHeight: 1.4 }}>
+                    {isAirgappedMode
+                      ? t('dualMode.airgappedDesc', 'Isolasi jaringan total. Seluruh data tersimpan terenkripsi di perangkat tanpa permintaan jaringan keluar.')
+                      : t('dualMode.connectedDesc', 'Terhubung ke jaringan untuk berbagi cerita di forum anonim dan sinkronisasi awan terenkripsi.')}
+                  </span>
+                </div>
+              </div>
+              <div className="settings-item-right" style={{ flexShrink: 0, marginLeft: '12px' }}>
+                <DualModePillToggle />
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div className="settings-section">

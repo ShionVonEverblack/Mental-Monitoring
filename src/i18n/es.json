@@ -96,6 +96,12 @@
       "family": "Familia",
       "hobby": "Pasatiempo",
       "meditation": "Meditación"
+    },
+    "domains": {
+      "self": "Uno Mismo",
+      "social": "Relaciones Sociales",
+      "activity": "Carga de Actividad",
+      "physical": "Condición Física"
     }
   },
   "journal": {
@@ -177,7 +183,14 @@
     "empty": "No hay historias en esta categoría aún. Sé el primero en compartir.",
     "comments": "Comentarios",
     "replyPlaceholder": "Escribe un mensaje de apoyo cálido...",
-    "loadMore": "Cargar Más"
+    "loadMore": "Cargar Más",
+    "reactions": {
+      "hug": "Enviar Abrazo Cálido",
+      "heart": "Presencia Cálida",
+      "strength": "Fuerza Amable",
+      "supportSent": "Apoyo enviado con empatía"
+    },
+    "quietSupportTitle": "Resonancia Empática Silenciosa"
   },
   "profile": {
     "title": "Perfil y Ajustes",
@@ -457,7 +470,11 @@
   },
   "streak": {
     "recovery": "Recuperación",
-    "recoveryDay": "Día de Recuperación"
+    "recoveryDay": "Día de Recuperación",
+    "mindfulMomentum": "Momento Consciente",
+    "compassionPresence": "Presente con autocompasión esta semana",
+    "restIsRecovery": "El descanso también es parte de la recuperación",
+    "gentleEncouragement": "Cada pausa consciente es valiosa para tu bienestar."
   },
   "session.timeReminder": "Llevas un rato aquí 🍃 Recuerda volver al mundo real también.",
   "disclaimer.clinical": "RIMA es una herramienta de autocuidado basada en evidencia, no sustituye la consulta con un profesional de salud mental.",
@@ -1396,5 +1413,25 @@
     "chipCft": "Ejercicio de autocompasión ante el fracaso",
     "chipBa": "Superar el desgano y el vacío emocional",
     "chipBpjs": "Guía de consulta y derivación médica"
+  },
+  "dualMode": {
+    "airgappedBadge": "🛡️ Bóveda Desconectada",
+    "airgappedBadgeText": "Bóveda Desconectada",
+    "airgappedTitle": "Modo Bóveda Desconectada",
+    "airgappedDesc": "Aislamiento de red total. Todos los datos cifrados localmente sin solicitudes externas de red.",
+    "connectedBadge": "🌐 Modo Conectado",
+    "connectedBadgeText": "Modo Conectado",
+    "connectedTitle": "Modo Conectado Híbrido",
+    "connectedDesc": "Conectado a la red para compartir en foros anónimos y copia de seguridad cifrada.",
+    "switchToConnected": "Cambiar a Modo Conectado",
+    "switchToAirgapped": "Cambiar a Modo Desconectado",
+    "sectionTitle": "MODO OPERATIVO (MODO DUAL)",
+    "forumAirgappedBannerTitle": "El Foro Requiere Modo Conectado",
+    "forumAirgappedBannerDesc": "Actualmente estás en Modo Bóveda Desconectada que protege tu privacidad bloqueando toda red. Para leer y compartir en el foro anónimo, activa el Modo Conectado.",
+    "hintSwitchToOnline": "1-Clic Conectar",
+    "hintSwitchToOffline": "1-Clic Desconectar",
+    "headerAria": "Modo Operativo de la Aplicación",
+    "forumAirgappedPostToast": "Guardado en la Bóveda Desconectada local. Cambia a Modo Conectado para compartir con la comunidad.",
+    "networkBlockedAuth": "Modo Bóveda Desconectada activo. Cambia a Modo Conectado para iniciar sesión con tu cuenta."
   }
 }

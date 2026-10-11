@@ -2211,3 +2211,181 @@ button.btn-icon.btn-icon-danger:not(.btn):hover:not(:disabled) {
   animation: none !important;
 }
 
+/* =========================================================================
+   G. Phase 1: Dual-Mode Engine, Mindful Momentum & Grouped Factor Styles
+   ========================================================================= */
+
+/* 1. AppShell Header & Dual-Mode Pill */
+.app-shell-header {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: var(--spacing-sm) var(--spacing-md) 0 var(--spacing-md);
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  position: relative;
+  z-index: var(--z-sticky);
+}
+
+@media (min-width: 768px) {
+  .app-shell-header {
+    padding: var(--spacing-md) var(--spacing-lg) 0 var(--spacing-lg);
+  }
+}
+
+.dual-mode-pill-container {
+  display: inline-flex;
+}
+
+.dual-mode-pill-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-glass-card);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: var(--text-primary);
+  transition: all var(--transition-fast);
+  min-height: 40px;
+  touch-action: manipulation;
+  user-select: none;
+}
+
+.dual-mode-pill-btn:hover {
+  border-color: var(--border-strong);
+  transform: translateY(-1px);
+}
+
+.dual-mode-pill-airgapped {
+  background: hsla(165, 45%, 50%, 0.12);
+  border-color: var(--color-secondary);
+  color: var(--color-secondary);
+}
+
+.dual-mode-pill-connected {
+  background: var(--color-primary-transparent);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+/* 2. Grouped Mood Factor Selector (4 Domains) */
+.mood-factor-domains {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-sm);
+}
+
+.mood-factor-domain-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-md);
+}
+
+.mood-factor-domain-header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  margin-bottom: var(--spacing-sm);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.mood-factor-domain-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* 3. Forum Quiet Support Reactions & Air-Gapped Banner */
+.forum-airgapped-banner {
+  box-shadow: var(--shadow-subtle);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.forum-quiet-support-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.quiet-support-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
+  font-size: 0.813rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  min-height: 38px;
+}
+
+.quiet-support-btn:hover {
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+  border-color: var(--border-strong);
+  transform: translateY(-1px);
+}
+
+/* 4. Sensory Calm & Low Stimulation Overrides */
+[data-sensory='calm'] .app-shell-header,
+[data-sensory='low-stimulation'] .app-shell-header,
+[data-sensory='calm'] .dual-mode-pill-btn,
+[data-sensory='low-stimulation'] .dual-mode-pill-btn,
+[data-sensory='calm'] .mood-factor-domain-card,
+[data-sensory='low-stimulation'] .mood-factor-domain-card,
+[data-sensory='calm'] .forum-airgapped-banner,
+[data-sensory='low-stimulation'] .forum-airgapped-banner,
+[data-sensory='calm'] .quiet-support-btn,
+[data-sensory='low-stimulation'] .quiet-support-btn,
+[data-sensory='calm'] .zen-momentum-tagline,
+[data-sensory='low-stimulation'] .zen-momentum-tagline,
+[data-sensory='calm'] .factor-chip,
+[data-sensory='low-stimulation'] .factor-chip,
+[data-sensory='calm'] .mood-option,
+[data-sensory='low-stimulation'] .mood-option,
+[data-sensory='calm'] .mood-emoji,
+[data-sensory='low-stimulation'] .mood-emoji {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow: none !important;
+  transform: none !important;
+  transition: none !important;
+  animation: none !important;
+}
+
+/* RTL Support for Arab locale */
+[dir="rtl"] .app-shell-header {
+  justify-content: flex-start;
+}
+
+[dir="rtl"] .dual-mode-pill-btn {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .mood-factor-domain-header {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .quiet-support-btn {
+  flex-direction: row-reverse;
+}
+
+

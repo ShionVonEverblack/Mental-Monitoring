@@ -96,6 +96,12 @@
       "family": "家族",
       "hobby": "趣味",
       "meditation": "瞑想"
+    },
+    "domains": {
+      "self": "自分自身",
+      "social": "対人関係・社会",
+      "activity": "活動・仕事の負荷",
+      "physical": "身体・健康状態"
     }
   },
   "journal": {
@@ -177,7 +183,14 @@
     "empty": "このカテゴリーにはまだ投稿がありません。最初の投稿をしてみましょう。",
     "comments": "コメント",
     "replyPlaceholder": "温かい励ましのメッセージを書きましょう...",
-    "loadMore": "さらに読み込む"
+    "loadMore": "さらに読み込む",
+    "reactions": {
+      "hug": "あたたかいハグを贈る",
+      "heart": "そっと寄り添う",
+      "strength": "穏やかな力を送る",
+      "supportSent": "温かいサポートを届けました"
+    },
+    "quietSupportTitle": "静かな共感の響き"
   },
   "profile": {
     "title": "マイページ・設定",
@@ -457,7 +470,11 @@
   },
   "streak": {
     "recovery": "リカバリー",
-    "recoveryDay": "リカバリーデー"
+    "recoveryDay": "リカバリーデー",
+    "mindfulMomentum": "マインドフル・モメンタム",
+    "compassionPresence": "今週も自分に優しく寄り添っています",
+    "restIsRecovery": "休息することも回復の大切な一部です",
+    "gentleEncouragement": "立ち止まり深呼吸するすべての瞬間が、心にとってかけがえのない時間です。"
   },
   "session.timeReminder": "ここにいる時間が長くなりました 🍃 現実の世界にも戻ることを忘れないでください。",
   "disclaimer.clinical": "RIMAはエビデンスに基づくセルフケアツールであり、専門家への相談の代わりにはなりません。",
@@ -1396,5 +1413,25 @@
     "chipCft": "失敗を感じたときの自己慈悲ワーク",
     "chipBa": "無気力感・活動停止からの脱出",
     "chipBpjs": "専門家・精神科への相談手順"
+  },
+  "dualMode": {
+    "airgappedBadge": "🛡️ 完全オフライン保管庫",
+    "airgappedBadgeText": "完全オフライン保管庫",
+    "airgappedTitle": "完全オフラインモード (Air-Gapped Vault)",
+    "airgappedDesc": "完全なネットワーク遮断。すべてのデータは端末内に暗号化保存され、外部通信は一切発生しません。",
+    "connectedBadge": "🌐 オンライン接続モード",
+    "connectedBadgeText": "接続ハイブリッド",
+    "connectedTitle": "接続ハイブリッドモード",
+    "connectedDesc": "匿名フォーラムでの共有や暗号化クラウドバックアップのためのネットワーク接続。",
+    "switchToConnected": "接続モードに切り替える",
+    "switchToAirgapped": "完全オフラインに切り替える",
+    "sectionTitle": "動作モード (デュアルモード)",
+    "forumAirgappedBannerTitle": "フォーラムの利用には接続モードが必要です",
+    "forumAirgappedBannerDesc": "現在、すべてのネットワーク通信を遮断してプライバシーを守る完全オフライン保管庫モードです。匿名フォーラムを閲覧・投稿するには接続モードに切り替えてください。",
+    "hintSwitchToOnline": "1クリック接続",
+    "hintSwitchToOffline": "1クリック遮断",
+    "headerAria": "アプリケーション動作モード",
+    "forumAirgappedPostToast": "端末のオフライン保管庫に保存されました。コミュニティに共有するには接続モードに切り替えてください。",
+    "networkBlockedAuth": "完全オフライン保管庫モードが有効です。クラウドログインを行うには接続モードに切り替えてください。"
   }
 }

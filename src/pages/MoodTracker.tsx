@@ -7,6 +7,7 @@ import { MoodMeterCanvas } from '../components/ui/MoodMeterCanvas';
 import { Modal } from '../components/ui/Modal';
 import { useMood } from '../hooks/useMood';
 import { MOOD_FACTORS } from '../utils/constants';
+import { GroupedMoodFactorSelector } from '../components/mood/GroupedMoodFactorSelector';
 import { QUADRANT_META, EMOTION_TAXONOMY } from '../data/emotionTaxonomy';
 import type { MoodScore, MoodEmoji, EmotionQuadrant } from '../types';
 import { formatDate, formatRelativeTime } from '../utils/helpers';
@@ -139,21 +140,10 @@ export const MoodTracker: React.FC = () => {
         {selectedScore && (
           <div className="factors-section" style={{ marginTop: '16px' }}>
             <h4 className="factors-title">{t('moodTracker.factors', { defaultValue: 'Apa yang memengaruhi moodmu?' })}</h4>
-            <div className="factors-grid">
-              {MOOD_FACTORS.map(factor => {
-                const isSelected = selectedFactors.includes(factor.id);
-                return (
-                  <button
-                    key={factor.id}
-                    className={`factor-chip ${isSelected ? 'active' : ''}`}
-                    onClick={() => toggleFactor(factor.id)}
-                    aria-pressed={isSelected}
-                  >
-                    {t(`mood.factorList.${factor.id}`, i18n.language === 'en' ? factor.labelEn : factor.labelId)}
-                  </button>
-                );
-              })}
-            </div>
+            <GroupedMoodFactorSelector
+              selectedFactors={selectedFactors}
+              onToggleFactor={toggleFactor}
+            />
 
             <h4 className="factors-title">{t('moodTracker.note', { defaultValue: 'Catatan tambahan (opsional)' })}</h4>
             <textarea 

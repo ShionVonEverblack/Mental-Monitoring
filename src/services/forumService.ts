@@ -1,6 +1,7 @@
 import type { ForumPost, ForumComment, ForumCategory } from '../types';
 import { generateId, generateAnonymousName } from '../utils/helpers';
 import { supabase, isSupabaseConfigured } from './supabase';
+import { isNetworkAllowed } from '../stores/dualModeStore';
 
 import { detectCrisis } from './crisisDetectionService';
 
@@ -60,7 +61,7 @@ export interface PaginatedPosts {
 }
 
 export async function fetchForumPosts(page = 0, limit = 20): Promise<PaginatedPosts> {
-  if (isSupabaseConfigured && supabase) {
+  if (isNetworkAllowed() && isSupabaseConfigured && supabase) {
     try {
       // First attempt query on the hardened public view (hiding is_flagged)
       const from = page * limit;
@@ -151,7 +152,7 @@ export async function createForumPost(
     createdAt: new Date().toISOString(),
   };
 
-  if (isSupabaseConfigured && supabase) {
+  if (isNetworkAllowed() && isSupabaseConfigured && supabase) {
     try {
       await supabase.from('forum_posts').insert([{
         id: newPost.id,
@@ -210,7 +211,7 @@ export async function addReactionToPost(postId: string, reactionType: 'heart' | 
   localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updated));
   window.dispatchEvent(new Event('local-storage'));
 
-  if (isSupabaseConfigured && supabase) {
+  if (isNetworkAllowed() && isSupabaseConfigured && supabase) {
     const target = updated.find(p => p.id === postId);
     if (target) {
       Promise.resolve(
@@ -226,7 +227,7 @@ export async function addReactionToPost(postId: string, reactionType: 'heart' | 
 }
 
 export async function fetchPostComments(postId: string): Promise<ForumComment[]> {
-  if (isSupabaseConfigured && supabase) {
+  if (isNetworkAllowed() && isSupabaseConfigured && supabase) {
     try {
       const { data, error } = await supabase
         .from('forum_comments')
@@ -299,7 +300,7 @@ export async function addCommentToPost(postId: string, content: string, authorNa
   localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedPosts));
   window.dispatchEvent(new Event('local-storage'));
 
-  if (isSupabaseConfigured && supabase) {
+  if (isNetworkAllowed() && isSupabaseConfigured && supabase) {
     Promise.resolve(
       supabase.from('forum_comments').insert([{
         id: newComment.id,
@@ -387,8 +388,8 @@ export async function reportForumPost(postId: string, reason: string, details?: 
     console.warn('Failed to save forum report locally:', err);
   }
 
-  // Attempt sync with Supabase moderation table if configured
-  if (isSupabaseConfigured && supabase) {
+  // Attempt sync with Supabase moderation table if configured and network allowed
+  if (isNetworkAllowed() && isSupabaseConfigured && supabase) {
     try {
       await supabase.from('forum_reports').insert([{
         id: newReport.id,

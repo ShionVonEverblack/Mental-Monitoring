@@ -19,11 +19,13 @@ import { CrisisInterceptor } from '../components/safety/CrisisInterceptor';
 import { Modal } from '../components/ui/Modal';
 import { generateAnonymousName, formatDate } from '../utils/helpers';
 import { useAuth } from '../hooks/useAuth';
+import { useDualMode } from '../hooks/useDualMode';
 import { ShieldAlert, MessageCircle, AlertTriangle, Send, Phone, CheckCircle, Flag, Bookmark, X } from 'lucide-react';
 
 export const Forum: React.FC = () => {
   const { t, i18n } = useTranslation();
   const { isAnonymousMode, activeDisplayName } = useAuth();
+  const { isAirgappedMode, setOperatingMode } = useDualMode();
   const [posts, setPosts] = useState<ForumPost[]>([]);
   const [activeCategory, setActiveCategory] = useState<string>('all');
   const [bookmarkedIds, setBookmarkedIds] = useState<string[]>(() => getBookmarkedPostIds());
@@ -64,7 +66,7 @@ export const Forum: React.FC = () => {
 
   useEffect(() => {
     loadPosts(0, false);
-  }, []);
+  }, [isAirgappedMode]);
 
   const loadPosts = async (pageNum = 0, append = false) => {
     try {
@@ -127,7 +129,9 @@ export const Forum: React.FC = () => {
         newCategory,
         authorToUse
       );
-      if (isCrisis) {
+      if (isAirgappedMode) {
+        triggerToast(t('dualMode.forumAirgappedPostToast', 'Disimpan di Vault Luring lokal. Aktifkan Mode Tersambung untuk berbagi dengan komunitas.'));
+      } else if (isCrisis) {
         triggerToast(t('forum.crisisPostAlert', 'Postingan terdeteksi berisi kata sensitif. Bantuan krisis selalu tersedia untukmu.'));
       } else {
         triggerToast(t('forum.postSuccess', 'Postingan anonim berhasil dipublikasikan!'));
@@ -137,7 +141,7 @@ export const Forum: React.FC = () => {
       setNewContent('');
       setAnonymousAuthor(generateAnonymousName());
       setIsCrisisDetected(false);
-      loadPosts();
+      loadPosts(0, false);
     } catch (error) {
       console.error('Failed to create post:', error);
       triggerToast(t('common.error', 'Terjadi kesalahan'));
@@ -150,6 +154,7 @@ export const Forum: React.FC = () => {
     try {
       const updated = await addReactionToPost(postId, type);
       setPosts(updated);
+      triggerToast(t('forum.reactions.supportSent', 'Dukungan empati terkirim'));
     } catch (error) {
       console.error('Failed to add reaction:', error);
     }
@@ -272,6 +277,45 @@ export const Forum: React.FC = () => {
           {isComposing ? t('common.cancel', 'Batal') : t('forum.newPost', 'Tulis Cerita')}
         </button>
       </header>
+
+      {/* Air-Gapped Mode Empathetic Banner */}
+      {isAirgappedMode && (
+        <div
+          className="forum-airgapped-banner"
+          role="status"
+          style={{
+            backgroundColor: 'var(--bg-glass-card)',
+            border: '1px solid var(--color-secondary)',
+            borderRadius: 'var(--radius-lg)',
+            padding: '16px 20px',
+            marginBottom: '20px',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '12px',
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
+            <span style={{ fontSize: '1.5rem', lineHeight: 1 }} aria-hidden="true">🛡️</span>
+            <div>
+              <h3 style={{ fontSize: '1rem', fontWeight: 600, margin: 0, color: 'var(--text-primary)' }}>
+                {t('dualMode.forumAirgappedBannerTitle', 'Forum Memerlukan Mode Tersambung')}
+              </h3>
+              <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', margin: '6px 0 0', lineHeight: 1.5 }}>
+                {t('dualMode.forumAirgappedBannerDesc', 'Anda sedang dalam Mode Luring Penuh (Air-Gapped Vault) yang melindungi privasi Anda dengan memblokir semua transmisi jaringan. Untuk membaca dan membagikan cerita di forum anonim, aktifkan Mode Tersambung.')}
+              </p>
+            </div>
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <button
+              type="button"
+              className="btn btn-primary btn-sm forum-switch-connected-btn"
+              onClick={() => setOperatingMode('connected')}
+            >
+              🌐 {t('dualMode.switchToConnected', 'Beralih ke Mode Tersambung')}
+            </button>
+          </div>
+        </div>
+      )}
 
       {showGuidelines && (
         <div className="guidelines-banner">
@@ -504,15 +548,36 @@ export const Forum: React.FC = () => {
                   {post.content}
                 </p>
 
-                <div className="forum-post-footer">
-                  <button className="forum-reaction" onClick={() => handleReaction(post.id, 'heart')}>
-                    ❤️ {post.reactions?.heart || 0}
+                <div className="forum-post-footer forum-quiet-support-footer">
+                  <button
+                    type="button"
+                    className="forum-reaction quiet-support-btn"
+                    onClick={() => handleReaction(post.id, 'hug')}
+                    aria-label={t('forum.reactions.hug', 'Kirim Pelukan Hangat')}
+                    title={t('forum.reactions.hug', 'Kirim Pelukan Hangat')}
+                  >
+                    <span aria-hidden="true">🤗</span>
+                    <span className="reaction-label">{t('forum.reactions.hug', 'Kirim Pelukan Hangat')}</span>
                   </button>
-                  <button className="forum-reaction" onClick={() => handleReaction(post.id, 'strength')}>
-                    💪 {post.reactions?.strength || 0}
+                  <button
+                    type="button"
+                    className="forum-reaction quiet-support-btn"
+                    onClick={() => handleReaction(post.id, 'heart')}
+                    aria-label={t('forum.reactions.heart', 'Hadir Mendengarkan')}
+                    title={t('forum.reactions.heart', 'Hadir Mendengarkan')}
+                  >
+                    <span aria-hidden="true">❤️</span>
+                    <span className="reaction-label">{t('forum.reactions.heart', 'Hadir Mendengarkan')}</span>
                   </button>
-                  <button className="forum-reaction" onClick={() => handleReaction(post.id, 'hug')}>
-                    🤗 {post.reactions?.hug || 0}
+                  <button
+                    type="button"
+                    className="forum-reaction quiet-support-btn"
+                    onClick={() => handleReaction(post.id, 'strength')}
+                    aria-label={t('forum.reactions.strength', 'Kirim Kekuatan Lembut')}
+                    title={t('forum.reactions.strength', 'Kirim Kekuatan Lembut')}
+                  >
+                    <span aria-hidden="true">🌿</span>
+                    <span className="reaction-label">{t('forum.reactions.strength', 'Kirim Kekuatan Lembut')}</span>
                   </button>
 
                   <button className="forum-reaction" onClick={() => toggleComments(post.id)} style={{ marginLeft: 'auto' }}>

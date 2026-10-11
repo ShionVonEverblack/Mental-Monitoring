@@ -74,4 +74,53 @@ describe('Profile Component - Import File Handling', () => {
     });
     expect(document.documentElement.hasAttribute('data-sensory')).toBe(false);
   });
+
+  it('renders Dual-Mode operating settings and allows toggling between Air-Gapped and Connected modes', async () => {
+    let rendered: ReturnType<typeof render>;
+    await act(async () => {
+      rendered = render(
+        <MemoryRouter>
+          <Profile />
+        </MemoryRouter>
+      );
+    });
+
+    const { getByText, getAllByRole } = rendered!;
+
+    // Verify section title is present
+    expect(getByText(/MODE OPERASIONAL \(DUAL-MODE\)/i)).toBeInTheDocument();
+
+    // Verify toggle button is present
+    const toggleButtons = getAllByRole('button', { name: /Mode Tersambung|Mode Luring Penuh/i });
+    expect(toggleButtons.length).toBeGreaterThan(0);
+
+    const toggleBtn = toggleButtons[0];
+    await act(async () => {
+      fireEvent.click(toggleBtn);
+    });
+
+    // Should now indicate air-gapped mode
+    expect(getByText(/Mode Luring Penuh \(Air-Gapped Vault\)/i)).toBeInTheDocument();
+  });
+
+  it('renders seedling recovery streak icon instead of toxic flame gamification icon', async () => {
+    let rendered: ReturnType<typeof render>;
+    await act(async () => {
+      rendered = render(
+        <MemoryRouter>
+          <Profile />
+        </MemoryRouter>
+      );
+    });
+
+    const statValues = rendered!.container.querySelectorAll('.stat-value');
+    const statTexts = Array.from(statValues).map(el => el.textContent || '');
+
+    // Must celebrate with gentle seedling 🌱 and never with punitive flame 🔥
+    const hasSeedling = statTexts.some(text => text.includes('🌱'));
+    const hasFlame = statTexts.some(text => text.includes('🔥'));
+
+    expect(hasSeedling).toBe(true);
+    expect(hasFlame).toBe(false);
+  });
 });
