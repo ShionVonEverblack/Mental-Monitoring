@@ -1,181 +1,201 @@
-# Milestone 1 Handoff Report: Rollup Manual Chunks & Workbox Configuration
+# Handoff Report: Phase 6 Milestone 1 (Core System Guardrails & Compliance Framework)
 
-**Author:** Worker M1 (PWA Performance & Rollup Manual Chunks Specialist)  
-**Date:** 2026-10-10  
-**Status:** Complete  
-**Working Directory:** `C:\Users\Hype\Kuliah\Proyekan\mental monitoring\.agents\teamwork\worker_m1\`  
-**Target File Modified:** `vite.config.ts`  
+**Agent Identifier:** `worker_m1`  
+**Parent Orchestrator:** `23e86b7a-05e5-4478-bbda-1fc7add44f85`  
+**Milestone:** Phase 6 — Milestone 1 (M1: Core System Guardrails & Compliance Framework)  
+**Target Rule File:** `C:\Users\Hype\Kuliah\Proyekan\mental monitoring\.agents\rules\agent_skill_guardrails.md`  
+**Timestamp:** 2026-10-12T15:35:00Z  
+**Handoff Type:** Hard Handoff (Milestone Complete)  
 
 ---
 
 ## 1. Observation
 
-### 1.1 Baseline Build & Chunk Distribution (Before Changes)
-Executing `npm run build` (`tsc -b && vite build`) prior to modification produced the following chunk layout:
-- **Main Entry Bundle**: `dist/assets/index-DAiHOxz2.js`: **613.57 kB** (gzip: **224.11 kB**, map: 111.58 kB).
-- **Vendor Chunks**:
-  - `dist/assets/recharts-vendor-DK2IuI-s.js`: **411.10 kB** (gzip: 115.28 kB, map: 2,017.01 kB).
-  - `dist/assets/react-vendor-B53boYic.js`: **228.73 kB** (gzip: 73.94 kB, map: 1,313.27 kB).
-  - `dist/assets/i18n-vendor-CE3uIs8q.js`: **49.28 kB** (gzip: 15.56 kB, map: 153.95 kB).
-  - `dist/assets/icons-vendor-C-TccVF0.js`: **26.75 kB** (gzip: 9.67 kB, map: 112.75 kB).
-  - `dist/assets/supabase-BY4f-U1H.js`: **8.70 kB** (gzip: 3.52 kB, map: 938.04 kB).
-- **PWA Service Worker**:
-  - Mode: `generateSW`
-  - Precache: **54 entries (1,797.98 KiB)**
-- **Root Cause of Bloat**:
-  - `src/i18n/config.ts` statically imports all 8 JSON translation catalogs (`id.json`, `en.json`, `jv.json`, `su.json`, `ja.json`, `zh.json`, `es.json`, `ar.json`), totaling **635,024 bytes (~620.1 KiB)** of raw JSON data.
-  - In `vite.config.ts`, `manualChunks(id)` only matched paths inside `node_modules/`, allowing all 8 translation catalogs to fall through into the main app entry bundle `index-*.js`.
-  - Furthermore, `id.includes('node_modules/react')` preceded `node_modules/react-i18next`, improperly directing `react-i18next` into `react-vendor` instead of `i18n-vendor`.
+### 1.1 Target File Creation & Frontmatter Structure
+- Direct write to `C:\Users\Hype\Kuliah\Proyekan\mental monitoring\.agents\rules\agent_skill_guardrails.md`.
+- Exact YAML frontmatter generated:
+  ```yaml
+  ---
+  trigger: always_on
+  description: Mandatory system-wide guardrails for all agent skills, enforcing YAML frontmatter compliance, <30K token context density compression, offline-first data integrity, UU PDP No. 27/2022 privacy, and client-side cryptography.
+  ---
+  ```
+- File metrics directly measured:
+  - Total line count: **245 lines** (Strictly within the $< 400$ lines limit and $< 30\text{K}$ token budget).
+  - Character count: 14,815 characters (~3,500 tokens).
 
-### 1.2 Modifications Applied to `vite.config.ts`
-Two targeted updates were made to `vite.config.ts`:
-1. **Workbox 3 MiB Precache Budget Headroom**:
-   In `plugins -> VitePWA -> workbox` (lines 40–43):
-   ```typescript
-   workbox: {
-     maximumFileSizeToCacheInBytes: 3000000,
-     globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
-     runtimeCaching: [ ... ]
-   }
-   ```
-2. **Cross-Platform Manual Chunks Partitioning & Vendor Precedence**:
-   In `build -> rollupOptions -> output -> manualChunks(id)` (lines 92–116):
-   ```typescript
-   manualChunks(id) {
-     if (/[\\/]src[\\/]i18n[\\/][^\\/]+\.json$/.test(id)) {
-       return 'i18n-locales';
-     }
-     if (
-       id.includes('node_modules/i18next') ||
-       id.includes('node_modules/react-i18next') ||
-       id.includes('node_modules/i18next-browser-languagedetector')
-     ) {
-       return 'i18n-vendor';
-     }
-     if (
-       id.includes('node_modules/react') ||
-       id.includes('node_modules/react-dom') ||
-       id.includes('node_modules/react-router-dom')
-     ) {
-       return 'react-vendor';
-     }
-     if (id.includes('node_modules/recharts')) {
-       return 'recharts-vendor';
-     }
-     if (id.includes('node_modules/lucide-react')) {
-       return 'icons-vendor';
-     }
-   }
-   ```
+### 1.2 Structure & Section Coverage
+The file strictly implements all 6 required sections with complete architectural depth:
+1. **Section 1: YAML Frontmatter Standards (Antigravity & agentskills.io compatibility)**:
+   - Specification matrix delineating System Rules (`.agents/rules/*.md`: mandatory `trigger: always_on`, `description: >-`, prohibited `name:`) versus Modular Skills (`.agents/skills/<name>/SKILL.md`: mandatory `name: <kebab-case>`, `description: >-`, prohibited `trigger: always_on`).
+   - Strict syntax invariants (opening/closing `---`, UTF-8, directory name parity, folded scalars `>-`).
+   - Automated Node.js validation script.
+2. **Section 2: Context Density Compression (<30K token budget, <400 lines per file)**:
+   - Budget ceilings: Active turn working context $< 30,000$ tokens; `SKILL.md` $< 400$ lines; briefing ledgers $< 100$ lines; `view_file` slices $\le 150$ lines with `StartLine`/`EndLine`.
+   - Progressive disclosure pattern: lean SOPs in `SKILL.md`, references in `references/`, utilities in `scripts/`. Prohibition of monolithic multi-skill preloading.
+   - Tabular synthesis and binary checklist (`- [ ]`) requirements.
+3. **Section 3: Offline-First Data Integrity & Zero Runtime Telemetry**:
+   - 100% on-device processing for Yale Mood Meter (2D circumplex coordinate taxonomy $[-5, +5]$ in canvas/SVG), JITAI smart engine (local trajectory evaluation, quiet hours 22:00–07:00, 4h cooldown, daily cap 3), CBT-I sleep diary (sleep efficiency calculation, local storage), and procedural Web Audio somatics (Brownian/pink noise, binaural beats with **0 KB external audio asset downloads**).
+   - Zero external network requests from therapeutic core.
+   - Zero analytics/tracking SDKs: Complete prohibition of Google Analytics, GTM, Meta Pixel, Mixpanel, Amplitude, Segment, Sentry, Datadog, Hotjar, and `navigator.sendBeacon()`.
+   - Strict dual-mode network gatekeeping with `isNetworkAllowed()` aborting when airgapped or offline.
+   - Workbox PWA precache invariants: `maximumFileSizeToCacheInBytes: 3000000` (3 MiB headroom) in `vite.config.ts`, `globPatterns` caching 100% of app shell, and zero external CDNs at runtime.
+4. **Section 4: Statutory Privacy Compliance (Indonesian UU PDP No. 27/2022)**:
+   - Specific Personal Data classification (*Data Pribadi Spesifik* / *Data Pribadi yang Bersifat Spesifik*) under Pasal 4 Ayat (2) huruf d and Pasal 16.
+   - Lawful basis and explicit consent under Pasal 20 & 22 via `<ConsentModal />` recorded in `rima-consent-accepted`.
+   - Data subject user rights (Pasal 5 s/d 13): Access & Portability (Pasal 7 with CSV formula injection escaping and UTF-8 BOM), Erasure (Pasal 8 via 1-tap `wipeAllUserData()`), Consent Withdrawal (Pasal 9), Objection to Automated Profiling (Pasal 10), and Restriction of Processing / Air-Gapped Mode (Pasal 11).
+   - Data minimization and Anonymous Guest Mode pseudonymization "Calm River" (Pasal 16 huruf a) via `generateAnonymousName()` pool.
+   - Differential privacy ($\epsilon \le 1.0$) and $k$-anonymity ($k \ge 10$) with Laplace noise perturbation.
+   - 72-hour breach notification standard under Pasal 46.
+5. **Section 5: Client-Side Cryptographic Standards (Web Crypto AES-GCM-256 & PBKDF2)**:
+   - Cipher: Web Crypto `AES-GCM-256` with 128-bit authentication tag.
+   - 96-bit IV: 12-byte cryptographically random IV generated per write operation via `crypto.getRandomValues(new Uint8Array(12))`.
+   - Key Derivation: PBKDF2-HMAC-SHA256 with 16-byte random salt and **600,000 iterations** in production (OWASP 2023+ standard), environment-gated to 100 in test mode (`isTestEnv`).
+   - Key Isolation: Non-extractable keys in volatile memory (`extractable: false`), never serialized or persisted to disk.
+   - Standard versioned `EncryptedPayload` JSON schema (`version: 1`, `salt`, `iv`, `ciphertext`) with runtime validation predicate `isEncryptedPayload()`.
+   - Zero plaintext at rest and graceful failure fallback (`"[Konten terenkripsi tidak dapat didekripsi]"`).
+6. **Section 6: Architectural Invariants & Preservation of 4 Quality Gates**:
+   - Pure vanilla CSS design tokens defined in `src/styles/design-tokens.css` and scoped component classes in `src/styles/components.css`. Strictly zero Tailwind CSS classes.
+   - Sensory mode support (`[data-sensory='calm']`, `[data-sensory='low-stimulation']`) and WCAG 2.2 AA touch target ($\ge 48\text{px}$) and contrast ($\ge 4.5:1$) invariants.
+   - 100% 8-language i18n parity across `id`, `en`, `jv`, `su`, `ja`, `zh`, `es`, `ar` with Arabic RTL support (`dir="rtl"`).
+   - The 4 Mandatory Repository Quality Gates (`npm run lint`, `npx tsc -b`, `npm test`, `npm run build`).
 
-### 1.3 Post-Optimization Build Metrics (After Changes)
-Execution of `npm run build` (`tsc -b && vite build`) produced the following production artifacts:
-- **Main Entry Bundle**:
-  - `dist/assets/index-By7SMZOr.js`: **48.10 kB** (gzip: **13.07 kB**, map: 111.55 kB)
-  - Drop from 613.57 kB to 48.10 kB represents a **565.47 kB reduction (92.16% reduction)**! Main entry is well below the 70 kB target.
-- **Dedicated Translation Catalog Chunk**:
-  - `dist/assets/i18n-locales-nZTdihVg.js`: **565.79 kB** (gzip: **210.99 kB**, map: 683.37 kB)
-- **Vendor Chunks**:
-  - `dist/assets/i18n-vendor-DxHZbUyL.js`: **62.52 kB** (gzip: **20.48 kB**, map: 203.09 kB) — successfully increased from 49.28 kB because `react-i18next` and `i18next-browser-languagedetector` are now routed here.
-  - `dist/assets/react-vendor-CBvOqB0L.js`: **223.01 kB** (gzip: **71.49 kB**, map: 1,291.59 kB) — successfully decreased from 228.73 kB.
-  - `dist/assets/recharts-vendor-7N2z7m5z.js`: **411.11 kB** (gzip: **115.29 kB**, map: 2,017.01 kB).
-  - `dist/assets/icons-vendor-BbSf-i3S.js`: **19.32 kB** (gzip: **6.81 kB**, map: 85.67 kB).
-  - `dist/assets/supabase-BY4f-U1H.js`: **8.70 kB** (gzip: **3.52 kB**, map: 938.04 kB).
-- **PWA Service Worker Generation**:
-  - Mode: `generateSW`
-  - Precached entries: **55 entries (1,799.05 KiB)** (cleanly incremented by 1 for `i18n-locales`).
-  - `dist/sw.js` content directly confirmed: `{url:"assets/i18n-locales-nZTdihVg.js",revision:null}` is precached.
+### 1.3 Empirical Quality Gates Verification Results
+All four verification commands were executed directly in `C:\Users\Hype\Kuliah\Proyekan\mental monitoring`:
 
-### 1.4 Quality Gate Verification Results
-- **Oxlint**:
-  - Command: `npm run lint`
-  - Output: `Found 0 warnings and 0 errors. Finished in 93ms on 125 files with 104 rules using 12 threads.`
-  - Exit code: `0`
-- **TypeScript**:
-  - Command: `npx tsc -b`
-  - Output: Clean exit code `0`, 0 errors.
-- **Vitest**:
-  - Command: `npx vitest run`
-  - Output: `40 test files passed (40/40), 396 tests passed (396/396)`
-  - Exit code: `0`
+1. **Gate 1: Static Linter (`npm run lint` / `oxlint`)**:
+   - Command: `npm run lint`
+   - Output:
+     ```
+     > mental-monitoring@1.0.0 lint
+     > oxlint
+
+     Found 0 warnings and 0 errors.
+     Finished in 112ms on 171 files with 104 rules using 12 threads.
+     ```
+   - Exit Code: `0`
+
+2. **Gate 2: Strict TypeScript Compiler (`npx tsc -b`)**:
+   - Command: `npx tsc -b`
+   - Output: Clean compilation with 0 errors.
+   - Exit Code: `0`
+
+3. **Gate 3: Unit & Integration Test Suite (`npm test` / `vitest run`)**:
+   - Command: `npm test`
+   - Output:
+     ```
+     Test Files  65 passed (65)
+          Tests  662 passed (662)
+       Start at  22:33:14
+       Duration  44.32s
+     ```
+   - Exit Code: `0`
+
+4. **Gate 4: Production PWA Build (`npm run build`)**:
+   - Command: `npm run build`
+   - Output:
+     ```
+     ✓ built in 1.69s
+
+     PWA v1.3.0
+     mode      generateSW
+     precache  62 entries (2123.70 KiB)
+     files generated
+       dist/sw.js.map
+       dist/sw.js
+       dist/workbox-835c8c05.js.map
+       dist/workbox-835c8c05.js
+     ```
+   - Exit Code: `0`
+
+5. **Direct Rule Frontmatter & Content Invariant Verification**:
+   - Command: Node.js schema and terms audit.
+   - Output:
+     ```
+     PASS: agent_skill_guardrails.md frontmatter schema is valid.
+     Rule file line count: 245
+     PASS: Line count complies with context density threshold (<400 lines).
+     PASS: All mandatory clauses and statutory terms verified successfully!
+     ```
+   - Exit Code: `0`
+
+6. **Repository Cleanliness / Write Boundary**:
+   - `git status --short` confirms that zero application files in `src/`, `public/`, or configuration files were touched. Only `.agents/rules/agent_skill_guardrails.md` was added.
 
 ---
 
 ## 2. Logic Chain
 
-1. **Step 1 — Extraction of Translation Catalogs**:
-   - *Observation Reference*: 1.1 and 1.2.
-   - The regular expression `/[\\/]src[\\/]i18n[\\/][^\\/]+\.json$/.test(id)` matches any JSON file under `src/i18n/`, regardless of whether path separators are Windows backslashes (`\`) or POSIX slashes (`/`).
-   - When Rollup resolves imports from `src/i18n/config.ts`, all 8 locale files (`id.json`, `en.json`, `jv.json`, `su.json`, `ja.json`, `zh.json`, `es.json`, `ar.json`) match this rule and are bundled exclusively into `'i18n-locales'`.
-   - *Result*: 565.79 kB of localized data is removed from `dist/assets/index-*.js`, dropping the entry bundle from 613.57 kB to 48.10 kB.
-
-2. **Step 2 — Correcting Vendor Chunk Precedence**:
-   - *Observation Reference*: 1.1, 1.2, and 1.3.
-   - Previously, `node_modules/react` was evaluated before `node_modules/i18next`. Because `node_modules/react-i18next` starts with `node_modules/react`, it matched `react-vendor`.
-   - By placing the `i18n-vendor` check first (matching `node_modules/i18next`, `node_modules/react-i18next`, and `node_modules/i18next-browser-languagedetector`), all i18n runtime libraries are consolidated into `i18n-vendor` (62.52 kB), slimming `react-vendor` down from 228.73 kB to 223.01 kB.
-
-3. **Step 3 — Offline-First PWA Precaching Continuity**:
-   - *Observation Reference*: 1.2 and 1.3.
-   - Workbox `globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}']` matches all files generated in `dist/assets/`.
-   - When `i18n-locales-*.js` is emitted, Workbox adds it to the precache manifest (`s.precacheAndRoute`).
-   - `maximumFileSizeToCacheInBytes: 3000000` guarantees that even if additional language catalogs are added in the future, Workbox will not exceed its caching ceiling.
-   - Total precached entries increased from 54 to 55, maintaining 100% offline access to all 8 languages.
+1. **Observation 1.1** establishes that `.agents/rules/agent_skill_guardrails.md` has been created with valid YAML frontmatter specifying `trigger: always_on` and a comprehensive `description`.
+2. **Observation 1.2** establishes that all 6 required sections — YAML Frontmatter Standards, Context Density Compression, Offline-First Data Integrity, Statutory Privacy Compliance (UU PDP No. 27/2022), Client-Side Cryptographic Standards (OWASP Web Crypto AES-GCM-256 + PBKDF2), and Architectural Invariants & 4 Quality Gates — are codified with concrete specifications, normative keywords, schema guards, and verification commands.
+3. **Observation 1.1 & 1.3** demonstrate that the rule file has an exact length of 245 lines, satisfying the $<400$ lines limit and providing high information density under the $<30\text{K}$ token budget ceiling.
+4. **Observation 1.3** verifies that the newly introduced rule file does not introduce syntax or configuration errors, does not violate any project rules, and that the entire repository passes all 4 quality gates with 0 errors, 0 warnings, 65/65 test suites passing (662/662 tests), and a clean PWA service worker build with 62 precached assets.
+5. **Observation 1.3 (item 6)** confirms that strict write ownership was maintained: no files outside `.agents/rules/agent_skill_guardrails.md` and agent metadata were modified.
+6. **Conclusion**: Milestone 1 (M1: Core System Guardrails & Compliance Framework) is fully satisfied, verified, and ready for handoff to subsequent milestones.
 
 ---
 
 ## 3. Caveats
 
-- **Single Locales Chunk vs. Dynamic Per-Locale Chunking**:
-  All 8 languages are bundled together into `i18n-locales` (~565 kB raw / ~210 kB gzip) rather than 8 individual dynamic imports. This is an intentional architectural trade-off to satisfy RIMA's offline-first clinical guarantee: users in acute emotional crisis can change languages offline without network dependencies.
-- **Font Caching**:
-  Google Fonts rely on runtime caching (`CacheFirst`) after initial online retrieval, while all application code and translation catalogs are 100% precached.
-- **Exclusive Write Scope**:
-  Only `vite.config.ts` was modified, honoring exclusive write ownership.
+- **No Caveats**: The implementation strictly adheres to the scope, interface contracts, and write boundary of Milestone 1. All repository quality gates independently pass with 100% cleanliness.
 
 ---
 
 ## 4. Conclusion
 
-Milestone 1 is complete and fully verified:
-- `vite.config.ts` has been configured with cross-platform Rollup manual chunk partitioning and Workbox 3 MiB headroom.
-- Main entry bundle size decreased from **613.57 kB** to **48.10 kB** (a 92.16% reduction, exceeding the < 70 kB requirement).
-- `dist/assets/i18n-locales-*.js` is generated (565.79 kB) and precached in `dist/sw.js`.
-- All quality gates pass: Oxlint (0 errors, 0 warnings), TypeScript compiler (0 errors), Vitest (396/396 tests passing across 40 test files), and production build succeeds cleanly.
+The Core System Guardrails & Compliance Framework rule file `.agents/rules/agent_skill_guardrails.md` has been successfully implemented and verified. It establishes an immutable, always-on foundation for all subsequent skill extraction milestones (M2 through M5), guaranteeing YAML frontmatter compatibility, lean context density, offline-first integrity, Indonesian UU PDP No. 27/2022 compliance, and cryptographic security across the RIMA ecosystem.
 
 ---
 
 ## 5. Verification Method
 
-To independently verify the implementation, execute the following commands in the project root:
+To independently reproduce and verify this milestone:
 
-1. **Verify TypeScript Compilation**:
+1. **Verify Frontmatter Schema and Content Invariants**:
    ```bash
-   npx tsc -b
+   node -e "
+   const fs = require('fs');
+   const p = '.agents/rules/agent_skill_guardrails.md';
+   if (!fs.existsSync(p)) throw new Error('File does not exist: ' + p);
+   const content = fs.readFileSync(p, 'utf8');
+   if (!content.startsWith('---\n')) throw new Error('Missing opening delimiter');
+   const parts = content.split('---');
+   if (parts.length < 3) throw new Error('Malformed YAML delimiters');
+   const yaml = parts[1];
+   if (!/trigger:\s*always_on/.test(yaml)) throw new Error('Missing trigger: always_on');
+   if (!/description:\s*.+/.test(yaml)) throw new Error('Missing description field');
+   const lines = content.split('\n').length;
+   if (lines > 400) throw new Error('Line count exceeds 400: ' + lines);
+   console.log('PASS: Frontmatter and line count (' + lines + ' lines) valid.');
+   "
    ```
-   *Expected result*: Exit code 0, 0 diagnostic errors.
 
-2. **Verify Linter**:
+2. **Verify Static Linter (Gate 1)**:
    ```bash
    npm run lint
    ```
-   *Expected result*: `Found 0 warnings and 0 errors.`
+   *Expected outcome*: `Found 0 warnings and 0 errors.` Exit code `0`.
 
-3. **Verify Vitest Test Suite**:
+3. **Verify TypeScript Strict Compilation (Gate 2)**:
    ```bash
-   npx vitest run
+   npx tsc -b
    ```
-   *Expected result*: 40/40 test files pass, 396/396 tests pass.
+   *Expected outcome*: Clean exit code `0`.
 
-4. **Verify Production Build & Chunk Splitting**:
+4. **Verify Test Suite (Gate 3)**:
+   ```bash
+   npm test
+   ```
+   *Expected outcome*: 65 test files passed, 662 tests passed, 0 failures. Exit code `0`.
+
+5. **Verify Production Build (Gate 4)**:
    ```bash
    npm run build
    ```
-   *Verification checklist*:
-   - `dist/assets/i18n-locales-*.js` exists and is ~565 kB.
-   - `dist/assets/index-*.js` is < 70 kB (measured: 48.10 kB).
-   - `dist/sw.js` contains `i18n-locales` in `precacheAndRoute`.
-   - Workbox reports 55 precached entries.
+   *Expected outcome*: Clean build generating 62 precached PWA assets in `dist/`. Exit code `0`.
 
-**Invalidation Conditions**:
-- If `dist/assets/index-*.js` exceeds 70 kB, the regular expression did not match the JSON locale files.
-- If `dist/sw.js` does not contain `i18n-locales`, Workbox glob pattern or file size threshold failed.
+6. **Invalidation Conditions**:
+   - Absence of `trigger: always_on` in `.agents/rules/agent_skill_guardrails.md`.
+   - File length exceeding 400 lines.
+   - Any failure or non-zero exit code in `npm run lint`, `npx tsc -b`, `npm test`, or `npm run build`.
+   - Any modification to files in `src/` or outside the M1 write boundary.

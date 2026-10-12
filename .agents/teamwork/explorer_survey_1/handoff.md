@@ -1,271 +1,173 @@
-# Phase 3 Exploration Handoff: Vite & PWA Build Configuration
+# Phase 6 Baseline Survey & Quality Gates Handoff Report
 
 ## 1. Observation
 
-### 1.1 Baseline Build Metrics & Chunk Distribution
-Execution of `npm run build` (`tsc -b && vite build`) produced the following production artifacts:
-- **Total transformed modules**: 2,523 modules in 1.85s.
-- **Entry point bundle**:
-  - `dist/assets/index-DAiHOxz2.js`: **613.57 kB** (gzip: **224.11 kB**, sourcemap: 111.58 kB).
-- **Vendor chunks**:
-  - `dist/assets/recharts-vendor-DK2IuI-s.js`: **411.10 kB** (gzip: 115.28 kB).
-  - `dist/assets/react-vendor-B53boYic.js`: **228.73 kB** (gzip: 73.94 kB).
-  - `dist/assets/i18n-vendor-CE3uIs8q.js`: **49.28 kB** (gzip: 15.56 kB).
-  - `dist/assets/icons-vendor-C-TccVF0.js`: **26.75 kB** (gzip: 9.67 kB).
-  - `dist/assets/supabase-BY4f-U1H.js`: **8.70 kB** (gzip: 3.52 kB).
-- **PWA Service Worker Generation**:
-  - Mode: `generateSW`
-  - Precached entries: **54 entries (1,797.98 KiB)**
-  - Generated files: `dist/sw.js`, `dist/sw.js.map`, `dist/workbox-835c8c05.js`, `dist/workbox-835c8c05.js.map`.
+### 1.1 Project Root & Environment
+- **Project Root Path**: `C:\Users\Hype\Kuliah\Proyekan\mental monitoring`
+- **Working Directory**: `C:\Users\Hype\Kuliah\Proyekan\mental monitoring\.agents\teamwork\explorer_survey_1`
+- **Core Configuration Files Observed**:
+  - `package.json`: Lines 7–13 define scripts:
+    ```json
+    "scripts": {
+      "dev": "vite",
+      "build": "tsc -b && vite build",
+      "lint": "oxlint",
+      "test": "vitest run --root .",
+      "preview": "vite preview"
+    }
+    ```
+  - `vite.config.ts`: Configures Rollup chunk splitting (`i18n-locales`, `react-vendor`, `recharts-vendor`, `i18n-vendor`, `icons-vendor`) and Vite PWA plugin with Workbox.
+  - `.oxlintrc.json`: Oxlint configuration file.
+  - `tsconfig.json`, `tsconfig.app.json`, `tsconfig.node.json`: TypeScript configuration.
 
-### 1.2 Root Cause of Bloated Main Bundle (`index-*.js`)
-Direct inspection of `src/i18n/` revealed 8 full JSON translation catalogs:
-- `ar.json`: 96,226 bytes
-- `ja.json`: 86,018 bytes
-- `es.json`: 78,978 bytes
-- `id.json`: 76,662 bytes
-- `jv.json`: 75,125 bytes
-- `su.json`: 75,109 bytes
-- `en.json`: 74,187 bytes
-- `zh.json`: 72,719 bytes
-- **Total raw JSON translation weight**: **635,024 bytes (~620.1 KiB)**.
+### 1.2 Structure of `.agents/`
+- Direct subdirectories in `C:\Users\Hype\Kuliah\Proyekan\mental monitoring\.agents`:
+  - `rules/`
+  - `skills/`
+  - `teamwork/`
+  - `workflows/` (contains `graphify.md`)
 
-In `src/i18n/config.ts` (lines 5-12), all 8 catalogs are statically imported:
-```ts
-5: import idTranslations from './id.json';
-6: import enTranslations from './en.json';
-7: import jvTranslations from './jv.json';
-8: import suTranslations from './su.json';
-9: import jaTranslations from './ja.json';
-10: import zhTranslations from './zh.json';
-11: import esTranslations from './es.json';
-12: import arTranslations from './ar.json';
-```
-In `src/main.tsx` (line 5) and `src/App.tsx` (line 3):
-```ts
-import './i18n/config';
-```
-In `vite.config.ts` (lines 90-105), the current `manualChunks` function only partitions selected paths inside `node_modules/`:
-```ts
-90:       output: {
-91:         manualChunks(id) {
-92:           if (id.includes('node_modules/react') || id.includes('node_modules/react-dom') || id.includes('node_modules/react-router-dom')) {
-93:             return 'react-vendor';
-94:           }
-95:           if (id.includes('node_modules/recharts')) {
-96:             return 'recharts-vendor';
-97:           }
-98:           if (id.includes('node_modules/i18next') || id.includes('node_modules/react-i18next')) {
-99:             return 'i18n-vendor';
-100:           }
-101:           if (id.includes('node_modules/lucide-react')) {
-102:             return 'icons-vendor';
-103:           }
-104:         }
-105:       }
-```
-Because the translation catalogs in `src/i18n/*.json` reside in `src/` (not `node_modules/`), they do not match any `manualChunks` rule and are bundled directly into the main entry chunk (`index-*.js`), accounting for over 85% of its 613.57 kB size.
+#### Existing Rules (`.agents/rules/`)
+- Exactly 1 existing rule file:
+  - `graphify.md` (lines 1–4):
+    ```yaml
+    ---
+    trigger: always_on
+    description: Consult the graphify knowledge graph at graphify-out/ for codebase and architecture questions.
+    ---
+    ```
+- Note: Target rule `agent_skill_guardrails.md` for Phase 6 does not exist yet.
 
-### 1.3 Vendor Catch-All Precedence Issue in `vite.config.ts`
-We observed a subtle path prefix collision in the existing `manualChunks`:
-- Line 92: `if (id.includes('node_modules/react') ...)`
-- Line 98: `if (id.includes('node_modules/i18next') || id.includes('node_modules/react-i18next'))`
-Because string `node_modules/react-i18next` contains `node_modules/react`, line 92 matches first. Thus, `react-i18next` was placed in `react-vendor` instead of `i18n-vendor`.
+#### Existing Skills (`.agents/skills/`)
+- Exactly 31 existing skill directories located at `C:\Users\Hype\Kuliah\Proyekan\mental monitoring\.agents\skills`:
+  1. `graphify`
+  2. `karpathy-guidelines`
+  3. `rima-calm-tech`
+  4. `rima-client-crypto`
+  5. `rima-clinical-evidence`
+  6. `rima-clinical-rag-architecture`
+  7. `rima-clinical-reasoning-guardrails`
+  8. `rima-code-quality-refactor`
+  9. `rima-component-creator`
+  10. `rima-crisis-nlp`
+  11. `rima-cross-feature-resilience`
+  12. `rima-deep-audit-security`
+  13. `rima-emotion-granularity`
+  14. `rima-future-feature-architecture` (verified present: contains `SKILL.md`)
+  15. `rima-i18n-management`
+  16. `rima-indexeddb-storage`
+  17. `rima-jitai-micro-interventions`
+  18. `rima-mental-health-chatbot-safety`
+  19. `rima-offline-security`
+  20. `rima-privacy-telemetry`
+  21. `rima-project-rules`
+  22. `rima-pwa-perf-and-code-splitting` (verified present: contains `SKILL.md`)
+  23. `rima-pwa-push-notifications`
+  24. `rima-qa-verification`
+  25. `rima-referral-protocols`
+  26. `rima-roadmap-architecture`
+  27. `rima-security-privacy-audit`
+  28. `rima-testing-verification`
+  29. `rima-trauma-informed-design`
+  30. `rima-wcag-accessibility`
+  31. `rima-web-audio-somatics`
+- Note: None of the 7 planned Phase 6 target skill packages (`librechat`, `awesome-agent-skills`, `anthropic-cybersecurity-skills`, `aion-ui`, `claude-skills`, `ai-guide`, `generic-agent`) exist yet in `.agents/skills/`.
 
-### 1.4 Workbox Offline Precaching Configuration
-In `vite.config.ts` (lines 40-72):
-```ts
-40:       workbox: {
-41:         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
-42:         runtimeCaching: [
-43:           {
-44:             urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
-45:             handler: 'CacheFirst',
-...
-```
-In `dist/sw.js` (line 1):
-Workbox precaches all 54 assets matching `globPatterns` using `s.precacheAndRoute([...])` with `revision: null` for content-hashed assets.
-Route navigation is registered via `s.NavigationRoute(s.createHandlerBoundToURL("index.html"))`.
+### 1.3 Test Suite Inventory
+- Exactly 65 test files across 10 directories in `src/`:
+  - `src/components/__tests__/` (15 files): `Analytics.test.tsx`, `CbtWizard.test.tsx`, `CssrsWizardModal.test.tsx`, `FastActionSafetyCard.test.tsx`, `GroupedMoodFactorSelector.test.tsx`, `JitaiNudgeCard.test.tsx`, `Modal.test.tsx`, `MoodMeterCanvas.test.tsx`, `MoodTracker.test.tsx`, `PageFallbackLoader.test.tsx`, `Profile.test.tsx`, `SelfCompassionModal.test.tsx`, `SOSButton.test.tsx`, `SoundscapePlayer.test.tsx`, `TippCrisisHub.test.tsx`
+  - `src/components/auth/__tests__/` (2 files): `AuthModal.test.tsx`, `IncognitoPillToggle.test.tsx`
+  - `src/components/chatbot/__tests__/` (1 file): `ChatbotDrawer.test.tsx`
+  - `src/components/layout/__tests__/` (2 files): `AppShell.test.tsx`, `DualModePillToggle.test.tsx`
+  - `src/hooks/__tests__/` (2 files): `useLocalStorage.test.ts`, `useTheme.test.ts`
+  - `src/pages/__tests__/` (10 files): `ActTherapy.test.tsx`, `Assessment.test.tsx`, `BehavioralActivation.test.tsx`, `ForumDualMode.test.tsx`, `Home.test.tsx`, `Journal.test.tsx`, `Landing.test.tsx`, `ProfessionalHelp.test.tsx`, `RelapsePrevention.test.tsx`, `SleepTracker.test.tsx`
+  - `src/services/__tests__/` (18 files): `assessment.test.ts`, `audioSomaticsService.test.ts`, `behavioralActivation.test.ts`, `chatbotEngine.test.ts`, `clinicalRagService.test.ts`, `crisisDetection.test.ts`, `cssrsService.test.ts`, `escalationService.test.ts`, `forumE2ee.test.ts`, `forumService.test.ts`, `jitaiEngine.test.ts`, `jitaiEngineMultimodal.test.ts`, `jitaiPersistence.test.ts`, `moodAnalysis.test.ts`, `referralService.test.ts`, `safetyCardService.test.ts`, `sleepService.test.ts`, `streakService.test.ts`
+  - `src/stores/__tests__/` (4 files): `actStore.test.ts`, `dualModeStore.test.ts`, `moodStore.test.ts`, `relapseStore.test.ts`
+  - `src/test/` (5 files): `adversarialChallenger1.test.tsx`, `adversarialIncognitoAuth.test.tsx`, `adversarialNavigationRoutingM4.test.tsx`, `i18nParity.test.ts`, `phase2E2E.test.ts`
+  - `src/utils/__tests__/` (6 files): `cryptoVault.test.ts`, `delusionPatterns.test.ts`, `exportImport.test.ts`, `helpers.test.ts`, `indexedDb.test.ts`, `security.test.ts`
+  - Total: **65 test files**, containing **662 unit and integration test assertions**.
 
-### 1.5 Quality Gate Baseline Verification
-- `npm run lint` (`oxlint`): 0 warnings, 0 errors (125 files, 104 rules, 68ms).
-- `npx tsc -b`: Exited with code 0.
-- `npx vitest run`: 40 test files passed (100%), 396 tests passed (100%), 0 failures.
+### 1.4 Baseline 4 Quality Gates Execution Results
+
+#### Gate 1: Static Linting (`npm run lint`)
+- **Command**: `npm run lint` (`oxlint`)
+- **Working Directory**: `C:\Users\Hype\Kuliah\Proyekan\mental monitoring`
+- **Exit Code**: `0`
+- **Output**:
+  ```text
+  > mental-monitoring@1.0.0 lint
+  > oxlint
+
+  Found 0 warnings and 0 errors.
+  Finished in 110ms on 171 files with 104 rules using 12 threads.
+  ```
+
+#### Gate 2: Type Checking (`npx tsc -b`)
+- **Command**: `npx tsc -b`
+- **Working Directory**: `C:\Users\Hype\Kuliah\Proyekan\mental monitoring`
+- **Exit Code**: `0`
+- **Output**: Clean compilation with 0 errors and 0 warnings (Stdout and Stderr empty).
+
+#### Gate 3: Unit & Integration Tests (`npm test`)
+- **Command**: `npm test` (`vitest run --root .`)
+- **Working Directory**: `C:\Users\Hype\Kuliah\Proyekan\mental monitoring`
+- **Exit Code**: `0`
+- **Output Summary**:
+  ```text
+  Test Files  65 passed (65)
+       Tests  662 passed (662)
+    Start at  22:12:49
+    Duration  46.87s
+  ```
+
+#### Gate 4: Production PWA Build (`npm run build`)
+- **Command**: `npm run build` (`tsc -b && vite build`)
+- **Working Directory**: `C:\Users\Hype\Kuliah\Proyekan\mental monitoring`
+- **Exit Code**: `0`
+- **Output Summary**:
+  - Transformed 2540 modules in 2.19s.
+  - Generated PWA Service Worker via Workbox (`generateSW`) with 62 precached entries (2123.70 KiB).
+  - Generated assets: `dist/sw.js`, `dist/workbox-835c8c05.js`, along with split chunks (`i18n-locales`, `react-vendor`, `recharts-vendor`, `i18n-vendor`, `icons-vendor`).
 
 ---
 
 ## 2. Logic Chain
 
-1. **Step 1 — Module Allocation to Chunks**:
-   When Rollup evaluates `src/main.tsx`, it traverses imports to `src/i18n/config.ts`, which imports the 8 JSON locale files (635 kB). In the absence of a `manualChunks` match for `src/i18n/*.json`, Rollup bundles those 8 JSON objects into `index-*.js`. This results in `index-*.js` weighing 613.57 kB.
-
-2. **Step 2 — Impact on Mobile Performance (TTI / FCP)**:
-   On budget mobile hardware, parsing and compiling a single 613 kB JavaScript file blocks the main thread. Splitting the translation dictionaries into a separate `i18n-locales` chunk reduces `index-*.js` to ~50–70 kB. The browser can parse the app shell script in a fraction of the time, dramatically reducing Time to Interactive (TTI).
-
-3. **Step 3 — HTTP/2 Module Preloading & Cache Invalidation**:
-   In `dist/index.html`, Vite automatically emits `<link rel="modulepreload">` for all chunks required by `index.js`. Thus, `i18n-locales-*.js` will be downloaded concurrently via HTTP/2 multiplexing. Furthermore, future UI/component modifications will invalidate only `index-*.js` (~60 kB) while preserving `i18n-locales-*.js` (~550 kB) in browser and service worker caches.
-
-4. **Step 4 — Workbox Precaching Compatibility**:
-   Workbox's `globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}']` matches every `.js` file output to `dist/assets/`. When `i18n-locales-[hash].js` is emitted, Workbox automatically includes it in `precacheAndRoute([...])`. When offline, the service worker intercepts requests for `i18n-locales-[hash].js` and serves it from CacheStorage. Zero network calls are required, perfectly maintaining RIMA's 100% offline-first architecture.
-
-5. **Step 5 — Defensive Workbox File Size Budgeting**:
-   Workbox has a default `maximumFileSizeToCacheInBytes` limit of 2,097,152 bytes (2 MiB). While `i18n-locales` (~550 kB) is well within this threshold, explicitly setting `maximumFileSizeToCacheInBytes: 3000000` (3 MiB) protects against future build failures as translation dictionaries grow.
-
-6. **Step 6 — Cross-Platform Path Normalization**:
-   On Windows operating systems, Rollup module IDs may contain backslashes (`\`). Using `const normalizedId = id.replace(/\\/g, '/');` ensures matching rules work identically across Windows, macOS, and Linux CI environments.
+1. **Step 1 (Observation 1.1 & 1.2)**: Inspection of the directory structure established that the RIMA project is actively organized under Google Antigravity / `agentskills.io` directory patterns (`.agents/skills/`, `.agents/rules/`, `.agents/workflows/`, `.agents/teamwork/`).
+2. **Step 2 (Observation 1.2)**: Inspection of `.agents/skills/` proved that 31 skills are already present, including the previously mandated `rima-pwa-perf-and-code-splitting` and `rima-future-feature-architecture`. None of the 7 external agent repository skills (`librechat`, `awesome-agent-skills`, `anthropic-cybersecurity-skills`, `aion-ui`, `claude-skills`, `ai-guide`, `generic-agent`) exist yet.
+3. **Step 3 (Observation 1.2)**: Inspection of `.agents/rules/` confirmed `graphify.md` exists with `trigger: always_on`, while `agent_skill_guardrails.md` is absent and needs to be created during Phase 6 implementation.
+4. **Step 4 (Observation 1.3 & 1.4 Gate 3)**: Discovery and test enumeration confirmed exactly 65 test files spanning components, pages, services, stores, hooks, utils, and adversarial/parity tests. Vitest executed all 65 test files and passed all 662 test cases with 0 failures.
+5. **Step 5 (Observation 1.4 Gates 1, 2, 4)**: All four quality gates (`oxlint`, `tsc -b`, `vitest run`, `vite build`) currently exit cleanly with code `0`. Any changes introduced by Phase 6 must preserve this exact zero-error baseline.
 
 ---
 
 ## 3. Caveats
 
-1. **Static vs. Dynamic Translation Loading**:
-   Currently, all 8 languages are bundled into a single `i18n-locales` chunk rather than 8 separate per-language chunks. This is intentional and necessary for RIMA's clinical offline guarantee: if a user changes languages (e.g. from Indonesian to Javanese or Arabic) while offline in an emergency crisis or flight mode, all translation data is already precached and available in CacheStorage.
-2. **Third-Party CDN Fonts**:
-   Google Fonts (`Plus Jakarta Sans`) are cached via `runtimeCaching` (CacheFirst), requiring an initial online request to populate `google-fonts-cache` and `gstatic-fonts-cache`. All core application assets, SVGs, icons, and locale catalogs are 100% precached on install.
-3. **No Code Modification Constraint**:
-   As an Explorer, this survey is strictly read-only. No modifications have been made to `vite.config.ts`. The implementation is ready for Milestone 1.
+1. Vitest test output emitted minor standard console warnings regarding `act(...)` in `DualModePillToggle.test.tsx` and missing mock i18n instance in `SelfCompassionModal.test.tsx`/`SoundscapePlayer.test.tsx`, but all assertions completed successfully and Vitest exited cleanly with code 0.
+2. The codebase currently contains no external repository dependencies or submodules for the 7 external repos; their playbooks, skills, and architectures will need to be authored directly into `.agents/skills/` and `.agents/rules/` with standard YAML frontmatter.
 
 ---
 
-## 4. Conclusion & Proposed Architecture
+## 4. Conclusion
 
-### 4.1 Recommended `manualChunks` in `vite.config.ts`
-The implementer should update `rollupOptions.output.manualChunks` in `vite.config.ts` as follows:
-
-```ts
-manualChunks(id) {
-  const normalizedId = id.replace(/\\/g, '/');
-
-  // 1. Translation Catalogs: Isolate 8-language JSON dictionaries (~635 kB raw)
-  if (normalizedId.includes('/src/i18n/') && normalizedId.endsWith('.json')) {
-    return 'i18n-locales';
-  }
-
-  // 2. i18n Libraries: Evaluate before React to prevent react-i18next prefix match
-  if (
-    normalizedId.includes('/node_modules/i18next/') ||
-    normalizedId.includes('/node_modules/react-i18next/') ||
-    normalizedId.includes('/node_modules/i18next-browser-languagedetector/')
-  ) {
-    return 'i18n-vendor';
-  }
-
-  // 3. React Framework & Routing Core
-  if (
-    normalizedId.includes('/node_modules/react/') ||
-    normalizedId.includes('/node_modules/react-dom/') ||
-    normalizedId.includes('/node_modules/react-router/') ||
-    normalizedId.includes('/node_modules/react-router-dom/') ||
-    normalizedId.includes('/node_modules/scheduler/')
-  ) {
-    return 'react-vendor';
-  }
-
-  // 4. Data Visualization Engine (Charts)
-  if (
-    normalizedId.includes('/node_modules/recharts/') ||
-    normalizedId.includes('/node_modules/d3-') ||
-    normalizedId.includes('/node_modules/victory-vendor/')
-  ) {
-    return 'recharts-vendor';
-  }
-
-  // 5. UI Icons
-  if (normalizedId.includes('/node_modules/lucide-react/')) {
-    return 'icons-vendor';
-  }
-
-  // 6. Supabase Client SDK (Cloud tier)
-  if (normalizedId.includes('/node_modules/@supabase/')) {
-    return 'supabase-vendor';
-  }
-}
-```
-
-### 4.2 Recommended Workbox Configuration in `vite.config.ts`
-Under `VitePWA({ workbox: { ... } })`:
-```ts
-workbox: {
-  globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
-  maximumFileSizeToCacheInBytes: 3000000, // 3 MiB defensive headroom for translation bundles
-  runtimeCaching: [
-    {
-      urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
-      handler: 'CacheFirst',
-      options: {
-        cacheName: 'google-fonts-cache',
-        expiration: {
-          maxEntries: 10,
-          maxAgeSeconds: 60 * 60 * 24 * 365
-        },
-        cacheableResponse: {
-          statuses: [0, 200]
-        }
-      }
-    },
-    {
-      urlPattern: /^https:\/\/fonts\.gstatic\.com\/.*/i,
-      handler: 'CacheFirst',
-      options: {
-        cacheName: 'gstatic-fonts-cache',
-        expiration: {
-          maxEntries: 10,
-          maxAgeSeconds: 60 * 60 * 24 * 365
-        },
-        cacheableResponse: {
-          statuses: [0, 200]
-        }
-      }
-    }
-  ]
-}
-```
-
-### 4.3 Expected Post-Implementation Results
-| Chunk | Baseline Size | Optimized Target Size | Purpose |
-|---|---|---|---|
-| `index-*.js` (main entry) | **613.57 kB** | **~50–70 kB** | Application shell, router setup, providers |
-| `i18n-locales-*.js` | *N/A (in index)* | **~540–560 kB** | Precached 8-language translation catalogs |
-| `recharts-vendor-*.js` | 411.10 kB | ~411 kB | Charting engine (lazy-loaded on analytics/dashboard) |
-| `react-vendor-*.js` | 228.73 kB | ~220–225 kB | React, ReactDOM, React Router |
-| `i18n-vendor-*.js` | 49.28 kB | ~55 kB | i18next runtime + react-i18next bindings |
-| `icons-vendor-*.js` | 26.75 kB | ~27 kB | Lucide icons |
-| `supabase-vendor-*.js` | 8.70 kB | ~9 kB | Supabase client SDK |
+- The RIMA repository is in pristine health.
+- All 4 baseline Quality Gates pass 100% with exit code 0 (`npm run lint`: 0 errors/0 warnings on 171 files; `npx tsc -b`: 0 errors; `npm test`: 65/65 test files and 662/662 tests passed; `npm run build`: PWA build succeeded with 62 precached entries).
+- The path is completely clear for the orchestrator and implementer subagents to extract and implement the 7 skill libraries in `.agents/skills/` and the system guardrail rule in `.agents/rules/agent_skill_guardrails.md`.
 
 ---
 
 ## 5. Verification Method
 
-To independently verify the implementation:
-
-1. **Verify TypeScript Compilation**:
-   ```bash
-   npx tsc -b
+To independently verify the baseline state, execute the following commands from `C:\Users\Hype\Kuliah\Proyekan\mental monitoring`:
+1. `npm run lint` -> Expected: Exit code 0, 0 errors, 0 warnings.
+2. `npx tsc -b` -> Expected: Exit code 0, empty error output.
+3. `npm test` -> Expected: Exit code 0, 65 test files passed, 662 tests passed.
+4. `npm run build` -> Expected: Exit code 0, clean build producing `dist/sw.js` and assets.
+5. Skill directories inspection:
+   ```powershell
+   (Get-ChildItem -Path ".agents\skills" -Directory).Count # Expected: 31
    ```
-   *Expected output*: Exits with code 0 and zero errors.
-
-2. **Verify Linter**:
-   ```bash
-   npm run lint
+6. Rules inspection:
+   ```powershell
+   Get-ChildItem -Path ".agents\rules" # Expected: graphify.md
    ```
-   *Expected output*: `Found 0 warnings and 0 errors.`
-
-3. **Verify Vitest Suite**:
-   ```bash
-   npx vitest run
-   ```
-   *Expected output*: All 40 test files and 396+ tests pass with 0 failures.
-
-4. **Verify Production Build & Chunk Splitting**:
-   ```bash
-   npm run build
-   ```
-   *Verification criteria*:
-   - Check that `dist/assets/i18n-locales-*.js` is generated.
-   - Check that `dist/assets/index-*.js` is reduced to `< 100 kB`.
-   - Check that Workbox reports `precache 55 entries` (or similar) with 0 errors.
-   - Inspect `dist/sw.js` and verify that `{url:"assets/i18n-locales-...js",revision:null}` is present in `precacheAndRoute`.
-
-5. **Invalidation Conditions**:
-   - If `index-*.js` exceeds 150 kB, check if `src/i18n/*.json` was matched by `manualChunks`.
-   - If `i18n-locales-*.js` is missing from `dist/sw.js`, check Workbox `globPatterns` and `maximumFileSizeToCacheInBytes`.

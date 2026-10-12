@@ -114,3 +114,53 @@ You have exclusive write ownership of:
 
 Implement PageFallbackLoader, add pure vanilla CSS calm styling, add calmLoader translations across all 8 languages, integrate in App.tsx Suspense, add unit tests, run all quality gates, and write your report to C:\Users\Hype\Kuliah\Proyekan\mental monitoring\.agents\teamwork\worker_m2\handoff.md.
 When finished, notify the orchestrator with send_message.
+
+## 2026-10-12T15:57:50Z
+You are the Worker for RIMA Project Phase 6 Milestone 2 (M2: Conversational UI & Interoperability Skills).
+Your working directory is: C:\Users\Hype\Kuliah\Proyekan\mental monitoring\.agents\teamwork\worker_m2
+Your project root is: C:\Users\Hype\Kuliah\Proyekan\mental monitoring
+
+Read ORIGINAL_REQUEST.md at: C:\Users\Hype\Kuliah\Proyekan\mental monitoring\.agents\teamwork\ORIGINAL_REQUEST.md
+Read PROJECT.md at: C:\Users\Hype\Kuliah\Proyekan\mental monitoring\PROJECT.md
+Read system guardrails at: C:\Users\Hype\Kuliah\Proyekan\mental monitoring\.agents\rules\agent_skill_guardrails.md
+
+Read M2 Explorer reports:
+- C:\Users\Hype\Kuliah\Proyekan\mental monitoring\.agents\teamwork\explorer_m2_1\handoff.md
+- C:\Users\Hype\Kuliah\Proyekan\mental monitoring\.agents\teamwork\explorer_m2_2\handoff.md
+- C:\Users\Hype\Kuliah\Proyekan\mental monitoring\.agents\teamwork\explorer_m2_3\handoff.md
+
+Write Ownership:
+You EXCLUSIVELY own the following directories and files:
+- C:\Users\Hype\Kuliah\Proyekan\mental monitoring\.agents\skills\librechat\
+- C:\Users\Hype\Kuliah\Proyekan\mental monitoring\.agents\skills\awesome-agent-skills\
+DO NOT modify any other files in src/, .agents/rules/, or elsewhere.
+
+MANDATORY INTEGRITY WARNING:
+DO NOT CHEAT. All implementations must be genuine. DO NOT hardcode test results, create dummy/facade implementations, or circumvent the intended task. A teamwork_preview_auditor will independently verify your work. Integrity violations WILL be detected and your work WILL be rejected.
+
+Your task:
+1. Implement C:\Users\Hype\Kuliah\Proyekan\mental monitoring\.agents\skills\librechat\SKILL.md:
+   - Valid YAML frontmatter (name: librechat, description: >-, license: Apache-2.0).
+   - Conversational UI streaming loop playbook (SSE, token chunking, AbortController cancellation with partial state preservation, auto-scroll UX).
+   - Sandpack dynamic artifacts rendering playbook (isolated iframe sandbox with restrictive CSP, typed postMessage bridge, multi-version ArtifactStore).
+   - MCP client architecture playbook (stdio, SSE, streamable-http transports, librechat.yaml schema, dynamic tool registration).
+   - Endpoint orchestration playbook (custom endpoints, dropParams parameter stripping, fallback chains).
+   - Multi-turn session persistence playbook (parentMessageId tree DAG, backward traversal, forward branch pagination).
+   - Strict adherence to .agents/rules/agent_skill_guardrails.md (<400 lines, <30K tokens).
+
+2. Implement C:\Users\Hype\Kuliah\Proyekan\mental monitoring\.agents\skills\awesome-agent-skills\ package:
+   - SKILL.md: Valid YAML frontmatter (name: awesome-agent-skills, description: >-, license: Apache-2.0), progressive disclosure design (<150 lines).
+   - references/cross_harness_adapters.md: Cross-harness interoperability adapters for Google Antigravity, Claude Code, Cursor (.mdc), and Gemini CLI.
+   - references/legacy_translation_guide.md: 6-step translation pipeline for legacy configs (.cursorrules, CLAUDE.md, .windsurfrules).
+   - references/curated_playbooks_catalog.md: Curated catalog of 30+ production playbooks across 6 domains (code review, bug triage, docgen, workflow automation, etc.).
+
+3. Execute verification commands to confirm zero side effects on RIMA:
+   - npm run lint
+   - npx tsc -b
+   - npm test
+   - npm run build
+   - Verify YAML frontmatter and file line budgets across all created skill files.
+
+4. Document your full implementation and verification results in:
+   C:\Users\Hype\Kuliah\Proyekan\mental monitoring\.agents\teamwork\worker_m2\handoff.md
+5. Update your progress.md and send a completion message back to the orchestrator.

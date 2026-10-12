@@ -189,3 +189,50 @@ Integrity mode: development
 - [ ] npx tsc -b lulus dengan 0 error.
 - [ ] Seluruh suite unit & integration test Vitest (44+ berkas) lulus 100%.
 - [ ] Build produksi PWA (npm run build) sukses tanpa peringatan.
+
+
+## 2026-10-12T15:06:58Z
+
+Use a full multi-agent team.
+Ekstrak dan implementasikan secara komprehensif seluruh pustaka skill, playbook, dan arsitektur dari 7 repositori agent terkemuka (LibreChat, VoltAgent/awesome-agent-skills, mukul975/Anthropic-Cybersecurity-Skills, iOfficeAI/AionUi, alirezarezvani/claude-skills, liyupi/ai-guide, dan lsdefine/GenericAgent) ke dalam direktori masing-masing di `.agents/skills/` dan `.agents/rules/`, lengkap dengan panduan eksekusi mandiri, referensi, dan validasi 4 Quality Gates repositori RIMA.
+
+Working directory: C:\Users\Hype\Kuliah\Proyekan\mental monitoring
+Integrity mode: development
+
+## Requirements
+
+### R1. Ekstraksi Pustaka Skill ke Direktori Masing-Masing (.agents/skills/)
+Bangun direktori skill terstruktur berstandar Google Antigravity / `agentskills.io` untuk ketujuh sumber:
+1. `.agents/skills/librechat/`: Playbook conversational UI, dynamic artifacts rendering, integrasi MCP (Model Context Protocol), endpoint orchestration, dan multi-turn session persistence.
+2. `.agents/skills/awesome-agent-skills/`: Kurasi katalog playbook produktivitas, software development, dan standar interoperabilitas lintas-harness (Antigravity, Claude Code, Cursor, Gemini CLI).
+3. `.agents/skills/anthropic-cybersecurity-skills/`: Playbook komprehensif audit keamanan berbasis NIST CSF 2.0, NIST AI RMF, MITRE ATT&CK, proteksi kriptografi Web Crypto, sanitasi input/injeksi, dan audit privasi UU PDP No. 27/2022.
+4. `.agents/skills/aion-ui/`: Playbook manajemen ruang kerja multi-agent, koordinasi subagent CLI lokal, dan pola automatisasi berkas.
+5. `.agents/skills/claude-skills/`: Pustaka skill rekayasa perangkat lunak mandiri (zero external dependencies) untuk refactoring, audit kode, compliance, dan verifikasi modular.
+6. `.agents/skills/ai-guide/`: Panduan operasional Vibe Coding, harness engineering, TDD-driven prompt development, dan gerbang verifikasi deterministik.
+7. `.agents/skills/generic-agent/`: Mekanisme kristalisasi skill mandiri (self-evolving skill tree), pencatatan alur eksekusi sukses, dan teknik pemadatan densitas konteks (<30K tokens).
+
+### R2. Aturan Guardrails Sistem (.agents/rules/)
+Buat aturan always-on di `.agents/rules/` (`agent_skill_guardrails.md`) untuk memastikan:
+- Kepatuhan standar YAML frontmatter pada seluruh playbook.
+- Pemadatan konteks informasi untuk mencegah bloatware prompt.
+- Penegakan integritas data offline-first, privasi UU PDP No. 27/2022, dan keamanan kriptografi klien.
+
+### R3. Preservasi Kualitas & 4 Quality Gates Repositori RIMA
+Seluruh instalasi berkas baru di `.agents/` tidak boleh menimbulkan dampak samping pada aplikasi utama:
+1. Static Linting: `npm run lint` (`oxlint`) wajib menghasilkan 0 error dan 0 warning.
+2. Type Checking: `npx tsc -b` wajib menghasilkan 0 error (Exit Code 0).
+3. Unit & Integration Tests: `npm test` (`vitest run`) wajib 100% lulus (65+ berkas uji).
+4. Production Build: `npm run build` wajib berhasil membuat bundel PWA dan Service Worker bersih.
+
+## Acceptance Criteria
+
+### Skill & Documentation Criteria
+- [ ] Masing-masing dari 7 repositori memiliki direktori skill tersendiri di `.agents/skills/` dengan berkas `SKILL.md` yang memiliki YAML frontmatter valid (`name`, `description`).
+- [ ] Aturan sistem di `.agents/rules/agent_skill_guardrails.md` terpasang dengan `trigger: always_on`.
+- [ ] Seluruh skrip pendukung (jika ada) menggunakan Python standard library atau virtual environment lokal yang sudah ada tanpa konflik dependensi.
+
+### Quality & Verification Gates
+- [ ] `npm run lint` lulus dengan 0 warning dan 0 error.
+- [ ] `npx tsc -b` lulus dengan 0 error.
+- [ ] `npm test` (Vitest) lulus 100% pada seluruh 65+ file tes.
+- [ ] `npm run build` berhasil membuat bundel produksi PWA.
