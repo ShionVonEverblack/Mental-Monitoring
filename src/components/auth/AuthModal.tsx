@@ -20,7 +20,10 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
   const [status, setStatus] = useState<'input' | 'sending' | 'sent'>('input');
   const [resendSuccess, setResendSuccess] = useState(false);
 
-  const validateEmail = (val: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val.trim());
+  const validateEmail = (val: string) => {
+    const s = val.trim();
+    return s.length <= 254 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

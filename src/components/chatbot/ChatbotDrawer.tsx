@@ -12,6 +12,7 @@ import {
   ArrowRight,
 } from 'lucide-react';
 import { processChatbotMessage, type ChatMessage } from '../../services/chatbotEngine';
+import { getSensoryScrollBehavior } from '../../utils/keyboardAvoidance';
 
 export interface ChatbotDrawerProps {
   isOpen?: boolean;
@@ -57,7 +58,7 @@ export const ChatbotDrawer: React.FC<ChatbotDrawerProps> = ({
   // Auto-scroll on new message
   useEffect(() => {
     if (isOpen) {
-      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+      messagesEndRef.current?.scrollIntoView?.({ behavior: getSensoryScrollBehavior() });
     }
   }, [messages, isThinking, isOpen]);
 
@@ -68,6 +69,16 @@ export const ChatbotDrawer: React.FC<ChatbotDrawerProps> = ({
         inputRef.current?.focus();
       }, 150);
     }
+  }, [isOpen]);
+
+  // Prevent background scroll bleed and rubber-banding while drawer is open
+  useEffect(() => {
+    if (!isOpen) return;
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = prevOverflow;
+    };
   }, [isOpen]);
 
   // Close on Escape key

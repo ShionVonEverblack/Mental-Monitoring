@@ -8,12 +8,13 @@ license: MIT
 
 ## 1. Executive Summary & Purpose
 
-This skill establishes the engineering standards, interface contracts, and architectural guardrails governing the implementation of RIMA's roadmap (2026–2027), as detailed in [`docs/PROJECT_ROADMAP.md`](file:///C:/Users/Hype/Kuliah/Proyekan/mental%20monitoring/docs/PROJECT_ROADMAP.md).
+This skill establishes the engineering standards, interface contracts, and architectural guardrails governing the implementation of RIMA's roadmap (2026–2028), as detailed in [`docs/PROJECT_ROADMAP.md`](file:///C:/Users/Hype/Kuliah/Proyekan/mental%20monitoring/docs/PROJECT_ROADMAP.md) and the comprehensive long-term master plan [`docs/FUTURE_ROADMAP_2027_2028.md`](file:///C:/Users/Hype/Kuliah/Proyekan/mental%20monitoring/docs/FUTURE_ROADMAP_2027_2028.md).
 
 Every engineer and AI agent contributing to RIMA must uphold:
 1. The **Dual-Mode Freedom** architecture (100% Offline Air-Gapped vs Online Connected Hybrid).
 2. The **Zero-Knowledge E2EE** default posture for all persistent stores.
 3. The **Cognitive Load Reduction** mandate: eliminating toxic streaks, choice overload in mood tracking, vanity metrics in forum interactions, and sensory overstimulation.
+4. The **7 Future Pillars (2027–2028)**: Adaptive Sensory UI, Evidence-Based DTx (DBT/CFT/Somatic), Wasm Frontend, CRDT Zero-Knowledge Sync, On-Device SLM (WebGPU), Advanced Therapeutic Journaling, and BPJS/SATUSEHAT Clinical Governance.
 
 ---
 

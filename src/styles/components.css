@@ -183,6 +183,8 @@ button.btn-icon.btn-icon-danger:not(.btn):hover:not(:disabled) {
 .modal-overlay {
   position: fixed;
   inset: 0;
+  bottom: var(--keyboard-offset-bottom, 0px);
+  max-height: var(--visual-viewport-height, 100dvh);
   background-color: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(4px);
   z-index: var(--z-modal);
@@ -191,6 +193,7 @@ button.btn-icon.btn-icon-danger:not(.btn):hover:not(:disabled) {
   justify-content: center;
   padding: var(--spacing-md);
   animation: fadeIn var(--transition-normal);
+  transition: bottom var(--transition-fast);
 }
 .modal-content {
   background-color: var(--bg-elevated);
@@ -199,11 +202,14 @@ button.btn-icon.btn-icon-danger:not(.btn):hover:not(:disabled) {
   box-shadow: var(--shadow-elevated);
   width: 100%;
   max-width: 500px;
-  max-height: 90vh;
-  overflow-y: auto;
+  max-height: min(90vh, calc(var(--visual-viewport-height, 100dvh) - (var(--spacing-md) * 2)));
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
   animation: scaleIn var(--transition-normal);
 }
 .modal-header {
+  flex-shrink: 0;
   padding: var(--spacing-lg);
   border-bottom: 1px solid var(--border-subtle);
   display: flex;
@@ -212,13 +218,22 @@ button.btn-icon.btn-icon-danger:not(.btn):hover:not(:disabled) {
 }
 .modal-body {
   padding: var(--spacing-lg);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  scroll-padding-bottom: var(--spacing-md);
+  flex: 1;
 }
 .modal-footer {
-  padding: var(--spacing-lg);
+  flex-shrink: 0;
+  padding: var(--spacing-md) var(--spacing-lg);
   border-top: 1px solid var(--border-subtle);
   display: flex;
   justify-content: flex-end;
   gap: var(--spacing-sm);
+  background-color: var(--bg-elevated);
+  position: sticky;
+  bottom: 0;
+  z-index: 2;
 }
 
 /* Badges */
@@ -1821,9 +1836,12 @@ button.btn-icon.btn-icon-danger:not(.btn):hover:not(:disabled) {
 .chat-drawer-wrapper {
   position: fixed;
   inset: 0;
+  bottom: var(--keyboard-offset-bottom, 0px);
+  max-height: var(--visual-viewport-height, 100dvh);
   z-index: var(--z-modal);
   display: flex;
   justify-content: flex-end;
+  transition: bottom var(--transition-fast);
 }
 
 .chat-drawer-backdrop {
@@ -1839,6 +1857,7 @@ button.btn-icon.btn-icon-danger:not(.btn):hover:not(:disabled) {
   width: 100%;
   max-width: 440px;
   height: 100%;
+  max-height: var(--visual-viewport-height, 100dvh);
   background: var(--bg-card);
   display: flex;
   flex-direction: column;
@@ -1933,6 +1952,8 @@ button.btn-icon.btn-icon-danger:not(.btn):hover:not(:disabled) {
 .chat-messages-area {
   flex: 1;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  scroll-padding-bottom: var(--spacing-md);
   padding: var(--spacing-lg);
   display: flex;
   flex-direction: column;
@@ -2127,7 +2148,9 @@ button.btn-icon.btn-icon-danger:not(.btn):hover:not(:disabled) {
 }
 
 .chat-drawer-footer {
+  flex-shrink: 0;
   padding: var(--spacing-md);
+  padding-bottom: max(var(--spacing-md), env(safe-area-inset-bottom));
   border-top: 1px solid var(--border-subtle);
   background: var(--bg-glass-subtle);
 }
@@ -2140,12 +2163,13 @@ button.btn-icon.btn-icon-danger:not(.btn):hover:not(:disabled) {
 
 .chat-input-field {
   flex: 1;
+  min-height: 44px;
   padding: 10px 14px;
   border-radius: var(--radius-md);
   border: 1px solid var(--border-strong);
   background: var(--bg-secondary);
   color: var(--text-primary);
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-base);
   outline: none;
   transition: border-color var(--transition-fast);
 }
@@ -2155,8 +2179,10 @@ button.btn-icon.btn-icon-danger:not(.btn):hover:not(:disabled) {
 }
 
 .chat-send-btn {
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
   border-radius: var(--radius-md);
   border: none;
   background: var(--color-primary);
@@ -2184,13 +2210,15 @@ button.btn-icon.btn-icon-danger:not(.btn):hover:not(:disabled) {
   border-right: 1px solid var(--border-subtle);
 }
 
-[dir="rtl"] .chat-float-btn {
+[dir="rtl"] .chat-float-btn,
+[dir="rtl"] .sos-float {
   right: auto;
   left: 16px;
 }
 
 @media (min-width: 768px) {
-  [dir="rtl"] .chat-float-btn {
+  [dir="rtl"] .chat-float-btn,
+  [dir="rtl"] .sos-float {
     right: auto;
     left: 32px;
   }

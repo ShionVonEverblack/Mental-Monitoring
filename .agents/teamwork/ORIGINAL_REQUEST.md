@@ -236,3 +236,44 @@ Seluruh instalasi berkas baru di `.agents/` tidak boleh menimbulkan dampak sampi
 - [ ] `npx tsc -b` lulus dengan 0 error.
 - [ ] `npm test` (Vitest) lulus 100% pada seluruh 65+ file tes.
 - [ ] `npm run build` berhasil membuat bundel produksi PWA.
+
+
+## 2026-10-16T14:09:29Z
+
+This is a single self-contained fix; keep it small and focused.
+Implementasikan Langkah 1 Prioritas Tinggi (P1) untuk RIMA (Ruang Interaksi Mental Aman): Ergonomi Sentuh Mobile & Pencegahan Tabrakan Keyboard Virtual (Keyboard Collision Avoidance) pada seluruh halaman form, dialog modal, drawer chatbot, dan wizard interaktif agar tombol aksi primer tidak pernah tertutup oleh keyboard virtual Android maupun iOS.
+
+Working directory: C:\Users\Hype\Kuliah\Proyekan\mental monitoring
+Integrity mode: development
+
+## Requirements
+
+### R1. Viewport & VisualViewport Keyboard Avoidance
+Pastikan antarmuka aplikasi beradaptasi secara responsif ketika keyboard virtual perangkat seluler (Android/iOS) terbuka:
+- Konfigurasikan perilaku viewport HTML dan CSS dinamis sehingga area layar menyesuaikan tinggi ruang kerja aktual saat keyboard muncul.
+- Sediakan mekanisme adaptif berbasis `window.visualViewport` yang mendeteksi pembukaan keyboard virtual dan menyesuaikan ruang gulir (*scroll padding* / *safe-area inset*) secara otomatis.
+
+### R2. Visibilitas Tombol Aksi pada Form, Modal, Wizard & Chatbot
+Pastikan ketika pengguna memfokuskan input teks atau `textarea` (seperti pada Jurnal, CBT Wizard, Forum, Rencana Keselamatan, Relapse Prevention, ACT, dan Chatbot Drawer):
+- Elemen input aktif secara mulus digulirkan ke dalam area pandang yang aman tanpa tertutup keyboard maupun navigasi bawah (*BottomNav*).
+- Dialog modal dan laci percakapan (*drawer*) tetap dapat digulirkan penuh dan tombol aksi utamanya (*Simpan*, *Lanjut*, *Kirim*, *Batal*) selalu dapat dijangkau dengan nyaman.
+- Menghormati preferensi aksesibilitas `prefers-reduced-motion` dan `data-sensory="low-stimulation"` (menggunakan perilaku gulir instan tanpa animasi mengejutkan saat mode stimulasi rendah aktif).
+
+### R3. Guardrails Arsitektur & 4 Quality Gates RIMA
+- Patuhi penggunaan murni Vanilla CSS design tokens (Zero Tailwind CSS).
+- Pertahankan 100% paritas terjemahan 8 bahasa (`id`, `en`, `jv`, `su`, `ja`, `zh`, `es`, `ar`) jika ada atribut atau label aksesibilitas baru.
+- Tambahkan unit/integration test otomatis di Vitest yang memverifikasi adaptasi `visualViewport`, perilaku fokus input, dan pencegahan tabrakan keyboard.
+
+## Acceptance Criteria
+
+### Functional & Ergonomic Criteria
+- [ ] Konfigurasi viewport mendukung adaptasi ukuran konten terhadap keyboard virtual seluler.
+- [ ] Saat elemen input/textarea difokuskan di dalam halaman maupun modal, sistem menyesuaikan posisi gulir dan offset bawah sehingga tombol aksi primer tetap terjangkau.
+- [ ] Mode `prefers-reduced-motion` dan `data-sensory="low-stimulation"` tetap dihormati sepenuhnya.
+- [ ] Pengujian unit/integrasi baru untuk ergonomi keyboard virtual lulus 100%.
+
+### Quality & Verification Gates
+- [ ] `npm run lint` (`oxlint`) lulus dengan 0 error dan 0 warning.
+- [ ] `npx tsc -b` lulus dengan 0 error.
+- [ ] `npm test` (`vitest run`) lulus 100% pada seluruh berkas pengujian tanpa regresi.
+- [ ] `npm run build` berhasil membangun bundel produksi PWA dan Service Worker dengan bersih.

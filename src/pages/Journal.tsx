@@ -10,6 +10,7 @@ import { detectCrisis } from '../services/crisisDetectionService';
 import { Modal } from '../components/ui/Modal';
 import type { CrisisDetectionResult } from '../services/crisisDetectionService';
 import { formatDate } from '../utils/helpers';
+import { getSensoryScrollBehavior } from '../utils/keyboardAvoidance';
 
 export const Journal: React.FC = () => {
   const { t, i18n } = useTranslation();
@@ -31,7 +32,7 @@ export const Journal: React.FC = () => {
     setTitle(journal.title);
     setContent(journal.content);
     setSelectedTemplate(journal.template);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: getSensoryScrollBehavior() });
   };
 
   const handleCancelEditor = () => {

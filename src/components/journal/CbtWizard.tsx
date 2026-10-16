@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { ArrowLeft, ArrowRight, Check, HelpCircle, Sparkles, TrendingDown } from 'lucide-react';
 import type { CbtThoughtRecord, CognitiveDistortionId } from '../../types';
 import { COGNITIVE_DISTORTIONS } from '../../utils/constants';
+import { getSensoryScrollBehavior } from '../../utils/keyboardAvoidance';
 
 const COMMON_EMOTIONS = [
   { id: 'anxious', labelKey: 'cbt.emotion.anxious', fallback: 'Cemas / Gelisah' },
@@ -54,14 +55,14 @@ export const CbtWizard: React.FC<CbtWizardProps> = ({
   const handleNext = () => {
     if (step < totalSteps) {
       setStep(step + 1);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      window.scrollTo({ top: 0, behavior: getSensoryScrollBehavior() });
     }
   };
 
   const handleBack = () => {
     if (step > 1) {
       setStep(step - 1);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      window.scrollTo({ top: 0, behavior: getSensoryScrollBehavior() });
     }
   };
 

@@ -159,25 +159,23 @@ Mengatasi kesenjangan layanan kesehatan jiwa di Indonesia—di mana survei **I-N
   • Pemangkasan Beban Kognitif        • On-Device Audio Synthesis        • Kemitraan Uji Klinis Kampus
 ```
 
-### Fase 1: Penguatan Fondasi & Arsitektur Dual-Mode (Target: Q4 2026)
-- [ ] Implementasi arsitektur **Dual-Mode** di pengaturan dan status bar (Mode 100% Offline Air-Gapped vs Mode Online Hybrid).
-- [ ] Migrasi penuh penyimpanan dari `localStorage` ke `IndexedDB` dengan enkripsi transparan Web Crypto AES-GCM-256.
-- [ ] Pemangkasan beban kognitif: Menghapus hitungan toxic streak, mengelompokkan faktor mood tracker ke 4 domain, dan membersihkan metrik sosial di Forum.
-- [ ] Dynamic chunking berkas translasi bahasa untuk memangkas waktu muat awal pada ponsel berspesifikasi rendah.
-- [ ] Penguatan isolasi data tamu anonim dengan fitur *One-Click Local Data Wipe*.
+### Fase 1: Penguatan Fondasi & Arsitektur Dual-Mode (SELESAI - Q4 2026)
+- [x] Implementasi arsitektur **Dual-Mode** di pengaturan dan status bar (Mode 100% Offline Air-Gapped vs Mode Online Hybrid).
+- [x] Migrasi penuh penyimpanan dari `localStorage` ke `IndexedDB` (`rimaAsyncStorage`) dengan enkripsi transparan Web Crypto AES-GCM-256.
+- [x] Pemangkasan beban kognitif: Menghapus hitungan toxic streak, mengelompokkan faktor mood tracker ke 4 domain, dan membersihkan metrik sosial di Forum.
+- [x] Dynamic chunking berkas translasi bahasa untuk memangkas waktu muat awal pada ponsel berspesifikasi rendah.
+- [x] Penguatan isolasi data tamu anonim dengan fitur *One-Click Local Data Wipe*.
 
-### Fase 2: Terapi Klinis Lanjutan & Komunitas Terenkripsi (Target: Q1 2027)
-- [ ] Peluncuran modul **Acceptance & Commitment Therapy (ACT)**: Kompas Nilai Hidup dan Latihan Defusi Kognitif.
-- [ ] Peluncuran modul **Relapse Prevention Plan**: Antisipasi pemicu kambuh dan penanganan *Abstinence Violation Effect*.
-- [ ] Pembangunan **Quiet Circles**: Forum anonim terenkripsi *end-to-end* dengan dukungan empati terstruktur tanpa metrik popularitas.
-- [ ] Integrasi mesin pencari semantik lokal di peramban (In-Browser RAG) untuk eksplorasi psikoedukasi yang lebih cerdas dan kontekstual.
-- [ ] Penguatan algoritma rekomendasi adaptif JITAI berbasis analisis multi-hari ritme tidur CBT-I dan suasana hati.
+### Fase 2: Terapi Klinis Lanjutan & Komunitas Terenkripsi (SELESAI - Q4 2026)
+- [x] Peluncuran modul **Acceptance & Commitment Therapy (ACT)**: Kompas Nilai Hidup dan Latihan Defusi Kognitif.
+- [x] Peluncuran modul **Relapse Prevention Plan**: Antisipasi pemicu kambuh dan penanganan *Abstinence Violation Effect*.
+- [x] Pembangunan **Quiet Circles**: Forum anonim terenkripsi *end-to-end* dengan dukungan empati terstruktur tanpa metrik popularitas.
+- [x] Integrasi mesin pencari semantik lokal di peramban (In-Browser RAG) untuk eksplorasi psikoedukasi yang lebih cerdas dan kontekstual.
+- [x] Penguatan algoritma rekomendasi adaptif JITAI multimodal berbasis analisis ritme tidur CBT-I dan suasana hati.
 
-### Fase 3: Ekspansi Multi-Platform & Integrasi Ekosistem Layanan Kesehatan (Target: Q2 2027+)
-- [ ] Pembangunan pembungkus mobile native (**Capacitor / Tauri**) untuk distribusi resmi di Google Play Store dan Apple App Store dengan biometrik lokal (Fingerprint/FaceID).
-- [ ] Implementasi **Web Push Notifications VAPID** terenkripsi untuk pengingat koping mandiri terjadwal di latar belakang.
-- [ ] Peluncuran **Generator Laporan Konsultasi Faskes BPJS/Puskesmas PDF** terstandarisasi.
-- [ ] Validasi empiris dan kolaborasi riset klinis dengan universitas atau lembaga psikologi di Indonesia untuk mengukur efikasi penurunan skor depresi/kecemasan pada pengguna muda.
+### Peta Jalan Lanjutan: Future Plan & Roadmap 2027–2028
+> 📖 Seluruh rencana arsitektur dan pengembangan fitur jangka panjang untuk tahun 2027–2028 (Fase 13 s.d. Fase 18) telah diformulasikan secara mendalam di dokumen resmi:  
+> **👉 [`docs/FUTURE_ROADMAP_2027_2028.md`](./FUTURE_ROADMAP_2027_2028.md)**. Dokumen tersebut mencakup 7 pilar: UI/UX Zen Monastic, Fitur Klinis DTx Lanjutan, Frontend Wasm & Mobile, Backend Zero-Knowledge CRDT Sync, On-Device Small Language Model (SLM), Jurnal Terapeutik Lanjutan (Pennebaker & Whisper Wasm), serta Jembatan Faskes BPJS & SATUSEHAT.
 
 ---
 

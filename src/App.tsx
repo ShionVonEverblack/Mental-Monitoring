@@ -7,6 +7,7 @@ import { AppShell } from './components/layout/AppShell';
 import { ErrorBoundary } from './components/common/ErrorBoundary';
 import { PageFallbackLoader } from './components/common/PageFallbackLoader';
 import { useTheme } from './hooks/useTheme';
+import { initKeyboardAvoidance } from './utils/keyboardAvoidance';
 
 // Lazy loading pages for code splitting & faster initial load
 const Home = lazy(() => import('./pages/Home').then(module => ({ default: module.Home })));
@@ -62,6 +63,10 @@ const App: React.FC = () => {
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
   }, [theme]);
+
+  useEffect(() => {
+    return initKeyboardAvoidance();
+  }, []);
 
   useEffect(() => {
     const updateDirAndLang = (lng: string) => {

@@ -1,132 +1,122 @@
-# Forensic Integrity Audit Report
+# Handoff Report: Victory Audit for RIMA Langkah 1 P1 - Mobile Touch Ergonomics & Keyboard Collision Avoidance
 
-**Work Product**: RIMA Phase 2 Improvements (M1-M4)  
-**Auditor**: Auditor 1 (Forensic Integrity Auditor)  
-**Profile**: General Project (Integrity Mode: Development)  
-**Verdict**: **CLEAN**
+**Auditor:** auditor_1 (Victory Auditor & Forensic Integrity Auditor)  
+**Date:** 2026-10-16T15:24:00Z  
+**Target:** Langkah 1 Prioritas Tinggi (P1) - Ergonomi Sentuh Mobile & Pencegahan Tabrakan Keyboard Virtual  
+**Integrity Mode:** development  
+**Overall Verdict:** **VICTORY CONFIRMED**
+
+---
+
+```
+=== VICTORY AUDIT REPORT ===
+
+VERDICT: VICTORY CONFIRMED
+
+PHASE A — TIMELINE:
+  Result: PASS
+  Anomalies: none
+  Provenance: Genuine multi-stage engineering progression observed across implementer_1 (initial build, 16 tests), reviewer_r1 (adversarial review & 6 fixes, 21 tests), reviewer_r2 (stress-testing & 7 fixes, 27 tests), and reviewer_r3 (hardening & 4 fixes, 31 tests).
+
+PHASE B — INTEGRITY CHECK:
+  Result: PASS
+  Details:
+    - Zero hardcoded test outputs or fake PASS/FAIL stubs found.
+    - Zero facade implementations; genuine dynamic visualViewport observation, baseline tracking, and DOM metric updates.
+    - Zero Tailwind CSS compliance confirmed; 100% vanilla CSS design tokens.
+    - 100% i18n parity verified across all 8 supported languages (id, en, jv, su, ja, zh, es, ar).
+    - Accessibility and sensory-aware motion guardrails strictly respected (prefers-reduced-motion and data-sensory="low-stimulation" / "calm").
+
+PHASE C — INDEPENDENT TEST EXECUTION:
+  Test command: npm run lint && npx tsc -b && npm test && npm run build
+  Your results:
+    - npm run lint (oxlint): 0 errors, 0 warnings across 178 files in 57ms.
+    - npx tsc -b: 0 errors (Exit Code 0).
+    - npm test (vitest run --root .): 66 test suites passed, 693 tests passed (0 failures, 0 regressions in 43.50s).
+    - npm run build (vite build): Success in 1.69s; PWA Service Worker generated with 62 precache entries (2129.45 KiB).
+  Claimed results:
+    - Gate 1: 0 errors, 0 warnings.
+    - Gate 2: 0 errors.
+    - Gate 3: 66 suites, 693 tests passed.
+    - Gate 4: Production PWA bundle clean.
+  Match: YES — Exact match across all 4 Quality Gates.
+```
 
 ---
 
 ## 1. Observation
 
-### A. Source Code & Architectural Integrity
-1. **`src/services/jitaiEngine.ts`** (351 lines):
-   - Implements genuine heuristic evaluation across 6 distinct priority levels:
-     - Priority 1 (lines 103–132): Acute Affective Dysregulation (Yale Mood Meter 2D Red quadrant: `valence <= -0.4 && arousal >= 0.4` or `quadrant === 'red'`) triggering Parasympathetic Vagal Reset (Stanford Cyclic Sighing).
-     - Priority 2 (lines 134–175): Steep negative slope recovery (drop >= 2 points within 48 hours or consecutive low scores) triggering CFT journaling.
-     - Priority 3 (lines 177–206): Depressive Hypo-Arousal (Blue quadrant: `valence <= -0.4 && arousal <= -0.4`) triggering Behavioral Activation spark.
-     - Priority 4 (lines 208–284): CBT-I Sleep rules: sleep efficiency <85% (Stimulus Control), sleep latency >30 min (Wind-down), and WASO >30 min (20-min bed reset rule).
-     - Priority 5 (lines 286–320): Inactivity >48 hours with stagnant mood.
-     - Priority 6 (lines 322–347): Scheduled activity reminder.
-   - Enforces anti-habituation guardrails in `checkGuardrails()` (lines 25–53):
-     - Quiet hours: 22:00 to 07:00 (`hour >= 22 || hour < 7`).
-     - Cooldown: 4 hours (`JITAI_COOLDOWN_MS = 14,400,000 ms`).
-     - Daily cap: 3 nudges (`JITAI_DAILY_CAP = 3`).
-   - Zero network dependencies: imports only TypeScript types (`../types/jitai` and `../types`). No `fetch`, `axios`, `WebSocket`, or telemetry pings.
-   - No hardcoded test IDs or conditional test mocks.
-
-2. **`src/services/jitaiPersistence.ts`** (145 lines):
-   - Persists state in local storage under key `'rima-jitai-state'`.
-   - Implements calendar-day auto-rollover (`parsed.date !== todayStr` resets daily count, timestamp, and dismissals).
-   - Emits custom `local-storage` events for reactive synchronization.
-   - Fully on-device and zero-network.
-
-3. **`src/services/safetyCardService.ts`** (311 lines):
-   - Defines `HOTLINE_119` with strict `href: 'tel:119,8'` and `HOTLINE_112` with `href: 'tel:112'`.
-   - `formatPhoneTelUri()` standardizes PBX extensions into automated comma pause dialing (`tel:119,8`).
-   - `parseContactString()` uses 4 regex patterns to parse parenthesized, delimited, and raw telephone numbers.
-   - Zero remote calls or telemetry.
-
-4. **`src/components/safety/FastActionSafetyCard.tsx`** (529 lines) & **`src/components/common/JitaiNudgeCard.tsx`** (122 lines):
-   - `FastActionSafetyCard` features real interactive `<a>` elements for crisis actions:
-     - Line 356–374: `actions.hotline119.href` binds directly to `tel:119,8`.
-     - Line 378–397: `formatPhoneTelUri(actions.trustedContact.phone)` binds directly to the user's trusted contact phone.
-     - Line 440–465: `actions.somaticRoute` binds to `/grounding` or `/breathe`.
-   - Full accessibility: WCAG 2.2 AA compliant with `role="dialog"`, `aria-modal="true"`, `aria-labelledby`, `aria-describedby`, ESC keyboard dismissal, and body scroll lock.
-   - Zero Tailwind CSS: strictly employs vanilla CSS with design tokens (`var(--bg-card)`, `var(--color-danger)`, `var(--color-primary)`, `var(--spacing-md)`, etc.).
-   - `JitaiNudgeCard` is genuinely mounted on `src/pages/Home.tsx` (lines 14, 165) between the mood section and affirmation card.
-
-### B. Internationalization (i18n) Parity & Authenticity
-- All 8 language dictionaries exist in `src/i18n/{id,en,jv,su,ja,zh,es,ar}.json`.
-- Key inspection verified that both `jitai` (29 keys) and `safetyCard` (23 keys) namespaces have 100% key parity across all 8 languages:
-  - Indonesian (`id.json`): e.g., `"red_vagal_title": "Atur Ritme Saraf Otonom"`
-  - English (`en.json`): e.g., `"red_vagal_title": "Regulate Autonomic Nervous System"`
-  - Javanese (`jv.json`): e.g., `"red_vagal_title": "Tata Raras Saraf Otonom"`
-  - Sundanese (`su.json`): e.g., `"red_vagal_title": "Atur Wirahma Saraf Otonom"`
-  - Japanese (`ja.json`): e.g., `"red_vagal_title": "自律神経のリズムを整える"`
-  - Chinese (`zh.json`): e.g., `"red_vagal_title": "调节自主神经节奏"`
-  - Spanish (`es.json`): e.g., `"red_vagal_title": "Regular el Sistema Nervioso Autónomo"`
-  - Arabic (`ar.json`): e.g., `"red_vagal_title": "تنظيم إيقاع الجهاز العصبي اللاإرادي"`
-- No empty strings, nulls, or placeholder tokens (such as "TODO", "LOREM", or untranslated stubs).
-- `src/App.tsx` (lines 41–57) dynamically sets `document.documentElement.dir = 'rtl'` and `lang = 'ar'` when Arabic is active.
-
-### C. Test Suite & Absence of Cheating / Trivial Stubs
-- Grep scan across the entire repository for `expect(true).toBe(true)` or `expect(true)` returned 0 results.
-- Tests in `src/services/__tests__/jitaiEngine.test.ts`, `src/services/__tests__/jitaiPersistence.test.ts`, `src/services/__tests__/safetyCardService.test.ts`, `src/components/__tests__/FastActionSafetyCard.test.tsx`, `src/components/__tests__/JitaiNudgeCard.test.tsx`, `src/test/i18nParity.test.ts`, and `src/test/phase2E2E.test.ts` execute real assertions on functions, DOM elements, accessibility attributes, date rollover, and localized translations.
-
-### D. Automated Quality Gate Execution
-1. **Linter (`npm run lint`)**:
-   - Command: `oxlint`
-   - Output: `Found 2 warnings and 0 errors. Finished in 93ms on 126 files.`
-   - Exit code: 0.
-   - Note: The 2 warnings are unused helper variables in `scratch/verify_i18n.js` and `scratch/verify_i18n.cjs`. No warnings or errors exist in application source code (`src/`).
-2. **TypeScript Compilation (`npx tsc -b`)**:
-   - Exit code: 0.
-   - Output: 0 errors.
-3. **Vitest Test Suite (`npx vitest run`)**:
-   - Exit code: 0.
-   - Result: 39 test files passed (100%), 349 individual tests passed (100%).
-4. **Production Build (`npm run build`)**:
-   - Command: `tsc -b && vite build`
-   - Exit code: 0.
-   - Result: 2523 modules transformed in 2.03s. PWA generateSW generated `dist/sw.js` and `dist/workbox-835c8c05.js` with 54 precached assets.
+Direct empirical observations from source inspection and execution:
+1. **Viewport & Meta Configuration**:
+   - `index.html` line 6: `<meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content" />`.
+   - The modern `interactive-widget=resizes-content` attribute is present and active, enabling Android and iOS WebKit viewport resizing behavior.
+2. **CSS Design Tokens & Viewport Adaptations**:
+   - `src/styles/design-tokens.css`: defines `--keyboard-height: 0px;`, `--visual-viewport-height: 100dvh;`, `--keyboard-offset-bottom: 0px;`, `--scroll-padding-bottom: 84px;`.
+   - `src/styles/index.css`: `.app-shell` uses `min-height: 100dvh`. `html` uses `scroll-padding-bottom: var(--scroll-padding-bottom, 96px)`. When `[data-keyboard-open="true"]`, `.bottom-nav` is hidden (`display: none !important`), `.sos-float` is offset by `--keyboard-offset-bottom`, and `.chat-float-btn` is offset above the SOS button.
+   - `src/styles/components.css`: `.modal-overlay` and `.chat-drawer-wrapper` adapt with `bottom: var(--keyboard-offset-bottom, 0px)` and `max-height: var(--visual-viewport-height, 100dvh)`. `.modal-footer` and `.cbt-wizard-footer` have `position: sticky; bottom: 0; z-index: 2` to prevent primary action buttons from being obscured by the virtual keyboard.
+3. **Core Avoidance Logic (`src/utils/keyboardAvoidance.ts`)**:
+   - Implements dual-mode detection: calculates `diffFromVisual = window.innerHeight - vv.height` (iOS Safari overlay style) and `diffFromBaseline = baselineHeight - currentEffectiveHeight` (Android Chrome layout viewport shrink style).
+   - Distinguishes physical keyboard height (`--keyboard-height`) from fixed-position offset (`--keyboard-offset-bottom: (isKeyboardOpen && !layoutViewportResized) ? keyboardHeight : 0px`), preventing double offsets on Android while preserving necessary offsets on iOS.
+   - Reference counting in `initKeyboardAvoidance()` prevents premature teardown when child components unmount.
+   - Orientation changes and width flips (> 50px) recalibrate baseline height without triggering false positives.
+   - `getSensoryScrollBehavior()` returns `'auto'` when `prefers-reduced-motion` or `data-sensory="low-stimulation"` / `"calm"` is active, ensuring instant scrolling without visual shock.
+   - `scrollElementIntoSafeView()` debounces fast focus transitions and aborts if focus shifts to a button or another interactive element.
+4. **Chatbot Drawer & Input Touch Targets**:
+   - `src/components/chatbot/ChatbotDrawer.tsx`: locks body scrolling (`document.body.style.overflow = 'hidden'`) while open, preventing background scroll bleed.
+   - `.chat-send-btn` and `.chat-input-field` comply with touch target ergonomics (44x44px minimum).
+5. **Quality Gates Verification Output**:
+   - `npm run lint` (`oxlint`): `Found 0 warnings and 0 errors. Finished in 57ms on 178 files with 104 rules using 12 threads.`
+   - `npx tsc -b`: Exit Code 0, 0 errors.
+   - `npm test` (`vitest run --root .`): `Test Files: 66 passed (66), Tests: 693 passed (693), Duration: 43.50s`.
+   - `npm run build`: `built in 1.69s, PWA v1.3.0 generateSW precache 62 entries (2129.45 KiB)`.
 
 ---
 
 ## 2. Logic Chain
 
-1. **Premise**: Under the Integrity Forensics framework (Development Mode), a work product is rejected if it exhibits hardcoded test outputs, facade/dummy implementations, fabricated verification outputs, test circumvention, or hidden network telemetry.
-2. **Deduction on JITAI Engine**: Direct inspection of `src/services/jitaiEngine.ts` shows genuine algorithmic evaluation of Yale Mood Meter coordinates, sleep metrics, and activity history. No test IDs or mocked parameters are special-cased. All state handling is performed locally via `localStorage` without network telemetry.
-3. **Deduction on UI Components**: `FastActionSafetyCard.tsx` and `JitaiNudgeCard.tsx` are fully realized React components with functional event handlers, dynamic service integration, WCAG 2.2 AA accessibility, and native design token styling. `tel:119,8` is implemented as an authentic telephony hyperlink.
-4. **Deduction on Internationalization**: Inspection of all 8 JSON dictionaries confirmed identical schema structure, 100% key parity, zero empty values, and authentic localized translations.
-5. **Deduction on Test Authenticity**: The test suite contains 349 comprehensive tests without trivial stubs, vacuously passing assertions, or mock circumvention.
-6. **Deduction on Build & Quality Gates**: All four verification commands (`npm run lint`, `npx tsc -b`, `npx vitest run`, `npm run build`) exited with code 0.
-7. **Conclusion**: The implementation satisfies all functional and non-functional requirements authentically without integrity violations.
+1. **Requirement R1 (Viewport & VisualViewport Keyboard Avoidance)**:
+   - Configured `interactive-widget=resizes-content` in `index.html`.
+   - `keyboardAvoidance.ts` observes `window.visualViewport` resize/scroll events and window resize/orientation events.
+   - Calculates keyboard height dynamically against a 150px threshold (avoiding false triggers on URL bar collapse).
+   - Injects computed values into CSS variables `--keyboard-height`, `--visual-viewport-height`, `--keyboard-offset-bottom`, `--scroll-padding-bottom`, and sets `data-keyboard-open="true|false"`.
+   - Therefore, R1 is completely fulfilled.
+
+2. **Requirement R2 (Action Button Visibility on Forms, Modals, Wizards & Chatbot)**:
+   - Focused inputs trigger delegated `focusin` handling via `scrollElementIntoSafeView` with sensory-aware behavior.
+   - Modals and chatbot drawers dynamically clamp to `--visual-viewport-height` and offset with `--keyboard-offset-bottom`.
+   - `.modal-footer` and `.cbt-wizard-footer` are sticky at bottom (`bottom: 0; z-index: 2`), ensuring primary action buttons (*Simpan*, *Lanjut*, *Kirim*, *Batal*) remain reachable without being covered by virtual keyboard or BottomNav.
+   - Mode `prefers-reduced-motion` and `data-sensory="low-stimulation"` are strictly respected.
+   - Therefore, R2 is completely fulfilled.
+
+3. **Requirement R3 (Guardrails Arsitektur & 4 Quality Gates RIMA)**:
+   - Zero Tailwind CSS: Verified by code inspection and grep; 100% vanilla CSS tokens used.
+   - 8-Language translation parity: `src/test/i18nParity.test.ts` passed 16/16 tests across all 8 locales (`id`, `en`, `jv`, `su`, `ja`, `zh`, `es`, `ar`).
+   - Automated test suite: `src/test/keyboardCollisionAvoidance.test.tsx` provides 31 rigorous tests covering edge cases, Android vs iOS modes, orientation flips, debouncing, and ref-counting.
+   - 4 Quality Gates: All executed independently and passed with 0 errors, 0 warnings, 0 test failures, and a clean PWA build.
+   - Therefore, R3 is completely fulfilled.
 
 ---
 
 ## 3. Caveats
 
-- Two unused variable warnings exist in `scratch/verify_i18n.js` and `scratch/verify_i18n.cjs`. These are non-production scratch test utilities outside `src/` and do not affect application code, bundle size, or runtime behavior.
-- In Vitest test execution output, several jsdom navigation warnings (`Not implemented: navigation to another Document`) were emitted when tests triggered external `tel:` links; this is standard jsdom environment behavior for protocol links and confirms that genuine link navigations are executed.
+1. **Physical Hardware Testing**:
+   - The verification was executed in Node/jsdom and simulated visualViewport environments. While mathematical models, event flows, and edge cases were tested comprehensively, physical touch interaction testing on physical OEM hardware (e.g., physical Samsung OneUI Gboard, Xiaomi MIUI keyboard, Apple iOS Safari native keyboard pop-in) remains a recommended step for final staging QA.
 
 ---
 
 ## 4. Conclusion
 
-**Verdict: CLEAN**
+The implementation of **Langkah 1 Prioritas Tinggi (P1) - Ergonomi Sentuh Mobile & Pencegahan Tabrakan Keyboard Virtual** is authentic, robust, beautifully architected, and fully verified. No signs of cheating, hardcoded stubs, or shortcuts were found. All requirements (R1, R2, R3) and acceptance criteria are satisfied with 100% pass rates across all 4 Quality Gates.
 
-No integrity violations, test circumvention, dummy facades, hardcoded mock outputs, or network telemetry leaks were found. The implementation of RIMA Phase 2 is genuine, fully functional, culturally localized across 8 languages, strictly adheres to vanilla CSS design tokens, and passes all verification gates. Milestone approval is granted.
+**Final Verdict:** **VICTORY CONFIRMED**
 
 ---
 
 ## 5. Verification Method
 
-To independently reproduce and verify this audit verdict:
-```bash
-# 1. Run Oxlint (0 errors)
-npm run lint
-
-# 2. Run TypeScript compiler check (0 errors)
-npx tsc -b
-
-# 3. Run full Vitest suite (39 files, 349 tests pass)
-npx vitest run
-
-# 4. Run production build with PWA Service Worker generation
-npm run build
-```
-Verify files:
-- `src/services/jitaiEngine.ts`: Check zero-network imports and heuristic rule logic.
-- `src/components/safety/FastActionSafetyCard.tsx`: Check `href="tel:119,8"` anchor tag and vanilla CSS tokens.
-- `src/i18n/{id,en,jv,su,ja,zh,es,ar}.json`: Verify 29 `jitai` keys and 23 `safetyCard` keys across all 8 files.
+To independently re-verify the work product:
+1. Run linter: `npm run lint`
+2. Run TypeScript compiler: `npx tsc -b`
+3. Run test suite: `npm test`
+4. Run production build: `npm run build`
+5. Inspect `src/utils/keyboardAvoidance.ts`, `src/hooks/useVirtualKeyboard.ts`, and `src/test/keyboardCollisionAvoidance.test.tsx`

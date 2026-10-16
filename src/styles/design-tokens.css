@@ -96,6 +96,12 @@
   --z-toast: 1500;
   --z-sos: 2000;
   --z-lock: 9999;
+
+  /* Mobile Virtual Keyboard & Viewport Avoidance Tokens */
+  --keyboard-height: 0px;
+  --visual-viewport-height: 100dvh;
+  --keyboard-offset-bottom: 0px;
+  --scroll-padding-bottom: 84px;
 }
 
 [data-theme='light'] {

@@ -76,3 +76,9 @@ When low-stimulation mode is active:
   - Use logical CSS properties: `margin-inline-start`, `padding-inline-end`, `inset-inline-start`.
   - Flip directional arrows (chevrons) for backwards/forwards navigation.
   - Keep numbers, time codes, and phone numbers in LTR direction (`direction: ltr; unicode-bidi: embed;`).
+
+## 6. Mobile Virtual Keyboard Ergonomics & Collision Avoidance (WCAG 2.2 SC 2.4.11)
+1. **Viewport Meta Directive**: Ensure `interactive-widget=resizes-content` is set in `index.html` viewport meta tag so mobile browsers resize the layout viewport when the virtual keyboard appears.
+2. **VisualViewport Synchronization**: Listen to `window.visualViewport` (`resize` and `scroll` events) to compute `--keyboard-inset-height` dynamically on `document.documentElement` and toggle `data-keyboard-open="true"`.
+3. **Focus Visibility & Safe Scroll**: When an input, textarea, or select receives focus inside forms, modals, or drawers, ensure it is scrolled into the unobstructed visual viewport while respecting `prefers-reduced-motion` and `data-sensory="low-stimulation"`.
+
