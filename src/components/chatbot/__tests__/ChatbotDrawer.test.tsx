@@ -101,6 +101,50 @@ describe('ChatbotDrawer Component', () => {
     expect(screen.getByText(/SEJIWA 119 Ext 8/i)).toBeInTheDocument();
   });
 
+  it('opens FastActionSafetyCard when clicking Bantuan Cepat button in crisis message', async () => {
+    renderWithRouter(<ChatbotDrawer isOpen={true} onClose={vi.fn()} />);
+
+    const input = screen.getByPlaceholderText(/Ketik pertanyaan atau ceritakan perasaanmu/i);
+    const sendBtn = screen.getByLabelText(/Kirim pesan/i);
+
+    fireEvent.change(input, { target: { value: 'Saya berniat bunuh diri malam ini' } });
+    fireEvent.click(sendBtn);
+
+    act(() => {
+      vi.advanceTimersByTime(300);
+    });
+
+    const fastSafetyBtn = screen.getByRole('button', { name: /Bantuan Cepat Darurat/i });
+    expect(fastSafetyBtn).toBeInTheDocument();
+
+    fireEvent.click(fastSafetyBtn);
+
+    // FastActionSafetyCard should appear with dialog role and 119 Ext 8 link
+    expect(screen.getByRole('dialog', { name: /Kamu Tidak Sendirian/i })).toBeInTheDocument();
+    const call119Link = screen.getByRole('link', { name: /Telepon.*119/i });
+    expect(call119Link).toBeInTheDocument();
+    expect(call119Link).toHaveAttribute('href', 'tel:119,8');
+  });
+
+  it('renders warm recovery affirmation without emergency lockout when user inputs recovery phrase', async () => {
+    renderWithRouter(<ChatbotDrawer isOpen={true} onClose={vi.fn()} />);
+
+    const input = screen.getByPlaceholderText(/Ketik pertanyaan atau ceritakan perasaanmu/i);
+    const sendBtn = screen.getByLabelText(/Kirim pesan/i);
+
+    fireEvent.change(input, { target: { value: 'aku sudah tidak ingin menyakiti diri lagi' } });
+    fireEvent.click(sendBtn);
+
+    act(() => {
+      vi.advanceTimersByTime(300);
+    });
+
+    // Should render recovery affirmation, NOT emergency lockout
+    expect(screen.getByText(/Penguatan Pemulihan & Welas Asih Diri/i)).toBeInTheDocument();
+    expect(screen.queryByText(/Bantuan Darurat & Keselamatan Segera/i)).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Latihan Welas Asih Diri/i })).toBeInTheDocument();
+  });
+
   it('navigates and closes when clicking an interactive action button', async () => {
     const handleClose = vi.fn();
     renderWithRouter(<ChatbotDrawer isOpen={true} onClose={handleClose} />);

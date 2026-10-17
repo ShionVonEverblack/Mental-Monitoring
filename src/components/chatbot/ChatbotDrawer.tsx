@@ -10,9 +10,13 @@ import {
   Phone,
   Sparkles,
   ArrowRight,
+  Shield,
+  ShieldAlert,
+  Wind,
 } from 'lucide-react';
 import { processChatbotMessage, type ChatMessage } from '../../services/chatbotEngine';
 import { getSensoryScrollBehavior } from '../../utils/keyboardAvoidance';
+import { FastActionSafetyCard } from '../safety/FastActionSafetyCard';
 
 export interface ChatbotDrawerProps {
   isOpen?: boolean;
@@ -27,6 +31,7 @@ export const ChatbotDrawer: React.FC<ChatbotDrawerProps> = ({
   const navigate = useNavigate();
 
   const [internalIsOpen, setInternalIsOpen] = useState(false);
+  const [showSafetyCard, setShowSafetyCard] = useState(false);
   const isOpen = controlledIsOpen !== undefined ? controlledIsOpen : internalIsOpen;
 
   const handleClose = useCallback(() => {
@@ -264,7 +269,7 @@ export const ChatbotDrawer: React.FC<ChatbotDrawerProps> = ({
                       </button>
                     )}
 
-                    {/* Crisis Emergency Calling Box */}
+                    {/* Crisis Emergency Calling Box & Fast-Action De-escalation */}
                     {msg.isEmergency && (
                       <div className="chat-emergency-box">
                         <a
@@ -281,6 +286,33 @@ export const ChatbotDrawer: React.FC<ChatbotDrawerProps> = ({
                           <Phone size={15} />
                           <span>Darurat 112</span>
                         </a>
+                        <button
+                          type="button"
+                          onClick={() => setShowSafetyCard(true)}
+                          className="chat-emergency-dial-btn chat-emergency-dial-alt"
+                          style={{ cursor: 'pointer' }}
+                        >
+                          <ShieldAlert size={15} />
+                          <span>{t('safetyCard.badge', 'Bantuan Cepat Darurat')}</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleActionClick('/safety-plan')}
+                          className="chat-emergency-dial-btn chat-emergency-dial-alt"
+                          style={{ cursor: 'pointer' }}
+                        >
+                          <Shield size={15} />
+                          <span>{t('home.safetyPlan', 'Rencana Keselamatan')}</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleActionClick('/grounding')}
+                          className="chat-emergency-dial-btn chat-emergency-dial-alt"
+                          style={{ cursor: 'pointer' }}
+                        >
+                          <Wind size={15} />
+                          <span>{t('safetyCard.somaticGroundingTitle', 'Latihan Grounding Sensorik 5-4-3-2-1')}</span>
+                        </button>
                         <small className="chat-emergency-note">
                           {t('chatbot.emergencyDialNotice', 'Tekan 8 saat nada sambung berbunyi')}
                         </small>
@@ -354,6 +386,16 @@ export const ChatbotDrawer: React.FC<ChatbotDrawerProps> = ({
           </aside>
         </div>
       )}
+
+      {/* FastActionSafetyCard Modal */}
+      <FastActionSafetyCard
+        isOpen={showSafetyCard}
+        onClose={() => setShowSafetyCard(false)}
+        onNavigate={(route) => {
+          setShowSafetyCard(false);
+          handleActionClick(route);
+        }}
+      />
     </>
   );
 };

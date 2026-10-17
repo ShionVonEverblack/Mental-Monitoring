@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { Edit3, Trash2 } from 'lucide-react';
+import { Edit3, Trash2, Phone, ShieldAlert, Wind } from 'lucide-react';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { JOURNAL_TEMPLATES, COGNITIVE_DISTORTIONS } from '../utils/constants';
 import type { JournalTemplate, JournalEntry, CbtThoughtRecord } from '../types';
 import { CbtWizard } from '../components/journal/CbtWizard';
 import { detectCrisis } from '../services/crisisDetectionService';
 import { Modal } from '../components/ui/Modal';
+import { FastActionSafetyCard } from '../components/safety/FastActionSafetyCard';
 import type { CrisisDetectionResult } from '../services/crisisDetectionService';
 import { formatDate } from '../utils/helpers';
 import { getSensoryScrollBehavior } from '../utils/keyboardAvoidance';
@@ -24,6 +25,7 @@ export const Journal: React.FC = () => {
   const [content, setContent] = useState('');
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [crisisResult, setCrisisResult] = useState<CrisisDetectionResult | null>(null);
+  const [showFastSafetyCard, setShowFastSafetyCard] = useState(false);
 
   const lang = i18n.language?.split('-')[0] || 'id';
 
@@ -81,7 +83,7 @@ export const Journal: React.FC = () => {
     setContent('');
 
     const result = detectCrisis(payload.content);
-    if (result.isDetected) {
+    if (result.isDetected && (result.severity === 'severe' || result.severity === 'moderate' || result.cssrsTier === 'tier2_active_no_plan' || result.cssrsTier === 'tier3_acute_imminent')) {
       setCrisisResult(result);
     }
   };
@@ -122,7 +124,7 @@ export const Journal: React.FC = () => {
     setTitle('');
     
     const result = detectCrisis(content);
-    if (result.isDetected) {
+    if (result.isDetected && (result.severity === 'severe' || result.severity === 'moderate' || result.cssrsTier === 'tier2_active_no_plan' || result.cssrsTier === 'tier3_acute_imminent')) {
       setCrisisResult(result);
     }
     
@@ -341,18 +343,64 @@ export const Journal: React.FC = () => {
             {t('crisis.gentleMessage', 'Tulisanmu menunjukkan bahwa kamu mungkin sedang mengalami masa sulit. Kamu tidak sendirian, dan ada bantuan yang tersedia.')}
           </p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-sm)' }}>
-            <button className="btn btn-danger" onClick={() => { setCrisisResult(null); navigate('/safety-plan'); }}>
-              {t('crisis.contactHelp', '🆘 Hubungi Bantuan Krisis')}
-            </button>
-            <button className="btn btn-secondary" onClick={() => { setCrisisResult(null); navigate('/safety-plan'); }}>
+            <a
+              href="tel:119,8"
+              className="btn btn-danger"
+              style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', textDecoration: 'none' }}
+            >
+              <Phone size={16} />
+              <span>SEJIWA 119 Ext 8</span>
+            </a>
+            <small
+              className="chat-emergency-note"
+              style={{ display: 'block', textAlign: 'center', marginTop: '-4px', marginBottom: '4px', fontSize: 'var(--font-size-xs, 0.75rem)', color: 'var(--text-secondary)' }}
+            >
+              {t('chatbot.emergencyDialNotice', 'Tekan 8 saat nada sambung berbunyi')}
+            </small>
+            <button
+              type="button"
+              className="btn btn-secondary"
+              onClick={() => { setCrisisResult(null); navigate('/safety-plan'); }}
+            >
               {t('crisis.safetyPlan', '📋 Lihat Rencana Keselamatan')}
             </button>
-            <button className="btn btn-ghost" onClick={() => setCrisisResult(null)}>
+            <button
+              type="button"
+              className="btn btn-outline"
+              onClick={() => { setCrisisResult(null); navigate('/grounding'); }}
+              style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
+            >
+              <Wind size={16} />
+              <span>{t('safetyCard.somaticGroundingTitle', 'Latihan Grounding Sensorik 5-4-3-2-1')}</span>
+            </button>
+            <button
+              type="button"
+              className="btn btn-outline"
+              onClick={() => { setShowFastSafetyCard(true); setCrisisResult(null); }}
+              style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
+            >
+              <ShieldAlert size={16} />
+              <span>{t('safetyCard.badge', 'Bantuan Cepat Darurat')}</span>
+            </button>
+            <button
+              type="button"
+              className="btn btn-ghost"
+              onClick={() => setCrisisResult(null)}
+            >
               {t('crisis.imOk', 'Saya baik-baik saja, terima kasih')}
             </button>
           </div>
         </Modal>
       )}
+
+      <FastActionSafetyCard
+        isOpen={showFastSafetyCard}
+        onClose={() => setShowFastSafetyCard(false)}
+        onNavigate={(route) => {
+          setShowFastSafetyCard(false);
+          navigate(route);
+        }}
+      />
     </div>
   );
 };

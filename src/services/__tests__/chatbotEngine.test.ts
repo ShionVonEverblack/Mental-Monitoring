@@ -10,7 +10,43 @@ describe('Chatbot Engine & Clinical Safety Pipeline', () => {
     expect(response.isEmergency).toBe(true);
     expect(response.text).toContain('119');
     expect(response.text).toContain('SEJIWA');
+    expect(response.text).toContain('Stanley-Brown');
+    expect(response.text).toContain('Somatik');
     expect(response.actionRoute).toBe('/professional-help');
+    expect(response.cssrsTier).toBe('tier3_acute_imminent');
+  });
+
+  it('triggers Recovery Affirmation for pure recovery statements without false-positive emergency lockout', () => {
+    const input = 'aku sudah tidak ingin menyakiti diri lagi';
+    const response = processChatbotMessage(input, 'id');
+
+    expect(response.stage).toBe('RECOVERY_AFFIRMATION');
+    expect(response.isEmergency).toBe(false);
+    expect(response.text).toContain('Penguatan Pemulihan & Welas Asih Diri');
+    expect(response.text).toContain('bersyukur');
+    expect(response.actionRoute).toBe('/self-compassion');
+    expect(response.cssrsTier).toBe('none');
+  });
+
+  it('triggers Recovery Affirmation in English for "I don\'t want to die anymore"', () => {
+    const input = "I don't want to die anymore, feeling much more hopeful.";
+    const response = processChatbotMessage(input, 'en');
+
+    expect(response.stage).toBe('RECOVERY_AFFIRMATION');
+    expect(response.isEmergency).toBe(false);
+    expect(response.text).toContain('Affirmation of Recovery');
+    expect(response.actionRoute).toBe('/self-compassion');
+  });
+
+  it('triggers Crisis Override on contrast compound sentence moving from past negation to active crisis', () => {
+    const input = 'Dulu aku bilang tidak mau bunuh diri, tapi malam ini aku ingin mengakhiri semuanya';
+    const response = processChatbotMessage(input, 'id');
+
+    expect(response.stage).toBe('CRISIS_OVERRIDE');
+    expect(response.isEmergency).toBe(true);
+    expect(response.text).toContain('119');
+    expect(response.text).toContain('SEJIWA');
+    expect(response.cssrsTier).toBe('tier3_acute_imminent');
   });
 
   it('triggers CBTp De-Escalation for persecutory/surveillance delusion', () => {
@@ -66,5 +102,64 @@ describe('Chatbot Engine & Clinical Safety Pipeline', () => {
     expect(response.stage).toBe('GROUNDED_RAG');
     expect(response.text.toLowerCase()).toContain('grounding');
     expect(response.actionLabel).toBeDefined();
+  });
+
+  it('triggers Crisis Override for double negative concealing active suicidal intent', () => {
+    const input = 'bukan berarti aku tidak ingin bunuh diri';
+    const response = processChatbotMessage(input, 'id');
+
+    expect(response.stage).toBe('CRISIS_OVERRIDE');
+    expect(response.isEmergency).toBe(true);
+    expect(response.text).toContain('119');
+    expect(response.text).toContain('SEJIWA');
+  });
+
+  it('triggers Recovery Affirmation for past crisis contrasted with current recovery', () => {
+    const input = 'dulu aku mau bunuh diri, tapi sekarang aku sudah pulih';
+    const response = processChatbotMessage(input, 'id');
+
+    expect(response.stage).toBe('RECOVERY_AFFIRMATION');
+    expect(response.isEmergency).toBe(false);
+    expect(response.text).toContain('Penguatan Pemulihan & Welas Asih Diri');
+  });
+
+  it('provides Grounded RAG psychoeducation for mild distress/sadness without emergency lockout', () => {
+    const input = 'Saya sangat sedih hari ini, bagaimana cara mengatasinya?';
+    const response = processChatbotMessage(input, 'id');
+
+    expect(response.stage).toBe('GROUNDED_RAG');
+    expect(response.isEmergency).toBe(false);
+    expect(response.sourceCitation).toBeDefined();
+  });
+
+  it('triggers Crisis Override for leetspeak and obfuscated single-letter crisis inputs', () => {
+    const leetResp = processChatbotMessage('aku mau bund1r', 'id');
+    expect(leetResp.stage).toBe('CRISIS_OVERRIDE');
+    expect(leetResp.isEmergency).toBe(true);
+
+    const punctResp = processChatbotMessage('aku mau b.u.n.u.h d.i.r.i', 'id');
+    expect(punctResp.stage).toBe('CRISIS_OVERRIDE');
+    expect(punctResp.isEmergency).toBe(true);
+  });
+
+  it('provides full 8-language parity for CRISIS_OVERRIDE emergency responses', () => {
+    const languages = [
+      { code: 'id', textSnippet: 'Bantuan Darurat & Keselamatan Segera', actionLabel: 'Hubungi Bantuan Darurat' },
+      { code: 'en', textSnippet: 'Urgent Support & Immediate Safety', actionLabel: 'Open Emergency Hotline Directory' },
+      { code: 'jv', textSnippet: 'Bantuan Darurat & Kaslametan Tumunten', actionLabel: 'Hubungi Bantuan Darurat' },
+      { code: 'su', textSnippet: 'Bantosan Darurat & Kasalametan Geura', actionLabel: 'Kontak Bantosan Darurat' },
+      { code: 'ja', textSnippet: '緊急支援と安全の確保', actionLabel: '緊急相談窓口一覧を開く' },
+      { code: 'zh', textSnippet: '紧急援助与即刻安全保障', actionLabel: '打开紧急援助通道' },
+      { code: 'es', textSnippet: 'Apoyo Urgente y Seguridad Inmediata', actionLabel: 'Abrir Directorio de Emergencia' },
+      { code: 'ar', textSnippet: 'دعم طارئ وسلامة فورية', actionLabel: 'فتح دليل خطوط الطوارئ' },
+    ];
+
+    for (const lang of languages) {
+      const response = processChatbotMessage('aku mau mati malam ini', lang.code);
+      expect(response.stage).toBe('CRISIS_OVERRIDE');
+      expect(response.isEmergency).toBe(true);
+      expect(response.text).toContain(lang.textSnippet);
+      expect(response.actionLabel).toBe(lang.actionLabel);
+    }
   });
 });

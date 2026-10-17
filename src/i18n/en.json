@@ -371,7 +371,9 @@
     "gentleMessage": "Your writing suggests you may be going through a difficult time. You are not alone, and help is available.",
     "contactHelp": "🆘 Contact Crisis Help",
     "safetyPlan": "📋 View Safety Plan",
-    "imOk": "I'm okay, thank you"
+    "imOk": "I'm okay, thank you",
+    "recoveryAction": "We honor your recovery journey. Keep taking care of yourself with compassion.",
+    "recoveryAffirmation": "We truly honor your recovery journey. Keep taking care of yourself; every small step forward is a meaningful victory."
   },
   "professional": {
     "title": "Professional Help",

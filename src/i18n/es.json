@@ -371,7 +371,9 @@
     "gentleMessage": "Tus palabras indican que podrías estar pasando por un momento muy difícil. Recuerda que no estás solo y hay apoyo disponible.",
     "contactHelp": "🆘 Contactar Ayuda en Crisis",
     "safetyPlan": "📋 Ver Plan de Seguridad",
-    "imOk": "Estoy bien, gracias"
+    "imOk": "Estoy bien, gracias",
+    "recoveryAction": "Valoramos tu proceso de recuperación. Sigue cuidándote con compasión.",
+    "recoveryAffirmation": "Valoramos profundamente tu proceso de recuperación. Sigue cuidándote; cada pequeño paso es una gran victoria."
   },
   "professional": {
     "title": "Directorio Profesional",

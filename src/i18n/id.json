@@ -371,7 +371,9 @@
     "gentleMessage": "Tulisanmu menunjukkan bahwa kamu mungkin sedang mengalami masa sulit. Kamu tidak sendirian, dan ada bantuan yang tersedia.",
     "contactHelp": "🆘 Hubungi Bantuan Krisis",
     "safetyPlan": "📋 Lihat Rencana Keselamatan",
-    "imOk": "Saya baik-baik saja, terima kasih"
+    "imOk": "Saya baik-baik saja, terima kasih",
+    "recoveryAction": "Kami menghargai proses pemulihanmu. Terus rawat dirimu dengan welas asih.",
+    "recoveryAffirmation": "Kami sangat menghargai proses pemulihanmu. Teruslah melangkah dan sayangi dirimu; setiap kemajuan kecil adalah kemenangan besar."
   },
   "professional": {
     "title": "Bantuan Profesional",

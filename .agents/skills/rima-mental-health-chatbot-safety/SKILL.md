@@ -198,3 +198,22 @@ describe('Chatbot Adversarial Safety Suite', () => {
   });
 });
 ```
+
+---
+
+## 8. Windowed Negation Guard & C-SSRS Multi-Tier Triage
+
+### A. Clause-Bounded Negation & Recovery Detection
+1. **Do Not Use Global Sentence Negation:** Never suppress a crisis match simply because a negation token (`tidak`, `bukan`, `enggak`, `gak`, `ora`, `teu`, `no longer`, `don't`) appears somewhere in the message. Users in acute distress frequently write compound sentences with contrasting clauses (e.g., *"Tadinya aku tidak ingin menyerah, tapi sekarang aku mau mengakhiri hidupku"*).
+2. **Pre-Window Clause Scope:** A negation or recovery modifier only neutralizes a crisis keyword if:
+   - It appears within a tight preceding token/character window before the crisis phrase within the **same clause** (not separated by contrastive conjunctions or clause delimiters such as `tapi`, `tetapi`, `namun`, `melainkan`, `padahal`, `but`, `however`, `;`, `.`, `!`, `?`).
+   - Double-negatives that affirm crisis intent (e.g., *"bukan berarti tidak ingin bunuh diri"*, *"can't say I don't want to die"*) are explicitly excluded from negation cancellation.
+   - Inherent negative distress idioms (e.g., *"tidak mau hidup lagi"*, *"ora gelem urip"*, *"teu hayang hirup"*) are protected in `INHERENT_NEGATIVE_KEYWORDS` so internal negation words do not self-cancel the phrase unless preceded by an external negation/recovery marker.
+   - No other un-negated crisis phrase exists anywhere else in the input.
+3. **Supportive Recovery Affirmation:** When an input contains only negated/recovery statements (e.g., *"Aku sudah tidak ingin menyakiti diri lagi"*), classify it as a recovery/safe expression (`isDetected: false`, `isRecovery: true`, `isNegated: true`) so the assistant responds with warm validation rather than an emergency lock.
+
+### B. C-SSRS Severity Tiers (`CssrsRiskTier`)
+- **`tier1_passive` (Passive Distress / Hopelessness):** Expressions of feeling overwhelmed, exhausted, or wishing to disappear without active self-harm intent $\rightarrow$ Trigger empathetic validation, gentle somatic grounding (`5-4-3-2-1` / breathing), and visible Safety Plan shortcut without locking the user out of reflective expression.
+- **`tier2_active_no_plan` (Active Ideation without Method/Imminence):** Explicit thoughts of self-harm or suicide without immediate means/plan $\rightarrow$ Trigger immediate pre-inference Crisis Interceptor (`<5ms` deterministic SLA), halt open-ended AI generation, and surface 119 Ext 8 hotline + Stanley-Brown Safety Plan.
+- **`tier3_acute_imminent` (Acute Imminent Risk / Intent, Plan, or Lethal Means):** Explicit intent, method, plan markers, or co-occurrence of lethal means + temporal markers $\rightarrow$ Immediately short-circuit generation and surface the high-contrast emergency de-escalation UI (`tel:119,8` Sejiwa Kemenkes, `tel:112` Darurat, primary trusted contact dialing, and somatic grounding).
+
